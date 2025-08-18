@@ -1,0 +1,206 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Report extends CI_Controller {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->model('b2b/reportb2b_modal');
+		
+        $this->load->library('form_validation');
+        $this->load->library('pagination');
+        $this->load->library('pushserver');
+        $this->load->library('email');
+        $data["login_data"] = logindata();
+        $this->load->helper('string');
+        $this->app_track();
+    }
+function app_track() {
+        $this->load->library("Util");
+        $util = new Util();
+        $util->app_track();
+    }
+
+    function index() {
+		
+        if (!is_loggedin()) {
+            redirect('login');
+        }
+        $data["login_data"] = logindata();
+        $data["user"] = $this->reportb2b_modal->getUser($data["login_data"]["id"]);
+        $labs=$this->input->get('labs');
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
+        $cquery = "";
+        if ($labs != "" || $start_date != "" || $end_date != "") {
+			
+			
+			$data['labdetils']=$this->reportb2b_modal->fetchdatarow('name','collect_from',array("id"=>$labs));
+			
+			$start_date=str_replace('/', '-',$start_date);
+			$end_date=str_replace('/', '-',$end_date);
+			/* $total_row = $this->reportb2b_modal->reportnumget($labs,$start_date,$end_date); */
+			$total_row = $this->reportb2b_modal->sample_listnum($labs,$start_date,$end_date);
+            $config = array();
+            $config["base_url"]=base_url()."b2b/report/index?labs=$labs&start_date=$start_date&end_date=$end_date";
+            $config["total_rows"] =$total_row;
+            $config["per_page"] = 50;
+            $config["uri_segment"] = 4;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+			$config['page_query_string'] = TRUE;
+            $this->pagination->initialize($config);
+            $page = ($this->input->get("per_page")) ? $this->input->get("per_page") : 0;
+            $data['query'] = $this->reportb2b_modal->sample_listget($config["per_page"],$page,$labs,$start_date,$end_date);
+			//echo "<pre>"; print_r($data['query']); die();
+            $data["links"] = $this->pagination->create_links();
+            $data["counts"] = $page;
+        
+		} else {
+			
+             /* $totalRows = $this->reportb2b_modal->reportnumget();
+            $config = array();
+            $config["base_url"] = base_url() . "b2b/Report/index";
+            $config["total_rows"] =$totalRows;
+            $config["per_page"] = 50;
+            $config["uri_segment"] = 4;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+			
+
+            $this->pagination->initialize($config);
+            $sort = $this->input->get("sort");
+            $by = $this->input->get("by");
+            $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+            $data["query"] = $this->reportb2b_modal->reportget_result($config["per_page"], $page);
+			$data["links"] = $this->pagination->create_links();
+            $data["counts"] = $page; */
+			$data['labdetils']=array();
+			$data["query"] = array();
+			$data["links"] = "";
+            $data["counts"] =0;
+        
+		}
+		 $data['lablist'] = $this->reportb2b_modal->master_fun_get_tbl_val("collect_from", array('status' => 1), array("id", "asc"));
+	
+    
+        $this->load->view('b2b/header');
+        $this->load->view('b2b/nav_logistic', $data);
+        $this->load->view('b2b/reportresult_view', $data);
+        $this->load->view('b2b/footer');
+    
+	}
+public function print_report(){
+        if (!is_loggedin()) {
+            redirect('login');
+        }
+       $labs = $this->input->get('labs');
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
+        $cquery = "";
+		$data['query']=array();
+        if ($labs != "" || $start_date != "" || $end_date != "") {
+			
+		$pdfFilePath=FCPATH."/upload/b2binvoice/invoice.pdf";	
+		$html = $this->load->view('b2b/invoice_pdf_view',$data,true); 
+		$this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                40, // margin bottom
+                2, // margin header
+                2); // margin footer
+        $pdf->WriteHTML($html);
+		$pdf->debug = true;
+        $pdf->allow_output_buffering = TRUE;
+		if (file_exists($pdfFilePath) == true) {
+            $this->load->helper('file');
+            unlink($path);
+        }
+        $pdf->Output($pdfFilePath, 'F');	
+		echo $pdfFilePath; 
+		die();
+		  $query = $this->reportb2b_modal->get_job_report($labs, $start_date, $end_date);
+
+		  }else{ show_404(); 
+		  
+		  
+		  }
+        
+    }
+  public  function payment_report() {
+	    if (!is_loggedin()) {
+            redirect('login');
+        }
+        $data["login_data"] = logindata();
+        $data["user"] = $this->reportb2b_modal->getUser($data["login_data"]["id"]);
+        $labs=$this->input->get('labs');
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
+        $cquery = "";
+        if ($labs != "" || $start_date != "" || $end_date != "") {
+			
+			$start_date=str_replace('/', '-',$start_date);
+			$end_date=str_replace('/', '-',$end_date);
+            $total_row = $this->reportb2b_modal->payreportnumget($labs,$start_date,$end_date);
+            $config = array();
+            $config["base_url"]=base_url()."b2b/report/payment_report?labs=$labs&start_date=$start_date&end_date=$end_date";
+            $config["total_rows"] =$total_row;
+            $config["per_page"] = 50;
+            $config["uri_segment"] = 4;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+			
+
+            $config['page_query_string'] = TRUE;
+            $this->pagination->initialize($config);
+            $page = ($this->input->get("per_page")) ? $this->input->get("per_page") : 0;
+            $data['query'] = $this->reportb2b_modal->paymentreport_get($config["per_page"],$page,$labs,$start_date,$end_date);
+            $data["links"] = $this->pagination->create_links();
+            $data["counts"] = $page;
+        } else {
+			
+            $totalRows = $this->reportb2b_modal->payreportnumget();
+            $config = array();
+            $config["base_url"] = base_url() . "b2b/report/payment_report";
+            $config["total_rows"] =$totalRows;
+            $config["per_page"] = 50;
+            $config["uri_segment"] = 4;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+			
+
+            $this->pagination->initialize($config);
+            $sort = $this->input->get("sort");
+            $by = $this->input->get("by");
+            $page = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+            $data["query"] = $this->reportb2b_modal->paymentreport_get($config["per_page"], $page);
+			$data["links"] = $this->pagination->create_links();
+            $data["counts"] = $page;
+        }
+		 $data['lablist'] = $this->reportb2b_modal->master_fun_get_tbl_val("collect_from", array('status' => 1), array("id", "asc"));
+		$data['payreport']=$this->reportb2b_modal->gettotalreport();
+	    $this->load->view('b2b/header');
+        $this->load->view('b2b/nav_logistic', $data);
+        $this->load->view('b2b/paymentreport_view', $data);
+        $this->load->view('b2b/footer');
+    
+	}
+ }

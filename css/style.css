@@ -1,0 +1,29 @@
+.tableclass{
+overflow-x: disable;
+}
+.pdng_0{padding:0 !important;}
+.chosen-container{width:100% !important;}
+.btn-group.manage_group_btns{float:right;}
+.res_mrgn_top_15px{margin-top:15px;}
+
+
+@media(max-width:767px){
+	.res_pdng_0{padding:0 !important;}
+	.res_mrgn_btm_15px{margin-bottom:15px;}
+	.res_mrgn_top_15px{margin-top:15px;}
+	.table-responsive.pending_job_list_tbl{overflow-x: hidden;word-wrap: break-word;}
+	.chosen.pdng_job_list_chosen{width:100%;}
+}
+@media(min-width:320px) and (max-width:359px){
+	.btn-group.manage_group_btns{float:none;}
+}
+@media(min-width:360px) and (max-width:479px){
+	.btn-group.manage_group_btns{float:none;}
+}
+
+@media(min-width:768px) and (max-width:1024px){
+	.res_pdng_0{padding:0 !important;}
+	.res_mrgn_btm_15px{margin-bottom:15px;}
+	.res_mrgn_top_15px{margin-top:15px;}
+	
+}

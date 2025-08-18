@@ -1,0 +1,89 @@
+﻿
+.grdbl
+{ color :#44a8c6;
+  font-size :15px;
+}
+
+.backbtn
+{
+ float:right;   
+    
+ }
+ .delete
+ {
+     background:url('../images/icon/delete.png');
+ }
+ .edit
+ {
+     background:url('../images/icon/edit.png');
+ }
+
+
+.tabs-nav {
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+.tabs-nav li{
+    float: left;
+    line-height: 32px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+.tabs-nav li.active { line-height: 31px }
+.tabs-nav li a {
+    background: #f8f8f8;
+    border: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    border-left: none;
+    color: #959393;
+    display: block;
+    letter-spacing: 0;
+    outline: none;
+    padding: 0 10px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+}
+.tabs-nav li:first-child a{ border-left: 1px solid #dddddd }
+.tabs-nav li a:hover { background: #f0f0f0 }
+.tabs-nav li.active a {
+    background: #fff;
+    border-bottom: 2px solid #fff;
+    
+  
+}
+ 
+.tabs-container{
+    border: 1px solid #dddddd;
+    margin: -1px 0 20px;
+    overflow: hidden;
+    width: 100%;
+}
+.tab-content {
+    padding: 20px;
+    background: #FFF;
+}
+
+
+      .modalBackground
+{
+background-color: Gray;
+filter: alpha(opacity=80);
+opacity: 0.8;
+z-index: -1;
+height: 700px;
+width: 500px;
+}
+.h1header
+{
+    margin-top:-20px;
+     color: white;
+    font-size: 28px;
+    text-align: center;
+}
+
+    

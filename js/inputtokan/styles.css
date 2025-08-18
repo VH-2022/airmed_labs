@@ -1,0 +1,16 @@
+@import url('http://fonts.googleapis.com/css?family=Henny+Penny');
+
+
+
+
+/* page structure */
+
+
+#searchbar {
+  display: block;
+}
+
+
+/* custom settings */
+.token-input-token-facebook p { font-size: 1.0em; color: #555; }
+.token-input-selected-token-facebook p { color: #fff; }

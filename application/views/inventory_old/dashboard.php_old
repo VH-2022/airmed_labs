@@ -1,0 +1,92 @@
+<section class="content-header">
+    <h1>
+        Dashboard             
+    </h1>
+
+    <ol class="breadcrumb">
+        <li><a href=""><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+<?php if ($login_data["type"] == 8) { ?>
+<section class="content">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-olive">
+                <span class="info-box-icon"><i class="fa fa-money"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Total Reagent</span>
+                      <span class="info-box-number"><?php echo $total_reagent[0]['total_reagent'];?></span>
+
+                    <div class="progress">
+                        <div style="width: 100%" class="progress-bar"></div>
+                    </div>
+                    <a href="#" style="color:white;"><span class="progress-description">
+                            <a href="<?php echo base_url();?>inventory/Item_master/item_list"> View More</a>
+                        </span></a>
+                </div><!-- /.info-box-content -->
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-yellow">
+                <span class="info-box-icon"><i class="fa fa-money"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Total Stationary</span>
+                    <span class="info-box-number"><?php
+                        
+                        echo $total_stationary[0]['stationary'] ;
+                        }
+                        ?></span>
+                    <div class="progress">
+                        <div style="width: 100%" class="progress-bar"></div>
+                    </div>
+                    <a href="#" style="color:white;"><span class="progress-description">
+                            <a href="<?php echo base_url();?>inventory/Stationary_master/stationary_list"> View More</a>
+                        </span></a>
+                </div><!-- /.info-box-content -->
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-teal">
+                <span class="info-box-icon"><i class="fa fa-eyedropper"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Total Consumables</span>
+                    <span class="info-box-number"><?php echo $total_consumes[0]['consumes']; ?></span>
+                    <div class="progress">
+                        <div style="width: 100%" class="progress-bar"></div>
+                    </div>
+                    <a href="#" style="color:white;"><span class="progress-description">
+                           <a href="<?php echo base_url();?>inventory/Consumes_master/consumes_list"> View More</a>
+                        </span></a>
+                </div><!-- /.info-box-content -->
+            </div>
+        </div>
+        <!-- <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-olive">
+                <span class="info-box-icon"><i class="fa fa-flask"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Today's Total Test</span>
+                    <span class="info-box-number"><?php echo $total_test[0]['test']; ?></span>
+                    <div class="progress">
+                        <div style="width: 100%" class="progress-bar"></div>
+                    </div>
+                    <a href="#" style="color:white;"><span class="progress-description">
+                            View More
+                        </span></a>
+                </div><!-- /.info-box-content --
+            </div>
+        </div> -->
+    </div>
+    <!-- /.row -->
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 text-center" style="background-color:#dd4b39">
+            <img src="<?php echo base_url(); ?>user_assets/images/logo1.png" class="" style="  " alt="User Image" />
+        </div>
+    </div>
+</section>
+</div></div>
+ <?php //} ?>
+<!-- jQuery 2.1.4 -->
+

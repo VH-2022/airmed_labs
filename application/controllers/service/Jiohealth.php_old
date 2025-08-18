@@ -1,0 +1,127 @@
+<?php
+
+class Jiohealth extends CI_Controller {
+
+    public function __construct() {
+        parent::__construct();
+
+        $this->load->helper('url');
+
+        $this->load->model('doctor_app_model');
+       
+        $this->load->helper('security');
+        $this->load->helper('string');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST');
+        header("Access-Control-Allow-Headers: X-Requested-With");
+        $this->app_tarce();
+    }
+
+    function app_tarce() {
+        $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+        $page = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['PHP_SELF']}";
+        if (!empty($_SERVER['QUERY_STRING'])) {
+            $page = $_SERVER['QUERY_STRING'];
+        } else {
+            $page = "";
+        }
+        if (!empty($_POST)) {
+            $user_post_data = $_POST;
+        } else {
+            $user_post_data = array();
+        }
+        $user_post_data = json_encode($user_post_data);
+        $useragent = $_SERVER['HTTP_USER_AGENT'];
+        $remotehost = @getHostByAddr($ipaddress);
+        $user_info = json_encode(array("Ip" => $ipaddress, "Page" => $page, "UserAgent" => $useragent, "RemoteHost" => $remotehost));
+        $user_track_data = array("url" => $actual_link, "user_details" => $user_info, "data" => $user_post_data, "createddate" => date("Y-m-d H:i:s"), "type" => "service");
+        //print_R($user_track_data);
+        $app_info = $this->doctor_app_model->master_fun_insert("user_track", $user_track_data);
+       
+    }
+
+ function json_data($status, $error_msg, $data = NULL) {
+        if ($data == NULL) {
+            $data = array();
+        }
+        $final = array("status" => $status, "error_msg" => $error_msg, "data" => $data);
+        return str_replace("null", '" "', json_encode($final));
+    }
+ public function testlist() {
+	 $token = $this->input->get_post("token");
+	if($token=="airmedjiohealth2018"){
+		
+       $qry1 = "SELECT c.`id`,c.`name`,c.`code` FROM `test_cities` c WHERE c.status='1' and c.user_view='1'";
+       $getcity = $this->doctor_app_model->get_result($qry1);
+	    $resulrarray=array();
+		foreach($getcity as $row){
+			
+			$resulrarray1["cityid"]=$row["id"];
+			$resulrarray1["cityname"]=$row["name"];
+			
+			$qry2="SELECT p.price,t.test_name,t.id AS testid,t.`TEST_CODE` AS testcode  FROM test_master_city_price p INNER JOIN test_master t ON t.`id`=p.`test_fk` AND t.`status`='1' WHERE p.status='1' AND p.`city_fk`='".$row["id"]."'";
+			$getcityprice = $this->doctor_app_model->get_result($qry2);
+			$testrarray=array();
+			$testrarraymain=array();
+			foreach($getcityprice as $test){
+				
+				$testrarray1["testid"]=$test["testid"];
+				/* $testrarray1["testcode"]=$test["testcode"]; */
+				$testrarray1["testname"]=$test["test_name"];
+				$testrarray1["testprice"]=$test["price"];
+				
+				$testrarraymain=array_push($testrarray,$testrarray1);
+			}
+			$resulrarray1["testdetils"]=$testrarray;
+			$testrarraymain=array_push($resulrarray,$resulrarray1);
+		
+		}
+		
+		 echo $this->json_data("1", "", $resulrarray);
+		 
+	}else{
+		
+		 echo $this->json_data("0", "invalid token",array());
+	}
+       
+    }
+public function packagelist() {
+	$token = $this->input->get_post("token");
+	if($token=="airmedjiohealth2018"){
+       $qry1 = "SELECT c.`id`,c.`name`,c.`code` FROM `test_cities` c WHERE c.status='1'  and c.user_view='1'";
+       $getcity = $this->doctor_app_model->get_result($qry1);
+	    $resulrarray=array();
+		foreach($getcity as $row){
+			
+			$resulrarray1["cityid"]=$row["id"];
+			$resulrarray1["cityname"]=$row["name"];
+			
+			 $qry2="SELECT p.d_price as price,t.title as test_name,t.id AS testid  FROM package_master_city_price p INNER JOIN package_master t ON t.`id`=p.package_fk AND t.`status`='1' WHERE p.status='1' AND p.`city_fk`='".$row["id"]."' AND t.is_view IS NULL";
+			
+			$getcityprice = $this->doctor_app_model->get_result($qry2);
+			$testrarray=array();
+			$testrarraymain=array();
+			foreach($getcityprice as $test){
+				
+				$testrarray1["packageid"]=$test["testid"];
+				$testrarray1["packagename"]=$test["test_name"];
+				$testrarray1["packageprice"]=$test["price"];
+				
+				$testrarraymain=array_push($testrarray,$testrarray1);
+			}
+			$resulrarray1["packagedetils"]=$testrarray;
+			$testrarraymain=array_push($resulrarray,$resulrarray1);
+		
+		}
+		
+		 echo $this->json_data("1", "", $resulrarray);
+	}else{
+		
+		 echo $this->json_data("0", "invalid token",array());
+	}
+       
+    }
+   	
+
+}

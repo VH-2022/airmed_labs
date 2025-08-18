@@ -1,0 +1,214 @@
+/* Example tokeninput style #2: Facebook style */
+ul.token-input-list-facebook {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 1%;
+    width: 100%;
+    cursor: text;
+    font-size: 12px;
+    min-height: 1px;
+    z-index: 999;
+    margin: 0;
+    padding: 6.7px 12px;
+    background-color: #fff;
+    list-style-type: none;
+    clear: left; 
+	border:none;
+}
+
+ul.token-input-list-facebook li input {
+    border: 0;
+    /*width: 100px;*/
+    width: 100%;
+    padding: 0px 8px;
+    background-color: white;
+    margin: 2px 0;
+    -webkit-appearance: caret;
+	line-height:26px
+}
+
+li.token-input-token-facebook {
+    overflow: hidden; 
+    height: auto !important; 
+    height: 15px;
+    margin: 3px;
+    padding: 1px 3px;
+    background-color: #eff2f7;
+    color: #000;
+    cursor: default;
+  --  border: 1px solid #ccd5e4;
+    font-size: 11px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    float: left;
+    /*white-space: nowrap;*/
+}
+
+li.token-input-token-facebook p {
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+li.token-input-token-facebook span {
+    color: #a6b3cf;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li.token-input-selected-token-facebook {
+--    background-color: #5670a6;
+--    border: 1px solid #3b5998;
+    color: #fff;
+--	background:#D01130 !important;
+}
+
+li.token-input-input-token-facebook {
+    /*float: left;*/
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+div.token-input-dropdown-facebook {
+    position: absolute;
+    width: 542px;
+    background-color: #fff;
+    overflow: hidden;
+--    border-left: 1px solid #ccc;
+ --   border-right: 1px solid #ccc;
+ --   border-bottom: 1px solid #ccc;
+    cursor: default;
+    font-size: 11px;
+    font-family: 'Questrial', sans-serif;
+    z-index: 9;
+	height: 251px; overflow-y: scroll; /*border-radius: 0 0 20px 20px;*/
+}
+
+div.token-input-dropdown-facebook p {
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    color: #777;
+}
+
+div.token-input-dropdown-facebook ul {
+    margin: 0;
+    padding: 0;
+}
+
+div.token-input-dropdown-facebook ul li {
+    background-color: #fff;
+    padding: 3px;
+    margin: 0;
+    list-style-type: none;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-dropdown-item-facebook {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-dropdown-item2-facebook {
+    background-color: #fff;
+}
+
+div.token-input-dropdown-facebook ul li em {
+    font-weight: bold;
+    font-style: normal;
+}
+
+div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-facebook {
+    background-color: #D01130 !important;
+    color: #fff;
+}
+
+.srch_sftr_popup_inpt ul.token-input-list-facebook {padding: 2px 2px; border-radius: 4px; box-shadow: 0 0 8px #e4e4e4 inset;}
+
+
+@media only screen and (max-width: 767px) {
+	ul.token-input-list-facebook {background: transparent;}
+}
+
+@media (min-width: 320px) and (max-width: 359px) {
+	div.token-input-dropdown-facebook {width: 228px !important;}
+}
+
+@media (min-width: 360px) and (max-width: 374px) {
+	div.token-input-dropdown-facebook {width: 268px !important;}
+}
+
+@media (min-width: 375px) and (max-width: 383px) {
+	div.token-input-dropdown-facebook {width: 283px !important;}
+}
+
+@media (min-width: 384px) and (max-width: 413px) {
+	div.token-input-dropdown-facebook {width: 292px !important;}
+}
+
+@media (min-width: 414px) and (max-width: 435px) {
+	div.token-input-dropdown-facebook {width: 322px !important;}
+}
+
+@media (min-width: 436px) and (max-width: 479px) {
+	div.token-input-dropdown-facebook {width: 343px !important;}
+}
+
+@media (min-width: 480px) and (max-width: 500px) {
+	div.token-input-dropdown-facebook {width: 388px !important;}
+}
+
+@media (min-width: 501px) and (max-width: 567px) {
+	div.token-input-dropdown-facebook {width: 410px !important;}
+}
+
+@media (min-width: 568px) and (max-width: 599px) {
+	div.token-input-dropdown-facebook {width: 477px !important;}
+}
+
+@media (min-width: 600px) and (max-width: 666px) {
+	div.token-input-dropdown-facebook {width: 508px !important;}
+}
+
+@media (min-width: 667px) and (max-width: 735px) {
+	div.token-input-dropdown-facebook {width: 575px !important;}
+}
+
+@media (min-width: 736px) and (max-width: 767px) {
+	div.token-input-dropdown-facebook {width: 644px !important;}
+}
+
+@media (min-width: 320px) and (max-width: 479px) {
+	.navMenuSecWrapper.set_populr_div {width: 86%;}
+}
+
+@media (min-width: 480px) and (max-width: 574px) {
+	.navMenuSecWrapper.set_populr_div {width: 91.7%;}
+}
+
+@media (min-width: 575px) and (max-width: 636px) {
+	.navMenuSecWrapper.set_populr_div {width: 93.5%;}
+}
+
+@media (min-width: 637px) and (max-width: 767px) {
+	.navMenuSecWrapper.set_populr_div {width: 94%;}
+}
+
+@media (min-width: 768px) and (max-width: 799px) {
+	div.token-input-dropdown-facebook {width: 435px !important;}
+	.navMenuSecWrapper.set_populr_div {width: 96%;}
+	.inpt_lft_div {margin-right: 12px !important;}
+}
+
+@media (min-width: 800px) and (max-width: 979px) {
+	div.token-input-dropdown-facebook {width: 438px !important;}
+	.navMenuSecWrapper.set_populr_div {width: 96%;}
+	.inpt_lft_div {margin-right: 12px !important;}
+}
+
+@media (min-width: 980px) and (max-width: 1024px) {
+	div.token-input-dropdown-facebook {width: 438px !important;}
+	.navMenuSecWrapper.set_populr_div {width: 96%;}
+	.inpt_lft_div {margin-right: 12px !important;}
+}

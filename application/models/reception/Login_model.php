@@ -1,0 +1,44 @@
+<?php
+Class Login_model extends CI_Model {
+
+    function checklogin($username) {
+        $this->db->select('id,name,mobile,doctorfk');
+        $this->db->from('doctor_reception');
+        $this->db->where('mobile', $username);
+        $this->db->where('status', '1');
+        $this->db->limit(1);
+        $query = $this->db->get();
+        if ($query->num_rows() == 1) {
+            return $query->result();
+        } else {
+            return false;
+        }
+    }
+       
+    public function login_time($did, $data) {
+        $this->db->where('id', $did);
+        $this->db->update('collect_from', $data);
+        return 1;
+    }
+    public function master_fun_get_tbl_val($dtatabase, $condition, $order) {
+        $this->db->order_by($order[0], $order[1]);
+        $query = $this->db->get_where($dtatabase, $condition);
+        $data['user'] = $query->result_array();
+        return $data['user'];
+    } 
+    function master_fun_insert($table, $data) {
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
+    public function master_fun_update($tablename, $cid, $data) {
+        $this->db->where($cid[0], $cid[1]);
+        $this->db->update($tablename, $data);
+        return 1;
+    }
+    public function master_num_rows($table, $condition) {
+        $query1 = $this->db->get_where($table, $condition);
+        return $query1->num_rows();
+    }
+}
+
+?>

@@ -1,0 +1,4664 @@
+<style>
+    .admin_job_dtl_img {border: 4px solid #8d8d8d; height: 160px; max-width: 160px; min-width: 80px; width: 180px;}
+	/* pending_job_detail responsive table */
+    .pending_job_list_tbl {width: 100%; float: left;}
+    .pending_job_list_tbl table {width: 100%; border-collapse: collapse; float: left;}
+    .pending_job_list_tbl th {background-color: #e5e5e5; color: #3e3e3e; font-size: 16px; font-weight: 600; text-align: center; vertical-align: middle; border: 1px solid #b1b1b1;}
+    .pending_job_list_tbl td, th {padding:2px 6px; border: 1px solid #ccc; text-align: left;}
+    .pending_job_list_tbl td {padding: 4px 4px; font-size: 13px; color: #505050;} 
+    @media (max-width: 980px) {
+        .pending_job_list_tbl table, .pending_job_list_tbl thead, .pending_job_list_tbl tbody, .pending_job_list_tbl th, .pending_job_list_tbl td, .pending_job_list_tbl tr {display: block;}
+        .pending_job_list_tbl thead tr {position: absolute; top: -9999px; left: -9999px;}
+        .pending_job_list_tbl tr {border: 1px solid #ccc !important;}
+        .pending_job_list_tbl td {border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 60%; text-align: left;}
+        .pending_job_list_tbl td:before {position: absolute; top: 6px; left: 6px; width: 45%; padding-right: 10px; white-space: nowrap;}
+        .pending_job_list_tbl tr{margin-bottom:15px;}
+        .table-responsive.pending_job_list_tbl{border:none !important;}
+
+        .pending_job_list_tbl td:nth-of-type(1):before {content: "No";}
+        .pending_job_list_tbl td:nth-of-type(2):before {content: "Reg No";}
+        .pending_job_list_tbl td:nth-of-type(3):before {content: "Order Id";}
+        .pending_job_list_tbl td:nth-of-type(4):before {content: "Customer Name";}
+        .pending_job_list_tbl td:nth-of-type(5):before {content: "Doctor";}
+        .pending_job_list_tbl td:nth-of-type(6):before {content: "Test/Package Name";}
+        .pending_job_list_tbl td:nth-of-type(7):before {content: "Date";}
+        .pending_job_list_tbl td:nth-of-type(8):before {content: "Payable Amount / Price";}
+        .pending_job_list_tbl td:nth-of-type(9):before {content: "Job Status";}
+        .pending_job_list_tbl td:nth-of-type(10):before {content: "Action";}
+    }
+    /* End pending_job_detail responsive table */
+</style>
+<!-- Page Heading -->
+<script src="<?php echo base_url(); ?>plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<link href="<?php echo base_url(); ?>user_assets/chosen/select.css" rel="stylesheet" type="text/css" media="all" />
+<link href="<?php echo base_url(); ?>plugins/timepick/css/timepicki.css" rel="stylesheet">
+<section class="content-header">
+    <h1>
+        Job Details (<?php echo $query[0]['order_id']; ?>)
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <span style="margin-right:30px; font-size:20px;"><?php echo $query[0]['date'] . "  "; ?>  </span>
+        <li><a href="<?php echo base_url(); ?>Dashboard"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+        <li><a href="<?php echo base_url(); ?>job-master/pending-list"><i class="fa fa-users"></i>Job List</a></li>
+        <li class="active">Job Details</li>
+    </ol>
+</section>
+<!-- Add fancyBox main JS and CSS files -->
+<script type="text/javascript" src="<?php echo base_url(); ?>source/jquery.fancybox.pack.js?v=2.1.5"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>source/jquery.fancybox.css?v=2.1.5" media="screen" />
+<!-- Add Media helper (this is optional) -->
+<script type="text/javascript" src="<?php echo base_url(); ?>source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+<!--Nishit code start-->
+<!--Vishal Add Css-->
+<link href="<?php echo base_url(); ?>css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+<!--Vishal End Css-->
+<script type="text/javascript">
+    var jq = $.noConflict();
+    jq(document).ready(function () {
+    jq('.fancybox').fancybox();
+    });</script>
+<style>
+    .chosen-container {
+        display: inline-block;
+        font-size: 14px;
+        position: relative; 
+        vertical-align: middle;
+        width: 100%;
+    }
+    .full_bg{background: rgba(0,0,0,0.3); width:100%; height:100%; float:left; padding:350px; position:fixed; z-index:9; top:0; bottom:0;}
+    .full_bg .loader img{width:70px; height:70px;}
+    .text_highlight:hover{
+        text-decoration: underline;
+        /*font-weight: bold;
+        font-size: 12px;*/
+    }
+</style>
+<div class="full_bg" style="display:none;" id="loader_div">
+    <div class="loader">
+        <center><img src="http://static.heart.org/riskcalc/app/assets/img/loading.gif"></center>
+    </div>
+</div>
+<?php if($query[0]['status'] == 7){ ?>
+<script>$("#loader_div").attr("style", "");</script>
+<?php } ?>
+<section class="content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <!-- form start -->
+                    <h3 class="box-title">Job Details</h3>
+                    <!--Add job start-->
+                    <?php
+                    $smsalert = $alertdetils[0]["smsalert"];
+                    $emailalert = $alertdetils[0]["emailalert"];
+                    ?>
+                    <div class="btn-group manage_group_btns">
+                        <?php if ($query[0]["model_type"] == 1) {
+                            ?>
+                            <button class="btn btn-default btn-sm" onclick="test_outsource('<?= $cid ?>');" data-toggle="tooltip" title="Outsource Test">Outsource Test</button>
+                            <?php
+                        }
+                        ?>
+                        <button class="btn btn-default btn-sm" onclick="<?php if (in_array($query[0]['status'], array("2", "0"))) { ?>alert('Booking is completeted. Please add new booking.')<?php } else { ?>test_manage('<?= $cid ?>');<?php } ?>" data-toggle="tooltip" title="Manage Test"><i class="fa fa-tag"></i>&nbsp;Manage Test</button>
+
+                        <?php if ($query[0]['status'] == 8 || $query[0]['status'] == 2) { ?>
+                            <?php //if ($login_data['type'] != 7) { ?>    
+                                <button class="btn btn-default btn-sm" data-toggle="tooltip" title="Manage Result" onclick="add_Result('<?= $cid ?>');"><i class="fa fa-list-alt"></i>&nbsp;Manage Result</button>
+                            <?php //} ?>
+                            <?php if ($login_data['type'] != 7) { ?>
+                                <a href="javascript:void(0)" onclick="approved();" class="btn btn-default btn-sm" data-toggle="tooltip" title="Generate Report"><i class="fa  fa-check"></i>&nbsp;Generate Report</a>
+
+                                <div id="myModalreport" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Generate Report</h4>
+                                            </div>
+                                            <?php echo form_open("add_result/approve_reporttest/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                                            <div id="reportcontain" class="modal-body">
+
+                                            </div>
+                                            <div id="info"></div>
+                                            <div class="modal-footer">
+                                                <input type="submit"  class="btn btn-primary" id="genbutton" value="Generate Report">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                            <?php echo form_close(); ?>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                    <hr>
+                    <!--Add job end-->
+                </div>
+                <Script>
+                    function approved() {
+                    if ($approved_test_cnt > 0) {
+                    /* var cnf = confirm('Are you sure?');
+                     return cnf; */
+                    $('#reportcontain').html('<div style="height:50px"><span id="searching_spinner_center" style="position: absolute;left: 50%;"><img src="<?= base_url() . "img/ajax-loader.gif" ?>" /></span></div>');
+                    $('#myModalreport').modal('show');
+                    //$("#genbutton").a
+                    $.ajax({url: "<?php echo base_url() . "job_master/getjobs_bookedpack"; ?>",
+                            type: "GET",
+                            data: {jobs: "<?= $cid ?>"},
+                            error: function (jqXHR, error, code) {
+                            },
+                            success: function (data) {
+                            if (data != "0") {
+                            $('#reportcontain').html(data);
+                            $(".up,.down").click(function () {
+                            var row = $(this).parents("tr:first");
+                            if ($(this).is(".up")) {
+                            row.insertBefore(row.prev());
+                            } else {
+                            row.insertAfter(row.next());
+                            }
+                            });
+                            $(".newadd").click(function () {
+                            var checkid = this.id;
+                            var splitchack = checkid.split("_")
+                                    var chtestid = splitchack[1];
+                            if ($('#' + checkid).is(':checked')) {
+                            $("#checkvalue_" + chtestid).val("1");
+                            } else {
+                            $("#checkvalue_" + chtestid).val("");
+                            }
+                            });
+                            }
+                            }
+                    });
+                    } else {
+                    alert("Please add result and approve test.");
+                    return false;
+                    }
+                    }
+                </script>
+                <div class="box-body">
+				
+				<?php
+                    if ($query[0]['status'] == 8 || $query[0]['status'] == 2 || $query[0]['status'] == 7) {
+                        $test_id_1 = "";
+                        $package_id_1 = "";
+                        $branch_id = $query[0]['branch_fk'];
+                        $status = $query[0]['status'];
+
+                        foreach ($query[0]["job_test_list"] as $key) {
+                            $test_id_1 .= $key['test_fk'] . ',';
+                        }
+                        foreach ($selected_package as $key) {
+                            foreach ($key["test_list"] as $kt_key) {
+                                $package_id_1 .= $kt_key['test_fk'] . ',';
+                            }
+                        }
+                        ?>
+                        <button class="btn-sm btn-primary" href='javascript:voic();' onclick="open_barcode_popup('<?= $cid ?>', '<?= $test_id_1 ?>', '<?= $package_id_1 ?>', '<?= $branch_id ?>', '<?= $status ?>');">Add Sample Collected</button>
+						
+						<div class="modal fade"  id="barcode_modal" role="dialog"  data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close bdisable" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Barcode</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="all_mobile_no1">
+                                        <div class="form-group">
+                                            <?php /* if (in_array($query[0]['status'], array(7, 8))) { */ ?>
+                                                <div class="col-md-5">
+                                                    <select class="form-control" name="test_data" id="test_data">
+                                                        <option value="">--Select Test--</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" placeholder="Barcode" id="b_barcode" name="barcode" class="form-control"/>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" id="add_barcode" name="add_barcode" class="btn btn-default" onclick="get_test_price()">Add</button>
+                                                </div><br/><br/>
+                                            <?php /* } */ ?>	
+
+                                            <div class="tableclass">
+
+                                                <div class="table-responsive pending_job_list_tbl">
+                                                    <table class="table table-striped" id="city_wiae_price">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Test Name</th>
+                                                                <th>Sample Type</th>
+                                                                <th>Barcode</th>
+                                                                <th>Print</th>
+                                                                <th>Sample Collected</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="t_body">
+                                                            <?php
+                                                            $cnt = 0;
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div></div>
+                                            <span style="color:red;" id="b_error"></span>
+                                            <span style="color:green" id="b_success"></span>
+                                        </div>
+                                    </div>
+
+                                    <!--                                        <div class="form-group">
+                                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="b_update();">Update</a>
+                                                                            </div>-->
+                                    <input type="hidden" id="b_job_id" value=""/>
+                                    <input type="hidden" id="branch_fk" value=""/>
+                                </div>
+
+                                <div class="modal-footer">
+<!--                                        <a href="javascript:void(0);" target="_blank" id="b_print" class="btn btn-primary"><i class="fa fa-print"></i> Print</a>-->
+                                    <button  type="button" class="btn btn-default bdisable" data-dismiss="modal">Close</button>
+                                </div>
+                                <?= form_close(); ?>
+                            </div>
+                        </div>
+                    </div>
+					
+					<script>
+                        function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
+                        $("#b_error").html("");
+                        $("#b_success").html("");
+                        $("#b_job_id").val(val);
+                        $("#branch_fk").val(branch_fk);
+                        if (val.trim() != '') {
+                        $.ajax({
+                        data: {test_ids: test_ids, package_ids: package_ids},
+                                url: "<?php echo base_url(); ?>job_master/get_barcode?jid=" + val,
+                                beforeSend: function () {
+                                $("#loader_div").attr("style", "");
+                                },
+                                success: function (response) {
+
+                                /* console.log(response); */
+                                var barcode = JSON.parse(response);
+                                $("#b_barcode").val(barcode.barcode[0].barcode);
+                                $("#b_print").attr("href", "<?= base_url(); ?>index.php/utility/getJobBarcode?id=" + val);
+                                var $el = $("#test_data");
+                                $el.empty();
+                                $el.append($("<option></option>")
+                                        .attr("value", '').text('Select Test'));
+                                var test_list = JSON.parse(response);
+                                $.each(test_list.final_test[0], function (index, data) {
+                                var ssampletype = data['sample_type'];
+                                if (ssampletype != null && ssampletype != "null"){
+                                var selectsampletype = data['sample_type'];
+                                } else{
+                                var selectsampletype = "";
+                                }
+                                $('#test_data').append('<option value="' + data['id'] + '" testtype="' + selectsampletype + '" >' + data['test_name'] + '</option>');
+                                });
+                                }, complete: function () {
+                        $("#loader_div").attr("style", "display:none;");
+                        }
+                        });
+                        $("#t_body").empty();
+                        $.ajax({
+                        data: {status: status},
+                                url: "<?php echo base_url(); ?>job_master/get_barcode_data?jid=" + val,
+                                beforeSend: function () {
+                                $("#loader_div").attr("style", "");
+                                },
+                                success: function (response) {
+                                /* console.log(response); */
+                                if (response != null) {
+									/* $("#city_wiae_price").empty(); */
+                                $("#city_wiae_price").append(response);
+								
+								checksample_collect(); 
+                                }
+
+                                }, complete: function () {
+                        $("#loader_div").attr("style", "display:none;");
+                        }
+                        });
+                        $('#barcode_modal').modal('show');
+						
+                        } else {
+                        $("#b_error").html("Sample Id is null Try again.");
+                        }
+                        }
+<?php if (in_array($query[0]['status'], array(7))) { ?>
+                            setTimeout(function(){ open_barcode_popup('<?= $cid ?>', '<?= $test_id_1 ?>', '<?= $package_id_1 ?>', '<?= $branch_id ?>', '<?= $status ?>'); }, 5000);
+<?php } ?>
+function checksample_collect(){
+$('.bdisable').removeAttr('disabled');
+var matches = [];
+$(".change_sample:checked").each(function() {
+    matches.push(1);
+});
+
+if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
+
+}
+
+                        function get_test_price() {
+                        var val = $("#b_job_id").val();
+                        var branch_fk = $("#branch_fk").val();
+                        var test_val1 = $("#test_data").val();
+                        if (test_val1 != ""){
+                        var idsplit = test_val1.split("_");
+                        var test_val = idsplit[0];
+                        var barcode1 = $("#b_barcode").val();
+                        var barcode = "";
+                        if (barcode1 == "") {
+                        barcode = "N/A";
+						var printbarcode="-";
+                        } else{
+                        barcode = barcode1;
+						var printbarcode='<a href="<?= base_url(); ?>index.php/utility/getJobBarcode_new?id=' + val + '&test_id=' + test_val + '" target="_blank" id="b_print' + test_val + '" class="btn btn-primary btn-xs"><i class="fa fa-print"></i> Print</a>';
+                        }
+
+                        var skillsSelect = document.getElementById("test_data");
+                        var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
+                        var getsampletype = $("#test_data option:selected").attr("testtype");
+                        if (getsampletype == "" || getsampletype == null){ var getsampletype = "N/A"; }
+
+                        $("#city_wiae_price").append('<tr id="' + test_val + '"><td>' + selectedText + '</td><td>' + getsampletype + '</td><td>' + barcode + '<input type="hidden" value = "' + barcode + '" class="price" id="price_' + barcode + '"">   <td>'+printbarcode+'</td><td><input class="change_sample" checked type="checkbox" testde="' + test_val1 + '" job_fk = "' + val + '" href = "javascript:void(0);" onclick="sample_collection(' + test_val1 + ',' + val + ');"></td><td><a class="deletecityprice" testtype="'+getsampletype+'" testde="' + test_val + '" testdename="' + selectedText + '"  job_fk = "' + val + '"href="javascript:void(0);" ><span class="glyphicon glyphicon-trash"></span></a></td></tr>');
+						
+						checksample_collect();	
+						
+                        $("#test_data option[value='" + test_val1 + "']").remove();
+                        if (barcode1 == "") {
+                        barcode = "";
+                        } else{
+                        barcode = barcode1;
+                        }
+
+                        $.ajax({
+                        data: {test_id: test_val, barcode: barcode, job_fk: val, branch_fk: branch_fk},
+                                url: "<?php echo base_url(); ?>job_master/add_barcode",
+                                beforeSend: function () {
+                                $("#loader_div").attr("style", "");
+                                },
+                                success: function (response) {
+
+                                }, complete: function () {
+							$("#rejectiontest_" + test_val).show();
+                        $("#loader_div").attr("style", "display:none;");
+						
+                        }
+                        });
+                        } else{
+                        alert('Please select test');
+                        }
+
+                        }
+                        $(document).on("click", ".deletecityprice", function () {
+                        var getdetest = $(this).attr("testde");
+                        var getdetestname = $(this).attr("testdename");
+                        var job_fk = $(this).attr("job_fk");
+                        var getdetesttype = $(this).attr("testtype");
+                        $("#test_data").append('<option value="' + getdetest + '" testtype="' + getdetesttype + '" >' + getdetestname + '</option>');
+                        $("#" + getdetest).remove();
+                        $.ajax({
+                        data: {test_id: getdetest, job_fk: job_fk},
+                                url: "<?php echo base_url(); ?>job_master/delete_barcode",
+                                beforeSend: function () {
+                                $("#loader_div").attr("style", "");
+                                },
+                                success: function (response) {
+
+                                }, complete: function () {
+                        $("#loader_div").attr("style", "display:none;");
+                        }
+                        });
+                        });
+                        $(document).on("click", ".change_sample", function () {
+                        var getdetest = $(this).attr("testde");
+                        var job_fk = $(this).attr("job_fk");
+                        var schcked = 0;
+                        if ($(this).prop('checked') == true){
+                        var schcked = 1;
+                        }
+                        $.ajax({
+                        data: {test_id: getdetest, job_fk: job_fk},
+                                url: "<?php echo base_url(); ?>job_master/update_sample_collection",
+                                beforeSend: function () {
+                                $("#loader_div").attr("style", "");
+                                },
+                                success: function (response) {
+                                if ($('.bantest_' + getdetest).css("color") == "rgb(255, 0, 0)"){
+                                $('.bantest_' + getdetest).css('color', '');
+                                } else{
+                                if ($('.bantest_' + getdetest).attr("testalert") == "1"){	$('.bantest_' + getdetest).css('color', 'red');
+                                }
+                                }
+                                if (schcked == 1){
+
+                                $("#rejectiontest_" + getdetest).show();
+                                } else{
+                                $("#rejectiontest_" + getdetest).hide();
+                                }
+								checksample_collect();
+
+
+                                }, complete: function () {
+                        $("#loader_div").attr("style", "display:none;");
+                        }
+                        });
+                        });
+						</script>
+						
+                    <?php } ?>
+				
+				
+                    <div class="col-sm-12 res_pdng_0">
+                        <label>Booked Test/Package</label><br>
+                        <?php
+                        $ts = explode('#', $query[0]['testname']);
+                        $tid = explode(",", $query[0]['testid']);
+                        $cnt = 1;
+                        $completed_cnt = 0;
+                        $test_list = array();
+                        if ($query[0]['testname'] != '') {
+                            foreach ($query[0]["job_test_list"] as $key) {
+                                ?>
+                                <?php
+                                if (!in_array($key["test_fk"], $test_list)) {
+                                    echo "(" . $cnt . ") <span id='test_" . $cid . "_" . $key["test_fk"]  . "' class='test_" . $cid . "'>" . $key["test_name"] . "</span>";
+                                    ?>&nbsp;&nbsp;&nbsp;
+									<b class="testtime_<?= $key["test_fk"] ?>"></b>
+									
+									<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+                                        <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $key["test_fk"] ?>" class="rejectiontest" testname="<?= $key["test_name"]; ?>" test="<?= $key["test_fk"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $key["test_fk"] ?>"></i></b></a>
+                                    <?php } ?>
+									
+									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $key["test_fk"] ?>');"><i class="fa fa-check"></i></a> <a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $key["test_fk"] ?>" id='dbtn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" onclick="return confirm('Are you sure?');" title="Disapprove Test"><b>X</b></a> <br>	
+                                    <?php
+                                    foreach ($key["sub_test"] as $kt_key) {
+                                        if (!in_array($kt_key["sub_test"], $test_list)) {
+                                            ?>
+                                            <i style="margin-left:20px">-</i><span id='test_<?= $cid; ?>_<?= $kt_key["sub_test"] ?>' class="test_<?= $cid; ?>"><?= $kt_key["test_name"] ?></span>&nbsp;&nbsp;&nbsp;
+											
+											<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+                                        <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["sub_test"] ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["sub_test"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["sub_test"] ?>"></i></b></a>
+                                    <?php } ?>
+											
+											<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["sub_test"] ?>');"><i class="fa fa-check"></i></a><a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["sub_test"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a><br>
+                                            <?php
+                                            $test_list[] = $kt_key["sub_test"];
+                                        }
+                                    }
+                                    $test_list[] = $key["test_fk"];
+                                    //print_r($test_list);
+                                }
+                                ?>
+                                <?php
+                                $cnt++;
+                            }
+                        }
+                        $pk = explode('@', $query[0]['packagename']);
+                        $pkgcnt = 0;
+                        foreach ($selected_package as $key) {
+                            //   print_r($key); die();
+                            ?>
+                                <?php echo "(" . $cnt . ") " . ucfirst($key["title"]); ?><br><?php
+                                foreach ($key["test_list"] as $kt_key) {
+                                    $kt_key["test_name"];
+                                    if (!in_array($kt_key["test_fk"], $test_list)) {
+                                        ?>
+                                    <i style="margin-left:20px">-</i><span id='test_<?= $cid; ?>_<?= $kt_key["test_fk"] ?>' class="test_<?= $cid; ?>"><?= $kt_key["test_name"] ?></span>&nbsp;&nbsp;&nbsp;
+									
+									<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+                                        <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["test_fk"]; ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["test_fk"]; ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["test_fk"] ?>"></i></b></a>
+                                    <?php } ?>
+									
+									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["test_fk"] ?>');"><i class="fa fa-check"></i></a><a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["test_fk"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a><br>
+                                    <?php
+                                    $test_list[] = $kt_key["test_fk"];
+                                }
+                            }
+                            $cnt++;
+                            $pkgcnt++;
+                        }
+                        ?>
+                        <a href="javascript:void(0);" id="approved_all_btn" style="display:none"  data-toggle="tooltip" title="Approve All Test" onclick="approve_all_test();" class="btn btn-sm btn-primary"><i class="fa fa-check"></i>Approve All Test</a>
+                        <form action="<?= base_url(); ?>/job_master/approve_all_test?jid=<?php echo $cid; ?>" method="POST" id="approve_all_test_form">
+                            <input type="hidden" name="id" id="result_added_test"/>
+                        </form>
+                        <script>
+                            function approve_all_test() {
+                            var result_added = $("#result_added_test").val();
+                            approveAllTest('<?= $cid ?>', result_added);
+                            }
+							$(".rejectiontest").click(function(){
+                            var testid = $(this).attr("test");
+                            var testname = $(this).attr("testname");
+                            $("#rejectiontestid").val(testid);
+                            $("#rejecttitle").html(testname + " Sample Rejection");
+                            $("#srejctsucess").html('');
+                            $("#loader_div").show();
+                            $.ajax({
+                            type: "GET",
+                                    url: "<?= base_url() . "sample_booking/samplerejectiondata" ?>",
+                                    data:{jobid:"<?= $cid; ?>", testid:testid},
+                                    success: function(data) {
+                                    $("#loader_div").hide();
+                                    $("#bodyresony").html(data);
+                                    $('#rejectionmodal').modal('show');
+                                    },
+                                    error: function() {
+                                    alert('error handing here');
+                                    }
+                            });
+                            });
+                        </script>
+						
+						<div id="rejectionmodal" data-dismiss="modal" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+
+                                    <form  id="sampleresonform" method="post" class="form-group">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 id="rejecttitle" class="modal-title"></h4>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div id="srejctsucess"></div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Reason</label>
+                                                <select id="resonid" class="form-control" name="reason">
+
+                                                    <option value="">Select</option>
+                                                    <?php foreach ($sampleresone as $resons) { ?>
+                                                        <option value="<?= $resons["id"]; ?>"><?= $resons["reason"]; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <span style="color:red;" id="reasonerror"></span>					
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="hidden" name="jobid" value="<?= $cid; ?>" />
+                                                <input type="hidden" name="testid" id="rejectiontestid" />
+                                                <label for="exampleInputEmail1">Remark</label>
+                                                <textarea id="ressonremark" name="ressonremark" class="form-control" ></textarea>	
+                                            </div>
+                                            <?php /* <label class="checkbox-inline">
+                                              <input type="checkbox" name="resonpatient" value="1">Patient
+                                              </label>
+                                              <label class="checkbox-inline">
+                                              <input type="checkbox" name="resonphelbo" value="1">phlebo
+                                              </label> */ ?>
+                                            <br>
+                                            <div id="bodyresony" class="table-responsive pending_job_list_tbl"></div>
+                                        </div><!--- /.modal-body --->
+                                        <div class="modal-footer">
+                                            <input type="submit" value="Submit" class="btn btn-primary" id="amount_submit_btn"/>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>	
+                        <script>
+                            $("#sampleresonform").submit(function(e){
+                            var resonid = $("#resonid").val();
+                            var resoonerror = 1;
+                            if (resonid == ""){
+                            resoonerror = 0;
+                            $("#reasonerror").html("The Reason field is required.");
+                            }
+                            if (resoonerror == 1){
+
+                            $('#rejectionmodal').modal('hide');
+                            $(".modal-backdrop").remove();
+                            $("#loader_div").show();
+                            var datastring = $("#sampleresonform").serialize();
+                            $.ajax({
+                            type: "POST",
+                                    url: "<?= base_url() . "sample_booking/samplerejection" ?>",
+                                    data: datastring,
+                                    success: function(data) {
+                                    var testid = $("#rejectiontestid").val();
+                                    $('.bantest_' + testid).css('color', 'red');
+                                    setTimeout(function(){ $("#loader_div").hide(); $('#rejectionmodal').modal('show');
+                                    if (data == '1'){ $("#srejctsucess").html('<div class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">x</button>Successfully sample rejection</div>');
+                                    setTimeout(function(){ $("#resonid").val(""); $("#ressonremark").val(""); $('#rejectionmodal').modal('hide'); $(".modal-backdrop").remove(); }, 3000);
+                                    }
+
+                                    }, 3000);
+                                    },
+                                    error: function() {
+                                    alert('error handing here');
+                                    }
+                            });
+                            }
+                            return false;
+                            });
+                            $(document).on('click', '.reassignphelbo', function(){
+
+                            var testid = $(this).attr("assgntest");
+                            $("#rejectionid").val(testid);
+                            $('#rejectionmodal').modal('hide');
+                            $(".modal-backdrop").remove();
+                            $('#assignpheloreject').modal('show');
+                            });</script>
+                        <div id="assignpheloreject" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Assign Phlebo</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="col-sm-12 res_pdng_0">
+                                            <div class="alert alert-danger alert-dismissable" id="msg_cancel1" style="display:none;">
+                                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                                                Phlebo Not Assign Try Again
+                                            </div>
+                                            <div class="alert alert-success alert-dismissable" id="msg_success1" style="display:none;">
+                                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                                                Phlebo Assign Successfully
+                                            </div>
+                                            <div class="form-group col-sm-12  pdng_0">
+                                                <label class="col-sm-3 pdng_0" for="exampleInputFile">Select Phlebo <i style="color:red">*</i>:</label>
+                                                <div class="col-sm-9 pdng_0">
+                                                    <select id="phlebo1"  name="phlebo" class="chosen">
+                                                        <option value="">--Select--</option>
+                                                        <?php foreach ($phlebo_list as $phlebo) { ?>
+                                                            <option value="<?= $phlebo["id"] ?>" <?php
+                                                            if ($phlebo_assign_job[0]["phlebo_fk"] == $phlebo["id"]) {
+                                                                echo "selected";
+                                                            }
+                                                            ?>><?= ucfirst($phlebo["name"]); ?> (<?= $phlebo["mobile"] ?>)</option>
+                                                                <?php } ?>
+                                                    </select> 
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12  pdng_0">
+                                                <input type="hidden" name="rejectionid" id="rejectionid" />
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Date <i style="color:red">*</i>:</label>
+                                                <div class="col-sm-9 pdng_0">
+                                                    <input type="text" id="date1" name="date" onchange="get_time1(this.value);" value="<?php
+                                                    if (!empty($phlebo_assign_job)) {
+                                                        echo $phlebo_assign_job[0]["date"];
+                                                    } else {
+                                                        echo $emergency_tests[0]["date"];
+                                                    }
+                                                    ?>" class="form-control datepicker-input"/>
+                                                </div>
+                                                <span style="color:red;" id="phone_error"></span>
+                                            </div>
+                                            <div class="form-group col-sm-12  pdng_0">
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Time <i style="color:red">*</i>:</label>
+                                                <div class="col-sm-9 pdng_0">
+                                                    <select id="time_slot1"  name="time" class="chosen">
+                                                        <option value="">--Select--</option>
+                                                        <?php $emergency_tests[0]["time_slot_fk"] ?>
+                                                    </select>
+                                                    <input type="hidden" id="get_time2" value="<?php
+                                                    if ($phlebo_assign_job[0]["time_fk"] != '') {
+                                                        echo $phlebo_assign_job[0]["time_fk"];
+                                                    }
+                                                    ?>">
+                                                    <br>OR <br><input type="text" placeholder="Exact time" name="sharp_time" id="sharp_time1" value="<?= $phlebo_assign_job[0]["time1"]; ?>"/>
+                                                    <input type="hidden" id="as_job_fk1" value="<?php echo $cid; ?>"/>
+                                                </div>
+                                                <span style="color:red;" id="email_error1"></span>
+                                            </div>
+                                            <div class="form-group col-sm-12  pdng_0">
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Address <i style="color:red">*</i>:</label> 
+                                                <div class="col-sm-9 pdng_0">
+                                                    <textarea id="address1" name="address" class="form-control"><?php
+                                                        if ($phlebo_assign_job[0]["address"]) {
+                                                            echo $phlebo_assign_job[0]["address"];
+                                                        } else {
+                                                            echo $emergency_tests[0]["address"];
+                                                        }
+                                                        ?></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12  pdng_0">
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Note :</label> 
+                                                <div class="col-sm-9 pdng_0">
+                                                    <textarea id="p_note1" name="note" class="form-control"></textarea>
+                                                    <span style="color:red;" id="p_note_error1"></span>
+                                                    <span style="color:red;" id="assign_phlebo_error1"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="box-footer">
+                                                <input onclick="assign_phlebo1();" id="send_btn1" style="float:right;" class="btn btn-primary" value="Assign" type="button">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+						
+                        <form role="form" action="<?php echo base_url(); ?>job_master/upload_report/<?= $cid ?>" method="post" enctype="multipart/form-data" id="submit_report">
+                            <?= validation_errors('<div class="alert alert-danger alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>', '</div>'); ?>
+                            <div class="box-body">
+                                <?php if (!empty($error)) { ?> 
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                                        <?php echo $error['0']; ?>
+                                    </div>
+                                <?php } ?>
+                                <?php if (!empty($old_report)) { ?>
+                                    <a href="javascript:void(0);" class="label label-warning " onclick="$('#oldReportmyModal').modal('show');">View Old Reports</a>
+                                <?php } else { ?>
+                                    <span class="label label-danger ">No old reports are available.</span>
+                                <?php } ?>
+                                <!-- Modal -->
+                                <div id="oldReportmyModal" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Old Reports</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <?php
+                                                $cnt = 1;
+                                                foreach ($old_report as $key) {
+                                                    ?>
+                                                    <p><?= $cnt; ?>.&nbsp;<a href="<?= base_url(); ?>job-master/job-details/<?= $key["id"] ?>" title="View job details" target="_blank"><?= $key["order_id"] ?></a>&nbsp;&nbsp;(<a href="<?= base_url(); ?>upload/report/<?php echo $key['report'] ?>?<?= rand(0000000, 9999999); ?>" title="View report" target="_blank"><?php echo $key['original'] ?></a>&nbsp;,&nbsp;<a href="<?= base_url(); ?>upload/report/<?php echo $key['without_laterpad'] ?>?<?= rand(0000000, 9999999); ?>" title="View report" target="_blank"><?php echo $key['without_laterpad_original'] ?></a>)</p>
+                                                    <?php
+                                                    $cnt++;
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Upload Reports</label><span style="color:red">*</span><br>	
+                                    <input type="file" id="common_report" name="common_report" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(with letterhead)</small>
+                                    <input type="file" id="common_report1" name="common_report1" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(without letterhead)</small>
+                                    <small>(Allow only .pdf file)</small><br>
+                                    <?php if (!empty($common_report)) {
+                                        $completed_cnt++;
+                                        ?>
+                                        <?php
+										if ($query[0]["model_type"] == 1) {
+
+                                            if (($query[0]['payable_amount'] <= 0 || $query[0]['payable_amount'] == '') || $query[0]["is_print"] == 1 || $query[0]["panel_test_count"] > 0  || $query[0]['branch_fk'] == 164) {
+													/*if($query[0]['payable_amount']>0 && $login_data["type"] != 1){
+														echo "<span style='color:green'>Report Has Been Generated Successfully.</span></br>";
+														echo "<span style='color:red;'>Please Pay Due Amount to View/Download Reports.</span><br/>";
+													}else{*/
+                                                ?>
+													<a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['report'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['original']; ?> </a>,<a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['without_laterpad'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['without_laterpad_original']; ?> </a> &nbsp; <?php if ($query[0]['status'] != "2") { ?><a href="<?php echo base_url(); ?>job_master/remove_report/<?php echo $common_report[0]['id']; ?>/<?php echo $common_report[0]['job_fk']; ?>" onclick="return confirm('Are you sure you want to remove this data?');" style="color:red;"> X </a> <?php } ?><br>
+											<?php	//}		
+                                                    if ($smsalert == '1' && in_array($login_data["type"], array(1, 2))) {
+                                                        if ($query[0]['notify_cust'] == 1) {
+                                                        ?>
+                                                    <a href='javascript:void(0);' onclick="sms_popup('<?= $cid ?>');" data-toggle="tooltip" data-original-title="Send Report Via SMS" ><i class="<?php
+                                                        if ($query[0]['send_sms'] == 1) {
+                                                            echo "fa fa-comment";
+                                                        } else {
+                                                            echo "fa fa-comment-o";
+                                                        }
+                                                        ?>"  style="<?php
+                                                                                                                                                                                          if ($query[0]['send_sms'] == 1) {
+                                                                                                                                                                                              echo "color:green";
+                                                                                                                                                                                          }
+                                                                                                                                                                                          ?>"></i></a> &nbsp;&nbsp;&nbsp;
+                                                        <?php } } if ($emailalert == 1 || in_array($login_data["type"], array(1, 2))) { ?>
+                                                    <a href='javascript:void(0);' onclick="mail_popup('<?= $cid ?>', '<?= $query[0]['custid'] ?>');" data-toggle="tooltip" data-original-title="Send Report Via Mail" ><i class="<?php
+                                                        if ($query[0]['send_email'] == 1) {
+                                                            echo "fa fa-envelope";
+                                                        } else {
+                                                            echo "fa fa-envelope-o";
+                                                        }
+                                                        ?>" style="<?php
+                                                                                                                                                                                                                          if ($query[0]['send_email'] == 1) {
+                                                                                                                                                                                                                              echo "color:green";
+                                                                                                                                                                                                                          }
+                                                                                                                                                                                                                          ?>"></i></a>
+                                                        <?php
+                                                    }
+                                                    $completed_cnt++;
+                                                } else {
+                                                    ?>
+                                                <span class="label label-warning">
+                                                    Please collect due amount.
+                                                </span>
+                                                <?php
+                                            }
+                                        } else if (($report_print_permission[0]["print_report"] == 1 || $b2b_job_detais[0]['payable_amount'] <= 0 || $b2b_job_detais[0]['payable_amount'] == '') && $query[0]["model_type"] == 2) {
+                                            if ($b2b_job_detais[0]['payable_amount'] <= 0 || $b2b_job_detais[0]['payable_amount'] == '') {
+                                                ?>
+                                                <a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['report'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['original']; ?> </a>,<a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['without_laterpad'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['without_laterpad_original']; ?> </a> &nbsp; <?php if ($query[0]['status'] != "2") { ?><a href="<?php echo base_url(); ?>job_master/remove_report/<?php echo $common_report[0]['id']; ?>/<?php echo $common_report[0]['job_fk']; ?>" onclick="return confirm('Are you sure you want to remove this data?');" style="color:red;"> X </a> <?php } ?><br>
+                                                <a href='javascript:void(0);' onclick="sms_popup('<?= $cid ?>');" data-toggle="tooltip" data-original-title="Send Report Via SMS" ><i class="<?php
+                                                    if ($query[0]['send_sms'] == 1) {
+                                                        echo "fa fa-comment";
+                                                    } else {
+                                                        echo "fa fa-comment-o";
+                                                    }
+                                                    ?>"  style="<?php
+                                                                                                                                                                                      if ($query[0]['send_sms'] == 1) {
+                                                                                                                                                                                          echo "color:green";
+                                                                                                                                                                                      }
+                                                                                                                                                                                      ?>"></i></a> &nbsp;&nbsp;&nbsp;
+                                                <a href='javascript:void(0);' onclick="mail_popup('<?= $cid ?>', '<?= $query[0]['custid'] ?>');" data-toggle="tooltip" data-original-title="Send Report Via Mail" ><i class="<?php
+                                                    if ($query[0]['send_email'] == 1) {
+                                                        echo "fa fa-envelope";
+                                                    } else {
+                                                        echo "fa fa-envelope-o";
+                                                    }
+                                                    ?>" style="<?php
+                                                                                                                                                                                                                      if ($query[0]['send_email'] == 1) {
+                                                                                                                                                                                                                          echo "color:green";
+                                                                                                                                                                                                                      }
+                                                                                                                                                                                                                      ?>"></i></a>
+                                                    <?php
+                                                    $completed_cnt++;
+                                                } else {
+                                                    ?>
+                                                <span class="label label-warning">
+                                                    Please collect due amount.
+                                                </span>
+                                                <?php
+                                            }
+                                        } else {
+                                            echo '<span class="label label-warning">
+                                                    Please collect due amount.
+                                                </span>';
+                                            ?>
+											 <a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['report'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['original']; ?> </a>,<a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['without_laterpad'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['without_laterpad_original']; ?> </a>
+                                            <?php
+                                            $completed_cnt++;
+                                        }
+                                    }
+                                    ?>
+                                    <input type="hidden" name="type_common_report" value="c"/>
+                                </div>
+                                <span style="color:red;" id="reporterror_<?php echo $cnt; ?>"></span>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Description </label>
+                                    <textarea id="desc_<?php echo $cnt; ?>" name="desc_common_report" class="form-control" <?php if ($query[0]['status'] == "2") { ?> disabled <?php } ?>><?php
+                                        if (!empty($common_report)) {
+                                            echo $common_report[0]['description'];
+                                        }
+                                        ?></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Report Status</label>
+                                    <select class="form-control" name="report_status">
+                                        <option value="">--Select--</option>
+                                        <option value="1" <?php
+                                        if ($query[0]["report_status"] == 1) {
+                                            echo "selected";
+                                        }
+                                        ?>>Critical</option>
+                                        <option value="2" <?php
+                                        if ($query[0]["report_status"] == 2) {
+                                            echo "selected";
+                                        }
+                                        ?>>Semi-Critical</option>
+                                        <option value="3" <?php
+                                        if ($query[0]["report_status"] == 3) {
+                                            echo "selected";
+                                        }
+                                        ?>>Normal</option>
+                                    </select>
+                                </div>
+                                <span style="color:red;" id="descerror_<?php echo $cnt; ?>"></span>
+                                <hr/>
+<?php /* Form common report end */ ?>
+                                <input type="hidden" id="upload_report" value="<?= $completed_cnt; ?>"/>
+                                <input type="hidden" value="<?php echo $cnt; ?>" id="count">
+                                <div class="form-group">
+                                    <?php if (!empty($report) and false) { ?>
+                                        <label for="exampleInputFile">Uploaded Report </label><br>
+                                        <?php foreach ($report as $re) { ?>
+                                            <a href="<?php echo base_url(); ?>job_master/download_report/<?php echo $re['report']; ?>"> <?php echo $re['original']; ?> </a> &nbsp; <a href="<?php echo base_url(); ?>job_master/remove_report/<?php echo $re['id']; ?>/<?php echo $re['job_fk']; ?>" onclick="return confirm('Are you sure you want to remove this data?');" style="color:red;"> X </a><br>
+                                        <?php } ?>
+<?php } ?>
+                                </div>
+                            </div><!-- /.box-body --></form>
+                            <?php if ($query[0]['sample_collection'] == "1" && $login_data['type'] != 7) { ?>
+                            <div class="box-footer">
+                                <?php
+                                if ($query[0]['testname'] != '' || $query[0]['packagename'] != '') {
+                                    if (empty($common_report)) {
+                                        if ($login_data['type'] == 1 || $login_data['type'] == 2 || $login_data['type'] == 5) {
+                                            ?>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary" type="button" onclick="Validation();">Upload</button>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                }
+                                ?>
+                            </div>
+<?php } ?>
+                    </div>
+                </div>
+            </div>
+<?php if ($login_data['type'] != 7) { ?> 
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <!-- form start -->
+                        <h3 class="box-title">Assign Phlebo</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="alert alert-danger alert-dismissable" id="msg_cancel" style="display:none;">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            Phlebo Not Assign Try Again
+                        </div>
+                        <div class="alert alert-success alert-dismissable" id="msg_success" style="display:none;">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            Phlebo Assign Successfully
+                        </div>
+                        <div class="col-sm-12 res_pdng_0">
+                            <div class="form-group col-sm-12  pdng_0">
+                                <label class="col-sm-3 pdng_0" for="exampleInputFile">Select Phlebo <i style="color:red">*</i>:</label>
+                                <div class="col-sm-9 pdng_0">
+                                    <select id="phlebo"  name="phlebo" class="chosen">
+                                        <option value="">--Select--</option>
+                                        <?php foreach ($phlebo_list as $phlebo) { ?>
+                                            <option value="<?= $phlebo["id"] ?>" <?php
+                                            if ($phlebo_assign_job[0]["phlebo_fk"] == $phlebo["id"]) {
+                                                echo "selected";
+                                            }
+                                            ?>><?= ucfirst($phlebo["name"]); ?> (<?= $phlebo["mobile"] ?>)</option>
+    <?php } ?>
+                                    </select> 
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12  pdng_0">
+                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Date <i style="color:red">*</i>:</label>
+                                <div class="col-sm-9 pdng_0">
+                                    <input type="text" id="date" name="date" onchange="get_time(this.value);" value="<?php
+                                    if (!empty($phlebo_assign_job)) {
+                                        echo $phlebo_assign_job[0]["date"];
+                                    } else {
+                                        echo $emergency_tests[0]["date"];
+                                    }
+                                    ?>" class="form-control datepicker-input"/>
+                                </div>
+                                <span style="color:red;" id="phone_error"></span>
+                            </div>
+                            <div class="form-group col-sm-12  pdng_0">
+                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Time <i style="color:red">*</i>:</label>
+                                <div class="col-sm-9 pdng_0">
+                                    <select id="time_slot"  name="time" class="chosen">
+                                        <option value="">--Select--</option>
+    <?php $emergency_tests[0]["time_slot_fk"] ?>
+                                    </select>
+                                    <input type="hidden" id="get_time1" value="<?php
+                                    if ($phlebo_assign_job[0]["time_fk"] != '') {
+                                        echo $phlebo_assign_job[0]["time_fk"];
+                                    }
+                                    ?>">
+                                    <br>OR <br><input type="text" placeholder="Exact time" name="sharp_time" id="sharp_time" value="<?= $phlebo_assign_job[0]["time1"]; ?>"/>
+                                    <input type="hidden" id="as_job_fk" value="<?php echo $cid; ?>"/>
+                                </div>
+                                <span style="color:red;" id="email_error"></span>
+                            </div>
+                            <div class="form-group col-sm-12  pdng_0">
+                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Address <i style="color:red">*</i>:</label> 
+                                <div class="col-sm-9 pdng_0">
+                                    <textarea id="address" name="address" class="form-control"><?php
+                                        if ($phlebo_assign_job[0]["address"]) {
+                                            echo $phlebo_assign_job[0]["address"];
+                                        } else {
+                                            echo $emergency_tests[0]["address"];
+                                        }
+                                        ?></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12  pdng_0">
+                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Note :</label> 
+                                <div class="col-sm-9 pdng_0">
+                                    <textarea id="p_note" name="note" class="form-control"></textarea>
+                                    <span style="color:red;" id="p_note_error"></span>
+                                    <span style="color:red;" id="assign_phlebo_error"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12  pdng_0">
+                                <div class="col-sm-9 pdng_0" style="float:right;">
+                                    <input type="checkbox" id="notify" name="notify" value="1" checked style="display:none;">
+                                </div>
+                            </div>
+                            <?php /* if (!empty($phlebo_assign_job[0])) { ?>
+                              <div class="form-group col-sm-12  pdng_0">
+                              <div class="col-sm-9 pdng_0" style="float:right;">
+                              <span class="label label-success">Phlebo already assigned.</span>
+                              </div>
+                              </div>
+                              <?php } ?>
+                              <?php
+                              if (!empty($phlebo_assign_job[0])) {
+                              if (!empty($phlebo_assign_job[0]["is_accept"] == 1)) {
+                              ?>
+                              <div class="form-group col-sm-12  pdng_0">
+                              <div class="col-sm-9 pdng_0" style="float:right;">
+                              <span class="label label-success">Phlebo Accept Job.</span>
+                              </div>
+                              </div>
+                              <?php } else { ?>
+                              <div class="form-group col-sm-12  pdng_0">
+                              <div class="col-sm-9 pdng_0" style="float:right;">
+                              <span class="label label-warning">Waiting for phlebo accept the job.</span>
+                              </div>
+                              </div>
+                              <?php
+                              }
+                              } */
+                            ?>
+                            <div class="box-footer">
+                                <input onclick="assign_phlebo();" id="send_btn" style="float:right;" class="btn btn-primary" value="Assign" type="button">
+                            </div>
+                            <?php /* if ($query[0]['status'] != 8) { ?>
+                              <div class="box-footer">
+                              <span id="loader_div" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
+                              <?php if (!empty($phlebo_assign_job[0])) { ?>
+                              <input onclick="update_phlebo();" id="send_btn" style="float:right;" class="btn btn-primary" value="Update" type="button">
+                              <?php } else { ?>
+                              <input onclick="assign_phlebo();" id="send_btn" style="float:right;" class="btn btn-primary" value="Assign" type="button">
+                              <?php }  ?>
+                              <script>
+                              function update_phlebo() {
+                              var phlb = confirm("Are you sure?");
+                              if (phlb == true) {
+                              assign_phlebo();
+                              }
+                              }
+                              </script>
+                              </div>
+                              <?php } */ ?>
+                            <h3>Phlebo Schedule</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Schedule</th>
+                                        <th>Address</th>
+                                        <th>Note</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+    <?php foreach ($phlebo_assign_job as $key) { ?>
+                                        <tr>
+                                            <td><?php foreach ($phlebo_list as $phlebo) { ?>
+                                                    <?php
+                                                    if ($key["phlebo_fk"] == $phlebo["id"]) {
+                                                        echo ucfirst($phlebo["name"]) . "-" . $phlebo["mobile"];
+                                                    }
+                                                    ?>
+        <?php } ?></td>
+                                            <td><?= $key["date"] . '-' . $key["time"]; ?></td>
+                                            <td><?= ucfirst($key["address"]) ?></td>
+                                            <td><?= ucfirst($key["note"]) ?></td>
+                                            <td><?php
+                                                if ($key["is_accept"] == 1) {
+                                                    echo '<span class="label label-success">Phlebo Accept Job.</span>';
+                                                } else {
+                                                    echo '<span class="label label-warning">Waiting for phlebo accept the job.</span>';
+                                                }
+                                                ?></td>
+                                            <td>
+                                                <?php if ($key["is_accept"] == 0) { ?>
+                                                    <a href="<?= base_url(); ?>job_master/accep_assign_phlebo_job/<?= $cid; ?>/<?= $key["id"] ?>" data-toggle="tooltip" data-original-title="Accept" onclick="return confirm('Are you sure?');"><i class="fa fa-check"></i></a>
+        <?php } ?>
+                                                <a href="<?= base_url(); ?>job_master/delete_assign_phlebo/<?= $cid; ?>/<?= $key["id"] ?>" data-toggle="tooltip" data-original-title="Remove" onclick="return confirm('Are you sure?');"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                <?php if (empty($phlebo_assign_job)) { ?>
+                                        <tr><td colspan="4"><center>Phlebo not assign.</center></td></tr>
+    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box-header">
+                        <!-- form start -->
+                        <h3 class="box-title">Phlebotomy schedule for <?php echo $booking_info[0]['date']; ?></h3>
+                    </div>
+                    <div class="box-body" id="phlebo_schedule">
+
+                    </div>
+                </div>
+<?php } ?>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-primary">
+<?php if (isset($success) != NULL) { ?>
+                    <div class="widget">
+                        <div class="alert alert-success alert-dismissable">
+                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+    <?php echo $success['0']; ?>
+                        </div>
+                    </div>
+                    <?php } ?>
+                <div class="box-header">
+                    <?php
+                    if ($query[0]['sample_collection'] == "0") {
+                        if ($query[0]['status'] == "1" || $query[0]['status'] == "2") {
+                            ?>			 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!--<a onclick="return confirm('Are you sure?');" style="float:right; margin-top:10px; margin-right:10px;" href='<?php echo base_url(); ?>job_master/job_mark_spam/<?php echo $query[0]['id']; ?>' data-toggle="tooltip" data-original-title="Mark as Spam" ><span class="label label-danger">Mark as Spam</span></a>   -->
+                            <?php
+                        }
+                    }
+                    ?>
+                    <?php
+                    if ($query[0]['sample_collection'] == "1") {
+                        if ($query[0]['status'] == "1" || $query[0]['status'] == "3") {
+                            ?>		
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!--<a onclick="return confirm('Are you sure?');"  style="float:right; margin-right:10px; margin-top:10px;" href='<?php echo base_url(); ?>job_master/job_mark_completed/<?php echo $query[0]['id']; ?>' data-toggle="tooltip" data-original-title="Mark as completed" ><span class="label label-success">Mark as completed</span> </a>   -->
+                            <?php
+                        }
+                    }
+                    ?>
+                    <!-- form start -->
+                    <h3 class="box-title">Customer Details</h3>
+
+                    <div class="btn-group" style="float:right;">
+                        <?php if ($query[0]['status'] == 7 || $query[0]['status'] == 8 || $query[0]['status'] == 2) { ?>
+                            <a class="btn btn-default btn-sm" href="<?php echo base_url(); ?>add_result/preview_report/<?php echo $cid; ?>?type=wlp" data-toggle="tooltip" title="Preview Report" target="_blank"><i class="fa fa-search"></i> Preview</a>
+<?php } ?>
+                        <button class="btn btn-default btn-sm" onclick="printreport();" data-toggle="tooltip" title="Print Report"><i class="fa fa-print"></i>&nbsp;Print Report</button>
+
+                        <div class="modal fade" id="print_model" role="dialog">
+                            <div class="modal-dialog">
+<?php echo form_open("add_result/reporttest_preview/" . $cid, array("method" => "POST", "id" => 'printmyForm', "role" => "form")); ?>
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Print Report</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="printerror" ></div>
+                                        <div id="printcontain" class="modal-body"></div>
+
+                                        <div id="printradio">	<label class="radio-inline">
+                                                <input type="radio" checked value='1' name="latterhead">without letterhead
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" value='2' name="latterhead">with letterhead
+                                            </label></div> </div>
+                                    <div class="modal-footer">
+                                        <input type="submit"  class="btn btn-primary" id="genprintbutton" value="Print Report">
+<?php echo form_close(); ?>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <script>
+
+                            function printreport() {
+                            var chck = 0;
+<?php
+if ($query[0]["model_type"] == 1) {
+
+    if ($query[0]['payable_amount'] <= 0 || $query[0]['payable_amount'] == '' || $query[0]["is_print"] == 1 || $query[0]["panel_test_count"] > 0) {
+        ?>
+        <?php if (!empty($common_report[0]['report']) || !empty($common_report[0]['without_laterpad'])) { ?>
+                                        chck = 1;
+                                        gettestdata();
+        <?php } else { ?>
+                                        chck = 1;
+                                        $("#printcontain").html("Please upload report!");
+                                        $("#genprintbutton").hide();
+                                        $("#printradio").hide();
+            <?php
+        }
+    } else {
+        ?>
+                                    chck = 1;
+                                    $("#printcontain").html('<h5 style="color:red;">Please collect due amount.</h5>');
+                                    $("#printradio").hide();
+                                    $("#genprintbutton").hide();
+        <?php
+    }
+} else if ($query[0]["model_type"] == 2) {
+    if ($b2b_job_detais[0]['payable_amount'] <= 0 || $b2b_job_detais[0]['payable_amount'] == '' || $report_print_permission[0]["print_report"] == 1) {
+        if (!empty($common_report[0]['report']) || !empty($common_report[0]['without_laterpad'])) {
+            ?>
+                                        chck = 1;
+                                        gettestdata();
+        <?php } else { ?>
+                                        chck = 1;
+                                        $("#printcontain").html("<h5 style='color:red;'>Please upload report!</h5>");
+                                        $("#printradio").hide();
+                                        $("#genprintbutton").hide();
+            <?php
+        }
+    } else {
+        ?>chck = 1;
+                    $("#printcontain").html("<h5 style='color:red;'>Please collect due amount.</h5>");
+                    $("#printradio").hide();
+                    $("#genprintbutton").hide();
+        <?php
+    }
+}
+?>
+            if (chck != 1) {
+            $("#printcontain").html("<h5 style='color:red;'>Please collect due amount.</h5>");
+            $("#printradio").hide();
+            $("#genprintbutton").hide();
+            }
+            $('#print_model').modal('show');
+            }
+
+
+
+            function gettestdata() {
+
+            $('#printcontain').html('<div style="height:50px"><span id="searching_spinner_center" style="position: absolute;left: 50%;"><img src="<?= base_url() . "img/ajax-loader.gif" ?>" /></span></div>');
+            $.ajax({url: "<?php echo base_url() . "job_master/getjobs_bookedprint"; ?>",
+                    type: "GET",
+                    data: {jobs: "<?= $cid ?>"},
+                    error: function (jqXHR, error, code) {
+                    },
+                    success: function (data) {
+                    if (data != "0") {
+                    $('#printcontain').html(data);
+                    $(".up,.down").click(function () {
+                    var row = $(this).parents("tr:first");
+                    if ($(this).is(".up")) {
+                    row.insertBefore(row.prev());
+                    } else {
+                    row.insertAfter(row.next());
+                    }
+                    });
+                    $(".printnewadd").click(function () {
+                    var checkid = this.id;
+                    var splitchack = checkid.split("_")
+                            var chtestid = splitchack[1];
+                    if ($('#' + checkid).is(':checked')) {
+                    $("#printvalue_" + chtestid).val("1");
+                    } else {
+                    $("#printvalue_" + chtestid).val("");
+                    }
+                    });
+                    }
+                    }
+            });
+            return false;
+            }
+
+            $('#printmyForm').on('submit', function (e) {
+            e.preventDefault();
+            var favorite = [];
+            $.each($("input[name='testall[]']:checked"), function () {
+
+            favorite.push($(this).val());
+            });
+            if (favorite != "") {
+
+            $('#print_model').modal('hide');
+            $("#loader_div").show();
+            $.ajax({
+            url: '<?= base_url() . "add_result/reporttest_preview/" . $cid; ?>',
+                    type: 'post',
+                    data: $('form#printmyForm').serialize(),
+                    success: function (data) {
+//                    window.location.href = '<?= base_url() . "job_master/testprint_downloade/" ?>' + data;
+                                                                windowprint = window.open('<?= base_url() . "job_master/testprint_downloade/" ?>' + data,'_blank');
+                                                                windowprint.print();
+                    $("#loader_div").hide();
+                    $("#printmyForm")[0].reset();
+                    }
+            });
+            } else {
+            $("#printerror").html('<div class="alert alert-danger alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">X</button>Please select booked test.</div>');
+            }
+
+            });
+                        </script>
+
+                    </div>
+                    <hr>
+                </div>
+                <div class="box-body">
+                    <?php if ($query[0]["model_type"] == 1) {
+                        ?>
+                        <div class="col-md-6 res_pdng_0" style="border-right:1px solid #ccc;">
+    <?php if ($relation == 'Self') { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Patient Name :</label> <?php echo ucfirst($query[0]['full_name']); ?> (Self)&nbsp;<a href="javascript:void(0)" onclick="$('#family_model12').modal('show');"> <i class="fa fa-edit"></i></a> &nbsp;<a href="javascript:void(0)" onclick="$('#family_model').modal('show');"> Change</a>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Notify Customer :</label> <?php
+                                    if ($query[0]['notify_cust'] == 1) {
+                                        echo '<span class="label label-success">Yes</span>';
+                                    } else {
+                                        echo '<span class="label label-danger">No</span>';
+                                    }
+                                    ?>
+                                    <a href="javascript:void(0);" onclick="$('#notify_model').modal('show');"><i class="fa fa-edit"></i></a>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Mobile :</label> <?php echo ucwords($query[0]['mobile']); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Email :</label> <?php echo $query[0]['email']; ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">DOB :</label> <?php echo $query[0]['dob']; ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Age :</label> <?php
+                                    if ($age[0] != 0) {
+                                        echo $age[0] . " Y";
+                                    }
+                                    if ($age[0] == 0 && $age[1] != 0) {
+                                        echo $age[1] . " M";
+                                    }
+                                    if ($age[0] == 0 && $age[1] == 0 && $age[2] != 0) {
+                                        echo $age[2] . " D";
+                                    }
+                                    ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Gender :</label> <?php echo ucwords($query[0]['gender']); ?>
+                                </div>
+    <?php } else { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Patient Name:</label> <?php echo $relation; ?>&nbsp;<a href="javascript:void(0)" onclick="$('#family_model1').modal('show');"> <i class="fa fa-edit"></i></a> &nbsp;<a href="javascript:void(0)" onclick="$('#family_model').modal('show');"> Change</a>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Mobile :</label> <?php echo ucwords($family_data[0]['phone']); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Email :</label> <?php echo $family_data[0]['email']; ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">DOB :</label> <?php echo $family_data[0]['dob']; ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Age :</label> <?php
+                                    if ($f_age[0] == '0') {
+                                        echo $f_age[1] . " M";
+                                    } else if ($f_age[0] == '0' && $f_age[1] == '0') {
+                                        echo $f_age[2] . " D";
+                                    } else {
+                                        echo $f_age[0] . " Y";
+                                    }
+                                    ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Gender :</label> <?php echo ucwords($family_data[0]['gender']); ?>
+                                </div>
+                            <?php } ?>
+
+    <?php if ($query[0]['state'] != NULL) { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">State :</label> <?php
+                                    foreach ($state as $st) {
+                                        if ($st['id'] == $query[0]['state']) {
+                                            echo ucwords($st['state_name']);
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            <?php } ?>
+    <?php if ($query[0]['city'] != NULL) { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">City :</label> <?php
+                                    foreach ($city as $ct) {
+                                        if ($ct['id'] == $query[0]['city']) {
+                                            echo ucwords($ct['city_name']);
+                                        }
+                                    }
+                                    ?>
+                                </div>
+    <?php } ?>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Pin Code :</label> <?php echo $query[0]['pin']; ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Address :</label> <?php echo $booking_info[0]['address']; ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Doctor :</label> <?php echo ucwords($query[0]['dname']) . " (" . $query[0]['dmobile'] . ")"; ?>
+                                <a href="javascript:void(0);" onclick="$('#doctor_model').modal('show');"><i class="fa fa-edit"></i></a>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Test City :</label> <?php
+                                echo $query[0]['test_city_name'];
+                                ?>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Branch :</label>
+                                <?php
+                                foreach ($branch_list as $branch) {
+                                    if ($query[0]['branch_fk'] == $branch['id']) {
+                                        echo ucwords($branch['branch_name']);
+                                    }
+                                }
+                                ?>
+                                <?php if (($login_data['type'] != 5 && $login_data['type'] != 6 && $login_data['type'] != 7) || $login_data['id'] == 17) { ?>
+                                    <a href="javascript:void(0);" onclick="$('#branch_model').modal('show');"><i class="fa fa-edit"></i></a>
+                                <?php } ?>
+                                <?php /* if ($login_data['type'] == 5) { ?>
+                                  <a href="javascript:void(0);" onclick="$('#branch_model').modal('show');"><i class="fa fa-edit"></i></a>
+                                  <?php } */ ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Creditors :</label>
+                                <?php
+                                if (!empty($selected_creditor)) {
+                                    echo ucfirst($selected_creditor[0]["name"]) . " - " . $selected_creditor[0]["mobile"];
+                                } else {
+                                    echo "NA";
+                                }
+                                ?>
+                                <a href="javascript:void(0);" onclick="$('#creditor_model').modal('show');"><i class="fa fa-edit"></i></a>
+                            </div>
+<!--                            <div class="form-group">
+                                <label for="exampleInputFile">Sample Collection Date :</label>
+    <?php //echo $booking_info[0]['date']; ?>
+                            </div>-->
+
+
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Sample Collection Date :</label>
+                                <?php
+                                if ($sample_collect_date[0]['created_date'] != "") {
+                                    echo date('Y-m-d', strtotime($sample_collect_date[0]['created_date']));
+                                } else {
+                                    echo "NA";
+                                }
+                                ?>
+                                <?php if ($login_data['type'] == '1' || login_data['type'] == '2') { ?>
+                                    <a href="javascript:void(0);" onclick="$('#sample_collet_date_model').modal('show');"><i class="fa fa-edit"></i></a>
+                                <?php } ?>
+                                    
+                                <?php //echo $booking_info[0]['date']; ?>
+                                <div class="modal fade" id="sample_collet_date_model" role="dialog">
+                                    <div class="modal-dialog">
+                                        
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Add Sample Collection Date</h4>
+                                            </div>
+                                            <link href="<?php echo base_url(); ?>plugins/timepick/css/timepicki.css" rel="stylesheet">
+                                            <?php echo form_open("job_master/add_sample_collect_date/" . $cid, array("method" => "POST", "role" => "form", "id" => "samplecollect_date_form")); ?>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="control-label">Date:</label>
+                                                    <input type="text" id="sample_collect_date" name="date" class="form-control datepicker" value="<?php echo date('Y-m-d', strtotime($sample_collect_date[0]['created_date'])) ?>"/>
+                                                    <span id="dateerror" class="sample_collect_daate_error" style="color:red"></span>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                            <?= form_close(); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Sample Collection Time :</label>
+                                <?php
+                                if ($sample_collect_time[0]['created_date'] != "") {
+                                    echo date('H:i:s', strtotime($sample_collect_time[0]['created_date']));
+                                } else {
+                                    echo "NA";
+                                }
+                                ?>
+                                <?php if ($login_data['type'] == '1' || login_data['type'] == '2') { ?>
+                                    <a href="javascript:void(0);" onclick="$('#sample_collet_time_model').modal('show');"><i class="fa fa-edit"></i></a>
+                                <?php } ?>
+
+                                <div class="modal fade" id="sample_collet_time_model" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Add Sample Collection Time</h4>
+                                            </div>
+                                            <?php echo form_open("job_master/add_sample_collect_time/" . $cid, array("method" => "POST", "role" => "form", "id" => "samplecollect_time_form")); ?>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="control-label">Time:</label>
+                                                    <input type="text"id="sample_collect_time" name="in_time" class="form-control" id="timepicker1" placeholder="00:00"  value="<?php echo date('H:i:s',  strtotime($sample_collect_time[0]['created_date'])) ?>">
+                                                    <span id="timeerror" class="sample_collect_time_error" style="color:red"></span>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                            <?= form_close(); ?>
+
+                                            <script>
+
+                                                        $("#samplecollect_date_form").submit(function(event) {
+                                                $(".sample_collect_daate_error").empty();
+                                                        var sample_collect_date = $("#sample_collect_date").val();
+                                                        if (sample_collect_date == ""){
+                                                $("#dateerror").html("Please enter date");
+                                                        return false;
+                                                } else{
+                                                return true;
+                                                }
+                                                });
+                                                        $("#samplecollect_time_form").submit(function(event) {
+                                                $(".sample_collect_time_error").empty();
+                                                        var sample_collect_date = $("#sample_collect_time").val();
+                                                        if (sample_collect_date == ""){
+                                                $("#timeerror").html("Please enter date");
+                                                        return false;
+                                                } else{
+                                                return true;
+                                                }
+                                                });
+                                                        $('#timepicker1').timepicki({
+                                                show_meridian: false,
+                                                        min_hour_value: 0,
+                                                        max_hour_value: 23,
+                                                        overflow_minutes: true,
+                                                        increase_direction: 'up',
+                                                        disable_keyboard_mobile: true
+                                                });</script>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Choose Time Slot :</label>
+    <?php echo $booking_info[0]['start_time'] . " To " . $booking_info[0]['end_time']; ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Receipt download :</label>
+                                <a href="<?php if (!empty($query[0]['invoice'])) { ?><?= base_url(); ?>upload/result/<?php echo $query[0]['invoice']; ?><?php } else { ?><?= base_url(); ?>job_master/pdf_invoice/<?= $cid ?><?php } ?>" target="_blank"><i class="fa fa-download"></i></a>
+                                &nbsp;&nbsp;<a href="<?= base_url(); ?>job_master/pdf_invoice/<?= $cid ?>" target="_blank">Regenerate</a>
+                                &nbsp;&nbsp;<a href="<?= base_url(); ?>job_master/pdf_invoice_without/<?= $cid ?>" target="_blank">Regenerate without letterhead</a>
+                                <iframe id='print_iframe' name='print-frame-name' src="<?= base_url(); ?>upload/result/<?php echo $query[0]['invoice']; ?>" style="display:none;"></iframe>
+                                &nbsp;&nbsp;<a href="javascript:void(0);" onclick="printDocument('print_iframe');"><i class="fa fa-print"></i></a>
+                                <script>
+                                    function printDocument(documentId) {
+                                    document.getElementById(documentId).contentWindow.print();
+                                    }
+                                </script>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Acknowledgment download :</label>
+                                <a href="<?= base_url(); ?>job_master/ack/<?php echo $query[0]['id']; ?>" target="_blank"><i class="fa fa-print"></i>  Regenerate</a>
+                                &nbsp;&nbsp;<a href="<?= base_url(); ?>job_master/ack_wtlpd/<?php echo $query[0]['id']; ?>" target="_blank">  Regenerate without letterhead <i class="fa fa-print"></i></a>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Note :</label> <textarea id="job_note" class="form-control"><?php echo ucwords($query[0]['note']); ?></textarea>
+                                <span id="note_success"></span>
+                            </div>
+                            <button class="btn-sm btn-primary res_mrgn_btm_15px" type="button" id="note_save_btn" onclick="update_note();">Save</button>
+                            <span id="loader_div2" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
+                        </div>
+                        <script>
+                            function update_note() {
+                            var job_note = $("#job_note").val();
+                            var as_job_fk = "<?= $cid; ?>";
+                            $("#note_success").html("");
+                            if (job_note.trim() != '') {
+                            $.ajax({
+                            url: "<?php echo base_url(); ?>job_master/job_note_update",
+                                    type: 'post',
+                                    data: {job_note: job_note, job_id: as_job_fk},
+                                    beforeSend: function () {
+                                    $("#loader_div2").attr("style", "");
+                                    $("#note_save_btn").attr("disabled", "disabled");
+                                    },
+                                    success: function (data) {
+                                    var json_data = JSON.parse(data);
+                                    if (json_data.status == 1) {
+                                    $("#note_success").html(json_data.msg);
+                                    } else {
+                                    $("#note_success").html(json_data.msg);
+                                    }
+                                    setTimeout(function () {
+                                    $("#note_success").html("");
+                                    }, 3000);
+                                    }, complete: function () {
+                            $("#loader_div2").attr("style", "display:none;");
+                            $("#note_save_btn").removeAttr("disabled");
+                            }
+                            });
+                            }
+                            }
+                        </script>
+                        <div class="col-md-6 res_pdng_0">
+                            <div class="form-group">
+                                <select class="form-control chosen-select" data-placeholder="Select Status" tabindex="-1" name="status" id="status" <?php
+                                if ($query[0]['status'] == 2) {
+                                    echo "disabled";
+                                }
+                                ?>>
+                                    <option  disabled value="">Select Status </option>
+                                    <option value="1" <?php
+                                    if ($query[0]['status'] == 1) {
+                                        echo "selected";
+                                    }
+                                    echo " disabled";
+                                    ?>> Waiting For Approval </option>
+                                    <option value="6" <?php
+                                    if ($query[0]['status'] == 6) {
+                                        echo "selected";
+                                    }
+                                    ?> <?php
+                                    if ($query[0]['status'] != 1) {
+                                        echo "disabled";
+                                    }
+                                    ?>> Approved </option>
+                                    <option value="7" <?php
+                                    if ($query[0]['status'] == 7) {
+                                        echo "selected";
+                                    }
+                                    ?> <?php
+                                    if ($query[0]['status'] != 6) {
+                                        echo "disabled";
+                                    }
+                                    ?>> Sample Collected </option>
+                                    <?php if ($login_data['type'] != 7) { ?>
+                                        <option value="8" <?php
+                                        if ($query[0]['status'] == 8) {
+                                            echo "selected";
+                                        }
+                                        ?> <?php
+                                        if ($query[0]['status'] != 7) {
+                                            echo "disabled";
+                                        }
+                                        ?>> Sample received & processing </option>
+                                        <option value="2" <?php
+                                        if ($query[0]['status'] == 2) {
+                                            echo "selected";
+                                        }
+                                        ?> <?php
+                                        if ($query[0]['status'] != 8) {
+                                            echo "disabled";
+                                        }
+                                        ?>> Completed </option>
+    <?php } ?>
+                                </select>
+                                <button class="btn-sm btn-primary res_mrgn_top_15px" type="button" id="change" onclick="change_status();" <?php
+                                if ($query[0]['status'] == 2) {
+                                    echo "disabled";
+                                }
+                                ?>>Save</button>
+                                <span id="loader_div1" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <?php
+                                if ($emergency_tests[0]["emergency"] == '1') {
+                                    echo '<span class="label label-danger">Emergency</span>';
+                                } else {
+                                    echo '<span class="label label-warning">Normal</span>';
+                                }
+                                ?>
+                            </div>
+                            <?php $booking_date = explode(" ", $query[0]['date']);
+                            if ($login_data['type'] == '1') {
+                                ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Registration Date:</label> <?php echo $query[0]['date']; ?>  <?php /* <a href="javascript:void(0)" onclick="$('#registration_model').modal('show');"> <i class="fa fa-edit"></i></a> */ ?>
+                                </div>
+    <?php } ?>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Total Amount:</label> <?php echo "Rs." . $query[0]['price']; ?>  
+                            </div>
+    <?php if ($cut_from_wallet != 0) { ?>
+                                <div class="form-group">  
+                                    <label for="exampleInputFile">Debited From Wallet:</label> <?php echo "Rs." . $cut_from_wallet; ?>  
+                                </div>
+                                <?php } ?>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Due/Payable Amount:</label> <?php
+                                $j_payable_price = 0;
+                                if ($query[0]['payable_amount'] == "") {
+                                    echo "Rs." . "0";
+                                } else {
+                                    $j_payable_price = $query[0]['payable_amount'];
+                                    echo "Rs." . $query[0]['payable_amount'];
+                                }
+                                ?>  <a href="javascript:void(0)" onclick="$('#payment_model').modal('show');"> <i class="fa fa-edit"></i></a>
+                            </div>
+                            <input type="hidden" value="<?php echo $cid; ?>" id="job_id">
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Discount:</label> <?php $bcnt=0;
+                                echo $query[0]['discount'] . "%"; 
+                                ?>  <?php if (!in_array($branchdis, array(8, 23, 66, 70,72)) || $login_data['type'] == 1 || $login_data['type'] == 2) { $bcnt=1; ?> <a id="disc_edit" href="javascript:void(0)" onclick="$('#discount_model').modal('show');"> <i class="fa fa-edit"></i></a> <?php } ?>
+                                <?php if($bcnt==0 && $login_data['id']==192&&$query[0]['branch_fk']==72){ ?> <a id="disc_edit" href="javascript:void(0)" onclick="$('#discount_model').modal('show');"> <i class="fa fa-edit"></i></a> <?php } ?>
+                            </div>
+                            <div class="form-group"> 
+                                <label for="exampleInputFile">Payment Type :</label> <?php echo $query[0]['payment_type']; ?>  
+                            </div>
+                            <!--                        <div class="form-group">
+                                                        <label for="exampleInputFile">Payment Via :</label> <?php
+                            foreach ($payment_type_list as $key) {
+                                if ($query[0]['payment_type_fk'] == $key["id"]) {
+                                    echo $key["name"];
+                                }
+                            }
+                            ?>  
+                                                        <a href="javascript:void(0)" onclick="$('#payment_model1').modal('show');"> <i class="fa fa-edit"></i></a>
+                                                    </div>-->
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Blood Sample Collection Status :</label> <?php
+                                if ($query[0]['sample_collection'] == "1") {
+                                    echo "Yes";
+                                } else {
+                                    echo "No";
+                                }
+                                ?>  
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Collection Charge :</label> <?php
+                                if ($query[0]['collection_charge'] == 1) {
+                                    echo '<span class="label label-success">Yes</span>';
+                                } else {
+                                    echo '<span class="label label-danger">No</span>';
+                                }
+                                ?>
+                                <?php if (in_array($login_data['type'], array("1", "2")) && $booking_date[0] == date("Y-m-d")) { ?>
+                                    <a href="javascript:void(0);" onclick="$('#colection_charge_model').modal('show');"><i class="fa fa-edit"></i></a>
+    <?php } ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Job Status :</label>   <?php
+                                if ($query[0]['status'] == 1) {
+                                    echo "<span class='label label-danger'>Waiting For Approval</span>";
+                                }
+                                ?>
+                                <?php
+                                if ($query[0]['status'] == 6) {
+                                    echo "<span class='label label-warning'>Approved</span>";
+                                }
+                                ?>
+                                <?php
+                                if ($query[0]['status'] == 7) {
+                                    echo "<span class='label label-warning'>Sample Collected</span>";
+                                }
+                                ?>
+                                <?php
+                                if ($query[0]['status'] == 8) {
+                                    echo "<span class='label label-warning'>Sample received & processing</span>";
+                                }
+                                ?>
+                                <?php
+                                if ($query[0]['status'] == 2) {
+                                    echo "<span class='label label-success'>Completed</span>";
+                                }
+                                ?>
+                                <?php
+                                if ($query[0]['status'] == 0) {
+                                    echo "<span class='label label-danger'>Spam</span>";
+                                }
+                                ?>
+                            </div>
+                                <?php if ($common_report[0]['report'] != '') { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Report Status :</label>
+                                    <?php
+                                    if ($query[0]["report_status"] == 1) {
+                                        echo '<span class="label label-danger">Critical</span>';
+                                    } else if ($query[0]["report_status"] == 2) {
+                                        echo '<span class="label label-warning">Semi-Critical</span>';
+                                    } else if ($query[0]["report_status"] == 3) {
+                                        echo '<span class="label label-success">Normal</span>';
+                                    } else {
+                                        echo '<span class="label label-danger">NA</span>';
+                                    }
+                                    ?>
+                                    <?php if ($login_data['type'] != 6 && $login_data['type'] != 7) { ?>
+                                        <a href="javascript:void(0);" onclick="$('#report_status_modal').modal('show');"><i class="fa fa-edit"></i></a>
+                                <?php } ?>
+                                </div>
+                                <?php } ?>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Barcode :</label>
+                                <?php echo $query[0]['barcode']; ?>
+                                <?php if ($login_data['type'] != 6 && $login_data['type'] != 7) { ?>
+                                    <a href="javascript:void(0);" onclick="$('#barcode_model').modal('show');"><i class="fa fa-edit"></i></a>
+                            <?php } ?>
+                            </div>
+                                <?php if ($query[0]['portal']) { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Book Portal :</label> <?php
+                                    echo $query[0]['portal'];
+                                    ?>  
+                                </div>
+                                <?php } ?>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Reference :</label> <?php
+                                echo $query[0]['other_reference'];
+                                ?>  
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Sample From :</label> <?php
+                                if (!empty($query[0]['sample_from_name'])) {
+                                    echo ucfirst($query[0]['sample_from_name']);
+                                } else {
+                                    echo "NA";
+                                }
+                                ?>  
+                            </div>
+                                <?php if ($query[0]['payment_type'] == 'PayUMoney') { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Transaction ID :</label> <?php
+                                    echo $payumoney_details[0]['payomonyid'];
+                                    ?>  
+                                </div>
+
+    <?php } ?>
+    <?php /* Nishit booking details start */ ?>
+                            <h3 class="box-title">Clinical History</h3>
+                            <hr style="margin-top:10px;">
+                            <div class="form-group">
+                                <label for="exampleInputFile"><?php
+                                    if ($query[0]["clinical_history"] == 1) {
+                                        echo "Yes";
+                                    } else {
+                                        echo "No";
+                                    }
+                                    ?></label> 
+                            </div>
+    <?php if ($query[0]["clinical_history"] == 1) { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Message :</label> <?php echo ucfirst($query[0]["prescription_message"]); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Prescription :</label> <a href="<?php echo base_url(); ?>upload/doctor_description/<?php echo $query[0]["prescription_file"]; ?>" target="_blank"> View</a>
+                                </div>
+                            <?php } ?>
+    <?php if ($query[0]["model_type"] == 1) {
+        ?>
+                                <h3 class="box-title">Account Holder Information</h3>
+                                <hr style="margin-top:10px;">
+                                <div class="form-group">
+                                    <?php
+                                    $check_pc = substr($query[0]['pic'], 0, 6);
+                                    if ($check_pc == "https:") {
+                                        ?>
+                                        <img src="<?php echo $query[0]['pic']; ?>" onerror="this.src='<?= base_url(); ?>upload/avatar/profile_avatar.png'" class="img-circle admin_job_dtl_img"  style="height: 70px;width:auto"/>
+                                    <?php } else { ?>
+                                        <img class="img-circle admin_job_dtl_img" onerror="this.src='<?= base_url(); ?>upload/avatar/profile_avatar.png'" src="<?php echo base_url(); ?>upload/<?php echo $query[0]['pic']; ?>" style="height: 70px;width:auto"/>
+        <?php } ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Name :</label> <a href="<?php echo base_url(); ?>customer-master/customer-all-details/<?php echo $query[0]['custid']; ?>"> <?php echo ucfirst($query[0]['full_name']); ?></a>&nbsp;<a href="javascript:void(0)" onclick="$('#family_model12').modal('show');"> <i class="fa fa-edit"></i></a>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Mobile :</label> <?php echo ucwords($query[0]['mobile']); ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Email :</label> <?php echo $query[0]['email']; ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">DOB :</label> <?php echo $query[0]['dob']; ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Age :</label> <?php
+                                    if ($age[0] == '0' && $age[2] == '0') {
+                                        echo $age[1] . " M";
+                                    } else if ($age[0] == '0' && $age[1] == '0') {
+                                        echo $age[2] . " D";
+                                    } else {
+                                        echo $age[0] . " Y";
+                                    }
+                                    ?>
+                                </div>
+                        <?php } /* Nishit booking details end */ ?>
+                        </div>
+                        <?php } else { ?>
+                        <div class="form-group">
+                            <?php
+                            if ($query[0]['status'] != 2) {
+                                if (!empty($common_report[0]['report']) || !empty($common_report[0]['without_laterpad'])) {
+                                    ?>
+                                    <a class="btn-sm btn-primary res_mrgn_top_15px" href="<?= base_url() . '/btob_job_master/mark_complete/' . $cid ?>"> Mark As Complete</a>
+
+                                    <?php
+                                } else {
+                                    echo "<label>Please Genereate report for complete.</label>";
+                                }
+                            } else {
+                                ?>
+                                <a class="btn-sm btn-primary res_mrgn_top_15px" href="<?= base_url() . '/btob_job_master/mark_complete/' . $cid ?>"> Regenerate Report</a>
+
+    <?php }
+    ?>
+
+
+
+                            <span id="loader_div1" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
+
+                        </div>
+    <?php if ($relation == 'Self') { ?>
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Patient Name :</label> <?php echo ucfirst($query[0]['full_name']); ?> 
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Mobile :</label> <?php echo ucwords($query[0]['mobile']); ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Email :</label> <?php echo $query[0]['email']; ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">DOB :</label> <?php echo $query[0]['dob']; ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Age :</label> <?php
+                                if ($age[0] != 0) {
+                                    echo $age[0] . " Y";
+                                }
+                                if ($age[0] == 0 && $age[1] != 0) {
+                                    echo $age[1] . " M";
+                                }
+                                if ($age[0] == 0 && $age[1] == 0 && $age[2] != 0) {
+                                    echo $age[2] . " D";
+                                }
+                                ?>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Gender :</label> <?php echo ucwords($query[0]['gender']); ?>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputFile">Barcode :</label> <?php echo $query[0]['barcode']; ?>
+                            </div>
+                                <?php if ($query[0]["model_type"] == 2) { ?>
+                                <div class="form-group">
+                                    <label for="exampleInputFile" class="col-sm-3 pdng_0">Total Amount:</label> <?php
+                                    echo "Rs." . $b2b_job_detais[0]['price'];
+                                    ?>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile" class="col-sm-3 pdng_0">Due/Payable Amount:</label> <?php
+                                    if ($b2b_job_detais[0]['payable_amount'] == "") {
+                                        echo "Rs." . "0";
+                                    } else {
+                                        echo "Rs." . $b2b_job_detais[0]['payable_amount'];
+                                    }
+                                    ?>  <a href="javascript:void(0)" onclick="$('#payment_model').modal('show');"> <i class="fa fa-edit"></i></a>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Creditors :</label>
+                                    <?php
+                                    if (!empty($selected_creditor)) {
+                                        echo ucfirst($selected_creditor[0]["name"]) . " - " . $selected_creditor[0]["mobile"];
+                                    } else {
+                                        echo "NA";
+                                    }
+                                    ?>
+                                    <?php if (empty($selected_creditor)) { ?>
+                                        <a href="javascript:void(0);" onclick="$('#creditor_model').modal('show');"><i class="fa fa-edit"></i></a>
+                                <?php } ?>
+                                </div>
+                            <?php } ?>
+                            <?php
+                        }
+                    }
+                   print_r($createdUser);
+                    ?> 
+                    <p>Created By <?= $createdUser['name'] ?>  <?=  $query[0]['phlebo_added_by'] ?> </p>
+                    <div class="col-sm-12 res_pdng_0"><div id="job_tracking"></div></div>
+                </div>
+            </div>
+        </div>
+<?php if ($login_data['type'] != 5 && $login_data['type'] != 6 && $login_data['type'] != 7) { ?>
+            <div class="col-md-6">
+                <div class="box box-primary">
+
+                    <div class="box-header">
+
+                        <!-- form start -->
+                        <h3 class="box-title">Phlebo OTP</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="col-md-6 res_pdng_0">
+                                <?php /* if ($query[0]['pic'] != NULL) { */ ?>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Phlebo Blood Collect OTP :</label>
+                                <?php
+                                if ($query[0]['status'] == 7 || $query[0]['status'] == 8 || $query[0]['status'] == 2) {
+                                    echo $phlebo_rate[0]["otp"];
+                                } else {
+                                    echo "Sample not collect.";
+                                }
+                                ?>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        <?php } /* Nishit change payment status start */ ?>
+        <!-- Modal -->
+<?php if ($query[0]["model_type"] == 1) { ?>
+            <div class="modal fade" id="payment_model" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Payment Status</h4>
+                        </div>
+                            <?php echo form_open("job_master/payment_received/" . $cid, array("onsubmit" => "return confirm('Are you sure?');", "method" => "POST", "role" => "form", "id" => "payment_receiv_form_id","novalidate" => true)); ?>
+                        <div class="modal-body">
+    <?php if (!empty($amount_history_success)) { ?>
+                                <div class="widget">
+                                    <div class="alert alert-success alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">x</button>
+                                <?php echo $amount_history_success['0']; ?>
+                                    </div>
+                                </div>
+    <?php } ?>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Receive Amount<span style="color:red;">*</span>:</label>
+								<input type='hidden' id='hdn_tid' name='hdn_tid'>
+                                <input type='hidden' id='payable' name='payable' value='<?= $query[0]['payable_amount']; ?>'>
+                                <input type="number" <?php if ($login_data['type'] != 1 && $login_data['type'] != 2){ ?> min="0" <?php } ?> class="form-control" id="j_amount" name="amount" onkeypress="return isNumberKey(event)" required="">
+                                <input type="hidden" id="ttl_amount" name="ttl_amount" value="<?= $query[0]['payable_amount']; ?>"/>
+                                <span style="color:red;" id="amount_error"></span>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Remark" name="remark"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="p_type" class="control-label">Mode<span style="color:red;">*</span>:</label>
+                                <select id="pay_mode" name="p_type" class="form-control" style="width: 100%" required>
+                                    <option value="">--Select Type--</option>
+    <?php foreach ($payment_type_list as $key) {
+        ?>
+                                        <option value="<?php echo $key['name']; ?>"><?php echo ucwords($key['name']); ?></option>
+
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                                <span style="color:red;" id="amount_error1"></span>
+                            </div>
+							<?php if($login_data["email"] == "shikha.kothari@airmedpathlabs.com" || $login_data["email"] == "admin@virtualheight.com") { ?>
+							<div class="form-group" id="div_time" <?= $user->type != 1 ? "style='display:none'" : "" ?>>
+                                <input type='datetime-local' class='form-control' id='rcv_tm' name='rcv_time' />
+                            </div>
+							<?php } ?>
+                            <script>
+                                $("#j_amount").keyup(function () {
+                                $("#amount_error").html("");
+                                var val = parseInt(this.value);
+                                var ttl_amt = '<?= $query[0]['payable_amount']; ?>';
+                                ttl_amt = parseInt(ttl_amt);
+                                if (val != null) {
+                                console.log("ttl" + ttl_amt + " input" + val);
+                                if (ttl_amt >= val) {
+                                $("#amount_submit_btn").removeAttr("disabled");
+                                } else {
+                                $("#amount_submit_btn").attr("disabled", "");
+                                $("#amount_error").html("Given amount is more than payable amount.");
+                                }
+                                } else {
+                                $("#amount_submit_btn").attr("disabled", "");
+                                $("#amount_error").html("Invalid amount.");
+                                }
+                                });
+                            </script>
+                            <h3>Received Amount History</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Remark</th>
+                                        <th>Pay Via</th>
+                                        <th>Added By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php
+                                    $ttl = 0;
+                                    if ($phlebo_collect[0]["amount"] > 0) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $phlebo_collect[0]["createddate"] ?></td>
+                                            <td>Rs.<?php
+                                                $ttl = $ttl + round($phlebo_collect[0]["amount"]);
+                                                echo $phlebo_collect[0]["amount"];
+                                                ?></td>
+                                            <td>Phlebo Collected</td>
+                                            <td>Cash</td>
+                                            <td><?= $phlebo_collect[0]["name"] ?></td>
+                                            <td></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php
+                                    if ($online_pay[0]["amount"] > 0) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $query[0]["date"] ?></td>
+                                            <td>Rs.<?php
+                                                echo round($online_pay[0]["amount"]);
+                                                $ttl = $ttl + round($online_pay[0]["amount"]);
+                                                ?></td>
+                                            <td>Online pay (PayUmoney)</td>
+                                            <td>PayUmoney</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php
+                                    if ($creditors_pay[0]["amount"] > 0) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $creditors_pay[0]["created_date"] ?></td>
+                                            <td>Rs.<?php
+                                                echo round($creditors_pay[0]["amount"]);
+                                                $ttl = $ttl + round($creditors_pay[0]["amount"]);
+                                                ?></td>
+                                            <td></td>
+                                            <td>Creditors</td>
+                                            <td><?php echo $creditors_pay[0]['name']; ?></td>
+                                            <td></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php
+                                    if ($cut_from_wallet > 0) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $query[0]["date"] ?></td>
+                                            <td>Rs.<?php
+                                                echo $cut_from_wallet;
+                                                $ttl = $ttl + $cut_from_wallet;
+                                                ?></td>
+                                            <td>Cut from wallet</td>
+                                            <td>Wallet</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php
+                                    if ($query[0]["discount"] > 0) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $query[0]["date"] ?></td>
+                                            <td>Rs.<?php
+                                                echo round(($query[0]["price"] * $query[0]["discount"]) / 100);
+                                                $ttl = $ttl + round(($query[0]["price"] * $query[0]["discount"]) / 100);
+                                                ?></td>
+                                            <td>Discount</td>
+                                            <td></td>
+                                            <td><?= $discount_added_by[0]["name"] ?></td>
+                                            <td></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php
+                                    foreach ($job_master_receiv_amount as $rakey): $ttl = $ttl + $rakey["amount"];
+                                        if ($rakey["amount"] != '') {
+                                            ?>
+                                            <tr>
+                                                <td id="rcv_tim"><?= $rakey["createddate"] ?></td>
+                                                <td>Rs.<?= $rakey["amount"] ?></td>
+                                                <td><?= ucfirst($rakey["remark"]) ?></td>
+                                                <td><?php if ($rakey["type"] == "User Pay") { ?>PayUmoney<?php } ?><?= ucfirst($rakey["payment_type"]) ?></td>
+                                                <td><?php if ($rakey["type"] != "User Pay") { ?><?= ucfirst($rakey["name"]); ?><?php } ?></td>
+                                                <td>
+                                                    <?php if ($rakey["type"] != "User Pay" && $login_data['type'] == 1 || $login_data['type'] == 2) { ?>
+													<?php if($login_data["email"] == "shikha.kothari@airmedpathlabs.com" || $login_data["email"] == "admin@virtualheight.com") { ?>
+														<a href="javascript:void(0);" onclick="edit_received_payment('<?= $rakey["id"] ?>', '<?= $rakey["amount"] ?>', '<?= $rakey["payment_type"] ?>');"><i class="fa fa-edit"></i></a>
+													<?php } ?>
+                                                        <a href="javascript:void(0);" onclick="delete_received_payment('<?= $rakey["id"] ?>', '<?= $rakey["amount"] ?>');"><i class="fa fa-trash"></i></a>
+                                            <?php } ?>
+                                                </td>
+                                            </tr>
+        <?php } endforeach; ?>
+                                    <tr style="border-top:2px solid black">
+                                        <td><b>Total Received Amount</b></td>
+                                        <td colspan="4"><b>Rs.<?= $ttl; ?></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+
+                            <!--                            <button type="button" class="btn btn-primary" id="amount_submit_btn" disabled="">Add</button>-->
+                            <input type="submit" value="Add" class="btn btn-primary" id="amount_submit_btn" onclick="return add_payment_click()"/>
+                            <script>
+                                function add_payment_click()
+                                {
+                                    var payment_type_option = document.getElementById('pay_mode').selectedIndex;
+                                    if(payment_type_option == 0)
+                                    {
+                                        $("#amount_error1").html("Please select payment mode for received amount");                                        
+                                        return false;
+                                    }
+                                }
+
+
+                                function send_receiv_amount() {
+                                $("#amount_submit_btn").attr('disabled', 'disabled');
+                                //$("#payment_receiv_form_id").submit();
+                                document.getElementById("frm_sb").click();
+                                return true;
+                                //$("#frm_sb").click();
+                                }
+                            </script>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+    <?= form_close(); ?>
+                    </div>
+
+                </div>
+            </div>
+<?php } ?>
+<?php if ($query[0]["model_type"] == 2) { ?>
+            <div class="modal fade" id="payment_model" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Payment Status</h4>
+                        </div>
+                            <?php echo form_open("b2b/Logistic/payment_received1/" . $b2b_job_detais[0]["id"] . "/" . $cid, array("onsubmit" => "", "method" => "POST", "role" => "form", "id" => "payment_receiv_form_id")); ?>
+                        <div class="modal-body">
+    <?php if (!empty($amount_history_success)) { ?>
+                                <div class="widget">
+                                    <div class="alert alert-success alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">x</button>
+                                <?php echo $amount_history_success['0']; ?>
+                                    </div>
+                                </div>
+    <?php } ?>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Receive Amount<span style="color:red;">*</span>:</label>
+                                <input type="text" class="form-control" id="j_amount" name="amount" onkeypress="return isNumberKey(event)" required="">
+                                <input type="hidden" id="ttl_amount" name="ttl_amount" value="<?= $b2b_job_detais[0]['payable_amount']; ?>"/>
+                                <span style="color:red;" id="amount_error"></span>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="Remark" name="remark"></textarea>
+                            </div>
+                            <script>
+                                function check_submit_b2b_payment() {
+                                $("#amount_error").html("");
+                                var chck = confirm('Are you sure?');
+                                if (chck == true) {
+                                if (parseInt($("#ttl_amount").val()) < parseInt($("#j_amount").val())) {
+                                $("#amount_error").html("Invalid received amount.");
+                                return false;
+                                } else if (parseInt($("#j_amount").val()) > 0) {
+                                $("#payment_receiv_form_id").submit();
+                                } else {
+                                $("#amount_error").html("Invalid received amount.");
+                                return false;
+                                }
+                                } else {
+                                return false;
+                                }
+                                }
+                                function delete_received_payment1(val, d_amount) {
+                                var cnfg = confirm('Are you sure?');
+                                if (cnfg == true) {
+                                var ttl_amount = $("#ttl_amount").val();
+                                $.ajax({
+                                url: "<?php echo base_url(); ?>b2b/Logistic/delete_assign_payment",
+                                        type: 'post',
+                                        data: {id: val, ttl_amount: ttl_amount, jid:<?= $b2b_job_detais[0]["id"]; ?>, did:<?= $cid; ?>, d_amount: d_amount},
+                                        beforeSend: function () {
+                                        $("#amount_error").html('<img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px">');
+                                        },
+                                        success: function (data) {
+                                        if (data == 1) {
+                                        window.location.reload();
+                                        }
+                                        $("#amount_error").html('');
+                                        }, complete: function () {
+                                $("#amount_error").html('');
+                                }
+                                });
+                                }
+                                }
+                            </script>
+                            <h3>Received Amount History</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Remark</th>
+                                        <th>Pay Via</th>
+                                        <th>Added By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php $ttl = 0; ?>
+                                    <?php
+                                    if ($query[0]["discount"] > 0) {
+                                        ?>
+                                        <tr>
+                                            <td><?= $job_details[0]["date"] ?></td>
+                                            <td>Rs.<?php
+                                                echo round(($query[0]["price"] * $query[0]["discount"]) / 100);
+                                                $ttl = $ttl + round(($query[0]["price"] * $query[0]["discount"]) / 100);
+                                                ?></td>
+                                            <td>Discount</td>
+                                            <td></td>
+                                            <td><?= $discount_added_by[0]["name"] ?></td>
+                                            <td></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php
+                                    foreach ($b2b_job_master_receiv_amount as $rakey): $ttl = $ttl + $rakey["amount"];
+                                        if ($rakey["amount"] != '') {
+                                            ?>
+                                            <tr>
+                                                <td><?= $rakey["createddate"] ?></td>
+                                                <td>Rs.<?= $rakey["amount"] ?></td>
+                                                <td><?= ucfirst($rakey["remark"]) ?></td>
+                                                <td>CASH</td>
+                                                <td><?php if ($rakey["type"] != "User Pay") { ?><?= ucfirst($rakey["name"]); ?><?php } ?></td>
+                                                <td>
+                                                    <?php if ($rakey["type"] != "User Pay" && $login_data['type'] == 1 || $login_data['type'] == 2) { ?>
+                                                        <a href="javascript:void(0);" onclick="delete_received_payment1('<?= $rakey["id"] ?>', '<?= $rakey["amount"] ?>');"><i class="fa fa-trash"></i></a>
+                                            <?php } ?>
+                                                </td>
+                                            </tr>
+        <?php } endforeach; ?>
+                                    <tr style="border-top:2px solid black">
+                                        <td><b>Total Received Amount</b></td>
+                                        <td colspan="4"><b>Rs.<?= $ttl; ?></b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+
+                            <!--                            <button type="button" class="btn btn-primary" id="amount_submit_btn" disabled="">Add</button>-->
+                            <input type="button" onclick="check_submit_b2b_payment();" value="Add" class="btn btn-primary" id="amount_submit_btn"/>
+                            <script>
+                                function send_receiv_amount() {
+                                $("#amount_submit_btn").attr('disabled', 'disabled');
+                                //$("#payment_receiv_form_id").submit();
+                                document.getElementById("frm_sb").click();
+                                return true;
+                                //$("#frm_sb").click();
+                                }
+                            </script>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+    <?= form_close(); ?>
+                    </div>
+
+                </div>
+            </div>
+        <?php } ?>
+
+<?php /* Nishit change payment status end */ ?>
+        <div class="modal fade" id="registration_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Register Date  & Time</h4>
+                    </div>
+                        <?php echo form_open("job_master/update_register_date/" . $cid, array("method" => "POST", "role" => "form", "id" => "change_date")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Register Date<i style="color:red;">*</i>:</label>
+
+                            <input type="text" name="date_time" id="sub_regi_date" class="form-control form_datetime" required="true" value="<?php echo $query[0]['date']; ?>" readonly/>
+                            <span class="color:red"></span>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Change</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+<?php /* Nishit change payment status start */ ?>
+        <!-- Modal -->
+        <div class="modal fade" id="family_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Family Member</h4>
+                    </div>
+                        <?php echo form_open("job_master/change_family_member/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select:</label>
+                            <select name="family_mem" class="form-control">
+                                <option value="0">Self</option>
+                                <?php foreach ($relation_list as $fkey) { ?>
+                                    <option value="<?= $fkey["id"] ?>" <?php
+                                    if ($booking_info[0]['family_member_fk'] == $fkey["id"]) {
+                                        echo "selected";
+                                    }
+                                    ?>><?= $fkey["name"] ?></option>
+<?php } ?>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <b>OR (Create new)</b>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Name<i style="color:red;">*</i>:</label>
+                            <input type="text" name="f_name" class="form-control" />
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Relation<i style="color:red;">*</i>:</label>
+                            <select name="family_relation" class="form-control" >
+                                <option value="">--Select--</option>
+                                <?php foreach ($relation1 as $fkey) { ?>
+                                    <option value="<?= $fkey["id"] ?>"><?= $fkey["name"] ?></option>
+<?php } ?>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Date Of Birth<i style="color:red;">*</i>:</label>
+                            <input type="text" name="f_dob" id='f_dob1' readonly="" class="form-control datepicker-input" />
+                            OR<input type="text" class="form-control" style="width:20%" onkeyup="calculate_age1(this.value, 'f_dob1');"/>
+                            <span style="color:red;" id="f_dob_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Gender<i style="color:red;">*</i>:</label>
+                            <select name="f_gender" class="form-control" id="f_gender" >
+                                <option value="male">Male</option>
+                                <option value="male">Female</option>
+                            </select>
+                            <span style="color:red;" id="f_gender_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Phone:</label>
+                            <input type="text" name="f_phone" class="form-control"/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Email:</label>
+                            <input type="text" name="f_email" class="form-control"/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Change</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="family_model1" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Family Member Info.</h4>
+                    </div>
+                        <?php echo form_open("job_master/update_family_member/" . $family_data[0]["id"] . "/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <input type="hidden" name="uid" value="<?= $query[0]["custid"] ?>"/>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Name<i style="color:red;">*</i>:</label>
+                            <input type="text" name="f_name" class="form-control" value="<?= $family_data[0]["name"] ?>" required=""/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Relation<i style="color:red;">*</i>:</label>
+                            <select name="family_relation" class="form-control" required="">
+                                <option value="">--Select--</option>
+                                <?php foreach ($relation1 as $fkey) { ?>
+                                    <option value="<?= $fkey["id"] ?>" <?php
+                                    if ($family_data[0]["relation_fk"] == $fkey["id"]) {
+                                        echo "selected";
+                                    }
+                                    ?>><?= $fkey["name"] ?></option>
+<?php } ?>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Date Of Birth<i style="color:red;">*</i>:</label>
+                            <input type="text" name="f_dob" id='f_dob3' readonly="" value="<?php
+                                   $bdate = explode("-", $family_data[0]["dob"]);
+                                   echo $bdate[2] . "/" . $bdate[1] . "/" . $bdate[0];
+                                   ?>" class="form-control datepicker-input" required=""/>
+                            OR<input type="text" class="form-control" style="width:20%" onkeyup="calculate_age1(this.value, 'f_dob3');"/>
+                            <span style="color:red;" id="f_dob_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Gender<i style="color:red;">*</i>:</label>
+                            <select name="f_gender" class="form-control" id="f_gender" required="">
+                                <option value="male" <?php
+                                if ($family_data[0]["gender"] == 'male') {
+                                    echo "selected";
+                                }
+                                ?>>Male</option>
+                                <option value="female" <?php
+                                if ($family_data[0]["gender"] == 'female') {
+                                    echo "selected";
+                                }
+                                ?>>Female</option>
+                            </select>
+                            <span style="color:red;" id="f_gender_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Phone:</label>
+                            <input type="text" name="f_phone" class="form-control" value="<?= $family_data[0]["phone"] ?>"/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Email:</label>
+                            <input type="text" name="f_email" class="form-control" value="<?= $family_data[0]["email"] ?>"/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="family_model12" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Patient Info.</h4>
+                    </div>
+<?php echo form_open("job_master/update_user_info/" . $query[0]["custid"] . "/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <input type="hidden" name="uid" value="<?= $query[0]["custid"] ?>"/>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Name<i style="color:red;">*</i>:</label>
+                            <input type="text" name="f_name" class="form-control" value="<?= $customer_info[0]["full_name"] ?>" required=""/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Date Of Birth<i style="color:red;">*</i>:</label>
+                            <input type="text" name="f_dob" id='f_dob' readonly="" value="<?php
+                                   $bdate = explode("-", $customer_info[0]["dob"]);
+                                   echo $bdate[2] . "/" . $bdate[1] . "/" . $bdate[0];
+                                   ?>" class="form-control datepicker-input" required=""/>
+                            OR<input type="text" class="form-control" style="width:20%" onkeyup="calculate_age1(this.value, 'f_dob');"/>
+                            <span style="color:red;" id="f_dob_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Gender<i style="color:red;">*</i>:</label>
+                            <select name="f_gender" class="form-control" id="f_gender" required="">
+                                <option value="male" <?php
+                                if ($customer_info[0]["gender"] == 'male') {
+                                    echo "selected";
+                                }
+                                ?>>Male</option>
+                                <option value="female" <?php
+                                if ($customer_info[0]["gender"] == 'female') {
+                                    echo "selected";
+                                }
+                                ?>>Female</option>
+                            </select>
+                            <span style="color:red;" id="f_gender_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Phone:</label>
+                            <input type="text" name="f_phone" class="form-control" value="<?= $customer_info[0]["mobile"] ?>"/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Email:</label>
+                            <input type="text" name="f_email" class="form-control" value="<?= $customer_info[0]["email"] ?>"/>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+<?php /* Nishit doctor model start */ ?>
+        <div class="modal fade" id="doctor_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Doctor</h4>
+                    </div>
+                        <?php echo form_open("job_master/change_doctor/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select Doctor:</label>
+                            <select name="referral_by" id="referral_by" class="form-control chosen" style="width:100%;" required="">
+
+                            </select>
+
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="notify_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Notify</h4>
+                    </div>
+                        <?php echo form_open("job_master/change_notify/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select:</label>
+                            <select name="notify" class="form-control chosen" style="width:100%;" required="">
+                                <option value="">--Select--</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="colection_charge_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Collection Charge</h4>
+                    </div>
+                        <?php echo form_open("job_master/change_cc/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select:</label>
+                            <select name="notify" id="collectioncharge_notify" onchange="collectionchargestatus();" class="form-control chosen" style="width:100%;" required="">
+                                <option value="">--Select--</option>
+                                <option value="1" <?php
+                                if ($query[0]["collection_charge"] == 1) {
+                                    echo " selected";
+                                }
+                                ?>>Yes</option>
+                                <option value="0" <?php
+                                if ($query[0]["collection_charge"] == 0) {
+                                    echo " selected";
+                                }
+                                ?>>No</option>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                        <div class="form-group" id="collectioncharge_amt">
+                            <label for="recipient-name" class="control-label">Collection Charge Amount<span style="color:red;">*</span>:</label>
+                            <input type="text" class="form-control" id="collectioncharge_amount" name="collectioncharge_amount" value="<?= $query[0]['collectioncharge_amount']; ?>" onkeypress="return isNumberKey(event)" required="">
+                            <input type="hidden" id="collectionchargeamount" name="collectionchargeamount" value="<?= $query[0]['collectioncharge_amount']; ?>" />
+                            <span style="color:red;" id="collectionchargeamount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+                <script>
+                    function collectionchargestatus(){
+                            var collectioncharge_notify = $("#collectioncharge_notify").val();
+                            if(collectioncharge_notify==1){
+                                    $("#collectioncharge_amt").show();
+                                    $("#collectionchargeamount").val($("#collectioncharge_amount").val());
+                            }else{
+                                    $("#collectioncharge_amt").hide();
+                                    $("#collectionchargeamount").val(0);
+                            }
+                    }
+                    $(document).ready(function(){
+                            collectionchargestatus();
+                    });
+                    $("#collectioncharge_amount").keyup(function () {
+                            $("#collectionchargeamount_error").html("");
+                            var newcollectioncharge_amount = Number(this.value);
+                            //var collectionchargeamount = '<?= $query[0]['collectioncharge_amount']; ?>';
+                            //collectionchargeamount = Number(collectionchargeamount);
+                            if (newcollectioncharge_amount != null) {
+                                    $("#collectionchargeamount").val(newcollectioncharge_amount);
+                            } else {
+                                    $("#amount_submit_btn").attr("disabled", "");
+                                    $("#collectionchargeamount_error").html("Invalid amount.");
+                            }
+                   });
+             </script> 
+            </div>
+        </div>
+<?php /* Nishit doctor model end */ ?> 
+<?php /* Hiten Branch model start */ ?>
+        <div class="modal fade" id="branch_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Branch</h4>
+                    </div>
+                        <?php echo form_open("job_master/change_branch/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select Branch:</label>
+
+                            <select id="branch" name="branch" class="chosen" style="width: 100%" required="">
+                                <option value="">--Select--</option>
+<?php foreach ($branch_list as $branch) {
+    ?>
+                                    <option value="<?php echo $branch['id']; ?>"><?php echo ucwords($branch['branch_name']) . " - " . $branch['branch_code']; ?></option>
+
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="creditor_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Creditors</h4>
+                    </div>
+                    <?php if ($query[0]["model_type"] == 1) { ?>
+                        <?php echo form_open("job_master/change_credential/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <?php } ?>
+                    <?php if ($query[0]["model_type"] == 2) { ?>
+    <?php echo form_open("b2b/logistic/change_credential/" . $cid, array("method" => "POST", "role" => "form")); ?>
+<?php } ?>
+                    <div class="modal-body">
+                        <div id="creditor_div">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Select Creditors:</label>
+                                <select id="creditor_id" name="creditor" class="chosen" style="width: 100%" required="">
+                                    <option value="">--Select--</option>
+                                    <?php foreach ($creditors as $branch) {
+                                        ?>
+                                        <option value="<?php echo $branch['id']; ?>" <?php
+                                        if ($selected_creditor[0]["creditors_fk"] == $branch["id"]) {
+                                            echo "selected";
+                                        }
+                                        ?>><?php echo ucwords($branch['name']) . " - " . $branch['mobile']; ?></option>
+
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                                <span style="color:red;" id="creditor_error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Amount:</label>
+                                <input type="number" name="creditor_amount" id="creditor_amount" class="form-control" value="<?php echo $selected_creditor[0]["amount"]; ?>">
+                                <span style="color:red;" id="creditor_amount_error"></span>
+                            </div>
+                        </div>
+                        <div id="otp_creditor_div" style="display:none;">
+                            <div class="form-group has-feedback">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style=""><i class="fa fa-key"></i></span>
+                                    <input type="text"  placeholder="OTP" id="otp_val" class="form-control" name="otp">
+                                </div>
+                                <span style="color:red;" id="otp_error"></span>
+                                <span style="color:green;" id="otp_success"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-xs-8">    
+                            <span id="loader_creditor_div" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
+                            <a href="javascript:void(0);" id="resend_opt" style="display:none;" onclick="credit_resend();">Resend OTP</a>
+                            <a href="javascript:void(0);" id="mycounter" style=""></a>
+                        </div><!-- /.col -->
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-primary" id="creditor_amount_submit_btn" onclick="creditor_otp();" <?php
+                            if ($selected_creditor[0]["creditors_fk"] != '') {
+                                echo "disabled";
+                            }
+                            ?>>Update</button>
+                            <button type="button" class="btn btn-primary" id="creditor_amount_submit_btn_otp" style="display:none;" onclick="creditor_otp_check();">Update</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+                <script>
+                    function countdown(elementName, minutes, seconds)
+                    {
+                    var element, endTime, hours, mins, msLeft, time;
+                    function twoDigits(n)
+                    {
+                    return (n <= 9 ? "0" + n : n);
+                    }
+
+                    function updateTimer()
+                    {
+                    msLeft = endTime - ( + new Date);
+                    if (msLeft < 1000) {
+                    //element.innerHTML = "countdown's over!";
+                    $("#mycounter").attr("style", "display:none;");
+                    $("#resend_opt").attr("style", "");
+                    $("#resend_opt").attr("style", "margin-bottom:10px");
+                    element.innerHTML = '';
+                    } else {
+                    $("#resend_opt").attr("style", "display:none;");
+                    time = new Date(msLeft);
+                    hours = time.getUTCHours();
+                    mins = time.getUTCMinutes();
+                    element.innerHTML = 'Resend Code after <b>' + (hours ? hours + ':' + twoDigits(mins) : mins) + ':' + twoDigits(time.getUTCSeconds()) + ' </b> second';
+                    setTimeout(updateTimer, time.getUTCMilliseconds() + 500);
+                    }
+                    }
+                    element = document.getElementById(elementName);
+                    endTime = ( + new Date) + 1000 * (60 * minutes + seconds) + 500;
+                    updateTimer();
+                    }
+                    $("#creditor_amount").keyup(function () {
+                    $("#creditor_amount_error").html("");
+                    var val = parseInt(this.value);
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        var ttl_amt = '<?= $b2b_job_detais[0]['payable_amount']; ?>';
+<?php } else { ?>
+                        var ttl_amt = '<?= $query[0]['payable_amount']; ?>';
+<?php } ?>
+                    ttl_amt = parseInt(ttl_amt);
+                    if (val != null) {
+                    console.log("ttl" + ttl_amt + " input" + val);
+                    if (ttl_amt >= val) {
+                    $("#creditor_amount_submit_btn").removeAttr("disabled");
+                    } else {
+                    $("#creditor_amount_submit_btn").attr("disabled", "");
+                    $("#creditor_amount_error").html("Given amount is more than payable amount.");
+                    }
+                    } else {
+                    $("#creditor_amount_submit_btn").attr("disabled", "");
+                    $("#creditor_amount_error").html("Invalid amount.");
+                    }
+                    });
+                    function creditor_otp() {
+                    var creditor_fk = $("#creditor_id").val();
+                    var amount = $("#creditor_amount").val();
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        var job_fk = "<?php echo $b2b_job_detais[0]["id"]; ?>";
+<?php } else { ?>
+                        var job_fk = "<?php echo $cid; ?>";
+<?php } ?>
+                    $("#creditor_error").html("");
+                    $("#creditor_amount_error").html("");
+                    var temp = 1;
+                    if (creditor_fk == "") {
+                    $("#creditor_error").html("Please select Creditors.");
+                    temp = 0;
+                    }
+                    if (amount == "") {
+                    $("#creditor_amount_error").html("Add Amount.");
+                    temp = 0;
+                    }
+                    if (temp == 1) {
+                    $.ajax({
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        url: "<?php echo base_url(); ?>b2b/logistic/creditors_add",
+<?php } else { ?>
+                        url: "<?php echo base_url(); ?>job_master/creditors_add",
+<?php } ?>
+                    type: 'post',
+                            data: {creditor_id: creditor_fk, amount: amount, job_id: job_fk},
+                            beforeSend: function () {
+                            $("#loader_creditor_div").attr("style", "");
+                            $("#creditor_amount_submit_btn").attr("disabled", "disabled");
+                            },
+                            success: function (data) {
+                            countdown("mycounter", 1, 0);
+                            $("#creditor_div").attr("style", "display:none;");
+                            $("#creditor_amount_submit_btn").attr("style", "display:none;");
+                            $("#otp_creditor_div").attr("style", "");
+                            $("#mycounter").attr("style", "");
+                            $("#resend_opt").attr("style", "");
+                            $("#creditor_amount_submit_btn_otp").attr("style", "");
+                            }, complete: function () {
+                    $("#loader_creditor_div").attr("style", "display:none;");
+                    }
+                    });
+                    }
+                    }
+                    function credit_resend() {
+                    var creditor_fk = $("#creditor_id").val();
+                    var amount = $("#creditor_amount").val();
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        var job_fk = "<?php echo $b2b_job_detais[0]["id"]; ?>";
+<?php } else { ?>
+                        var job_fk = "<?php echo $cid; ?>";
+<?php } ?>
+                    $.ajax({
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        url: "<?php echo base_url(); ?>b2b/logistic/creditors_resend",
+<?php } else { ?>
+                        url: "<?php echo base_url(); ?>job_master/creditors_resend",
+<?php } ?>
+                    type: 'post',
+                            data: {creditor_id: creditor_fk, amount: amount, job_id: job_fk},
+                            beforeSend: function () {
+                            $("#loader_creditor_div").attr("style", "");
+                            $("#creditor_amount_submit_btn").attr("disabled", "disabled");
+                            },
+                            success: function (data) {
+                            countdown("mycounter", 1, 0);
+                            $("#creditor_div").attr("style", "display:none;");
+                            $("#creditor_amount_submit_btn").attr("style", "display:none;");
+                            $("#otp_creditor_div").attr("style", "");
+                            $("#mycounter").attr("style", "");
+                            $("#resend_opt").attr("style", "");
+                            $("#creditor_amount_submit_btn_otp").attr("style", "");
+                            }, complete: function () {
+                    $("#loader_creditor_div").attr("style", "display:none;");
+                    }
+                    });
+                    }
+                    function creditor_otp_check() {
+                    $("#otp_success").html("");
+                    $("#otp_error").html("");
+                    $("#creditor_amount_submit_btn_otp").prop("disabled", true);
+                    var otp = $("#otp_val").val();
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        var job = "<?php echo $b2b_job_detais[0]["id"]; ?>";
+<?php } else { ?>
+                        var job = "<?php echo $cid; ?>";
+<?php } ?>
+                    var creditor_fk = $("#creditor_id").val();
+                    var amount = $("#creditor_amount").val();
+                    if (otp.trim() != '') {
+                    $.ajax({
+                    url: '<?= base_url(); ?>job_master/creditor_check_otp',
+<?php if ($query[0]["model_type"] == 2) { ?>
+                        url: "<?php echo base_url(); ?>b2b/logistic/creditor_check_otp",
+<?php } else { ?>
+                        url: "<?php echo base_url(); ?>job_master/creditor_check_otp",
+<?php } ?>
+                    type: 'post',
+                            data: {otp: otp, job: job, creditor_fk: creditor_fk, amount: amount},
+                            success: function (data) {
+                            var jsondata = JSON.parse(data);
+                            if (jsondata.status == 0) {
+                            $("#creditor_amount_submit_btn_otp").prop("disabled", false);
+                            $("#otp_error").html(jsondata.msg);
+                            }
+                            if (jsondata.status == 1) {
+                            $("#otp_success").html(jsondata.msg);
+                            setTimeout(function () {
+                            window.location.reload();
+                            }, 1000);
+                            }
+                            },
+                            error: function (jqXhr) {
+                            $("#creditor_amount_submit_btn_otp").prop("disabled", false);
+                            alert('Oops somthing wrong Tryagain!.');
+                            }
+                    });
+                    } else {
+                    $("#creditor_amount_submit_btn_otp").prop("disabled", false);
+                    $("#otp_error").html("OTP field is required.");
+                    }
+                    }
+                </script>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="barcode_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Barcode</h4>
+                    </div>
+<?php echo form_open("job_master/change_barcode/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Barcode:</label>
+                            <input type="text" name="barcode" value="<?php echo $query[0]['barcode']; ?>" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="report_status_modal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Report Status</h4>
+                    </div>
+<?php echo form_open("job_master/change_report_status/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select Status:</label>
+                            <select class="form-control" name="report_status" style="width: 100%" required="">
+                                <option value="">--Select--</option>
+                                <option value="1" <?php
+                                if ($query[0]["report_status"] == 1) {
+                                    echo "selected";
+                                }
+                                ?>>Critical</option>
+                                <option value="2" <?php
+                                if ($query[0]["report_status"] == 2) {
+                                    echo "selected";
+                                }
+                                ?>>Semi-Critical</option>
+                                <option value="3" <?php
+                                if ($query[0]["report_status"] == 3) {
+                                    echo "selected";
+                                }
+                                ?>>Normal</option>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="payment_model1" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change Payment Via</h4>
+                    </div>
+                        <?php echo form_open("job_master/change_payment_type/" . $cid, array("method" => "POST", "role" => "form")); ?>
+                    <div class="modal-body">
+<?php if (!empty($amount_history_success)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $amount_history_success['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+                            <div class="widget">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+                            <?php echo $family_error['0']; ?>
+                                </div>
+                            </div>
+<?php } ?>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Select Type:</label>
+
+                            <select id="branch" name="p_type" class="form-control" style="width: 100%" required="">
+                                <option value="">--Select--</option>
+                                <?php foreach ($payment_type_list as $key) {
+                                    ?>
+                                    <option value="<?php echo $key['id']; ?>" <?php
+                                    if ($key["id"] == $query[0]["payment_type_fk"]) {
+                                        echo "selected";
+                                    }
+                                    ?>><?php echo ucwords($key['name']); ?></option>
+
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <span style="color:red;" id="amount_error"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="amount_submit_btn">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+
+<?php /* Hiten branch model end */ ?>
+        <div class="modal fade" id="discount_model" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Discount</h4>
+                    </div>
+<?php echo form_open("job_master/discount_update/" . $cid, array("method" => "POST", "role" => "form", "id" => "payment_receiv_form_id")); ?>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Discount (%):</label>
+                            <input type="text" class="form-control" id="discount_amount_per" onkeyup="calculate_discount('1');" value="<?= $query[0]["discount"] ?>" name="discount_per" required="">
+                        </div>
+                        OR
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Discount (flat):</label>
+                            <input type="text" class="form-control" id="discount_amount_flat" onkeyup="calculate_discount('2');" name="discount_flat" required="">
+                        </div>
+                        <input type="hidden" name="price" value="<?= $query[0]['price']; ?>"/>
+                        <input type="hidden" name="payable_price" value="<?= $query[0]['payable_amount']; ?>"/>
+                        <input type="hidden" name="old_discount" value="<?= $query[0]["discount"] ?>"/>
+                        <input type="hidden" name="dabited_from_wallet" value="<?= $cut_from_wallet ?>"/>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Note:</label>
+                            <textarea class="form-control" name="discount_note"><?= $query[0]["discount_note"] ?></textarea>
+                        </div>
+                        <span style="color:red;" id="discount_amount_error"></span>
+                        <script>
+                            function calculate_discount(val) {
+                            var total_price = <?= $query[0]['price']; ?>;
+                            var payable_price = <?= $j_payable_price ?>;
+                            $("#discount_submit_btn").attr("style", "display:none;");
+                            $("#discount_amount_error").html("");
+                            if (val == 1) {
+                            var discount_amount_per = $("#discount_amount_per").val();
+                            if (discount_amount_per != '') {
+                            var flat_price = 0;
+                            if (discount_amount_per != 0) {
+                            flat_price = total_price * discount_amount_per / 100;
+                            }
+                            if (payable_price >= flat_price) {
+                            $("#discount_amount_flat").val(Math.round(flat_price));
+                            $("#discount_submit_btn").attr("style", "");
+                            } else {
+                            $("#discount_amount_error").html("Discount price is more then discount.");
+                            }
+                            }
+                            }
+                            if (val == 2) {
+                            var discount_amount_flat = $("#discount_amount_flat").val();
+                            if (discount_amount_flat != '') {
+                            var per_price = 0;
+                            if (payable_price >= discount_amount_flat) {
+                            if (discount_amount_flat != 0) {
+                            per_price = 100 * discount_amount_flat / total_price;
+                            }
+                            $("#discount_amount_per").val(parseFloat(per_price).toFixed(2));
+                            $("#discount_submit_btn").attr("style", "");
+                            } else {
+                            $("#discount_amount_error").html("Discount price is more then discount.");
+                            }
+                            }
+                            }
+                            }
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Update" class="btn btn-primary" style="display:none;" id="discount_submit_btn"/>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+<?= form_close(); ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="sms_modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+<?php echo form_open("job_master/send_report_sms1", array("method" => "post", "role" => "form")); ?>
+                <input type="hidden" id="job_fk" name="job_fk" value=""/>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Send Report Via SMS</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="all_mobile_no">
+                        <div class="form-group">
+                            <input type="text" placeholder="Mobile No.1" id="mobile_no0" name="mobile_no[]" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="append_num();"><i class="fa fa-plus"></i> Add</a>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="sms_report" rows="20" placeholder="SMS..." name="sms" required=""></textarea>
+                    </div>
+                    <div class="pull-right"><button type="submit" class="btn btn-primary" id="amount_submit_btn">Send</button></div><br>
+                    <h3>Send SMS History</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Mobile No</th>
+                                <th style="width:70%">SMS</th>
+                                <th>Send By</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result_sms_history">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+<?= form_close(); ?>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="mail_modal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+<?php echo form_open("job_master/send_report_email1", array("method" => "post", "role" => "form")); ?>
+                <input type="hidden" id="job_fk1" name="job_fk" value=""/>
+                <input type="hidden" id="cust_fk1" name="cust_fk" value=""/>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Send Report Via Mail</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="all_mobile_no1">
+                        <div class="form-group">
+                            <input type="email" placeholder="Email-1" id="email_no0" name="email[]" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="append_num1();"><i class="fa fa-plus"></i> Add</a>
+                    </div>
+                    <div class="pull-right"><button type="submit" class="btn btn-primary" id="amount_submit_btn">Send</button></div><br>
+                    <h3>Send Email History</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Send By</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result_email_history">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+<?= form_close(); ?>
+            </div>
+
+        </div>
+    </div>
+    <?php /* Nishit change payment status end */ ?>
+    <?php /* <div class="col-md-12">
+      <div class="box box-primary">
+      <div class="box-header">
+      <!-- form start -->
+      <h3 class="box-title">Add Result</h3>
+      </div>
+      <div class="box-body">
+      <div class="alert alert-danger alert-dismissable" id="msg_cancel" style="display:none;">
+      <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+      Results Not Add
+      </div>
+      <div class="alert alert-success alert-dismissable" id="msg_success" style="display:none;">
+      <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
+      Results Add Successfully
+      </div>
+      <div class="col-sm-12">
+      <?php
+      $ts = explode('#', $query[0]['testname']);
+      $tid = explode(",", $query[0]['testid']);
+      $cnt=0;
+      foreach ($tid as $testidp) {
+      if($parameter_list[$cnt][0]['test_fk'] == $testidp) {
+      ?>
+      <h3>Add Result For <?php echo ucfirst($ts[$cnt]); ?></h3>
+      <table id="example4" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+      <th>Parameter Name</th>
+      <th>Subparameter Name</th>
+      <th>Value</th>
+      <th>Parameter Value</th>
+      <th>Parameter Unit</th>
+      <input type="hidden" id="para_job_id" value="<?php echo $cid; ?>">
+      </tr>
+      </thead>
+      <?php } $cn=1;
+      foreach($parameter_list[$cnt] as $parameter) {
+      if($parameter['test_fk'] == $testidp) {
+      if($parameter['pid'] == $parameter['parameter_fk']) {
+      ?>
+      <tbody>
+      <td><?php echo $parameter['parameter_name']; ?></td>
+      <td><?php echo $parameter['subparameter_name']; ?></td>
+      <td>
+      <input type="text" id="value_add_<?php echo $cnt; ?>_<?php echo $cn; ?>" class="form-control">
+      <input type="hidden" id="para_id_<?php echo $cnt; ?>_<?php echo $cn; ?>" value="<?php echo $parameter['pid']; ?>">
+      <input type="hidden" id="subpara_id_<?php echo $cnt; ?>_<?php echo $cn; ?>" value="<?php echo $parameter['gid']; ?>">
+      </td>
+      <td><?php echo $parameter['subparameter_range']; ?></td>
+      <td><?php echo $parameter['subparameter_unit']; ?></td>
+      <?php } else { ?>
+      <tbody>
+      <td><?php echo $parameter['parameter_name']; ?></td>
+      <td> - </td>
+      <td>
+      <input type="text" id="value_add_<?php echo $cnt; ?>_<?php echo $cn; ?>" class="form-control">
+      <input type="hidden" id="para_id_<?php echo $cnt; ?>_<?php echo $cn; ?>" value="<?php echo $parameter['pid']; ?>">
+      </td>
+      <td><?php echo $parameter['parameter_range']; ?></td>
+      <td><?php echo $parameter['parameter_unit']; ?></td>
+      <?php
+      }
+      }
+      $cn++;
+      ?>
+      <input type="hidden" id="para_count_<?php echo $cnt; ?>" value="<?php echo $cn; ?>">
+      <input type="hidden" id="test_count" value="<?php echo $cnt; ?>">
+      <input type="hidden" id="test_id_<?php echo $cnt; ?>" value="<?php echo $testidp; ?>">
+      <?php
+      }$cnt++; ?>
+      </tbody>
+      </table>
+      <?php
+      }
+      ?>
+      </div>
+      </div>
+      <div class="box-footer">
+      <span id="loader_div" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
+      <input onclick="add_results();" id="add_result" style="float:right;" class="btn btn-primary" value="Add" type="button">
+      </div>
+      </div>
+      </div> */ ?>
+</section>
+<script src="<?php echo base_url(); ?>plugins/timepick/js/timepicki.js"></script>
+<script>
+                            $('#sharp_time').timepicki({
+                            min_hour_value: 0,
+                                    step_size_minutes: 1,
+                                    overflow_minutes: true,
+                                    increase_direction: 'up',
+                                    disable_keyboard_mobile: true});</script>
+<script type="text/javascript" src="<?php echo base_url(); ?>user_assets/chosen/chosen.jquery.js"></script>
+<script  type="text/javascript">
+                            $(function () {
+                            $('.chosen').chosen();
+                            });
+							
+							</script> 
+<script>
+
+<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+        function getrjectsamlestatus(){
+
+        var allteststatus = "<?= implode(",", $test_list); ?>";
+        $.ajax({
+        type: "POST",
+                url: "<?php echo base_url(); ?>sample_booking/checktestreject",
+                data:{jid:<?= $cid; ?>, testall:allteststatus},
+                success: function(data) {
+                var json_testdata = JSON.parse(data);
+                if (json_testdata.status == 1){
+
+                $.each(json_testdata.testresult, function(index, testid) {
+                $('.bantest_' + testid).attr("testalert", "1");
+                $('.bantest_' + testid).css('color', 'red');
+                $("#rejectiontest_" + testid).show();
+                });
+                }
+                $.each(json_testdata.collecttets, function(index, ctestid) {
+
+                $("#rejectiontest_" + ctestid).show();
+                });
+                },
+                error: function() {
+                alert('error handing here');
+                }
+        });
+        }
+        getrjectsamlestatus();
+<?php } ?>
+    function sms_popup(jid) {
+    $("#result_sms_history").empty();
+    $.ajax({
+    url: '<?php echo base_url(); ?>add_result/send_result/' + jid,
+            beforeSend: function () {
+            $("#loader_div").attr("style", "");
+            },
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            if (json_data.status == 1) {
+            $("#sms_report").val(json_data.sms);
+            for (var i = 0; json_data.mobile.length > i; i++) {
+            if (i == 0) {
+            $("#mobile_no" + i).val(json_data.mobile[i]);
+            }
+            if (i > 0) {
+            if ($num_cnt == 2)
+            {
+            append_num();
+            $("#mobile_no" + i).val(json_data.mobile[i]);
+            }
+            }
+
+            }
+            for (var j = 0; json_data.history.length > j; j++) {
+            var numbr = json_data.history[j].mobile;
+            var new_no = numbr.split(",");
+            var txt = '';
+            for (var nbr = 0; new_no.length > nbr; nbr++) {
+            txt += new_no[nbr] + '<br/>';
+            }
+            $("#result_sms_history").append('<tr> <td>' + txt + '</td> <td><span class="more">' + json_data.history[j].sms + '</span></td> <td>' + json_data.history[j].name + '</td> <td>' + json_data.history[j].created_date + '</td></tr>');
+            }
+            if (json_data.history.length == 0) {
+            $("#result_sms_history").append('<tr> <td colspan="4"><center>Data not available.</center></td></tr>');
+            }
+            more_less();
+            $("#job_fk").val(jid);
+            $("#sms_modal").modal("show");
+            } else {
+            alert("Data not available.");
+            $("#job_fk").val("");
+            }
+            },
+            error: function (jqXhr) {
+            alert("Try again.");
+            },
+            complete: function () {
+            $("#loader_div").attr("style", "display:none;");
+            },
+    });
+    }
+    function mail_popup(jid, cid) {
+    $("#result_email_history").empty();
+    $.ajax({
+    url: '<?php echo base_url(); ?>job_master/get_user_info/' + cid + "/" + jid,
+            beforeSend: function () {
+            $("#loader_div").attr("style", "");
+            },
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            if (json_data.status == 1) {
+
+            $("#email_no0").val(json_data.data[0]);
+            if (json_data.data.length > 1) {
+            if ($num_cnt1 == 2)
+            {
+            $("#all_mobile_no1").append('<div class="form-group" id="add_num1_' + $sms_cnt1 + '" style="width:93%;height:40px;"><input type="email" value="' + json_data.data[1] + '" placeholder="Email-' + $num_cnt1 + '" id="mobile_no1' + $sms_cnt1 + '" name="email[]" class="form-control" style="width:94%;float:left;margin-right:16px"/><a href="javascript:void(0);" onclick="add_num1_' + $sms_cnt1 + '.remove();$sms_cnt1--;$num_cnt1--;"><i class="fa fa-trash"></i></a></div>');
+            $sms_cnt1++;
+            $num_cnt1++;
+            }
+            }
+
+
+
+            for (var j = 0; json_data.history.length > j; j++) {
+            var numbr = json_data.history[j].email;
+            var new_no = numbr.split(",");
+            var txt = '';
+            for (var nbr = 0; new_no.length > nbr; nbr++) {
+            txt += new_no[nbr] + '<br/>';
+            }
+            $("#result_email_history").append('<tr> <td>' + txt + '</td> <td>' + json_data.history[j].name + '</td> <td>' + json_data.history[j].created_date + '</td></tr>');
+            }
+            if (json_data.history.length == 0) {
+            $("#result_email_history").append('<tr> <td colspan="3"><center>Data not available.</center></td></tr>');
+            }
+            $("#job_fk1").val(jid);
+            $("#cust_fk1").val(cid);
+            $("#mail_modal").modal("show");
+            } else {
+            alert("Data not available.");
+            $("#job_fk1").val("");
+            }
+            },
+            error: function (jqXhr) {
+            alert("Try again.");
+            },
+            complete: function () {
+            $("#loader_div").attr("style", "display:none;");
+            },
+    });
+    }
+
+    function sms_popup_old(jid) {
+    $("#result_sms_history").empty();
+    $.ajax({
+    url: '<?php echo base_url(); ?>add_result/send_result/' + jid,
+            beforeSend: function () {
+            $("#loader_div").attr("style", "");
+            },
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            if (json_data.status == 1) {
+            $("#sms_report").val(json_data.sms);
+            for (var i = 0; json_data.mobile.length > i; i++) {
+            $("#mobile_no" + i).val(json_data.mobile[i]);
+            }
+            for (var j = 0; json_data.history.length > j; j++) {
+            var numbr = json_data.history[j].mobile;
+            var new_no = numbr.split(",");
+            var txt = '';
+            for (var nbr = 0; new_no.length > nbr; nbr++) {
+            txt += new_no[nbr] + '<br/>';
+            }
+            $("#result_sms_history").append('<tr> <td>' + txt + '</td> <td><span class="more">' + json_data.history[j].sms + '</span></td> <td>' + json_data.history[j].name + '</td> <td>' + json_data.history[j].created_date + '</td></tr>');
+            }
+            if (json_data.history.length == 0) {
+            $("#result_sms_history").append('<tr> <td colspan="4"><center>Data not available.</center></td></tr>');
+            }
+            more_less();
+            $("#job_fk").val(jid);
+            $("#sms_modal").modal("show");
+            } else {
+            alert("Data not available.");
+            $("#job_fk").val("");
+            }
+            },
+            error: function (jqXhr) {
+            alert("Try again.");
+            },
+            complete: function () {
+            $("#loader_div").attr("style", "display:none;");
+            },
+    });
+    }
+    function mail_popup_old(jid, cid) {
+    $("#result_email_history").empty();
+    $.ajax({
+    url: '<?php echo base_url(); ?>job_master/get_user_info/' + cid + "/" + jid,
+            beforeSend: function () {
+            $("#loader_div").attr("style", "");
+            },
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            if (json_data.status == 1) {
+            $("#email_no0").val(json_data.data[0].email);
+            for (var j = 0; json_data.history.length > j; j++) {
+            var numbr = json_data.history[j].email;
+            var new_no = numbr.split(",");
+            var txt = '';
+            for (var nbr = 0; new_no.length > nbr; nbr++) {
+            txt += new_no[nbr] + '<br/>';
+            }
+            $("#result_email_history").append('<tr> <td>' + txt + '</td> <td>' + json_data.history[j].name + '</td> <td>' + json_data.history[j].created_date + '</td></tr>');
+            }
+            if (json_data.history.length == 0) {
+            $("#result_email_history").append('<tr> <td colspan="3"><center>Data not available.</center></td></tr>');
+            }
+            $("#job_fk1").val(jid);
+            $("#cust_fk1").val(cid);
+            $("#mail_modal").modal("show");
+            } else {
+            alert("Data not available.");
+            $("#job_fk1").val("");
+            }
+            },
+            error: function (jqXhr) {
+            alert("Try again.");
+            },
+            complete: function () {
+            $("#loader_div").attr("style", "display:none;");
+            },
+    });
+    }
+    $sms_cnt = 1;
+    $num_cnt = 2;
+    function append_num() {
+    $("#all_mobile_no").append('<div class="form-group" id="add_num_' + $sms_cnt + '" style="width:93%;height:40px;"><input type="text" placeholder="Mobile No.' + $num_cnt + '" id="mobile_no' + $sms_cnt + '" name="mobile_no[]" class="form-control" style="width:94%;float:left;margin-right:16px"/><a href="javascript:void(0);" onclick="add_num_' + $sms_cnt + '.remove();$sms_cnt--;$num_cnt--;"><i class="fa fa-trash"></i></a></div>');
+    $sms_cnt++;
+    $num_cnt++;
+    }
+    $sms_cnt1 = 1;
+    $num_cnt1 = 2;
+    function append_num1() {
+    $("#all_mobile_no1").append('<div class="form-group" id="add_num1_' + $sms_cnt1 + '" style="width:93%;height:40px;"><input type="email" placeholder="Email-' + $num_cnt1 + '" id="mobile_no1' + $sms_cnt1 + '" name="email[]" class="form-control" style="width:94%;float:left;margin-right:16px"/><a href="javascript:void(0);" onclick="add_num1_' + $sms_cnt1 + '.remove();$sms_cnt1--;$num_cnt1--;"><i class="fa fa-trash"></i></a></div>');
+    $sms_cnt1++;
+    $num_cnt1++;
+    }
+    function more_less() {
+    var showChar = 100; // How many characters are shown by default
+    var ellipsestext = "...";
+    var moretext = "Show more";
+    var lesstext = "Show less";
+    $('.more').each(function () {
+    var content = $(this).html();
+    if (content.length > showChar) {
+
+    var c = content.substr(0, showChar);
+    var h = content.substr(showChar, content.length - showChar);
+    var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+    $(this).html(html);
+    }
+
+    });
+    $(".morelink").click(function () {
+    if ($(this).hasClass("less")) {
+    $(this).removeClass("less");
+    $(this).html(moretext);
+    } else {
+    $(this).addClass("less");
+    $(this).html(lesstext);
+    }
+    $(this).parent().prev().toggle();
+    $(this).prev().toggle();
+    return false;
+    });
+    }
+    function add_results() {
+    var test_count = $('#test_count').val();
+    var para_job_id = $('#para_job_id').val();
+    var i;
+    var j;
+    var data = [];
+    for (i = 0; i <= test_count; i++) {
+    var para_count = $('#para_count_' + i).val();
+    var test_id = $('#test_id_' + i).val();
+    var data2 = [];
+    for (j = 1; j < para_count; j++) {
+    var value_add = $('#value_add_' + i + '_' + j).val();
+    var para_id = $('#para_id_' + i + '_' + j).val();
+    var subpara_id = $('#subpara_id_' + i + '_' + j).val();
+    var myObject = [];
+    myObject['job_id'] = para_job_id;
+    myObject['test_id'] = test_id;
+    myObject['value'] = value_add;
+    myObject['parameter_id'] = para_id;
+    myObject['subpar_id'] = subpara_id;
+    alert(myObject);
+    data2.push(myObject);
+    }
+    }
+    data.push(data2);
+    console.log(data);
+    return false;
+    }
+    function assign_phlebo() {
+    $("#assign_phlebo_error").html("");
+    var phlebo = $("#phlebo").val();
+    var adate = $("#date").val();
+    var atime = $("#time_slot").val();
+    if (atime == null) {
+    atime = '';
+    }
+    var address = $("#address").val();
+    var p_note = $("#p_note").val();
+    var sharp_time = $("#sharp_time").val();
+    if ($('#notify').prop('checked')) {
+    var notify = 1;
+    } else {
+    var notify = 0;
+    }
+    var as_job_fk = $("#as_job_fk").val();
+    if (phlebo.trim() != '' && adate.trim() != '' && address.trim() != '') {
+    if (atime.trim() != '' || sharp_time.trim() != '') {
+    $.ajax({
+    url: "<?php echo base_url(); ?>job_master/assign_phlebo_job",
+            type: 'post',
+            data: {phlebo_id: phlebo, job_id: as_job_fk, dated: adate, timed: atime, address: address, notify: notify, sharp_time: sharp_time, note: p_note},
+            beforeSend: function () {
+            $("#loader_div").attr("style", "");
+            $("#send_btn").attr("disabled", "disabled");
+            },
+            success: function (data) {
+				
+            if (data == 1) {
+            $("#msg_success").show();
+            } else {
+            $("#msg_cancel").show();
+            }
+            window.location.reload();
+            }, complete: function () {
+    $("#loader_div").attr("style", "display:none;");
+    $("#send_btn").removeAttr("disabled");
+    get_phlebo_schedule();
+    }
+    });
+    } else {
+    $("#assign_phlebo_error").html("* fields are required.");
+    }
+    } else {
+    $("#assign_phlebo_error").html("* fields are required.");
+    }
+    }
+	function assign_phlebo1() {
+
+    $("#assign_phlebo_error1").html("");
+    var phlebo = $("#phlebo1").val();
+    var adate = $("#date1").val();
+    var atime = $("#time_slot1").val();
+    if (atime == null) { atime = ''; }
+    var address = $("#address1").val();
+    var p_note = $("#p_note1").val();
+    var sharp_time = $("#sharp_time1").val();
+    var rejectionid = $("#rejectionid").val();
+    var notify = 0;
+    var as_job_fk = $("#as_job_fk1").val();
+    if (phlebo.trim() != '' && rejectionid.trim() != '' && adate.trim() != '' && address.trim() != '') {
+
+    if (atime.trim() != '' || sharp_time.trim() != '') {
+
+
+    $.ajax({
+    url: "<?php echo base_url(); ?>job_master/assign_phlebo_job",
+            type: 'post',
+            data: {phlebo_id: phlebo, job_id: as_job_fk, dated: adate, timed: atime, address: address, notify: notify, sharp_time: sharp_time, note: p_note, rejectionid:rejectionid, type:'2'},
+            beforeSend: function () {
+            $('#assignpheloreject').modal('hide');
+            $(".modal-backdrop").remove();
+            $("#loader_div").attr("style", "");
+            $("#send_btn1").attr("disabled", "disabled");
+            },
+            success: function (data) {
+
+
+            if (data == 1) {
+            $("#msg_success1").show();
+            } else {
+            $("#msg_cancel1").show();
+            }
+			
+            setTimeout(function(){ window.location.reload(); }, 3000);
+            }, complete: function () {
+
+    $("#loader_div").attr("style", "display:none;");
+    $("#send_btn1").removeAttr("disabled");
+    $('#assignpheloreject').modal('show');
+    get_phlebo_schedule();
+    }
+    });
+    } else {
+    $("#assign_phlebo_error1").html("* fields are required.");
+    }
+    } else {
+    $("#assign_phlebo_error1").html("* fields are required.");
+    }
+
+    }
+	function edit_received_payment(id, amt, typ) {
+        let r = <?= $user->type ?>;
+        document.getElementById('j_amount').value = amt;
+        document.getElementById('pay_mode').value = typ;
+        document.getElementById('hdn_tid').value = id;
+        document.getElementById('ttl_amount').innerHTML = 0;
+        document.getElementById('payable').value = amt;
+        document.getElementById('rcv_tm').value = document.getElementById('rcv_tim').innerHTML;
+        if(r == 1) {
+            document.getElementById('div_time').style.display = 'block';        
+        }
+        document.getElementById('j_amount').focus();        
+    }
+    function delete_received_payment(val, d_amount) {
+    var cnfg = confirm('Are you sure?');
+    if (cnfg == true) {
+    var ttl_amount = $("#ttl_amount").val();
+    $.ajax({
+    url: "<?php echo base_url(); ?>job_master/delete_assign_payment",
+            type: 'post',
+            data: {id: val, ttl_amount: ttl_amount, jid:<?= $cid; ?>, d_amount: d_amount},
+            beforeSend: function () {
+            $("#amount_error").html('<img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px">');
+            },
+            success: function (data) {
+            if (data == 1) {
+            window.location.reload();
+            }
+            $("#amount_error").html('');
+            }, complete: function () {
+    $("#amount_error").html('');
+    }
+    });
+    }
+    }
+    function Validation() {
+    var cnt = 0;
+    var pm = 1;
+    var count = $("#count").val();
+    var common_report = $("#common_report").val();
+    if (common_report == '') {
+    for (cnt = 0; cnt < count; cnt++) {
+    $("#descerror_" + cnt).html('');
+    $("#reporterror_" + cnt).html('');
+    var desc = $("#desc_" + cnt).val();
+    var report = $("#report_" + cnt).val();
+    /*if (desc == ''){
+     pm=1;
+     //$("#descerror_"+cnt).html('Description is required.');
+     } else {
+     pm=0;
+     $("#descerror_"+cnt).html('');
+     }*/
+    if (report == '') {
+    pm = 1;
+    $("#reporterror_" + cnt).html('Report is required.');
+    } else {
+    pm = 0;
+    $("#reporterror_" + cnt).html('');
+    }
+    }
+    } else {
+    pm = 0;
+    }
+    if (pm == 0) {
+    $("#submit_report").submit();
+    }
+    }
+    function change_status() {
+    var status = $("#status").val();
+    var job_id = $("#job_id").val();
+    if (status == "") {
+    alert("Please Select Status!");
+    } else {
+    if (status == "2") {
+    // if (parseInt($approved_test_length) != parseInt($approved_test_cnt)) {
+    //     alert("Please complete all tests.");
+    //     return false;
+    //}
+    var completed_tst = $("#upload_report").val();
+    if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
+    alert("Please upload report.");
+    return false;
+    }
+    var txt;
+    var r = confirm("Are you sure want to complete job!");
+    if (r == true) {
+
+    /*  var completed_tst = $("#upload_report").val();
+     if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
+     $("#descerror_1").html("<br>Please upload report.");
+     return false;
+     }*/
+    $.ajax({
+    url: "<?php echo base_url(); ?>job_master/changing_status_job",
+            type: 'post',
+            data: {status: status, jobid: job_id},
+            beforeSend: function () {
+            $("#change").attr("disabled", "disabled");
+            $("#loader_div1").attr("style", "");
+            },
+            success: function (data) {
+            if (data == 1) {
+            //     console.log("data"+data);
+            window.location = "<?php echo base_url(); ?>job-master/job-details/<?php echo $cid; ?>";
+                        }
+                        }, complete: function () {
+                //$("#change").removeAttr("disabled");
+                $("#loader_div1").attr("style", "display:none;");
+                }
+                });
+                } else {
+
+                }
+                } else {
+                $.ajax({
+                url: "<?php echo base_url(); ?>job_master/changing_status_job",
+                        type: 'post',
+                        data: {status: status, jobid: job_id},
+                        beforeSend: function () {
+                        $("#change").attr("disabled", "disabled");
+                        $("#loader_div1").attr("style", "");
+                        },
+                        success: function (data) {
+                        if (data == 1) {
+                        //     console.log("data"+data);
+                        window.location = "<?php echo base_url(); ?>job-master/job-details/<?php echo $cid; ?>";
+                                    }
+                                    }, complete: function () {
+                            //$("#change").removeAttr("disabled");
+                            $("#loader_div1").attr("style", "display:none;");
+                            }
+                            });
+                            }
+                            }
+                            }
+</script>
+<script type="text/javascript" src="<?php echo base_url(); ?>user_assets/chosen/chosen.jquery.js"></script>
+<script  type="text/javascript">
+
+                            jQuery(".chosen-select").chosen({
+                            search_contains: true
+                            });
+                            //  $(".chosen-select-deselect").chosen({ allow_single_deselect: true });
+                            // $("#cid").chosen('refresh');
+
+</script>
+<script>
+    function get_time(val) {
+    var time = $('#get_time1').val();
+    $.ajax({
+    url: '<?php echo base_url(); ?>phlebo-api_v4/get_phlebo_schedule',
+            type: 'post',
+            data: {bdate: val, city_id: '<?= $query[0]['test_city']; ?>'},
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            $('#time_slot').html("");
+            if (json_data.status == 1) {
+            for (var i = 0; i < json_data.data.length; i++) {
+            if (json_data.data[i].booking_status == 'Available') {
+            $('#time_slot').append('<option value="' + json_data.data[i].time_slot_fk + '" ' + (time == json_data.data[i].time_slot_fk ? 'selected' : '') + '>' + json_data.data[i].start_time + ' TO ' + json_data.data[i].end_time + ' (Available)</option>').trigger("chosen:updated");
+            } else {
+            $('#time_slot').append('<option disabled>' + json_data.data[i].start_time + ' TO ' + json_data.data[i].end_time + ' (Unavailable)</option>').trigger("chosen:updated");
+            }
+            }
+            } else {
+            if (json_data.error_msg == 'Time slot unavailable.') {
+            //$("#phlebo_shedule").empty();
+            //$("#phlebo_shedule").append('<div class="form-group"><label for="message-text" class="form-control-label">Request to consider as emergency:-</label><input type="checkbox" value="emergency" onclick="check_emergency(this);" value="emergency" id="as_emergency"></div>'+"<span style='color:red;'>" + json_data.error_msg + "</span>");
+            } else {
+            //$("#phlebo_shedule").html("<span style='color:red;'>" + json_data.error_msg + "</span>");
+            }
+            }
+            $('.chosen').trigger("chosen:updated");
+            },
+            error: function (jqXhr) {
+            $("#phlebo_shedule").html("");
+            },
+            complete: function () {
+            //$("#shedule_loader_div").attr("style", "display:none;");
+            //$("#send_opt_1").removeAttr("disabled");
+            },
+    });
+    }
+	function get_time1(val) {
+    var time = $('#get_time2').val();
+    $.ajax({
+    url: '<?php echo base_url(); ?>phlebo-api_v4/get_phlebo_schedule',
+            type: 'post',
+            data: {bdate: val, city_id: '<?= $query[0]['test_city']; ?>'},
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            $('#time_slot1').html("");
+            if (json_data.status == 1) {
+            for (var i = 0; i < json_data.data.length; i++) {
+            if (json_data.data[i].booking_status == 'Available') {
+            $('#time_slot1').append('<option value="' + json_data.data[i].time_slot_fk + '" ' + (time == json_data.data[i].time_slot_fk ? 'selected' : '') + '>' + json_data.data[i].start_time + ' TO ' + json_data.data[i].end_time + ' (Available)</option>').trigger("chosen:updated");
+            } else {
+            $('#time_slot1').append('<option disabled>' + json_data.data[i].start_time + ' TO ' + json_data.data[i].end_time + ' (Unavailable)</option>').trigger("chosen:updated");
+            }
+            }
+            } else {
+            if (json_data.error_msg == 'Time slot unavailable.') {
+            //$("#phlebo_shedule").empty();
+            //$("#phlebo_shedule").append('<div class="form-group"><label for="message-text" class="form-control-label">Request to consider as emergency:-</label><input type="checkbox" value="emergency" onclick="check_emergency(this);" value="emergency" id="as_emergency"></div>'+"<span style='color:red;'>" + json_data.error_msg + "</span>");
+            } else {
+            //$("#phlebo_shedule").html("<span style='color:red;'>" + json_data.error_msg + "</span>");
+            }
+            }
+            $('.chosen').trigger("chosen:updated");
+            },
+            error: function (jqXhr) {
+            $("#phlebo_shedule").html("");
+            },
+            complete: function () {
+            //$("#shedule_loader_div").attr("style", "display:none;");
+            //$("#send_opt_1").removeAttr("disabled");
+            },
+    });
+    }
+    var date = $('#date').val();
+    get_time(date);
+	get_time1(date);
+    setTimeout(function () {
+    /* var job_id = $("#job_id").val(); */
+    var job_id = "<?php echo $cid; ?>";
+    if (job_id > 0) {
+    $.ajax({
+    url: "<?php echo base_url(); ?>job_master/get_job_log/" + job_id,
+            success: function (data) {
+            $("#job_tracking").html(data);
+            }
+    });
+    }
+    }, 1000);</script>
+<script>
+    $(document).ready(function () {
+    var date_input = $('input[name="date"]'); //our date input has the name "date"
+
+    var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+    date_input.datepicker({
+    format: 'yyyy-mm-dd',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+    })
+    })
+<?php if (!empty($amount_history_success)) { ?>
+        setTimeout(function () {
+        $('#payment_model').modal('show');
+        }, 1000);
+<?php } ?>
+<?php if (!empty($family_error)) { ?>
+        setTimeout(function () {
+        $('#family_model').modal('show');
+        }, 1000);
+<?php } ?>
+    setTimeout(function () {
+    testcity = <?= $query[0]['test_city_city_fk'] ?>;
+    $.ajax({
+    url: '<?php echo base_url(); ?>Admin/get_refered_by',
+            type: 'post',
+            data: {val: testcity},
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            $("#referral_by").html(json_data.refer);
+            $('.chosen').trigger("chosen:updated");
+            },
+            error: function (jqXhr) {
+            $("#referral_by").html("");
+            },
+            complete: function () {
+            },
+    });
+    }, 1000);
+    function test_manage(jid) {
+    jq.fancybox.open({
+    href: '<?= base_url(); ?>job_master/manage_test/' + jid,
+            type: 'iframe',
+            padding: 5,
+            width: '100%',
+    });
+    }
+    function add_Result(jid) {
+    jq.fancybox.open({
+    href: '<?= base_url(); ?>add_result/test_details/' + jid,
+            type: 'iframe',
+            padding: 5,
+            width: '100%',
+    });
+    }
+    function approveTest(jid, tid) {
+    jq.fancybox.open({
+    href: '<?= base_url(); ?>add_result/test_approve_details/' + jid + '/' + tid,
+            type: 'iframe',
+            padding: 5,
+            width: '100%',
+    });
+    }
+    function approveTest1(jid, tid) {
+    jq.fancybox.open({
+    href: '<?= base_url(); ?>add_result/test_details/' + jid + '/' + tid,
+            type: 'iframe',
+            padding: 5,
+            width: '100%',
+    });
+    }
+    function approveAllTest(jid, tid) {
+    jq.fancybox.open({
+    href: '<?= base_url(); ?>add_result/all_test_approve_details?jid=' + jid + '&tid=' + tid,
+            type: 'iframe',
+            padding: 5,
+            width: '100%',
+    });
+    }
+    function close_popup() {
+    jq.fancybox.close();
+    setTimeout(function () {
+    window.location.reload();
+    }, 1000);
+    }
+    function close_popup1() {
+    jq.fancybox.close();
+    check_test_result();
+    }
+    calculate_discount('1');
+    function get_phlebo_schedule() {
+    var job_id = $("#job_id").val();
+    $.ajax({
+    url: '<?php echo base_url(); ?>job_master/get_job_phlebo_schedule/' + job_id,
+            type: 'post',
+            data: {val: 1},
+            success: function (data) {
+            $("#phlebo_schedule").html(data);
+            },
+            error: function (jqXhr) {
+            //  $("#referral_by").html("");
+            },
+            complete: function () {
+            },
+    });
+    }
+    get_phlebo_schedule();</script>
+<script>
+    function calculate_age1(val, id)
+    {
+    var today_date = '<?= date("Y-m-d"); ?>';
+    var get_date_data = today_date.split("-");
+    var new_date = get_date_data[0] - val;
+    new_date = get_date_data[2] + "/" + get_date_data[1] + "/" + new_date;
+    $("#" + id).val(new_date);
+    }
+
+<?php if (trim($query[0]['note']) != '') { ?>
+        //   alert("<?php // echo ucwords(trim($query[0]['note']));                                                                             ?>");
+<?php } ?>
+    $approved_test_cnt = 0;
+    $approved_test_length = <?php echo count($test_list); ?>;
+    /*Check test result start*/
+    function check_test_result() {
+    $approved_test_cnt = 0;
+    $.ajax({
+    url: '<?php echo base_url(); ?>job_master/check_test_parameter_val',
+            type: 'post',
+            data: {job_id: '<?php echo $cid; ?>'},
+            success: function (data) {
+            var json_data = JSON.parse(data);
+            if (json_data.data) {
+                    var job_data = json_data.data;
+            var add_result_array = [];
+            $.each(job_data, function (index, value) {
+            var job_fk = value.jid;
+            var job_status = value.status;
+            <?php if(in_array($query[0]['status'], array("8","2"))){ ?>
+            $(".test_" + job_fk).each(function() {
+                var vl = this.id;
+                var v2 = vl.split("_");
+                /*var vl = this.title;*/ 
+            $(this).attr("onclick", "approveTest1('" + job_fk + "','" + v2[2] + "')");
+            $(this).attr("style", "cursor:pointer;");
+            $(this).attr("class", "text_highlight");
+            });
+            <?php } ?>
+            if (value.details) {
+			
+            $.each(value.details, function (index1, value1) {
+				
+            var tst_fk = value1.test_fk;
+            var tst_status = value1.test_status;
+            tst_status = parseInt(tst_status);
+            var tst_parameter = value1.parameter;
+            var tst_result = value1.result;
+            var tst_outsource_result = value1.outsource;
+            var check_test = 0;
+            if (tst_status == 0) {
+            if ($("#test_" + job_fk + "_" + tst_fk)) {
+            $("#test_" + job_fk + "_" + tst_fk).attr("style", "cursor:pointer;");
+            $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest1('" + job_fk + "','" + tst_fk + "')");
+            $("#test_" + job_fk + "_" + tst_fk).attr("class", "text_highlight");
+            check_test = 1;
+            }
+            }
+
+            if (tst_status == 3) {
+            /*Remianing Nishit*/
+            if ($("#test_" + job_fk + "_" + tst_fk)) {
+            $("#test_" + job_fk + "_" + tst_fk).attr("style", "background:blue;color:white;");
+            check_test = 1;
+            if (job_status == '8') {
+<?php if ($login_data['type'] == 1 || $login_data['type'] == 2 || $login_data['type'] == 5 || $login_data['type'] == 6) { ?>
+                $("#test_" + job_fk + "_" + tst_fk).attr("style", "background:blue;color:white;cursor:pointer;");
+                $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest1('" + job_fk + "','" + tst_fk + "')");
+                $("#test_" + job_fk + "_" + tst_fk).attr("class", "text_highlight");
+<?php } ?>
+            }
+            }
+            }
+
+
+            if (tst_status == 1) {
+            if ($("#test_" + job_fk + "_" + tst_fk)) {
+            $("#test_" + job_fk + "_" + tst_fk).attr("style", "background:#f7f574;cursor:pointer;");
+<?php if ($login_data['type'] == 1 || $login_data['type'] == 2 || $login_data['type'] == 5) { ?>
+                $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest('" + job_fk + "','" + tst_fk + "')");
+                $("#test_" + job_fk + "_" + tst_fk).attr("class", "text_highlight");
+                $("#btn_" + job_fk + "_" + tst_fk).attr("style", "");
+                add_result_array.push(tst_fk);
+<?php } else if ($login_data['type'] == 6) { ?>
+                $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest1('" + job_fk + "','" + tst_fk + "')");
+                $("#test_" + job_fk + "_" + tst_fk).attr("class", "text_highlight");
+<?php } ?>
+            check_test = 1;
+            }
+            }
+
+            var tst_approve_result = value1.approve;
+            if (tst_status == 2) {
+            if ($("#test_" + job_fk + "_" + tst_fk)) {
+				
+				$("#rejectiontest_"+tst_fk).hide();
+				<?php if ($query[0]['status'] == 8) { ?>
+				$("#testjobstatus").html("<span class='label label-warning'>Partial Complete</span>");
+							<?php } ?>
+				
+            $("#test_" + job_fk + "_" + tst_fk).attr("style", "background:green;color:white;cursor:pointer;");
+            $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest('" + job_fk + "','" + tst_fk + "')");
+<?php if ($login_data['type'] == 1 || $login_data['type'] == 2 || $login_data['type'] == 5 || $login_data['type'] == 6) { ?>
+                $("#dbtn_" + job_fk + "_" + tst_fk).attr("style", "");
+<?php } ?>
+            $("#btn_" + job_fk + "_" + tst_fk).attr("style", "display:none;");
+            check_test = 1;
+            removeA(add_result_array, tst_fk);
+            $approved_test_cnt++;
+            }
+            }
+			
+			
+			
+            });
+			
+			
+			
+            }
+            });
+            var selected_ids = JSON.parse(JSON.stringify(add_result_array));
+            $("#result_added_test").val(selected_ids);
+            if (selected_ids != '') {
+            $("#approved_all_btn").removeAttr("style");
+            } else {
+            $("#approved_all_btn").attr("style", "display:none;");
+            }
+            }
+            },
+            error: function (jqXhr) {
+            $("#branch").html("");
+            },
+            complete: function () {
+            },
+    });
+    }
+function checkreporttime(testid,jobid,aprovedate){
+	
+	$.ajax({
+    url: '<?php echo base_url(); ?>sample_booking/check_testhourse',
+            type: 'get',
+            data: {testid:testid,jobid:jobid,aprovedate:aprovedate},
+            success: function (data) {
+				if(data=='1'){
+				$(".testtime_"+testid).html('<i style="color:red;" class="fa fa-clock-o" aria-hidden="true"></i>');
+			}
+
+            },
+            error: function (jqXhr) {
+         
+            },
+            complete: function () {
+            },
+    });
+}	
+    function removeA(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+    what = a[--L];
+    while ((ax = arr.indexOf(what)) !== - 1) {
+    arr.splice(ax, 1);
+    }
+    }
+    return arr;
+    }
+    check_test_result();
+    /*End*/
+    function test_outsource(jid) {
+    jq.fancybox.open({
+    href: '<?= base_url(); ?>job_master/outsource_test/' + jid,
+            type: 'iframe',
+            padding: 5,
+            width: '100%',
+            afterClose: function () {
+            return window.location.reload();
+            }
+    });
+    }
+    function isNumberKey(evt)
+    {
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode != 46 && charCode > 31
+            && (charCode < 48 || charCode > 57)) {
+    if (charCode == 45) {
+    return true;
+    } else {
+    return false;
+    }
+    } else {
+    return true;
+    }
+    }
+</script>
+<!--Vishal Code Start-->
+<script src="<?php echo base_url(); ?>plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap-datetimepicker.js"></script>
+<script>
+    var jq_123 = $.noConflict();
+    jq_123(document).ready(function () {
+    var date = new Date();
+    jq_123('.form_datetime').datetimepicker({
+    format: 'yyyy-mm-dd hh:ii',
+            endDate: date
+    });
+    })
+</script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/additional-methods.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    $('#change_date').validate(function () {
+    rules:{
+    date:{
+    required:true
+    }
+    }
+    });
+    });</script>
+<script>
+    $(document).ready(function () {
+    $("#age_1,#age_2,#age_3").keypress(function (e) {
+    //if the letter is not digit then display error and don't type anything
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+    //display error message
+    $("#errmsg").html("Only Number Allow").show();
+    return false;
+    } else {
+    $("#errmsg").html("Only Number Allow").hide();
+    }
+    });
+    });</script>
+<script>
+    $(document).ready(function () {
+    $("#age_111,#age_211,#age_311").keypress(function (e) {
+    //if the letter is not digit then display error and don't type anything
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+    //display error message
+    $("#errmsg_1").html("Only Number Allow").show();
+    return false;
+    } else {
+    $("#errmsg_1").html("Only Number Allow").hide();
+    }
+    });
+    });</script>
+<script>
+
+    $(document).ready(function () {
+    $('.update_patient_submit').click(function (e) {
+    e.preventDefault();
+    var $birthday = $('#f_dob_1').val();
+    var nw_date = $birthday.split("-");
+    nw_date = nw_date[2] + "-" + nw_date[1] + "-" + nw_date[0];
+    var now = new Date();
+    var past = new Date(nw_date);
+    var nowYear = now.getFullYear();
+    var pastYear = past.getFullYear();
+    var age = nowYear - pastYear;
+    if (age <= '150') {
+    $('#update_patient_id').submit();
+    return true;
+    } else {
+    $('#errmsg').html("Invalid Years").show();
+    return false;
+    }
+
+    });
+    });</script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    $('.sub_chng_fmly').click(function (e) {
+    e.preventDefault();
+    var $birthday = $('#f_dob3').val();
+    var nw_date = $birthday.split("-");
+    nw_date = nw_date[2] + "-" + nw_date[1] + "-" + nw_date[0];
+    var now = new Date();
+    var past = new Date(nw_date);
+    var nowYear = now.getFullYear();
+    var pastYear = past.getFullYear();
+    var age = nowYear - pastYear;
+    if (age <= '150') {
+    $('#chg_fml_id').submit();
+    return true;
+    } else {
+    $('#errmsg_1').html("Invalid Years").show();
+    return false;
+    }
+
+    });
+    });
+
+jq(document).ready(function () {
+        $admintype = <?= $login_data['type'];?>;
+        $pkgcounter = <?= $pkgcnt;?>;
+        if($admintype!=1){
+                if($pkgcounter>0){
+                        $("#disc_edit").css("display", "none");
+                }
+        }
+});
+
+</script> 
+<!--Vishal Code End-->

@@ -1,0 +1,3447 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Employee extends CI_Controller {
+
+    public $CI = NULL;
+
+    function __construct() {
+        parent::__construct();
+        $this->CI = & get_instance();
+        $this->load->model('user_model');
+        $this->load->model('hrm/employee_model');
+        $this->load->model('hrm/department_model');
+        $this->load->library('email');
+        $this->load->library('pushserver');
+        $this->load->helper('string');
+        $this->load->helper(array('form', 'url'));
+        //echo current_url(); die();
+        ini_set('display_errors', 'On');
+
+        $data["login_data"] = is_hrmlogin();
+    }
+
+    function index() {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['success'] = $this->session->flashdata("success");
+        $this->load->library('pagination');
+
+        $employee_id = trim($this->input->get('employee_id'));
+        $data['employee_id'] = $employee_id;
+
+        $e_name = trim($this->input->get('e_name'));
+        $data['e_name'] = $e_name;
+
+        $phone = trim($this->input->get('phone'));
+        $data['phone'] = $phone;
+		
+		$branch = trim($this->input->get('branch'));
+        $data['branch'] = $branch;
+		
+        $city = trim($this->input->get('city'));
+        $data['city'] = $city;
+
+        $status = $this->input->get('status');
+        $data['status'] = $status;
+
+        if ($employee_id != "" || $e_name != "" || $phone != "" || $status != "" || $city != '' || $branch != "") {
+            $total_row = $this->employee_model->search_num($employee_id, $e_name, $phone, $status, $city,$branch);
+            $config = array();
+            $get = $_GET;
+//            unset($get['offset']);
+            $config["base_url"] = base_url() . "hrm/employee/index?" . http_build_query($get);
+            $config["total_rows"] = $total_row;
+            $config["per_page"] = 100;
+            $config["uri_segment"] = 3;
+            $config['page_query_string'] = TRUE;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+            $config['page_query_string'] = TRUE;
+            $this->pagination->initialize($config);
+            $page = ($this->input->get("per_page")) ? $this->input->get("per_page") : 0;
+
+            $data['query'] = $this->employee_model->list_search($employee_id, $e_name, $phone, $status, $city,$branch, $config["per_page"], $page);
+            $data["links"] = $this->pagination->create_links();
+            $data["counts"] = $page;
+        } else {
+            $employee_id = "";
+            $e_name = "";
+            $phone = "";
+            $status = "";
+			$branch = "";
+
+            $totalRows = $this->employee_model->search_num($employee_id, $e_name, $phone, $status, "","");
+            $config = array();
+            $config["base_url"] = base_url() . "hrm/employee/index/";
+            $config["total_rows"] = $totalRows;
+            $config["per_page"] = 100;
+            $config["uri_segment"] = 3;
+            $config['page_query_string'] = TRUE;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+            $this->pagination->initialize($config);
+            $sort = $this->input->get("sort");
+            $by = $this->input->get("by");
+            $page = ($this->input->get("per_page")) ? $this->input->get("per_page") : 0;
+            $data["query"] = $this->employee_model->list_search($employee_id, $e_name, $phone, $status, "","",$config["per_page"], $page);
+            $data["links"] = $this->pagination->create_links();
+            $data["counts"] = $page;
+        }
+        //echo "<pre>";print_r($data["query"]);die();
+        $data["test_city"] = $this->employee_model->get_all('test_cities', array("status" => 1));
+        $this->load->view('hrm/header');
+        $this->load->view('hrm/nav', $data);
+        $this->load->view('hrm/employee_list', $data);
+        $this->load->view('hrm/footer');
+    }
+
+     function pdf_offer_letter() {
+
+        $id = $_POST['emp_offer_id'];
+        $with_without_letter = $_POST['letter_head'];
+
+        $download_type = $_POST['download_type'];
+
+        $data = $this->employee_model->get_one("hrm_employees", array("id" => $id));
+
+        $designation_data = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data->designation));
+        $department_data = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data->department));
+        $city_data = $this->employee_model->get_one('test_cities', array("status" => 1, "id" => $data->city));
+
+        $salary_structure = $this->employee_model->get_all('hrm_salary_structure', array("status" => 1, "designation_fk" => $designation_data->id));
+
+//        $q = "select *,se.id,se.status from hrm_employee_salary_structure se 
+//            left JOIN hrm_salary_structure ss 
+//            on se.salary_structure_fk = ss.id 
+//            where employee_fk = $id OR salary_structure_fk= 0 and ss.status=1";
+//
+//        $salary_structure_emp1 = $this->employee_model->get_val($q);
+        
+        $structure_id = $data->salary_structure_id;
+        if ($structure_id != "") {
+            $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id 
+                        WHERE ss.status='1' and employee_fk = $id";
+
+            $salary_structure_emp1 = $this->employee_model->get_val($q);
+        }
+
+        $data1 = array('data' => $data, 'designation' => $designation_data, 'city' => $city_data, 'department' => $department_data, 'salary_structure' => $salary_structure, 'salary_structure_emp1' => $salary_structure_emp1);
+
+
+        if ($download_type == '1') {
+            $date = date("_Y-m-d_H:i:s");
+            $pdfFilePath = FCPATH . "/upload/employee/offer_letter" . $date . ".pdf";
+
+            $data->page_title = 'AirmedLabs';
+
+            ini_set('memory_limit', '128M');
+            $html = $this->load->view('hrm/offer_letter', $data1, true);
+            if (file_exists($pdfFilePath)) {
+                $this->delete_downloadfile($pdfFilePath);
+            }
+
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->autoScriptToLang = true;
+            $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+            $pdf->autoVietnamese = true;
+            $pdf->autoArabic = true;
+            $pdf->autoLangToFont = true;
+
+            if ($with_without_letter == 1) {
+                $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+            }
+
+            $pdf->AddPage('p', // L - landscape, P - portrait
+                    '', '', '', '', 5, // margin_left
+                    5, // margin right
+                    30, // margin top
+                    30, // margin bottom
+                    2, // margin header
+                    2); // margin footer
+            
+            if ($with_without_letter == 1) {
+                $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+            }
+
+            $pdf->WriteHTML($html);
+
+//        $pdf->debug = true;
+//        $pdf->allow_output_buffering = TRUE;
+//        if (file_exists($pdfFilePath) == true) {
+//            $this->load->helper('file');
+//            unlink($path);
+//        }
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+            $downld = $this->_push_file($pdfFilePath, "offer_letter" . $date . ".pdf");
+            $this->session->set_flashdata("success", "Offer letter has downloaded successfully.");
+            redirect($pdfFilePath);
+        } else {
+            header("Content-type: application/vnd.ms-word");
+            header("Content-Disposition: attachment;Filename=offer_letter.doc");
+            ini_set('memory_limit', '128M');
+            $html = '<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>';
+            
+            $html .= $this->load->view('hrm/offer_letter', $data1, true);
+            $html .= '<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>';
+            echo $html;
+            exit;
+        }
+
+        //redirect("/upload/b2binvoice/" . $data['job_details'][0]['order_id'] . "customerinvoice.pdf?" . time());
+    }
+
+    function pdf_joining_letter() {
+
+        $id = $_POST['emp_offer_id1'];
+        $with_without_letter = $_POST['letter_head1'];
+
+        $download_type = $_POST['download_type1'];
+
+        $data = $this->employee_model->get_one("hrm_employees", array("id" => $id));
+
+        $designation_data = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data->designation));
+        $department_data = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data->department));
+        $city_data = $this->employee_model->get_one('test_cities', array("status" => 1, "id" => $data->city));
+
+        $salary_structure = $this->employee_model->get_all('hrm_salary_structure', array("status" => 1, "designation_fk" => $designation_data->id));
+
+//        $q = "select *,se.id,se.status from hrm_employee_salary_structure se 
+//            left JOIN hrm_salary_structure ss 
+//            on se.salary_structure_fk = ss.id 
+//            where employee_fk = $id OR salary_structure_fk= 0 and ss.status=1";
+//
+//        $salary_structure_emp1 = $this->employee_model->get_val($q);
+
+
+
+        $structure_id = $data->salary_structure_id;
+        if ($structure_id != "") {
+            $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id
+                        WHERE ss.status='1' and employee_fk = $id";
+
+            $salary_structure_emp1 = $this->employee_model->get_val($q);
+        }
+        
+        $data1 = array('data' => $data, 'designation' => $designation_data, 'city' => $city_data, 'department' => $department_data, 'salary_structure' => $salary_structure, 'salary_structure_emp1' => $salary_structure_emp1);
+
+        if ($download_type == "1") {
+            $date = date("_Y-m-d_H:i:s");
+            $pdfFilePath = FCPATH . "/upload/employee/joining_letter" . $date . ".pdf";
+
+            $data->page_title = 'AirmedLabs';
+
+            ini_set('memory_limit', '128M');
+            $html = $this->load->view('hrm/joining_letter', $data1, true);
+            if (file_exists($pdfFilePath)) {
+                $this->delete_downloadfile($pdfFilePath);
+            }
+
+            $this->load->library('pdf');
+            $pdf = $this->pdf->load();
+            $pdf->autoScriptToLang = true;
+            $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+            $pdf->autoVietnamese = true;
+            $pdf->autoArabic = true;
+            $pdf->autoLangToFont = true;
+
+            if ($with_without_letter == 1) {
+                $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+            }
+
+            $pdf->AddPage('p', // L - landscape, P - portrait
+                    '', '', '', '', 5, // margin_left
+                    5, // margin right
+                    30, // margin top
+                    30, // margin bottom
+                    2, // margin header
+                    2); // margin footer
+
+            if ($with_without_letter == 1) {
+                $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+            }
+
+            $pdf->WriteHTML($html);
+
+//        $pdf->debug = true;
+//        $pdf->allow_output_buffering = TRUE;
+//        if (file_exists($pdfFilePath) == true) {
+//            $this->load->helper('file');
+//            unlink($path);
+//        }
+            $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+            $downld = $this->_push_file($pdfFilePath, "joining_letter" . $date . ".pdf");
+            $this->session->set_flashdata("success", "Joining Letter has downloaded successfully.");
+            redirect($pdfFilePath);
+            //redirect("/upload/b2binvoice/" . $data['job_details'][0]['order_id'] . "customerinvoice.pdf?" . time());
+        } else {
+            header("Content-type: application/vnd.ms-word");
+            header("Content-Disposition: attachment;Filename=offer_letter.doc");
+            ini_set('memory_limit', '128M');
+
+            $html = '<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>';
+            $html .= $this->load->view('hrm/joining_letter', $data1, true);
+            $html .= '<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>';
+            echo $html;
+            exit;
+        }
+    }
+
+    function send_offer_letter($id) {
+        $data = $this->employee_model->get_one("hrm_employees", array("id" => $id));
+        $designation_data = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data->designation));
+        $department_data = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data->department));
+        $city_data = $this->employee_model->get_one('test_cities', array("status" => 1, "id" => $data->city));
+
+        $salary_structure = $this->employee_model->get_all('hrm_salary_structure', array("status" => 1, "designation_fk" => $designation_data->id));
+
+//        $q = "select *,se.id,se.status from hrm_employee_salary_structure se 
+//            left JOIN hrm_salary_structure ss 
+//            on se.salary_structure_fk = ss.id 
+//            where employee_fk = $id OR salary_structure_fk= 0 and ss.status=1";
+//$salary_structure_emp1 = $this->employee_model->get_val($q);
+
+
+        $structure_id = $data->salary_structure_id;
+        if ($structure_id != "") {
+            $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id
+                        WHERE employee_fk = $id OR ss.salary_strucure_id = 0 AND se.salary_strucure_id = $structure_id";
+
+            $salary_structure_emp1 = $this->employee_model->get_val($q);
+        }
+
+        $data1 = array('data' => $data, 'designation' => $designation_data, 'city' => $city_data, 'department' => $department_data, 'salary_structure' => $salary_structure, 'salary_structure_emp1' => $salary_structure_emp1);
+
+        $filename = "offer_letter" . time() . $id . ".pdf";
+        $pdfFilePath = FCPATH . "/upload/employee/" . $filename;
+
+        $data->page_title = 'AirmedLabs'; // pass data to the view
+
+        ini_set('memory_limit', '128M');
+        $html = $this->load->view('hrm/offer_letter', $data1, true);
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+
+        $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                30, // margin bottom
+                2, // margin header
+                2); // margin footer
+
+
+        $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+
+        $pdf->WriteHTML($html);
+
+//        $pdf->debug = true;
+//        $pdf->allow_output_buffering = TRUE;
+//        if (file_exists($pdfFilePath) == true) {
+//            $this->load->helper('file');
+//            unlink($path);
+//        }
+        $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+//
+//        $name = "Test_result_wlpd.pdf";
+//        $downld = $this->_push_file($pdfFilePath, "Test_result_wlpd.pdf");
+
+
+        $this->load->library("util");
+        $util = new Util;
+        $this->load->helper("Email");
+        //$email_cnt = new Email;
+
+        $config['mailtype'] = 'html';
+
+        $this->email->initialize($config);
+
+        $message1 = '<div style="padding:0 4%;">
+                    <h4><b>Hello, </b>' . $data->name . '</h4>
+                        <p style="color:#7e7e7e;font-size:13px;">Please find below offer letter :  </p>
+		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
+                </div>';
+
+        //$this->email->to(implode(",", $c_email));
+        $to_email = $data->email;
+        //$to_email = "bhavik@virtualheight.com";
+
+        $this->email->to($to_email);
+        $this->email->from($this->config->item('admin_booking_email'), "AirmedLabs");
+        $this->email->subject("Offer Letter");
+        $this->email->message($message1);
+
+        $attatchPath = base_url() . "upload/employee/" . $filename;
+        $this->email->attach($attatchPath);
+
+        $this->email->send();
+        $this->session->set_flashdata("success", "Offer Letter has sent successfully.");
+        //redirect($pdfFilePath);
+        redirect("hrm/employee/index", "refresh");
+    }
+
+    function send_join_letter($id) {
+
+        $data = $this->employee_model->get_one("hrm_employees", array("id" => $id));
+
+        $designation_data = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data->designation));
+        $department_data = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data->department));
+        $city_data = $this->employee_model->get_one('test_cities', array("status" => 1, "id" => $data->city));
+
+        $salary_structure = $this->employee_model->get_all('hrm_salary_structure', array("status" => 1, "designation_fk" => $designation_data->id));
+
+//        $q = "select *,se.id,se.status from hrm_employee_salary_structure se 
+//            left JOIN hrm_salary_structure ss 
+//            on se.salary_structure_fk = ss.id 
+//            where employee_fk = $id OR salary_structure_fk= 0 and ss.status=1";
+//
+//        $salary_structure_emp1 = $this->employee_model->get_val($q);
+
+
+        $structure_id = $data->salary_structure_id;
+        if ($structure_id != "") {
+            $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id
+                        WHERE employee_fk = $id OR ss.salary_strucure_id = 0 AND se.salary_strucure_id = $structure_id";
+
+            $salary_structure_emp1 = $this->employee_model->get_val($q);
+        }
+
+        $data1 = array('data' => $data, 'designation' => $designation_data, 'city' => $city_data, 'department' => $department_data, 'salary_structure' => $salary_structure, 'salary_structure_emp1' => $salary_structure_emp1);
+
+        $filename = "joining_letter" . time() . $id . ".pdf";
+        $pdfFilePath = FCPATH . "/upload/employee/" . $filename;
+
+        $data->page_title = 'AirmedLabs';
+
+        ini_set('memory_limit', '128M');
+        $html = $this->load->view('hrm/joining_letter', $data1, true);
+
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+
+        $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                30, // margin bottom
+                2, // margin header
+                2); // margin footer
+
+        $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+
+
+        $pdf->WriteHTML($html);
+
+//        $pdf->debug = true;
+//        $pdf->allow_output_buffering = TRUE;
+//        if (file_exists($pdfFilePath) == true) {
+//            $this->load->helper('file');
+//            unlink($path);
+//        }
+        $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+//        $name = "Test_result_wlpd.pdf";
+//        $downld = $this->_push_file($pdfFilePath, "Test_result_wlpd.pdf");
+
+        $this->load->library("util");
+        $util = new Util;
+        $this->load->helper("Email");
+        //$email_cnt = new Email;
+
+        $config['mailtype'] = 'html';
+
+        $this->email->initialize($config);
+
+        $message1 = '<div style="padding:0 4%;">
+                    <h4><b>Hello, </b>' . $data->name . '</h4>
+                        <p style="color:#7e7e7e;font-size:13px;">Please find below join letter :  </p>
+		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
+                </div>';
+
+        //$this->email->to(implode(",", $c_email));
+        $to_email = $data->email;
+        //$to_email = "bhavik@virtualheight.com";
+        $this->email->to($to_email);
+        $this->email->from($this->config->item('admin_booking_email'), "AirmedLabs");
+        $this->email->subject("Joining Letter");
+        $this->email->message($message1);
+
+        $attatchPath = base_url() . "upload/employee/" . $filename;
+        $this->email->attach($attatchPath);
+
+        $this->email->send();
+        $this->session->set_flashdata("success", "Join Letter has sent successfully.");
+        //redirect($pdfFilePath);
+        redirect("hrm/employee/index", "refresh");
+    }
+
+    function pdf_relevent_letter() {
+
+        $id = $_POST['emp_offer_id2'];
+        $with_without_letter = $_POST['letter_head2'];
+
+        $data['data'] = $this->employee_model->get_one("hrm_employees", array("id" => $id));
+
+        $date = date("_Y-m-d_H:i:s");
+        $pdfFilePath = FCPATH . "/upload/employee/relevant_letter" . $date . ".pdf";
+
+        ini_set('memory_limit', '128M');
+        $html = $this->load->view('hrm/relevant_letter', $data, true);
+
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+
+        if ($with_without_letter == 1) {
+            $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+        }
+
+
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                30, // margin bottom
+                2, // margin header
+                2); // margin footer
+
+
+        if ($with_without_letter == 1) {
+            $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+        }
+
+        $pdf->WriteHTML($html);
+
+        $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+        $downld = $this->_push_file($pdfFilePath, "relevant_letter" . $date . ".pdf");
+        $this->session->set_flashdata("success", "Relevant Letter has downloaded successfully.");
+        redirect($pdfFilePath);
+    }
+
+    function send_relevent_letter($id) {
+
+        $data['data'] = $this->employee_model->get_one("hrm_employees", array("id" => $id));
+
+        $filename = "offer_letter" . time() . $id . ".pdf";
+        $pdfFilePath = FCPATH . "/upload/employee/" . $filename;
+
+        //$data->page_title = 'AirmedLabs'; // pass data to the view
+
+        ini_set('memory_limit', '128M');
+        $html = $this->load->view('hrm/relevant_letter', $data, true);
+
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1;
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+
+        $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                30, // margin bottom
+                2, // margin header
+                2); // margin footer
+
+
+        $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+
+        $pdf->WriteHTML($html);
+
+        $pdf->Output($pdfFilePath, 'F');
+
+        $this->load->library("util");
+        $util = new Util;
+        $this->load->helper("Email");
+
+        $config['mailtype'] = 'html';
+
+        $this->email->initialize($config);
+
+        $message1 = '<div style="padding:0 4%;">
+                    <h4><b>Hello, </b>' . $data['data']->name . '</h4>
+                        <p style="color:#7e7e7e;font-size:13px;">Please find below relevant letter :  </p>
+		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
+                </div>';
+
+        $to_email = $data['data']->email;
+        //$to_email = "bhavik@virtualheight.com";
+
+
+        $this->email->to($to_email);
+        $this->email->from($this->config->item('admin_booking_email'), "AirmedLabs");
+        $this->email->subject("Relevant Letter");
+        $this->email->message($message1);
+
+        $attatchPath = base_url() . "upload/employee/" . $filename;
+        $this->email->attach($attatchPath);
+
+        $this->email->send();
+        $this->session->set_flashdata("success", "Relevant Letter has sent successfully.");
+        redirect("hrm/employee/index", "refresh");
+    }
+
+    function phlebo_attendance() {
+
+        $data["login_data"] = logindata();
+        if ($_GET['month'] != "" && $_GET['city'] != "") {
+
+            $month = $_GET['month'];
+            $city = $_GET['city'];
+            $year = $_GET['current_year'];
+
+            $data['month'] = $month;
+            $data['city'] = $city;
+            $data['year'] = $year;
+
+            $today = cal_days_in_month(CAL_GREGORIAN, $month, date("Y"));
+            $data['today'] = $today;
+
+            $totalRows = $this->employee_model->num_row("phlebo_master", array("test_city" => $city));
+            $config = array();
+            $get = $_GET;
+            //print_r($get);die();
+            $config["base_url"] = base_url() . "hrm/employee/phlebo_attendance";
+            //$config["total_rows"] = count($totalRows);
+            $config["per_page"] = 100;
+            $config['page_query_string'] = TRUE;
+            $config["uri_segment"] = 3;
+            $config['cur_tag_open'] = '<span>';
+            $config['cur_tag_close'] = '</span>';
+            $config['next_link'] = 'Next &rsaquo;';
+            $config['prev_link'] = '&lsaquo; Previous';
+            //$this->pagination->initialize($config);
+            // $sort = $this->input->get("sort");
+            //$by = $this->input->get("by");
+            $page = ($this->input->get("per_page")) ? $this->input->get("per_page") : 0;
+            $data['query'] = $this->employee_model->search($config["per_page"], $page, $city);
+            //$data["links"] = $this->pagination->create_links();
+            $data["pages"] = $page;
+        }
+
+        $data['city_list'] = $this->user_model->master_fun_get_tbl_val("test_cities", array('status' => 1), array("id", "asc"));
+
+        $this->load->view('hrm/header');
+        $this->load->view('hrm/nav', $data);
+        $this->load->view('hrm/phlebo_attendance', $data);
+        $this->load->view('hrm/footer');
+    }
+
+    function phlebo_present($id, $month, $year) {
+        $q = "SELECT DISTINCT day(start_date),start_date FROM `phlabo_timer`
+                  WHERE user_fk = $id 
+                  AND MONTH(start_date) = $month 
+                  AND YEAR(start_date) = $year
+                  ";
+        $data = $this->employee_model->get_val($q);
+        return count($data);
+        //SELECT DAY(LAST_DAY(yourdate)) get total days in month like 31 or 30 or 28 of 
+    }
+
+    function phlebo_leave($id, $month, $year, $today) {
+
+        $q = "SELECT DISTINCT day(start_date),start_date FROM `phlabo_timer`
+                  WHERE user_fk = $id 
+                  AND MONTH(start_date) = $month 
+                  AND YEAR(start_date) = $year
+                  ";
+        $present = $this->employee_model->get_val($q);
+
+        $festivals = $this->employee_model->get_val("select * from festival_master where status = 1 AND MONTH(festival_date) = $month AND YEAR(festival_date) = $year and status=1");
+
+        $month_no = ($month == 10 || $month == 11 || $month == 12) ? $month : "0" . $month;
+        $start = date('Y-m-d', strtotime("$year-$month_no-01"));
+        $end = date('Y-m-d', strtotime("$year-$month_no-$today"));
+        $current = $start;
+        $total_sunday = 0;
+
+        while ($current != $end) {
+            if (date('l', strtotime($current)) == 'Sunday') {
+                $total_sunday++;
+            }
+            $current = date('Y-m-d', strtotime($current . ' +1 day'));
+        };
+
+        return ($today - (count($festivals) + $total_sunday + count($present)));
+    }
+
+    function phlebo_festival_work($id, $month, $year, $today) {
+        $festivals = $this->employee_model->get_val("select * from festival_master where status = 1 AND MONTH(festival_date) = $month AND YEAR(festival_date) = $year and status=1");
+//                        echo $this->db->last_query();
+//                        exit;
+
+        $present_total = [];
+        foreach ($festivals as $fes) {
+            $date = $fes['festival_date'];
+            $q = "SELECT DISTINCT day(start_date),start_date FROM `phlabo_timer`
+                  WHERE user_fk = $id 
+                  AND MONTH(start_date) = $month 
+                  AND YEAR(start_date) = $year
+                  AND start_date = '$date'
+                  ";
+
+            $present = $this->employee_model->get_val($q);
+
+            $present_total[] = $present;
+        }
+
+        $val1 = !empty($present_total[0]);
+        $val2 = !empty($present_total[1]);
+
+        if ($val1 == 1) {
+            $count = 1;
+            if ($val2 == 1) {
+                $count = 2;
+            }
+            return $count;
+        } else if ($val2 == 1) {
+            return $count = 1;
+        } else {
+            return $count = 0;
+        }
+    }
+
+    function phlebo_work_sun($id, $month, $year, $today) {
+
+        $q = "SELECT DISTINCT day(start_date),start_date FROM `phlabo_timer`
+                  WHERE user_fk = $id 
+                  AND MONTH(start_date) = $month 
+                  AND YEAR(start_date) = $year
+                  ";
+
+        $present = $this->employee_model->get_val($q);
+
+        $month_no = ($month == 10 || $month == 11 || $month == 12) ? $month : "0" . $month;
+        $start1 = date('Y-m-d', strtotime("$year-$month_no-01"));
+        $end1 = date('Y-m-d', strtotime("$year-$month_no-$today"));
+        $current1 = $start1;
+        $total_fill_sunday = 0;
+
+        while ($current1 != $end1) {
+            if (date('l', strtotime($current1)) == 'Sunday') {
+                foreach ($present as $p) {
+                    if ($current1 == date('Y-m-d', strtotime($p['start_date']))) {
+                        $total_fill_sunday++;
+                    }
+                }
+            }
+            $current1 = date('Y-m-d', strtotime($current1 . ' +1 day'));
+        };
+        return $total_fill_sunday;
+    }
+
+    function phlebo_ot($id, $month, $year, $today) {
+        $q = "SELECT `pm`.`id`,`pm`.`name`,`pm`.`start_time`,`pm`.`end_time`,`pt`.`stop_time`,`pt`.`start_date`, TIMEDIFF(pt.stop_time,pm.end_time) AS over_time
+                  FROM `phlabo_timer` pt 
+                  INNER JOIN `phlebo_master` pm ON `pt`.`user_fk`=`pm`.`id` 
+                  WHERE `pm`.`id` = $id 
+                  AND MONTH(pt.start_date) = $month 
+                  AND YEAR(pt.start_date) = $year
+                  AND pm.end_time < pt.stop_time + 15
+                  ";
+
+        $present = $this->employee_model->get_val($q);
+
+        $total_time = 0;
+        $hours = 0;
+        $minutes = 0;
+
+        foreach ($present as $p) {
+            list($hour, $minute) = explode(':', $p['over_time']);
+            $minutes += $hour * 60;
+            $minutes += $minute;
+        }
+
+        $hours = floor($minutes / 60);
+        $minutes -= $hours * 60;
+        return sprintf("%02d Hours And %02d Minutes", $hours, $minutes);
+    }
+
+    function phlebo_travel_1_15($id, $month, $year) {
+        $q = "SELECT * FROM `phlabo_timer`
+                  WHERE user_fk = $id
+                   AND MONTH(start_date) = $month
+                   AND YEAR(start_date) = $year
+                       AND DAY(start_date) <= 15
+                  ";
+
+        $phlebo_timer = $this->employee_model->get_val($q);
+
+        $total_km = 0;
+        foreach ($phlebo_timer as $pt) {
+            $total_km = $total_km + ($pt['out_riding'] - $pt['in_riding']);
+        }
+        return $total_km;
+    }
+
+    function phlebo_travel_16_31($id, $month, $year) {
+
+        $q = "SELECT * FROM `phlabo_timer`
+                  WHERE user_fk = $id
+                   AND MONTH(start_date) = $month
+                   AND YEAR(start_date) = $year
+                       AND DAY(start_date) >= 16
+                  ";
+
+        $phlebo_timer = $this->employee_model->get_val($q);
+
+        $total_km = 0;
+        foreach ($phlebo_timer as $pt) {
+            $total_km = $total_km + ($pt['out_riding'] - $pt['in_riding']);
+        }
+        return $total_km;
+    }
+
+    function phlebo_total_travel_1_31($id, $month, $year) {
+        $q = "SELECT * FROM `phlabo_timer`
+                  WHERE user_fk = $id
+                   AND MONTH(start_date) = $month
+                   AND YEAR(start_date) = $year
+                  ";
+
+        $phlebo_timer = $this->employee_model->get_val($q);
+
+        $total_km = 0;
+        foreach ($phlebo_timer as $pt) {
+            $total_km = $total_km + ($pt['out_riding'] - $pt['in_riding']);
+        }
+        return $total_km;
+    }
+
+    function nishit_test() {
+        $date = date("_Y-m-d_H:i:s");
+        $pdfFilePath = FCPATH . "upload/employee/offer_letter" . $date . ".pdf";
+        //$data['page_title'] = 'AirmedLabs'; // pass data to the view
+        ini_set('memory_limit', '512M');
+        //$html = $this->load->view('hrm/offer_letter', $data1, true);
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                30, // margin bottom
+                2, // margin header
+                2); // margin footer
+        //$html = "<b>Test</b>";
+        //echo $html; exit;
+        $pdf->WriteHTML("<b>Test</b>");
+        $pdf->debug = false;
+        $pdf->allow_output_buffering = false;
+        $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+        //redirect("/upload/b2binvoice/" . $data['job_details'][0]['order_id'] . "customerinvoice.pdf?" . time());
+
+        redirect($pdfFilePath);
+    }
+
+    function delete_downloadfile($path) {
+        $this->load->helper('file');
+        unlink($path);
+    }
+
+    function add() {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+
+//        if ($_POST) {
+//            echo "<pre>";
+//            print_r($_POST);
+//            exit;
+//        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['success'] = $this->session->flashdata("success");
+        $data['error'] = $this->session->flashdata("error");
+        $data['error_doc'] = $this->session->flashdata("error_doc");
+        $data['department_list'] = $this->employee_model->get_all('hrm_department', array("status" => 1));
+        $data['salary_list'] = $this->employee_model->get_all('hrm_master_salary_structure', array("status" => 1));
+
+        $data['city_list'] = $this->employee_model->get_all('test_cities', array("status" => 1));
+
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('name', 'Name', 'trim|required');
+        $this->form_validation->set_rules('city_data', 'City', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+
+        if ($this->form_validation->run() != FALSE) {
+
+            $name = $this->input->post('name');
+            $father = $this->input->post('father');
+            $dob = $this->input->post('dob');
+            $gender = $this->input->post('gender');
+            $phone = $this->input->post('phone');
+            $local_address = $this->input->post('local_address');
+            $permanent_address = $this->input->post('permanent_address');
+
+            $city = $this->input->post('city_data');
+            $branch_data = $this->input->post('branch_data');
+
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
+
+            $in_time = date("H:i:s", strtotime(str_replace(' ', '', $this->input->post('in_time'))));
+            $out_time = date("H:i:s", strtotime(str_replace(' ', '', $this->input->post('out_time'))));
+
+            $employee_id = $this->input->post('employee_id');
+            $department = $this->input->post('department');
+            $designation = $this->input->post('designation');
+            $date_joining = $this->input->post('date_joining');
+            $joinnig_salary = $this->input->post('joinnig_salary');
+            $holder_name = $this->input->post('holder_name');
+            $account_number = $this->input->post('account_number');
+            $bank_name = $this->input->post('bank_name');
+            $ifsc_code = $this->input->post('ifsc_code');
+            $pan_number = $this->input->post('pan_number');
+            $branch = $this->input->post('branch');
+            $company_email = $this->input->post('company_email');
+            $company_mobile = $this->input->post('company_mobile');
+            $master_salary = $this->input->post('master_salary');
+            $sal_option = $this->input->post('sal_option');
+
+            //photo
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'jpg|gif|png|jpeg';
+            if ($files['photo']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['photo']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('photo')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error", $error);
+                    redirect("hrm/employee/add", "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $photo = $doc_data['file_name'];
+                }
+            }
+            //photo
+            //docs
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['resume']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['resume']['name'];
+
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+
+                if (!$this->upload->do_upload('resume')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/add", "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $resume = $doc_data['file_name'];
+                }
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['offer_letter']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['offer_letter']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('offer_letter')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/add", "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $offer_letter = $doc_data['file_name'];
+                }
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['joining_letter']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['joining_letter']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('joining_letter')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/add", "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $joining_letter = $doc_data['file_name'];
+                }
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['contract_agreement']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['contract_agreement']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('contract_agreement')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/add", "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $contract_agreement = $doc_data['file_name'];
+                }
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['id_proof']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['id_proof']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('id_proof')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/add", "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $id_proof = $doc_data['file_name'];
+                }
+            }
+            $this->load->library("Util");
+            $util = new Util();
+
+            $new_employee_id = $util->get_employee_id($city);
+            //docs
+            $data1 = array(
+                "name" => $name,
+                "father_name" => $father,
+                "photo" => $photo,
+                "date_of_birth" => $dob,
+                "gender" => $gender,
+                "phone" => $phone,
+                "address" => $local_address,
+                "permanent_address" => $permanent_address,
+                "city" => $city,
+                "branch_fk" => $branch_data,
+                "email" => $email,
+                "password" => $password,
+                "employee_id" => $new_employee_id,
+                "department" => $department,
+                "designation" => $designation,
+                "date_of_joining" => $date_joining,
+                "joining_salary" => $joinnig_salary,
+                "salary_structure_id" => $master_salary,
+                "company_email" => $company_email,
+                "company_mobile" => $company_mobile,
+                "bank_holder_name" => $holder_name,
+                "bank_account_number" => $account_number,
+                "bank_name" => $bank_name,
+                "ifsc_code" => $ifsc_code,
+                "pan_number" => $pan_number,
+                "branch" => $branch,
+                "resume" => $resume,
+                "offer_letter" => $offer_letter,
+                "joining_letter" => $joining_letter,
+                "contract_agreement" => $contract_agreement,
+                "id_proof" => $id_proof,
+                //"active" => 1,
+                "created_by" => $data["login_data"]["id"],
+                "created_date" => date("Y-m-d H:i:s"),
+                "sal_option" => $sal_option
+            );
+
+            if ($resume != "" || $offer_letter != "" || $joining_letter != "" || $contract_agreement != "" || $id_proof != "") {
+                $data1["status"] = 1;
+            } else {
+                $data1["status"] = 0;
+            }
+//            echo "<pre>";
+//            print_r($_POST);
+//            exit;
+            $insert = $this->employee_model->insert("hrm_employees", $data1);
+
+//            echo $this->db->last_query();
+//                        exit;
+
+            $count = $_POST['count'];
+
+            $insert_id = $insert;
+            $data2 = array(
+                "employee_fk" => $insert_id,
+                "salary_structure_fk" => $_POST["master_salary"],
+                "created_by" => $data["login_data"]["id"],
+                "created_date" => date("Y-m-d H:i:s"),
+                "status" => 1
+            );
+            $insert3 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+
+
+            if ($count > 0) {
+                for ($i = 0; $i < $count; $i++) {
+                    $data2 = array(
+                        "employee_fk" => $insert_id,
+                        "salary_strucure_id" => $_POST["salary_id_$i"],
+                        "salary_value" => $_POST["salary_value_$i"],
+                        "created_by" => $data["login_data"]["id"],
+                        "created_date" => date("Y-m-d H:i:s"),
+                        "status" => 1
+                    );
+                    $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+                }
+            }
+
+
+//            if ($count > 0) {
+//                //$insert_id = $this->db->insert_id();
+//                //0-basic,1-pf,2-pf,3-esic,4-ta
+//                for ($i = 0; $i < $count; $i++) {
+//                    if (isset($_POST['pf_check']) && $_POST['pf_check'] != "") {
+//                        if ($i == 1 || $i == 2) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_strucure_id" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 1,
+//                                "type" => 1, // PF
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+//                        }
+//                    } else {
+//                        if ($i == 1 || $i == 2) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_strucure_id" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 0,
+//                                "type" => 1, // PF
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+//                        }
+//                    }
+//                    if (isset($_POST['pf_esic']) && $_POST['pf_esic'] != "") {
+//                        if ($i == 3) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_strucure_id" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 1,
+//                                "type" => 2, // ESIC
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+//                        }
+//                    } else {
+//                        if ($i == 3) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_strucure_id" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 0,
+//                                "type" => 2, // ESIC
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+//                        }
+//                    }
+//                    if ($i != 1 && $i != 2 && $i != 3) {
+//                        $data2 = array(
+//                            "employee_fk" => $insert_id,
+//                            "salary_strucure_id" => $_POST["salary_id_$i"],
+//                            "salary_value" => $_POST["salary_value_$i"],
+//                            "created_by" => $data["login_data"]["id"],
+//                            "created_date" => date("Y-m-d H:i:s"),
+//                            "status" => 1,
+//                            "type" => 4, // Other
+//                        );
+//                        $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+//                    }
+//                }
+//
+//                // Add other salary
+//                if (isset($_POST['salary_other']) && $_POST['salary_other'] != "") {
+//                    $data2 = array(
+//                        "employee_fk" => $insert_id,
+//                        "salary_strucure_id" => 0,
+//                        "salary_value" => $_POST['salary_other'],
+//                        "created_by" => $data["login_data"]["id"],
+//                        "created_date" => date("Y-m-d H:i:s"),
+//                        "status" => 1,
+//                        "type" => 3     //3- Other salary
+//                    );
+//                    $insert2 = $this->employee_model->insert("hrm_employee_salary_structure_details", $data2);
+//                }
+//            }
+//            if ($count > 0) {
+//                //$insert_id = $this->db->insert_id();
+//                //0-basic,1-pf,2-pf,3-esic,4-ta
+//                for ($i = 0; $i < $count; $i++) {
+//                    if (isset($_POST['pf_check']) && $_POST['pf_check'] != "") {
+//                        if ($i == 1 || $i == 2) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_structure_fk" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 1,
+//                                "type" => 1, // PF
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+//                        }
+//                    } else {
+//                        if ($i == 1 || $i == 2) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_structure_fk" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 0,
+//                                "type" => 1, // PF
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+//                        }
+//                    }
+//                    if (isset($_POST['pf_esic']) && $_POST['pf_esic'] != "") {
+//                        if ($i == 3) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_structure_fk" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 1,
+//                                "type" => 2, // ESIC
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+//                        }
+//                    } else {
+//                        if ($i == 3) {
+//                            $data2 = array(
+//                                "employee_fk" => $insert_id,
+//                                "salary_structure_fk" => $_POST["salary_id_$i"],
+//                                "salary_value" => $_POST["salary_value_$i"],
+//                                "created_by" => $data["login_data"]["id"],
+//                                "created_date" => date("Y-m-d H:i:s"),
+//                                "status" => 0,
+//                                "type" => 2, // ESIC
+//                            );
+//                            $insert2 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+//                        }
+//                    }
+//                    if ($i != 1 && $i != 2 && $i != 3) {
+//                        $data2 = array(
+//                            "employee_fk" => $insert_id,
+//                            "salary_structure_fk" => $_POST["salary_id_$i"],
+//                            "salary_value" => $_POST["salary_value_$i"],
+//                            "created_by" => $data["login_data"]["id"],
+//                            "created_date" => date("Y-m-d H:i:s"),
+//                            "status" => 1,
+//                            "type" => 4, // Other
+//                        );
+//                        $insert2 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+//                    }
+//                }
+//
+//                // Add other salary
+//                if (isset($_POST['salary_other']) && $_POST['salary_other'] != "") {
+//                    $data2 = array(
+//                        "employee_fk" => $insert_id,
+//                        "salary_structure_fk" => 0,
+//                        "salary_value" => $_POST['salary_other'],
+//                        "created_by" => $data["login_data"]["id"],
+//                        "created_date" => date("Y-m-d H:i:s"),
+//                        "status" => 1,
+//                        "type" => 3     //3- Other salary
+//                    );
+//                    $insert2 = $this->employee_model->insert("hrm_employee_salary_structure", $data2);
+//                }
+//            }
+
+            $this->session->set_flashdata("success", "Employee successfully added.");
+            redirect("hrm/employee", "refresh");
+        }
+
+        $this->load->view('hrm/header', $data);
+        $this->load->view('hrm/nav', $data);
+        $this->load->view('hrm/employee_add', $data);
+        $this->load->view('hrm/footer', $data);
+    }
+
+    function edit($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['cid'] = $cid;
+        $data['error'] = $this->session->flashdata("error");
+        $data['error_doc'] = $this->session->flashdata("error_doc");
+        $data['query'] = $this->employee_model->get_one("hrm_employees", array("id" => $cid));
+        $data['city_list'] = $this->employee_model->get_all('test_cities', array("status" => 1));
+
+        $data['branch_list'] = $this->employee_model->getBranch(array("id" => $data['query']->city));
+
+        $data['department_list'] = $this->employee_model->get_all('hrm_department', array("status" => 1));
+        $data['designation_list'] = $this->employee_model->get_all('hrm_designation', array("status" => 1, "department_fk" => $data['query']->department));
+
+        $data['salary_list'] = $this->employee_model->get_all('hrm_master_salary_structure', array("status" => 1));
+
+        $data['salary_structure'] = $this->employee_model->get_all('hrm_salary_structure', array("status" => 1));
+        $data['salary_structure_emp'] = $this->employee_model->get_all('hrm_employee_salary_structure', array("employee_fk" => $cid));
+//        $q = "select *,se.id,se.status,ss.cutofftype from hrm_employee_salary_structure se 
+//            left JOIN hrm_salary_structure ss 
+//            on se.salary_structure_fk = ss.id 
+//            where employee_fk = $cid OR salary_structure_fk = '0' and ss.status='1'";
+//
+//        $data['salary_structure_emp1'] = $this->employee_model->get_val($q);
+//        $structure_id = $data['query']->salary_structure_id;
+//        $q = "select *,ss.type,ss.status from hrm_employee_salary_structure_details ss 
+//                        LEFT JOIN  hrm_master_salary_structure_details se 
+//                        on ss.salary_strucure_id = se.id
+//                        WHERE employee_fk = $cid OR ss.salary_strucure_id = 0 AND se.salary_strucure_id = $structure_id
+//             ";
+
+
+        $structure_id = $data['query']->salary_structure_id;
+        if ($structure_id != "") {
+            $q = "select *,ss.type,ss.status from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id
+                        WHERE employee_fk = $cid and ss.status='1'";
+
+            $data['salary_structure_emp1'] = $this->employee_model->get_val($q);
+        }
+//        echo "<pre>";
+//        print_r($data['salary_structure_emp1']);
+//        exit;
+		
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('city_data', 'City', 'trim|required');
+        $this->form_validation->set_rules('name', 'Name', 'trim|required');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+        $this->form_validation->set_rules('employee_id', 'Employee ID', 'trim|required');
+
+        if ($this->form_validation->run() != FALSE) {
+            $name = $this->input->post('name');
+            $father = $this->input->post('father');
+            $dob = $this->input->post('dob');
+            $gender = $this->input->post('gender');
+            $phone = $this->input->post('phone');
+            $local_address = $this->input->post('local_address');
+            $permanent_address = $this->input->post('permanent_address');
+
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
+            $employee_id = $this->input->post('employee_id');
+            $department = $this->input->post('department');
+            $designation = $this->input->post('designation');
+            $date_joining = $this->input->post('date_joining');
+			$date_leaving = $this->input->post('date_leaving');
+            $joinnig_salary = $this->input->post('joinnig_salary');
+            $holder_name = $this->input->post('holder_name');
+            $account_number = $this->input->post('account_number');
+            $bank_name = $this->input->post('bank_name');
+            $ifsc_code = $this->input->post('ifsc_code');
+            $pan_number = $this->input->post('pan_number');
+            $branch = $this->input->post('branch');
+            $company_email = $this->input->post('company_email');
+            $company_mobile = $this->input->post('company_mobile');
+            //photo
+			
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'jpg|gif|png|jpeg';
+            if ($files['photo']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['photo']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('photo')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error", $error);
+                    redirect("hrm/employee/edit/" . $cid, "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $photo = $doc_data['file_name'];
+                }
+            }
+            if (empty($photo)) {
+                $photo = $data['query']->photo;
+            }
+            //photo
+            //docs
+            $files = $_FILES;
+            $this->load->library('upload');
+             $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['resume']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['resume']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('resume')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/edit/" . $cid, "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $resume = $doc_data['file_name'];
+                }
+            }
+            if (empty($resume)) {
+                $resume = $data['query']->resume;
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+             $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['offer_letter']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['offer_letter']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('offer_letter')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/edit/" . $cid, "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $offer_letter = $doc_data['file_name'];
+                }
+            }
+            if (empty($offer_letter)) {
+                $offer_letter = $data['query']->offer_letter;
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+            $config['allowed_types'] = 'pdf|PDF|doc|DOC';
+            if ($files['joining_letter']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['joining_letter']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('joining_letter')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/edit/" . $cid, "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $joining_letter = $doc_data['file_name'];
+                }
+            }
+            if (empty($joining_letter)) {
+                $joining_letter = $data['query']->joining_letter;
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+             $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['contract_agreement']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['contract_agreement']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('contract_agreement')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/edit/" . $cid, "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $contract_agreement = $doc_data['file_name'];
+                }
+            }
+            if (empty($contract_agreement)) {
+                $contract_agreement = $data['query']->contract_agreement;
+            }
+            $files = $_FILES;
+            $this->load->library('upload');
+             $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+            if ($files['id_proof']['name'] != "") {
+                $config['upload_path'] = './upload/employee/';
+                $config['file_name'] = time() . $files['id_proof']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('id_proof')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                    $this->session->set_flashdata("error_doc", $error);
+                    redirect("hrm/employee/edit/" . $cid, "refresh");
+                } else {
+                    $doc_data = $this->upload->data();
+                    $id_proof = $doc_data['file_name'];
+                }
+            }
+            if (empty($id_proof)) {
+                $id_proof = $data['query']->id_proof;
+            }
+            //docs
+            $data1 = array(
+                "name" => $name,
+                "father_name" => $father,
+                "photo" => $photo,
+                "date_of_birth" => $dob,
+                "gender" => $gender,
+                "phone" => $phone,
+                "address" => $local_address,
+                "permanent_address" => $permanent_address,
+                "city" => $city,
+                "branch_fk" => $branch_data,
+                "email" => $email,
+                "password" => $password,
+                "employee_id" => $employee_id,
+                "department" => $department,
+                "designation" => $designation,
+                "date_of_joining" => $date_joining,
+				"date_of_leaving" => $date_leaving,
+                "joining_salary" => $joinnig_salary,
+                "company_email" => $company_email,
+                "company_mobile" => $company_mobile,
+                "bank_holder_name" => $holder_name,
+                "bank_account_number" => $account_number,
+                "bank_name" => $bank_name,
+                "ifsc_code" => $ifsc_code,
+                "pan_number" => $pan_number,
+                "branch" => $branch,
+                "resume" => $resume,
+                "offer_letter" => $offer_letter,
+                "joining_letter" => $joining_letter,
+                "contract_agreement" => $contract_agreement,
+                "id_proof" => $id_proof,
+                "updated_by" => $data["login_data"]["id"],
+                "updated_date" => date("Y-m-d H:i:s")
+            );
+
+            $update = $this->employee_model->update("hrm_employees", array("id" => $cid), $data1);
+            $this->session->set_flashdata("success", "Employee successfully added.");
+            redirect("hrm/employee", "refresh");
+        } else {
+            $this->load->view('hrm/header', $data);
+            $this->load->view('hrm/nav', $data);
+            $this->load->view('hrm/employee_edit', $data);
+            $this->load->view('hrm/footer', $data);
+        }
+    }
+
+    function delete($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['query'] = $this->employee_model->update("hrm_employees", array("id" => $cid), array("status" => '3'));
+        $this->session->set_flashdata("success", "Employee successfully deleted.");
+        redirect("hrm/employee", "refresh");
+    }
+
+    function delete1($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['query'] = $this->employee_model->update("hrm_employees", array("id" => $cid), array("is_profassion" => '0'));
+        $this->session->set_flashdata("success", "Employee successfully updated.");
+        redirect("hrm/employee", "refresh");
+    }
+
+    function get_designation() {
+        $postData = $this->input->post();
+        $result = $this->employee_model->getDesignation($postData);
+        print_r(json_encode($result));
+    }
+
+    function get_branch() {
+        $postData = $this->input->post();
+        $result = $this->employee_model->getBranch($postData);
+        print_r(json_encode($result));
+    }
+
+    function get_salaray_strucuture() {
+//        $department = $this->input->post('department');
+//        $designation = $this->input->post('designation');
+        $master_salary = $this->input->post('master_salary');
+//        $result = $this->employee_model->get_all('hrm_salary_structure', array("status" => 1, "department_fk" => $department, "designation_fk" => $designation));
+        $result = $this->employee_model->get_all('hrm_master_salary_structure_details', array("status" => 1, "salary_strucure_id" => $master_salary));
+        $result1 = $result;
+        for ($i = 0; $i < count($result1); $i++) {
+            $result[$i]->salary_name = ucwords($result1[$i]->salary_name);
+        }
+        print_r(json_encode($result));
+    }
+
+//    function get_salaray_strucuture_new() {
+//        $master_salary = $this->input->get_post('master_salary');
+//        $salary = $this->input->get_post('salary');
+//        $result = $this->employee_model->get_all('hrm_master_salary_structure_details', array("status" => 1, "salary_strucure_id" => $master_salary));
+//        //print_r($result);die();
+//        $result1 = $result;
+//        for ($i = 0; $i < count($result1); $i++) {
+//            $result[$i]->salary_name = ucwords($result1[$i]->salary_name);
+//        }
+//        $new_common_salary_structure = array();
+//        $new_common_salary_structure[] = array("salary_name" => "BASIC");
+//        $new_common_salary_structure[] = array("salary_name" => "DA");
+//        $new_common_salary_structure[] = array("salary_name" => "HRA");
+//        $new_common_salary_structure[] = array("salary_name" => "CONVEYANCE ALLOWANCE");
+//        $new_common_salary_structure[] = array("salary_name" => "SPECIAL ALLOWANCE");
+//        $new_common_salary_structure[] = array("salary_name" => "MEDICAL REIMBURSEMENT");
+//        //$new_common_salary_structure[] = array("salary_name" => "MAINTENACE COST");
+//        //$new_common_salary_structure[] = array("salary_name" => "OT");
+//        //$new_common_salary_structure[] = array("salary_name" => "PETROL");
+//        //$new_common_salary_structure[] = array("salary_name" => "INSENTIVE");
+//        //$new_common_salary_structure[] = array("salary_name" => "SUNDAY WAGES");
+//        //$new_common_salary_structure[] = array("salary_name" => "FESTIVAL ALLOWANCE");
+//        //$new_common_salary_structure[] = array("salary_name" => "OTHERS EARNING");
+//        $new_common_salary_structure[] = array("salary_name" => "PF-EMPLOYEE'S CONTRIBUTION");
+//        $new_common_salary_structure[] = array("salary_name" => "ESIC-EMPLOYEE'S CONTRIBUTION");
+//        $new_common_salary_structure[] = array("salary_name" => "GROSS SALARY");
+//        $new_common_salary_structure[] = array("salary_name" => "PF-EMPLOYER'S CONTRIBUTION");
+//        $new_common_salary_structure[] = array("salary_name" => "ESIC-EMPLOYER'S CONTRIBUTION");
+//        //$new_common_salary_structure[] = array("salary_name" => "TDS");
+//        //$new_common_salary_structure[] = array("salary_name" => "LEAVES");
+//        //$new_common_salary_structure[] = array("salary_name" => "PT");
+//        //$new_common_salary_structure[] = array("salary_name" => "OTHERS DEDUCTION");
+//        $new_common_salary_structure[] = array("salary_name" => "SALARY (CTC) / PM");
+//        $new_common_salary_structure[] = array("salary_name" => "NET TAKE HOME");
+//        $moth_day = 30;
+//        $leave = 0;
+//        $pf = 0;
+//        $esic = 0;
+//        $basic = 0;
+//        $da = 0;
+//        $hra = 0;
+//        $convence = 0;
+//        $madical = 0;
+//        $pt = 0;
+//        $final_array = array();
+//        foreach ($new_common_salary_structure as $csskey) {
+//            foreach ($result as $skey) {
+//
+//                if (trim(strtoupper($skey->salary_name)) == $csskey["salary_name"]) {
+//                    $s_name = $skey->salary_name;
+//                    if ($salary > 0) {
+//
+//                        $salary_calculate = 0;
+//                        if ($skey->cutofftype == 1) {
+//                            $salary_calculate = $salary;
+//                        }
+//                        if ($skey->cutofftype == 2) {
+//                            $salary_calculate = round($salary * $skey->value / 100);
+//                        }
+//
+//
+//
+//                        if (trim(strtoupper($s_name)) == "BASIC") {
+//                            $basic = $salary_calculate;
+//                            $skey->new_value = $salary_calculate;
+//                        }
+//                        if (trim(strtoupper($s_name)) == "DA") {
+//                            $da = $salary_calculate;
+//                            $skey->new_value = $salary_calculate;
+//                        }
+//                        if (trim(strtoupper($s_name)) == "HRA") {
+//                            $hra = $salary_calculate;
+//                            if ($master_salary == 28) {
+//                                $hra = round($salary * 20 / 100);
+//                            }
+//                            $skey->new_value = $hra;
+//                        }
+//                        if (trim(strtoupper($s_name)) == "CONVEYANCE ALLOWANCE") {
+//                            $convence = 1600;
+//                            $skey->new_value = 1600;
+//                        }
+//                        if (trim(strtoupper($s_name)) == "MEDICAL REIMBURSEMENT") {
+//                            $madical = 1250;
+//                            $skey->new_value = 1250;
+//                        }
+//                        if (trim(strtoupper($s_name)) == "PF-EMPLOYEE'S CONTRIBUTION") {
+//                            $salary_calculate = round((($basic + $da) * 12) / 100);
+//                            $pf = $salary_calculate;
+//                            $skey->new_value = $salary_calculate;
+//                        }
+//
+//                        if (trim(strtoupper($s_name)) == "PF-EMPLOYER'S CONTRIBUTION") {
+//                            $salary_calculate = round((($basic + $da) * 12) / 100);
+//                            $pfe = $salary_calculate;
+//                            $skey->new_value = $salary_calculate;
+//                        }
+//
+//                        if (trim(strtoupper($s_name)) == "ESIC-EMPLOYEE'S CONTRIBUTION") {
+//
+//                            $salary_calculate = round((($basic + $da) * 1.75) / 100);
+//                            $esic = $salary_calculate;
+//                            $skey->new_value = $salary_calculate;
+//                        }
+//                        if (trim(strtoupper($s_name)) == "ESIC-EMPLOYER'S CONTRIBUTION") {
+//
+//                            $salary_calculate = round((($basic + $da) * 4.75) / 100);
+//                            $esice = $salary_calculate;
+//                            $skey->new_value = $salary_calculate;
+//                        }
+//                    }
+//
+//                    $final_array[] = $skey;
+//                }
+//            }
+//        }
+//        //echo $basic."----".$da."----".$hra."----".$convence."----".$madical;die();
+//        $special_allowance = $salary - ($basic + $da + $hra + $convence + $madical);
+//        /* END */
+//        /* CTC START */
+//        $gross = $basic + $da + $hra + $convence + $madical + $special_allowance + $pf + $esic;
+//        $ctc = $basic + $da + $hra + $convence + $madical + $special_allowance + $pf + $esic + $pfe + $esice;
+//        /* END */
+//        /* NTH START */
+//        $nth = ($basic + $da + $hra + $convence + $madical + $special_allowance);
+//        /* END */
+//
+//        $cnt = 0;
+//        foreach ($final_array as $value) {
+//            if (trim(strtoupper($value->salary_name)) == "SPECIAL ALLOWANCE") {
+//                $final_array[$cnt]->new_value = $special_allowance;
+//            }
+//            if (trim(strtoupper($value->salary_name)) == "GROSS SALARY") {
+//                $final_array[$cnt]->new_value = $gross;
+//            }
+//            if (trim(strtoupper($value->salary_name)) == "SALARY (CTC) / PM") {
+//                $final_array[$cnt]->new_value = $ctc;
+//            }
+//            if (trim(strtoupper($value->salary_name)) == "NET TAKE HOME") {
+//                $final_array[$cnt]->new_value = $nth;
+//            }
+//            $cnt++;
+//        }
+//
+//
+//        print_r(json_encode($final_array));
+//    }
+    
+        function get_salaray_strucuture_new() {
+        $master_salary = $this->input->get_post('master_salary');
+        $salary = $this->input->get_post('salary');
+        $sal_option = $this->input->get_post('sal_option');
+        $result = $this->employee_model->get_all('hrm_master_salary_structure_details', array("status" => 1, "salary_strucure_id" => $master_salary));
+
+        //echo "<pre>"; print_r($result);die();
+        $result1 = $result;
+        for ($i = 0; $i < count($result1); $i++) {
+            $result[$i]->salary_name = ucwords($result1[$i]->salary_name);
+        }
+        $new_common_salary_structure = array();
+
+        //echo "<pre>"; print_r($common_salary_structure);die();
+        $new_common_salary_structure[] = array("salary_name" => "Basic");
+        $new_common_salary_structure[] = array("salary_name" => "DA");
+
+        $new_common_salary_structure[] = array("salary_name" => "Other Allowance");
+        $new_common_salary_structure[] = array("salary_name" => "MAINTENACE COST");
+        $new_common_salary_structure[] = array("salary_name" => "OT");
+        $new_common_salary_structure[] = array("salary_name" => "Petrol");
+        $new_common_salary_structure[] = array("salary_name" => "Insentive");
+        $new_common_salary_structure[] = array("salary_name" => "Sunday Wages");
+        $new_common_salary_structure[] = array("salary_name" => "Festival Allowance");
+        $new_common_salary_structure[] = array("salary_name" => "Others Earning");
+        //$new_common_salary_structure[] = array("salary_name" => "Other Reimbursement");
+        $new_common_salary_structure[] = array("salary_name" => "PF-Employee's Contribution");
+        $new_common_salary_structure[] = array("salary_name" => "ESIC-Employee's Contribution");
+
+        $new_common_salary_structure[] = array("salary_name" => "PF-Employer's Contribution");
+        $new_common_salary_structure[] = array("salary_name" => "ESIC-Employer's Contribution");
+        $new_common_salary_structure[] = array("salary_name" => "TDS");
+        $new_common_salary_structure[] = array("salary_name" => "Leaves");
+        $new_common_salary_structure[] = array("salary_name" => "PT");
+        $new_common_salary_structure[] = array("salary_name" => "Others Deduction");
+        $new_common_salary_structure[] = array("salary_name" => "Present Day Basic Salary");
+
+
+        $new_common_salary_structure[] = array("salary_name" => "Present Day DA");
+        $new_common_salary_structure[] = array("salary_name" => "Present Day Allowance");
+        $new_common_salary_structure[] = array("salary_name" => "Present Day ESIC");
+
+        $new_common_salary_structure[] = array("salary_name" => "SALARY (CTC) / PM");
+        $new_common_salary_structure[] = array("salary_name" => "Net Take Home");
+
+        $moth_day = 30;
+        $leave = 0;
+        $basic = 0;
+        $da = 0;
+        $hra = 0;
+        $convence = 0;
+        $madical = 0;
+        $pt = 0;
+        $final_array = array();
+        $employee_salary = $salary;
+        $present_day_basic = 0;
+        $pf = 0;
+        $e_pf = 0;
+        $esic = 0;
+        $e_esic = 0;
+        $tds = 0;
+        $others = 0;
+        $year = date('Y');
+        $month = date('m');
+        $Other_Deduction = 0;
+        //echo "<pre>"; print_r($new_common_salary_structure);die();
+
+        foreach ($new_common_salary_structure as $csskey) {
+            foreach ($result as $skey) {
+
+                if (trim(strtoupper($skey->salary_name)) == trim(strtoupper($csskey["salary_name"]))) {
+                    
+                    $s_name = $skey->salary_name;
+                    if ($salary > 0) {
+
+                        $salary_calculate = 0;
+                        if ($skey->cutofftype == 1) {
+                            $salary_calculate = $salary;
+                        }
+                        if ($skey->cutofftype == 2) {
+                            $salary_calculate = round($salary * $skey->value / 100);
+                        }
+
+                        if (trim(strtoupper($s_name)) == "BASIC") {
+                            $basic = $salary_calculate;
+                            $present_day_basic = $salary_calculate;
+                            $skey->new_value = $salary_calculate;
+                        }
+
+                        if (trim(strtoupper($s_name)) == "DA") {
+                            $da = $salary_calculate;
+                            $skey->new_value = $salary_calculate;
+                        }
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Insentive"))) {
+                            $incentive = ($employee_salary * 40) / 100;
+                            $skey->new_value = $incentive;
+                        }
+//                        if (trim(strtoupper($s_name)) == "HRA") {
+//                            $hra = $salary_calculate;
+//                            if ($master_salary == 28) {
+//                                $hra = round($salary * 20 / 100);
+//                            }
+//                            $skey->new_value = $hra;
+//                        }
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Other Allowance"))) {
+                            $other_allowance = $salary_calculate;
+                            $skey->new_value = $salary_calculate;
+                        }
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Others Earning"))) {
+                            $skey->new_value = 0;
+                        }
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Others Deduction"))) {
+                            $skey->new_value = 0;
+                        }
+
+                        if (trim(strtoupper($s_name)) == "MAINTENACE COST") {
+                            $salary_calculate = round($MAINTENACE);
+                            $skey->new_value = $salary_calculate;
+                        }
+
+                        if (trim(strtoupper($s_name)) == "CONVEYANCE ALLOWANCE") {
+                            $convence = 1600;
+                            $skey->new_value = 1600;
+                        }
+                        if (trim(strtoupper($s_name)) == "MEDICAL REIMBURSEMENT") {
+                            $madical = 1250;
+                            $skey->new_value = 1250;
+                        }
+                        if (trim(strtoupper($s_name)) == "PF-EMPLOYEE'S CONTRIBUTION") {
+                            $pf = $salary_calculate = 0;
+                            if ($employee_salary <= 21000) {
+                                $pf = $salary_calculate = round(($present_day_basic * 12) / 100);
+                            }
+                            if ($employee_salary > 21000) {
+                                if ($sal_option == "1") {
+                                    $pf = $salary_calculate = round(($present_day_basic * 12) / 100);
+                                }
+                            }
+                            $skey->new_value = $pf;
+                        }
+
+                        if (trim(strtoupper($s_name)) == "PF-EMPLOYER'S CONTRIBUTION") {
+                            $e_pf = $salary_calculate = 0;
+                            if ($employee_salary <= 21000) {
+                                $e_pf = $salary_calculate = round(($present_day_basic * 12) / 100);
+                            }
+                            if ($employee_salary > 21000) {
+                                if ($sal_option == "1") {
+                                    $e_pf = $salary_calculate = round(($present_day_basic * 12) / 100);
+                                }
+                            }
+                            $skey->new_value = $salary_calculate;
+                        }
+
+                        if (trim(strtoupper($s_name)) == "TDS") {
+                            $tds = round($tds);
+                            $skey->new_value = $tds;
+                        }
+
+
+
+
+
+                        $daynumber = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+                        $moth_day = $daynumber;
+
+                        $present_day_basic_sal = round($basic * (($moth_day - $leave) / $moth_day));
+                        $present_day_da = round($da * (($moth_day - $leave) / $moth_day));
+                        $present_day_allowance = round($other_allowance * (($moth_day - $leave) / $moth_day));
+
+                        if (trim(strtoupper($s_name)) == "ESIC-EMPLOYEE'S CONTRIBUTION") {
+
+                            if ($master_salary == "27") {
+                                if ($employee_salary < 21000) {
+                                    $esic = round((($present_day_basic + $other_allowance + $da) * 1.75) / 100);
+                                    $e_esic = round((($present_day_basic + $other_allowance + $da) * 4.75) / 100);
+                                    $present_day_esic = round((($present_day_basic_sal + $present_day_da + $present_day_allowance) * 1.75) / 100);
+                                } else {
+                                    $present_day_esic = "N/A";
+                                }
+                            }
+                            $skey->new_value = $esic;
+                        }
+                        if (trim(strtoupper($s_name)) == "ESIC-EMPLOYER'S CONTRIBUTION") {
+
+                            if ($master_salary == "27") {
+                                if ($employee_salary < 21000) {
+                                    $esic = round((($present_day_basic + $other_allowance + $da) * 1.75) / 100);
+                                    $e_esic = round((($present_day_basic + $other_allowance + $da) * 4.75) / 100);
+
+                                    $present_day_esic = round((($present_day_basic_sal + $present_day_da + $present_day_allowance) * 1.75) / 100);
+                                } else {
+                                    $present_day_esic = "N/A";
+                                }
+                            }
+                            $skey->new_value = $e_esic;
+                        }
+
+                        if (trim(strtoupper($s_name)) == "PT") {
+                            $salary_calculate = 0;
+                            if ($employee_salary >= '0' && $employee_salary <= '5999') {
+                                $salary_calculate = '0';
+                            }
+                            if ($employee_salary >= '6000' && $employee_salary <= '8999') {
+                                $salary_calculate = '80';
+                            }
+                            if ($employee_salary >= '9000' && $employee_salary <= '11999') {
+                                $salary_calculate = '150';
+                            }
+                            if ($employee_salary >= '12000') {
+                                $salary_calculate = '200';
+                            }
+                            $pt = $salary_calculate;
+                            $skey->new_value = $pt;
+                        }
+
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Present Day Basic Salary"))) {
+                            $skey->new_value = $basic;
+                        }
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Present Day DA"))) {
+                            $skey->new_value = $da;
+                        }
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Present Day Allowance"))) {
+                            $skey->new_value = $other_allowance;
+                        }
+
+                        if (trim(strtoupper($s_name)) == trim(strtoupper("Present Day ESIC"))) {
+                            $skey->new_value = $esic;
+                        }
+                    }
+
+                    $final_array[] = $skey;
+                }
+            }
+        }
+
+        //echo $basic."----".$da."----".$hra."----".$convence."----".$madical;die();
+        $special_allowance = $salary - ($basic + $da + $hra + $convence + $madical);
+        /* END */
+        /* CTC START */
+        $gross = $basic + $da + $hra + $convence + $madical + $special_allowance + $pf + $esic;
+        //$ctc = $basic + $da + $hra + $convence + $madical + $special_allowance + $pf + $esic + $pfe + $esice;
+
+        if ($master_salary == '28') {
+            $ctc = $basic + $da + $other_allowance + $incentive + $pf + $esic + $e_pf + $e_esic;
+        }else{
+            $ctc = $basic + $da + $other_allowance + $incentive + $pf + $esic + $e_pf + $e_esic + $pt;
+        }
+        
+        
+
+        /* END */
+        /* NTH START */
+        $nth = ($basic + $da + $hra + $convence + $madical + $special_allowance) - $pt - $pf - $esic - $e_pf - $e_esic;
+        
+        /* END */
+
+        $cnt = 0;
+
+        foreach ($final_array as $value) {
+            if (trim(strtoupper($value->salary_name)) == "SPECIAL ALLOWANCE") {
+                $final_array[$cnt]->new_value = $special_allowance;
+            }
+            if (trim(strtoupper($value->salary_name)) == "GROSS SALARY") {
+                $final_array[$cnt]->new_value = $gross;
+            }
+            if (trim(strtoupper($value->salary_name)) == "SALARY (CTC) / PM") {
+                $final_array[$cnt]->new_value = $ctc;
+            }
+            if (trim(strtoupper($value->salary_name)) == "NET TAKE HOME") {
+                $final_array[$cnt]->new_value = $nth;
+            }
+            $cnt++;
+        }
+
+
+        print_r(json_encode($final_array));
+    }
+
+    function salary_edit() {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $count = $this->input->post('count');
+
+        if ($count > 0) {
+            for ($i = 0; $i < $count; $i++) {
+
+                $data = array(
+                    "salary_value" => $_POST["salary_name_$i"],
+                );
+                $update = $this->employee_model->update("hrm_employee_salary_structure_details", array("salary_strucure_id" => $_POST["salary_id_$i"]), $data);
+            }
+        }
+
+
+
+
+//        if ($count > 0) {
+//            for ($i = 0; $i < $count; $i++) {
+//                $emp_sal = $this->employee_model->get_one("hrm_employee_salary_structure_details", array("salary_strucure_id" => $_POST["salary_id_$i"]));
+//
+//                $data = array(
+//                    "salary_value" => $_POST["salary_name_$i"],
+//                );
+//
+//                if ($emp_sal->type == 1) {
+//                    if (isset($_POST['pf_check'])) {
+//                        $data["status"] = 1;
+//                    } else {
+//                        $data["status"] = 0;
+//                    }
+//                } else if ($emp_sal->type == 2) {
+//                    if (isset($_POST['pf_esic'])) {
+//                        $data["status"] = 1;
+//                    } else {
+//                        $data["status"] = 0;
+//                    }
+//                }
+//
+//                $update = $this->employee_model->update("hrm_employee_salary_structure_details", array("salary_strucure_id" => $_POST["salary_id_$i"]), $data);
+//            }
+//        }
+//        if ($count > 0) {
+//            for ($i = 0; $i < $count; $i++) {
+//
+//                $emp_sal = $this->employee_model->get_one("hrm_employee_salary_structure", array("id" => $_POST["salary_id_$i"]));
+//
+//                $data = array(
+//                    "salary_value" => $_POST["salary_name_$i"],
+//                );
+//
+//                if ($emp_sal->type == 1) {
+//                    if (isset($_POST['pf_check'])) {
+//                        $data["status"] = 1;
+//                    } else {
+//                        $data["status"] = 0;
+//                    }
+//                } else if ($emp_sal->type == 2) {
+//                    if (isset($_POST['pf_esic'])) {
+//                        $data["status"] = 1;
+//                    } else {
+//                        $data["status"] = 0;
+//                    }
+//                }
+//
+//                $update = $this->employee_model->update("hrm_employee_salary_structure", array("id" => $_POST["salary_id_$i"]), $data);
+//            }
+//        }
+        echo 1;
+    }
+
+    function deactivate($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['cid'] = $cid;
+
+        $data1 = array(
+            "status" => 2,
+            "updated_by" => $data["login_data"]["id"],
+            "updated_date" => date("Y-m-d H:i:s")
+        );
+        $update = $this->employee_model->update("hrm_employees", array("id" => $cid), $data1);
+        echo 1;
+    }
+
+    function personal_edit($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['cid'] = $cid;
+        $name = $this->input->post('name');
+        $father = $this->input->post('father');
+        $dob = $this->input->post('dob');
+        $gender = $this->input->post('gender');
+        $phone = $this->input->post('phone');
+        $local_address = $this->input->post('local_address');
+        $permanent_address = $this->input->post('permanent_address');
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+        $city = $this->input->post('city_data');
+        $branch_data = $this->input->post('branch_data');
+
+        //photo
+        $files = $_FILES;
+        $this->load->library('upload');
+        $config['allowed_types'] = 'jpg|gif|png|jpeg';
+        if ($files['photo']['name'] != "") {
+            $config['upload_path'] = './upload/employee/';
+            $config['file_name'] = time() . $files['photo']['name'];
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+            if (!$this->upload->do_upload('photo')) {
+                $error = $this->upload->display_errors();
+                $error = str_replace("<p>", "", $error);
+                $error = str_replace("</p>", "", $error);
+                $this->session->set_flashdata("error", $error);
+                redirect("hrm/employee/edit/" . $cid, "refresh");
+            } else {
+                $doc_data = $this->upload->data();
+                $photo = $doc_data['file_name'];
+            }
+        }
+        if (empty($photo)) {
+            $photo = $data['query']->photo;
+        }
+        //photo
+        $data1 = array(
+            "name" => $name,
+            "father_name" => $father,
+            "photo" => $photo,
+            "city" => $city,
+            "branch_fk" => $branch_data,
+            "date_of_birth" => $dob,
+            "gender" => $gender,
+            "phone" => $phone,
+            "address" => $local_address,
+            "permanent_address" => $permanent_address,
+            "email" => $email,
+            "password" => $password,
+            "updated_by" => $data["login_data"]["id"],
+            "updated_date" => date("Y-m-d H:i:s")
+        );
+        $update = $this->employee_model->update("hrm_employees", array("id" => $cid), $data1);
+        echo 1;
+    }
+
+    function company_edit($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $employee_id = $this->input->post('employee_id');
+        $department = $this->input->post('department');
+        $designation = $this->input->post('designation');
+        $date_joining = $this->input->post('date_joining');
+		$date_leaving = $this->input->post('date_leaving');
+        $joinnig_salary = $this->input->post('joinnig_salary');
+        $company_email = $this->input->post('company_email');
+        $company_mobile = $this->input->post('company_mobile');
+        $master_salary = $this->input->post('master_salary');
+        $sal_option = $this->input->post('sal_option');
+        
+        $data1 = array(
+            "employee_id" => $employee_id,
+            "department" => $department,
+            "designation" => $designation,
+            "company_email" => $company_email,
+            "company_mobile" => $company_mobile,
+            "date_of_joining" => $date_joining,
+			"date_of_leaving" => $date_leaving,
+            "joining_salary" => $joinnig_salary,
+            "updated_by" => $data["login_data"]["id"],
+            "updated_date" => date("Y-m-d H:i:s"),
+            "salary_structure_id" => $master_salary,
+            "sal_option" => $sal_option
+        );
+        $update = $this->employee_model->update("hrm_employees", array("id" => $cid), $data1);
+
+
+        $count = $this->input->post('count');
+
+        if ($count > 0) {
+            $update = $this->employee_model->update("hrm_employee_salary_structure_details", array("employee_fk" => $cid), array("status" => "0"));
+            for ($i = 0; $i < $count; $i++) {
+                $data = array(
+                    "salary_value" => $_POST["salary_value_$i"],
+                );
+                $update = $this->employee_model->insert("hrm_employee_salary_structure_details", array("salary_strucure_id" => $_POST["salary_id_$i"], "salary_value" => $_POST["salary_name_$i"], "employee_fk" => $cid, "type" => "0", "created_date" => date("Y-m-d H:i:s"), "status" => "1"));
+            }
+        }
+
+
+        echo 1;
+    }
+
+    function bank_account_edit($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $holder_name = $this->input->post('holder_name');
+        $account_number = $this->input->post('account_number');
+        $bank_name = $this->input->post('bank_name');
+        $ifsc_code = $this->input->post('ifsc_code');
+        $pan_number = $this->input->post('pan_number');
+        $branch = $this->input->post('branch');
+        $data1 = array(
+            "bank_holder_name" => $holder_name,
+            "bank_account_number" => $account_number,
+            "bank_name" => $bank_name,
+            "ifsc_code" => $ifsc_code,
+            "pan_number" => $pan_number,
+            "branch" => $branch,
+            "updated_by" => $data["login_data"]["id"],
+            "updated_date" => date("Y-m-d H:i:s")
+        );
+        $update = $this->employee_model->update("hrm_employees", array("id" => $cid), $data1);
+        echo 1;
+    }
+
+    function document_edit($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['query'] = $this->employee_model->get_one("hrm_employees", array("id" => $cid));
+
+        $files = $_FILES;
+        $this->load->library('upload');
+       $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+        if ($files['resume']['name'] != "") {
+            $config['upload_path'] = './upload/employee/';
+            $config['file_name'] = time() . $files['resume']['name'];
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+            if (!$this->upload->do_upload('resume')) {
+                $error = $this->upload->display_errors();
+                $error = str_replace("<p>", "", $error);
+                $error = str_replace("</p>", "", $error);
+                $this->session->set_flashdata("error_doc", $error);
+                redirect("hrm/employee/edit/$cid", "refresh");
+            } else {
+                $doc_data = $this->upload->data();
+                $resume = $doc_data['file_name'];
+            }
+        }
+        if ($resume == "") {
+            $resume = $data['query']->resume;
+        }
+
+        $files = $_FILES;
+        $this->load->library('upload');
+        $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+        if ($files['offer_letter']['name'] != "") {
+            $config['upload_path'] = './upload/employee/';
+            $config['file_name'] = time() . $files['offer_letter']['name'];
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+            if (!$this->upload->do_upload('offer_letter')) {
+                $error = $this->upload->display_errors();
+                $error = str_replace("<p>", "", $error);
+                $error = str_replace("</p>", "", $error);
+                $this->session->set_flashdata("error_doc", $error);
+                redirect("hrm/employee/edit/$cid", "refresh");
+            } else {
+                $doc_data = $this->upload->data();
+                $offer_letter = $doc_data['file_name'];
+            }
+        }
+        if (empty($offer_letter)) {
+            $offer_letter = $data['query']->offer_letter;
+        }
+        $files = $_FILES;
+        $this->load->library('upload');
+        $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+        if ($files['joining_letter']['name'] != "") {
+            $config['upload_path'] = './upload/employee/';
+            $config['file_name'] = time() . $files['joining_letter']['name'];
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+            if (!$this->upload->do_upload('joining_letter')) {
+                $error = $this->upload->display_errors();
+                $error = str_replace("<p>", "", $error);
+                $error = str_replace("</p>", "", $error);
+                $this->session->set_flashdata("error_doc", $error);
+                redirect("hrm/employee/edit/$cid", "refresh");
+            } else {
+                $doc_data = $this->upload->data();
+                $joining_letter = $doc_data['file_name'];
+            }
+        }
+        if (empty($joining_letter)) {
+            $joining_letter = $data['query']->joining_letter;
+        }
+        $files = $_FILES;
+        $this->load->library('upload');
+       $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+        if ($files['contract_agreement']['name'] != "") {
+            $config['upload_path'] = './upload/employee/';
+            $config['file_name'] = time() . $files['contract_agreement']['name'];
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+            if (!$this->upload->do_upload('contract_agreement')) {
+                $error = $this->upload->display_errors();
+                $error = str_replace("<p>", "", $error);
+                $error = str_replace("</p>", "", $error);
+                $this->session->set_flashdata("error_doc", $error);
+                redirect("hrm/employee/edit/$cid", "refresh");
+            } else {
+                $doc_data = $this->upload->data();
+                $contract_agreement = $doc_data['file_name'];
+            }
+        }
+        if (empty($contract_agreement)) {
+            $contract_agreement = $data['query']->contract_agreement;
+        }
+        $files = $_FILES;
+        $this->load->library('upload');
+        $config['allowed_types'] = 'pdf|PDF|doc|DOC|jpg|png';
+        if ($files['id_proof']['name'] != "") {
+            $config['upload_path'] = './upload/employee/';
+            $config['file_name'] = time() . $files['id_proof']['name'];
+            $this->upload->initialize($config);
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0755, TRUE);
+            }
+            if (!$this->upload->do_upload('id_proof')) {
+                $error = $this->upload->display_errors();
+                $error = str_replace("<p>", "", $error);
+                $error = str_replace("</p>", "", $error);
+                $this->session->set_flashdata("error_doc", $error);
+                redirect("hrm/employee/edit/$cid", "refresh");
+            } else {
+                $doc_data = $this->upload->data();
+                $id_proof = $doc_data['file_name'];
+            }
+        }
+        if (empty($id_proof)) {
+            $id_proof = $data['query']->id_proof;
+        }
+        //docs
+        $data1 = array(
+            "resume" => $resume,
+            "offer_letter" => $offer_letter,
+            "joining_letter" => $joining_letter,
+            "contract_agreement" => $contract_agreement,
+            "id_proof" => $id_proof,
+            "updated_by" => $data["login_data"]["id"],
+            "updated_date" => date("Y-m-d H:i:s")
+        );
+
+        if ($resume != "" || $offer_letter != "" || $joining_letter != "" || $contract_agreement != "" || $id_proof != "") {
+            $data1["status"] = 1;
+        } else {
+            $data1["status"] = 0;
+        }
+
+        $update = $this->employee_model->update("hrm_employees", array("id" => $cid), $data1);
+        if ($update) {
+            $rsm = "'resume'";
+            $offr = "'offer'";
+            $jng = "'joining'";
+            $cntct = "'contract'";
+            $prf = "'proof'";
+            $query = $this->employee_model->get_one("hrm_employees", array("id" => $cid));
+            echo '<div class="form-group col-sm-12  pdng_0">';
+            if ($query->resume != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->resume . '" target="_blank">View Resume</a>
+                                                        <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $rsm . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->offer_letter != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->offer_letter . '" target="_blank">Offer Letter</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $offr . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->joining_letter != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->joining_letter . '" target="_blank">Joining Letter</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $jng . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->contract_agreement != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->contract_agreement . '" target="_blank">View Contract</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $cntct . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->id_proof != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->id_proof . '" target="_blank">View ID Proof</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $prf . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>';
+        }
+    }
+
+    function document_delete($cid) {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $which = $this->input->post('types');
+        if ($which == 'resume') {
+            $update = $this->employee_model->update("hrm_employees", array("id" => $cid), array("resume" => ""));
+        } else if ($which == 'offer') {
+            $update = $this->employee_model->update("hrm_employees", array("id" => $cid), array("offer_letter" => ""));
+        } else if ($which == 'joining') {
+            $update = $this->employee_model->update("hrm_employees", array("id" => $cid), array("joining_letter" => ""));
+        } else if ($which == 'contract') {
+            $update = $this->employee_model->update("hrm_employees", array("id" => $cid), array("contract_agreement" => ""));
+        } else if ($which == 'proof') {
+            $update = $this->employee_model->update("hrm_employees", array("id" => $cid), array("id_proof" => ""));
+        }
+
+        $emp = $this->employee_model->get_one("hrm_employees", array("id" => $cid));
+
+        if ($emp->resume == "" && $emp->offer_letter == "" && $emp->joining_letter == "" && $emp->contract_agreement == "" && $emp->id_proof == "") {
+            $update2 = $this->employee_model->update("hrm_employees", array("id" => $cid), array("status" => 0));
+        }
+
+        if ($update) {
+            $rsm = "'resume'";
+            $offr = "'offer'";
+            $jng = "'joining'";
+            $cntct = "'contract'";
+            $prf = "'proof'";
+            $query = $this->employee_model->get_one("hrm_employees", array("id" => $cid));
+            echo '<div class="form-group col-sm-12  pdng_0">';
+            if ($query->resume != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->resume . '" target="_blank">View Resume</a>
+                                                        <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $rsm . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->offer_letter != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->offer_letter . '" target="_blank">Offer Letter</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $offr . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->joining_letter != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->joining_letter . '" target="_blank">Joining Letter</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $jng . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->contract_agreement != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->contract_agreement . '" target="_blank">View Contract</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $cntct . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>
+                                                <div class="form-group col-sm-12  pdng_0">';
+            if ($query->id_proof != '') {
+                echo '<a class="btn btn-primary" style="background-color:#bf2d37;" href="' . base_url() . 'upload/employee/' . $query->id_proof . '" target="_blank">View ID Proof</a>
+                                                            <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Remove" onclick="document_delete_data(' . $prf . ');" class="btn btn-primary" style="background-color:#bf2d37;"><i class="fa fa-trash-o"></i></a>';
+            }
+            echo '</div>';
+        }
+    }
+
+    function test_pdf() {
+
+        $pdfFilePath = FCPATH . "/upload/report/Test_result_wlpd.pdf";
+        $data['page_title'] = 'AirmedLabs'; // pass data to the view
+        ini_set('memory_limit', '128M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
+        $html = "<b>Test</b>"; // render the view into HTML 
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+        $pdf->SetHTMLHeader("Header");
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                72, // margin top
+                72, // margin bottom
+                2, // margin header 
+                2); // margin footer
+        $pdf->SetHTMLFooter("Footer");
+        $pdf->WriteHTML($html);
+        $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+        $name = "Test_result_wlpd.pdf";
+        $downld = $this->_push_file($pdfFilePath, "Test_result_wlpd.pdf");
+        //$this->delete_downloadfile($pdfFilePath);
+    }
+
+    function _push_file($path, $name) {
+        // make sure it's a file before doing anything!
+        if (is_file($path)) {
+            // required for IE
+            if (ini_get('zlib.output_compression')) {
+                ini_set('zlib.output_compression', 'Off');
+            }
+            // get the file mime type using the file extension
+            $this->load->helper('file');
+
+            $mime = get_mime_by_extension($path);
+
+            // Build the headers to push out the file properly.
+            header('Pragma: public');     // required
+            header('Expires: 0');         // no cache
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path)) . ' GMT');
+            header('Cache-Control: private', false);
+            header('Content-Type: ' . $mime);  // Add the mime type from Code igniter.
+            header('Content-Disposition: attachment; filename="' . basename($name) . '"');  // Add the file name
+            header('Content-Transfer-Encoding: binary');
+            header('Content-Length: ' . filesize($path)); // provide file size
+            header('Connection: close');
+            readfile($path); // push it out
+        }
+    }
+
+//    function salary_slip() {
+//        if (!is_hrmlogin()) {
+//            redirect('login');
+//        }
+//        $data["login_data"] = is_hrmlogin();
+//        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+//        $data['success'] = $this->session->flashdata("success");
+//
+//        if ($_GET['employee'] != "" && $_GET['month'] != "") {
+//            $emp = $_GET['employee'];
+//            $month = $_GET['month'];
+//            $year = $_GET['current_year'];
+//
+//            $today = cal_days_in_month(CAL_GREGORIAN, $month, date("Y"));
+//            $data['today'] = $today;
+//
+//            $data['emp'] = $emp;
+//            $data['month'] = $month;
+//
+//            $data['all_record'] = $this->employee_model->get_all("hrm_salary_slip_data", array("year" => date('Y'), "month" => $_GET['month'], "employee_fk" => $_GET['employee']));
+////            echo "<pre>";
+////            print_R($data['all_record']);
+////            exit;
+//            if (count($data['all_record']) <= 0) {
+//                $data['query'] = $this->employee_model->get_one("hrm_employees", array("id" => $emp));
+//
+//                $data['designation_data'] = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data['query']->designation));
+//                $data['department_data'] = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data['query']->department));
+//
+//                $q = "select *,se.id,se.status from hrm_employee_salary_structure se 
+//                        left JOIN hrm_salary_structure ss 
+//                        on se.salary_structure_fk = ss.id 
+//                        where employee_fk = $emp OR salary_structure_fk= 0 and ss.status=1";
+//
+//                $data['salary_structure_emp'] = $this->employee_model->get_val($q);
+//
+//                $emp_present = $this->employee_model->get_all('hrm_employee_attendance', array("status" => 1, "present_absent" => 1, "employee_fk" => $emp, "att_month" => $month, "att_year" => $year));
+//
+//                $festivals = $this->employee_model->get_val("select * from festival_master where status = 1 AND MONTH(festival_date) = $month AND YEAR(festival_date) = $year and status=1");
+//
+//                $month_no = ($month == 10 || $month == 11 || $month == 12) ? $month : "0" . $month;
+//                $start = date('Y-m-d', strtotime("$year-$month_no-01"));
+//                $end = date('Y-m-d', strtotime("$year-$month_no-$today"));
+//                $current = $start;
+//                $total_sunday = 0;
+//
+//                while ($current != $end) {
+//                    if (date('l', strtotime($current)) == 'Sunday') {
+//                        $total_sunday++;
+//                    }
+//
+//                    $current = date('Y-m-d', strtotime($current . ' +1 day'));
+//                };
+//
+//                $start1 = date('Y-m-d', strtotime("$year-$month_no-01"));
+//                $end1 = date('Y-m-d', strtotime("$year-$month_no-$today"));
+//                $current1 = $start1;
+//                $total_fill_sunday = 0;
+//
+//                while ($current1 != $end1) {
+//
+//                    if (date('l', strtotime($current1)) == 'Sunday') {
+//                        foreach ($emp_present as $ep) {
+//                            if ($current1 == date('Y-m-d', strtotime("$ep->att_year-$ep->att_month-$ep->att_date")) && $ep->present_absent == 1) {
+//                                $total_fill_sunday++;
+//                            }
+//                        }
+//                    }
+//
+//                    $current1 = date('Y-m-d', strtotime($current1 . ' +1 day'));
+//                };
+//
+//                $data['total_present_day'] = $today - (count($festivals) + $total_sunday) - ($today - count($emp_present));
+//                $data['festivals'] = count($festivals);
+//            } else {
+//
+//                $q2 = "select * from hrm_salary_slip_data sd 
+//                        INNER JOIN hrm_salary_slip_data_details se 
+//                        on sd.id = se.salary_sleep_fk 
+//                        where sd.employee_fk = $emp and sd.month = $month and sd.year = $year and se.status = 1";
+//
+//                $data['salary_structure_exist'] = $this->employee_model->get_val($q2);
+//            }
+//        }
+//        $data['employee'] = $this->user_model->master_fun_get_tbl_val("hrm_employees", array('status' => 1), array("id", "desc"));
+//        $data['leave_reason'] = $this->user_model->master_fun_get_tbl_val("hrm_leave_reason", array('status' => 1), array("id", "asc"));
+//
+//        $this->load->view('hrm/header');
+//        $this->load->view('hrm/nav', $data);
+//        $this->load->view('hrm/salary_slip', $data);
+//        $this->load->view('hrm/footer');
+//    }
+//
+//    function salary_slip_data_save() {
+//        if (!is_hrmlogin()) {
+//            redirect('login');
+//        }
+//        $data["login_data"] = is_hrmlogin();
+//        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+//        $data['success'] = $this->session->flashdata("success");
+//
+//        if ($_POST) {
+////            echo "<pre>";
+////            print_R($_POST);
+////            exit;
+//
+//            $emp_id = $_POST['employee_data'];
+//            $month = $_POST['month_data'];
+//            $year = $_POST['year_data'];
+//
+//            $all_record = $this->employee_model->get_all("hrm_salary_slip_data", array("year" => $year, "month" => $month, "employee_fk" => $emp_id));
+//
+//            $data2 = array(
+//                "employee_fk" => $emp_id,
+//                "month" => $month,
+//                "year" => $year,
+//                "name" => $_POST['name'],
+//                "designation_fk" => $_POST['designation'],
+//                "department_fk" => $_POST['department'],
+//                "joining_date" => $_POST['joining_date'],
+//                "present_day" => $_POST['present_day'],
+//                "days_in_month" => $_POST['days_in_month'],
+//                "working_hr" => $_POST['working_hr'],
+//                "monthly_ctc" => $_POST['monthly_ctc'],
+//                "ot" => $_POST['ot'],
+//                "festivals" => $_POST['festivals'],
+//                "sunday_wage" => $_POST['sunday_wage'],
+//                "salary_ctc_pm" => $_POST['salary_ctc_pm'],
+//                "total_deduction" => $_POST['total_deduction'],
+//                "net_take_home" => $_POST['net_take_home'],
+//                "created_by" => $data["login_data"]["id"],
+//                "created_date" => date("Y-m-d H:i:s"),
+//                "status" => 1,
+//            );
+//
+//            if (count($all_record) > 0) {
+//                $update = $this->employee_model->update("hrm_salary_slip_data", array("id" => $all_record[0]->id), $data2);
+//            } else {
+//                $insert2 = $this->employee_model->insert("hrm_salary_slip_data", $data2);
+//            }
+//
+//            if (isset($_POST['salary_name']) && count($_POST['salary_name']) > 0) {
+//                if ($insert2 == "") {
+//                    //Update slip
+//                    $all_record1 = $this->employee_model->get_all("hrm_salary_slip_data_details", array("salary_sleep_fk" => $all_record[0]->id, 'status' => 1));
+//                    for ($i = 0; $i < count($_POST['salary_name']); $i++) {
+//                        $update2 = $this->employee_model->update("hrm_salary_slip_data_details", array("id" => $all_record1[$i]->id), array("status" => 0));
+//
+//                        $data3 = [
+//                            "salary_sleep_fk" => $all_record[0]->id,
+//                            "salary_name" => $_POST['salary_name'][$i],
+//                            "salary_value" => $_POST['salary_value'][$i],
+//                            "created_by" => $data["login_data"]["id"],
+//                            "status" => 1,
+//                        ];
+//
+//                        $insert2 = $this->employee_model->insert("hrm_salary_slip_data_details", $data3);
+//                    }
+//                } else {
+//                    //Insert slip
+//                    for ($i = 0; $i < count($_POST['salary_name']); $i++) {
+//                        $data3 = [
+//                            "salary_sleep_fk" => $insert2,
+//                            "salary_name" => $_POST['salary_name'][$i],
+//                            "salary_value" => $_POST['salary_value'][$i],
+//                            "created_by" => $data["login_data"]["id"],
+//                            "status" => 1,
+//                        ];
+//                        $insert3 = $this->employee_model->insert("hrm_salary_slip_data_details", $data3);
+//                    }
+//                }
+//            }
+//
+//            $this->session->set_flashdata("success", "Salary slip data are saved successfully.");
+//            redirect("hrm/employee/salary_slip?employee=$emp_id&month=$month&current_year=$year");
+//        }
+//    }
+
+
+
+    function salary_slip() {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['success'] = $this->session->flashdata("success");
+
+        if ($_GET['employee'] != "" && $_GET['month'] != "") {
+            $emp = $_GET['employee'];
+            $month = $_GET['month'];
+            $year = $_GET['current_year'];
+
+            $today = cal_days_in_month(CAL_GREGORIAN, $month, date("Y"));
+            $data['today'] = $today;
+
+            $data['emp'] = $emp;
+            $data['month'] = $month;
+
+            $data['all_record'] = $this->employee_model->get_all("hrm_salary_slip_data", array("year" => date('Y'), "month" => $_GET['month'], "employee_fk" => $_GET['employee']));
+//            echo "<pre>";
+//            print_R($data['all_record']);
+//            exit;
+            if (count($data['all_record']) <= 0) {
+                $data['query'] = $this->employee_model->get_one("hrm_employees", array("id" => $emp));
+
+                $data['designation_data'] = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data['query']->designation));
+                $data['department_data'] = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data['query']->department));
+
+
+                $structure_id = $data['query']->salary_structure_id;
+                if ($structure_id != "") {
+//                    $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+//                        LEFT JOIN  hrm_master_salary_structure_details se 
+//                        on ss.salary_strucure_id = se.id
+//                        WHERE employee_fk = $emp OR ss.salary_strucure_id = 0 AND se.salary_strucure_id = $structure_id";
+
+                    $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id
+                        WHERE employee_fk = $emp AND se.salary_strucure_id = $structure_id";
+
+                    $data['salary_structure_emp'] = $this->employee_model->get_val($q);
+                }
+
+//                echo "<pre>";
+//                print_r($data['salary_structure_emp']);
+//                exit;
+
+
+                $emp_present = $this->employee_model->get_all('hrm_employee_attendance', array("status" => 1, "present_absent" => 1, "employee_fk" => $emp, "att_month" => $month, "att_year" => $year));
+
+                $festivals = $this->employee_model->get_val("select * from festival_master where status = 1 AND MONTH(festival_date) = $month AND YEAR(festival_date) = $year and status=1");
+
+                $month_no = ($month == 10 || $month == 11 || $month == 12) ? $month : "0" . $month;
+                $start = date('Y-m-d', strtotime("$year-$month_no-01"));
+                $end = date('Y-m-d', strtotime("$year-$month_no-$today"));
+                $current = $start;
+                $total_sunday = 0;
+
+                while ($current != $end) {
+                    if (date('l', strtotime($current)) == 'Sunday') {
+                        $total_sunday++;
+                    }
+
+                    $current = date('Y-m-d', strtotime($current . ' +1 day'));
+                };
+
+                $start1 = date('Y-m-d', strtotime("$year-$month_no-01"));
+                $end1 = date('Y-m-d', strtotime("$year-$month_no-$today"));
+                $current1 = $start1;
+                $total_fill_sunday = 0;
+
+                while ($current1 != $end1) {
+
+                    if (date('l', strtotime($current1)) == 'Sunday') {
+                        foreach ($emp_present as $ep) {
+                            if ($current1 == date('Y-m-d', strtotime("$ep->att_year-$ep->att_month-$ep->att_date")) && $ep->present_absent == 1) {
+                                $total_fill_sunday++;
+                            }
+                        }
+                    }
+
+                    $current1 = date('Y-m-d', strtotime($current1 . ' +1 day'));
+                };
+
+                if (isset($emp_present) && count($emp_present) > 0) {
+                    $temp_var = $today - (count($festivals) + $total_sunday) - ($today - count($emp_present));
+                } else {
+                    $temp_var = 0;
+                }
+
+                //$data['total_present_day'] = $today - (count($festivals) + $total_sunday) - ($today - count($emp_present));
+                $data['total_present_day'] = $temp_var;
+                $data['festivals'] = count($festivals);
+            } else {
+                $q2 = "select * from hrm_salary_slip_data sd 
+                        INNER JOIN hrm_salary_slip_data_details se 
+                        on sd.id = se.salary_sleep_fk 
+                        where sd.employee_fk = $emp and sd.month = $month and sd.year = $year and se.status = 1";
+
+                $data['salary_structure_exist'] = $this->employee_model->get_val($q2);
+            }
+        }
+        $data['employee'] = $this->user_model->master_fun_get_tbl_val("hrm_employees", array('status' => 1), array("id", "desc"));
+        $data['leave_reason'] = $this->user_model->master_fun_get_tbl_val("hrm_leave_reason", array('status' => 1), array("id", "asc"));
+
+        $this->load->view('hrm/header');
+        $this->load->view('hrm/nav', $data);
+        $this->load->view('hrm/salary_slip', $data);
+        $this->load->view('hrm/footer');
+    }
+
+    function salary_slip_data_save() {
+        if (!is_hrmlogin()) {
+            redirect('login');
+        }
+        $data["login_data"] = is_hrmlogin();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['success'] = $this->session->flashdata("success");
+
+        if ($_POST) {
+//            echo "<pre>";
+//            print_R($_POST);
+//            exit;
+
+            $emp_id = $_POST['employee_data'];
+            $month = $_POST['month_data'];
+            $year = $_POST['year_data'];
+
+            $all_record = $this->employee_model->get_all("hrm_salary_slip_data", array("year" => $year, "month" => $month, "employee_fk" => $emp_id));
+
+            $data2 = array(
+                "employee_fk" => $emp_id,
+                "month" => $month,
+                "year" => $year,
+                "name" => $_POST['name'],
+                "designation_fk" => $_POST['designation'],
+                "department_fk" => $_POST['department'],
+                "joining_date" => $_POST['joining_date'],
+                "present_day" => $_POST['present_day'],
+                "days_in_month" => $_POST['days_in_month'],
+                "working_hr" => $_POST['working_hr'],
+                "monthly_ctc" => $_POST['monthly_ctc'],
+                "ot" => $_POST['ot'],
+                "festivals" => $_POST['festivals'],
+                "sunday_wage" => $_POST['sunday_wage'],
+                "salary_ctc_pm" => $_POST['salary_ctc_pm'],
+                "total_deduction" => $_POST['total_deduction'],
+                "salary_other" => $_POST['salary_other'],
+                "net_take_home" => $_POST['net_take_home'],
+                "created_by" => $data["login_data"]["id"],
+                "created_date" => date("Y-m-d H:i:s"),
+                "status" => 1,
+            );
+
+            if (count($all_record) > 0) {
+                $update = $this->employee_model->update("hrm_salary_slip_data", array("id" => $all_record[0]->id), $data2);
+            } else {
+                $insert2 = $this->employee_model->insert("hrm_salary_slip_data", $data2);
+            }
+
+//            echo $this->db->last_query();
+//            exit;
+
+            if (isset($_POST['salary_name']) && count($_POST['salary_name']) > 0) {
+                if ($insert2 == "") {
+                    //Update slip
+                    $all_record1 = $this->employee_model->get_all("hrm_salary_slip_data_details", array("salary_sleep_fk" => $all_record[0]->id, 'status' => 1));
+                    for ($i = 0; $i < count($_POST['salary_name']); $i++) {
+                        $update2 = $this->employee_model->update("hrm_salary_slip_data_details", array("id" => $all_record1[$i]->id), array("status" => 0));
+
+                        $data3 = [
+                            "salary_sleep_fk" => $all_record[0]->id,
+                            "salary_name" => $_POST['salary_name'][$i],
+                            "salary_value" => $_POST['salary_value'][$i],
+                            "created_by" => $data["login_data"]["id"],
+                            "status" => 1,
+                            "sal_type" => $_POST['salary_type'][$i]
+                        ];
+
+                        $insert2 = $this->employee_model->insert("hrm_salary_slip_data_details", $data3);
+                    }
+                } else {
+                    //Insert slip
+                    for ($i = 0; $i < count($_POST['salary_name']); $i++) {
+                        $data3 = [
+                            "salary_sleep_fk" => $insert2,
+                            "salary_name" => $_POST['salary_name'][$i],
+                            "salary_value" => $_POST['salary_value'][$i],
+                            "created_by" => $data["login_data"]["id"],
+                            "status" => 1,
+                            "sal_type" => $_POST['salary_type'][$i]
+                        ];
+                        $insert3 = $this->employee_model->insert("hrm_salary_slip_data_details", $data3);
+                    }
+                }
+            }
+
+            $this->session->set_flashdata("success", "Salary slip data are saved successfully.");
+            redirect("hrm/employee/salary_slip?employee=$emp_id&month=$month&current_year=$year");
+        }
+    }
+
+    function pdf_salary_slip() {
+        $with_without_letter = $_POST['letter_head'];
+
+        if ($_GET['employee'] != "" && $_GET['month'] != "") {
+            $emp = $_GET['employee'];
+            $month = $_GET['month'];
+            $year = $_GET['current_year'];
+
+            $today = cal_days_in_month(CAL_GREGORIAN, $month, date("Y"));
+            $data['today'] = $today;
+
+            $data['emp'] = $emp;
+            $data['month'] = $month;
+
+            $data['all_record'] = $this->employee_model->get_all("hrm_salary_slip_data", array("year" => date('Y'), "month" => $_GET['month'], "employee_fk" => $_GET['employee']));
+//            echo "<pre>";
+//            print_R($data['all_record']);
+//            exit;
+            if (count($data['all_record']) <= 0) {
+                $data['query'] = $this->employee_model->get_one("hrm_employees", array("id" => $emp));
+
+                $data['designation_data'] = $this->employee_model->get_one('hrm_designation', array("status" => 1, "id" => $data['query']->designation));
+                $data['department_data'] = $this->employee_model->get_one('hrm_department', array("status" => 1, "id" => $data['query']->department));
+
+
+                $structure_id = $data['query']->salary_structure_id;
+                if ($structure_id != "") {
+                    $q = "select *,ss.type,ss.status,se.type As plus_minus from hrm_employee_salary_structure_details ss 
+                        LEFT JOIN  hrm_master_salary_structure_details se 
+                        on ss.salary_strucure_id = se.id
+                        WHERE employee_fk = $emp OR ss.salary_strucure_id = 0 AND se.salary_strucure_id = $structure_id";
+
+                    $data['salary_structure_emp'] = $this->employee_model->get_val($q);
+                }
+
+
+
+                $emp_sal_cnt = count($data['salary_structure_emp']);
+                $total_plus = 0;
+                $total_minus = 0;
+                //$take_home = 0;
+                if ($emp_sal_cnt > 0) {
+                    for ($i = 0; $i < $emp_sal_cnt; $i++) {
+                        if ($data['salary_structure_emp'][$i]['plus_minus'] == 1) {
+                            $total_plus = $total_plus + $data['salary_structure_emp'][$i]['salary_value'];
+                        } else if ($data['salary_structure_emp'][$i]['plus_minus'] == 2) {
+                            $total_minus = $total_minus + $data['salary_structure_emp'][$i]['salary_value'];
+                        }
+                    }
+                }
+                if ($total_plus != "" && $total_minus != "") {
+                    //$take_home = $total_plus - $total_minus;
+                    $data['total_plus'] = $total_plus;
+                    $data['total_minus'] = $total_minus;
+                    $data['salary_other'] = $total_plus + $total_minus;
+                    $data['take_home'] = $total_plus;
+                }
+
+
+
+                $emp_present = $this->employee_model->get_all('hrm_employee_attendance', array("status" => 1, "present_absent" => 1, "employee_fk" => $emp, "att_month" => $month, "att_year" => $year));
+
+                $festivals = $this->employee_model->get_val("select * from festival_master where status = 1 AND MONTH(festival_date) = $month AND YEAR(festival_date) = $year and status=1");
+
+                $month_no = ($month == 10 || $month == 11 || $month == 12) ? $month : "0" . $month;
+                $start = date('Y-m-d', strtotime("$year-$month_no-01"));
+                $end = date('Y-m-d', strtotime("$year-$month_no-$today"));
+                $current = $start;
+                $total_sunday = 0;
+
+                while ($current != $end) {
+                    if (date('l', strtotime($current)) == 'Sunday') {
+                        $total_sunday++;
+                    }
+
+                    $current = date('Y-m-d', strtotime($current . ' +1 day'));
+                };
+
+                $start1 = date('Y-m-d', strtotime("$year-$month_no-01"));
+                $end1 = date('Y-m-d', strtotime("$year-$month_no-$today"));
+                $current1 = $start1;
+                $total_fill_sunday = 0;
+
+                while ($current1 != $end1) {
+
+                    if (date('l', strtotime($current1)) == 'Sunday') {
+                        foreach ($emp_present as $ep) {
+                            if ($current1 == date('Y-m-d', strtotime("$ep->att_year-$ep->att_month-$ep->att_date")) && $ep->present_absent == 1) {
+                                $total_fill_sunday++;
+                            }
+                        }
+                    }
+
+                    $current1 = date('Y-m-d', strtotime($current1 . ' +1 day'));
+                };
+
+                $data['total_present_day'] = $today - (count($festivals) + $total_sunday) - ($today - count($emp_present));
+                $data['festivals'] = count($festivals);
+            } else {
+
+                $q2 = "select * from hrm_salary_slip_data sd 
+                        INNER JOIN hrm_salary_slip_data_details se 
+                        on sd.id = se.salary_sleep_fk 
+                        where sd.employee_fk = $emp and sd.month = $month and sd.year = $year and se.status = 1";
+
+                $data['salary_structure_exist'] = $this->employee_model->get_val($q2);
+
+
+                $emp_sal_cnt1 = count($data['salary_structure_exist']);
+                $total_plus1 = 0;
+                $total_minus1 = 0;
+                //$take_home1 = 0;
+                if ($emp_sal_cnt1 > 0) {
+                    for ($i = 0; $i < $emp_sal_cnt1; $i++) {
+                        if ($data['salary_structure_exist'][$i]['sal_type'] == 1) {
+                            $total_plus1 = $total_plus1 + $data['salary_structure_exist'][$i]['salary_value'];
+                        } else if ($data['salary_structure_exist'][$i]['sal_type'] == 2) {
+                            $total_minus1 = $total_minus1 + $data['salary_structure_exist'][$i]['salary_value'];
+                        }
+                    }
+                }
+                if ($total_plus1 != "" && $total_minus1 != "") {
+                    //$take_home1 = $total_plus1 - $total_minus1;
+                    $data['total_plus1'] = $total_plus1;
+                    $data['total_minus1'] = $total_minus1;
+                    $data['salary_other1'] = $total_plus1 + $total_minus1;
+                    $data['take_home1'] = $total_plus1;
+                }
+            }
+        }
+
+        $date = date("_Y-m-d_H:i:s");
+        $pdfFilePath = FCPATH . "/upload/employee/salary_slip" . $date . ".pdf";
+
+        //$data->page_title = 'AirmedLabs';
+
+        ini_set('memory_limit', '128M');
+        $html = $this->load->view('hrm/salary_slip_pdf', $data, true);
+
+        if (file_exists($pdfFilePath)) {
+            $this->delete_downloadfile($pdfFilePath);
+        }
+
+        $this->load->library('pdf');
+        $pdf = $this->pdf->load();
+        $pdf->autoScriptToLang = true;
+        $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
+        $pdf->autoVietnamese = true;
+        $pdf->autoArabic = true;
+        $pdf->autoLangToFont = true;
+
+        if ($with_without_letter == 1) {
+            $pdf->SetHTMLHeader('<body>
+                <div class="pdf_container">
+            <div class="main_set_pdng_div">
+                <div class="brdr_full_div">
+                    <div class="header_full_div">
+                        <img class="set_logo" src="logo.png" style="margin-top:15px;"/>
+                    </div>');
+        }
+
+        $pdf->AddPage('p', // L - landscape, P - portrait
+                '', '', '', '', 5, // margin_left
+                5, // margin right
+                30, // margin top
+                30, // margin bottom
+                2, // margin header
+                2); // margin footer
+
+        if ($with_without_letter == 1) {
+            $pdf->SetHTMLFooter('<div class="foot_num_div" style="margin-bottom:0;padding-bottom:0">
+		<p class="foot_num_p" style="margin-bottom:2;padding-bottom:0"><img class="set_sign" src="pdf_phn_btn.png" style="width:"/></p>
+		<p class="foot_lab_p" style="font-size:13px;margin-bottom:2;padding-bottom:0">LAB AT YOUR DOORSTEP</p>
+	</div>
+		<p class="lst_airmed_mdl" style="font-size:13px;margin-top:5px">Airmed Pathology Pvt. Ltd.</p>
+		<p class="lst_31_addrs_mdl" style="font-size:12px"><span style="color:#9D0902;">Commercial Address : </span>31, Ambika Society, Next to Nabard Bank, Opp. Usmanpura, Ahmedabad, Gujarat - 380 013.</p>
+		<p class="lst_31_addrs_mdl"><b><img src="email-icon.png" style="margin-bottom:-3px;width:13px"/> info@airmedlabs.com  <img src="web-icon.png" style="margin-bottom:-3px;width:13px"/> www.airmedlabs.com</b></p><p class="lst_31_addrs_mdl"><!--<img src="lastimg.png" style="margin-top:3px;"/>--> </p></div>
+        </body>
+</html>');
+        }
+
+        $pdf->WriteHTML($html);
+
+//        $pdf->debug = true;
+//        $pdf->allow_output_buffering = TRUE;
+//        if (file_exists($pdfFilePath) == true) {
+//            $this->load->helper('file');
+//            unlink($path);
+//        }
+        $pdf->Output($pdfFilePath, 'F'); // save to file because we can
+
+        $downld = $this->_push_file($pdfFilePath, "salary_slip" . $date . ".pdf");
+        $this->session->set_flashdata("success", "Salary Slip has downloaded successfully.");
+        redirect($pdfFilePath);
+        //redirect("/upload/b2binvoice/" . $data['job_details'][0]['order_id'] . "customerinvoice.pdf?" . time());
+    }
+
+     function export_csv() {
+        $employee_id = trim($this->input->get('employee_id'));
+        $data['employee_id'] = $employee_id;
+
+        $e_name = trim($this->input->get('e_name'));
+        $data['e_name'] = $e_name;
+
+        $phone = trim($this->input->get('phone'));
+        $data['phone'] = $phone;
+
+        $city = trim($this->input->get('city'));
+        $data['city'] = $city;
+
+        $branch = trim($this->input->get('branch'));
+        $data['branch'] = $branch;
+
+        $status = $this->input->get('status');
+        $data['status'] = $status;
+
+
+        $data['query'] = $this->employee_model->list_search_csv($employee_id, $e_name, $phone, $status, $city, $branch);
+
+
+        header("Content-type: application/csv");
+        header("Content-Disposition: attachment; filename=\"Employee_list-" . date('d-M-Y') . ".csv\"");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, array("No.",
+            "Employee Id",
+            "Name",
+            "Father Name",
+            "Date of Birth",
+            "Gender",
+            "Phone",
+            "Addeess",
+            "Address1",
+            "City",
+            "Branch",
+            "Email",
+            "Department",
+            "Designation",
+            "Date of Joining",
+            "Salary"
+        ));
+
+
+        $cnt = 1;
+        foreach ($data['query'] as $key) {
+
+            fputcsv($handle, array($cnt,
+                $key["employee_id"],
+                $key["name"],
+                $key["father_name"],
+                $key["date_of_birth"],
+                $key["gender"],
+                $key["phone"],
+                $key["address"],
+                $key["permanent_address"],
+                $key["city_name"],
+                $key["Branch_name"],
+                $key["email"],
+                $key["department"],
+                $key["designation"],
+                $key["date_of_joining"],
+                $key["joining_salary"]));
+            $cnt++;
+        }
+        fclose($handle);
+        exit;
+    }
+
+    function change_employee_id() {
+        $emp_present = $this->employee_model->get_all('hrm_employees', array("id !=" => ""));
+        $this->load->library("Util");
+        $util = new Util();
+
+        foreach ($emp_present as $key) {
+            $new_employee_id = $util->get_employee_id($key->city);
+            $update = $this->employee_model->update("hrm_employees", array("id" => $key->id), array("employee_id" => $new_employee_id));
+        }
+    }
+
+}
+
+?>

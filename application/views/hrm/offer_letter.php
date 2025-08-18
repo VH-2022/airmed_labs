@@ -1,0 +1,210 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <style>
+            body {font-family: 'Roboto', sans-serif; font-size: small}
+            .pdf_container {width: 970px; margin: 0 auto;}
+            .main_set_pdng_div {width: 100%; float: left;}
+            .brdr_full_div {border: 0px solid #444444; float: left; padding: 10px; width: 100%;}
+            .full_div {width: 100%; float: left;}
+            .header_full_div {float: left; padding: 6px 40px; width: 92%; border-bottom: 1px solid #000000;}
+            .set_logo {width: 180px; float: right;}
+
+            .rgtsign_img_divfull {width: 100%; float: left; text-align: center;}
+            .rgtsign_img_divfull h1 { font-size: 20px; color: #3b3b3b; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; margin-top: 15px;}
+            .rgtsign_img_divfull h2 {color: #3b3b3b; font-size: 16px; margin: 0; font-weight: normal;}
+            .rgtsign_img_divfull h2 span {color: #046604;}
+            .rgtsign_img_divfull h5 {color: #3b3b3b; font-size: 14px; font-weight: normal; margin-bottom: 0; margin-top: 5px;}
+            .rgtsign_img_divfull h5 span {color: #046604;}
+            .rgtsign_img_divfull p {color: #3b3b3b; font-size: 12px; margin-top: 5px;}
+            .invc_brdrdiv_titl_div {background-color: #f6f6f6; border: 1px solid #cccccc; float: left; padding: 10px 15px; width: 96.8%;}
+            .invc_brdrdiv_titl_div_span {font-size: 14px; color: #000; font-weight: bold; padding: 10px 15px;}
+            .mdl_tbl_full { margin-bottom: 5px; padding: 3px 15px; width: 100%; border-bottom: 1px solid #cccccc; display: table; border-bottom: 1px solid #cccccc; border-left: 1px solid #cccccc; border-right: 1px solid #cccccc;}
+            .mdl_tbl_full tr td {padding: 3px 0; font-size: 12px;}
+            .mdl_tbl_full tr td:nth-of-type(1) {width: 300px; color: #777777; text-transform: uppercase;}
+            .mdl_tbl_full tr {margin-bottom: 10px;}
+            .bookng_smry_titl {color: #373737; float: left; font-size: 16px; font-weight: bold; margin: 0 0 10px 0;}
+
+            .ordr_smry_full {width: 100%; float: left;}
+            .ordr_smry_cl6_lft {border: 1px solid #f4f4f4; display: table; float: left; margin-right: 15px; width: 46.2%;}
+            .ordrsmry_cl6_back {background-color: #f4f4f4; float: left; padding: 8px; text-align: center; vertical-align: middle; width: 125px;}
+            .ordrsmry_cl6_back p {font-size: 14px;}
+            .ordrsmry_cl6_dotted_brdr {float: left; padding: 5px; vertical-align: middle;}
+            .ordrsmry_cl6_dotted_brdr p {border: 1px dotted #ededed; margin: 0; min-height: 55px; text-align: center; font-size: 14px; padding-top: 4px;}
+
+            .ordr_smry_cl6_rgt {border: 1px solid #f4f4f4; float: left; margin-left: 15px; width: 97%;}
+            .ordrsmry_cl6_tbl {float: left; width: 100%; border-collapse: collapse;}
+            .ordrsmry_cl6_tbl tr td {padding: 5px 10px; font-size: 12px;width:75%;}
+            .ordrsmry_cl6_tbl tr td {border-right: 1px solid #f4f4f4; border-bottom: 1px solid #f4f4f4;}
+            .ordrsmry_cl6_tbl tr td:last-child {border-right: none; text-align:right;}
+            .ordrsmry_cl6_tbl tr:last-child td {border-bottom: none;}
+            .ordrsmry_cl6_tbl tr td:nth-of-type(1) {text-transform: uppercase;text-align:right;}
+
+            .invc_sctn_3_full_back {background-color: #838383; float: right; margin-top: 20px; padding: 10px 15px; text-align: right; width: 95%; margin-bottom: 5px;}
+            .invc_sctn_3_full_back p {color: #ffffff; font-weight: bold; margin: 0;}
+            .invc_sctn_3_full_back p span {color: #ffe439; margin-left: 20px;}
+
+            .pymntsmry_tbl {display: table; width: 100%; border-collapse: collapse; margin-bottom: 1px;}
+            .pymntsmry_tbl tr {border: 1px solid #f4f4f4;}
+            .pymntsmry_tbl tr td {border: 1px solid #f4f4f4;}
+            .pymntsmry_tbl tr:nth-of-type(1) {background-color: #f4f4f4;}
+            .pymntsmry_tbl tr:nth-of-type(1) td {font-weight: bold;}
+            .pymntsmry_tbl tr td {padding: 8px;}
+            .pymntsmry_tbl tr:last-child td:last-child {color: #d01130; font-size: 18px; font-weight: bold;}
+
+            .foot_num_div {width: 100%; float: left; padding-bottom: 10px; border-bottom: 2px dotted #E30026;}
+            .foot_num_p {text-align: center; margin-bottom: 10px;}
+            .foot_num_p span {background-color: #E30026; border-radius: 25px; padding: 3px 15px; color: #fff;}
+            .foot_lab_p {margin: 0; text-align: center; text-transform: uppercase;}
+            .lst_ison_ul {display: inline-block; padding: 0; text-align: center; width: 100%; amrgin-top: 5px;}
+            .lst_ison_ul li {display: inline-block; margin-right: 15px;}
+            .lst_icon_spn_back {background-color: #e30026; border-radius: 50%; float: left; height: 16px; margin-right: 9px; padding: 4px; width: 16px;}
+            .lst_icon_spn_back .fa {color: #fff;}
+            .lst_airmed_mdl {float: left; margin-bottom: 0; margin-top: 9px; text-align: center; width: 100%;}
+            .lst_31_addrs_mdl {float: left; margin: 0 0 0 0; text-align: center; width: 100%;}
+
+            .half_div{width:50%; float:left;}
+            .ordr_smry_cl12_rgt{width:100%; float:left; margin-top:10px;}
+            .ordrsmry_cl6_tbl tr td {font-size: 20px;}
+            table {
+                border-collapse: collapse;
+            }
+            table, td, th {
+                border: 1px solid black;
+            }
+            .left{text-align:left;}
+            .bg{background:silver;}
+        </style>
+    </head>
+
+    <p>Date:-<b><?php echo date('d/m/Y') ?></b></p><br/><br/>
+    <div class="rgtsign_img_divfull">
+        <center><u><b>Offer Letter</b></u></center><br/><br/>
+    </div>
+
+    <?php
+    if ($data->gender == "female") {
+        $mr_or_mrs = "Mrs.";
+    } else {
+        $mr_or_mrs = "Mr.";
+    }
+    ?>
+
+    Dear <?= $mr_or_mrs ?> <b><?= $data->name ?></b>,<br/><br/>
+
+    <p>With reference to the discussion we had with you,
+        we on behalf of Airmed Labs are pleased to offer you the position of <b><?php
+            if (isset($designation->name) && $designation->name != "") {
+                echo $designation->name;
+            }
+            ?></b> and invite you to join <b>Airmed Pathology Pvt. Ltd.</b> family. 
+        Your current location will be <b><?php
+            if (isset($city->name) && $city->name != "") {
+                echo $city->name;
+            }
+            ?></b>.</p>
+
+    <p>Your Cost To Company CTC  would be Rs. <b><?php
+            if (isset($data->joining_salary) && $data->joining_salary != "") {
+                echo $data->joining_salary;
+            }
+            ?></b>/- per annum (Rs. <b><?php
+            if (isset($data->joining_salary) && $data->joining_salary != "") {
+                echo preg_replace("/[^0-9a-zA-Z,.]/", "", $data->joining_salary) * 12;
+            }
+            ?></b>/- Only). </p>
+
+    <p>The allowance, benefits and other terms and conditions of your employment are mentioned in <b>Annexure – A</b>. Your compensation will be reviewed in future as per company policy. </p>
+
+    <p>On joining the company you will be on probation for Six months. You will abide by the rules and regulations of the company as may be in force from time to time.</p>
+
+    <p>We welcome you aboard and the detailed appointment letter will be given to you within fifteen days of your joining.
+        We expect you to join <b>on or before <?php
+            if (isset($data->date_of_joining) && $data->date_of_joining != "") {
+                echo $data->date_of_joining;
+            }
+            ?></b> in line with discussion with you.</p>
+
+    <p>Please sign and return a copy of this letter as your acknowledgement of receipt and acceptance.</p>
+
+    <p>We take this opportunity to welcome you to the organization and look forward to having you on board as a part of the team.</p>
+
+    <b>For Airmed Pathology Pvt. Ltd.</b><br/><br/><br/>
+    <b>HR Department</b><br/>
+
+    <pagebreak>
+
+        <div class="rgtsign_img_divfull">
+            <center><b>Annexure - A</b></center><br/><br/>
+        </div>
+
+        <div class="ordr_smry_cl12_rgt">
+            <div class="ordr_smry_cl6_rgt">
+
+                <table style="width:80%;">
+                    <tr>
+                        <th style="text-align: left;" class="bg"><u>SALARY HEAD</u></th>
+                        <th style="text-align: left;" class="bg"><u>AMOUNT (Rs.) (MONTHLY)</u></th>
+                        <th style="text-align: left;" class="bg"><u>AMOUNT (Rs.) (YEARLY)</u></th>
+                        <th style="text-align: left;width:100px" class="bg"><u>TYPE</u></th>                    
+                    </tr>
+
+                    <tbody>
+                        <?php
+                        if (isset($salary_structure_emp1) && count($salary_structure_emp1) > 0) {
+                            foreach ($salary_structure_emp1 as $sal) {
+                                ?>
+                                <?php
+                                $b = "";
+                                $b1 = "";
+                                $class='';
+                                if (in_array($sal['salary_name'], array("SALARY (CTC) / PM", "Net Take Home","Gross Salary"))) {
+                                    $b = "<b>";
+                                    $b1 = "</b>";
+                                    $class = ' class="bg"';
+                                }
+                                ?>
+                                <tr>
+                                    <td <?=$class?>>
+                                        <?php echo $b . $sal['salary_name'] . $b1 ?>
+                                    </td>
+                                    <td <?=$class?>>
+                                        <?php echo $b . $sal['salary_value'] . $b1; ?>
+                                    </td>
+                                    <td <?=$class?>>
+                                        <?php echo $b;
+                                        echo $sal['salary_value'] * 12;
+                                        echo $b1; ?>
+                                    </td>
+                                    <td <?=$class?>>
+                                        <?php
+                                        if (!in_array($sal['salary_name'], array("SALARY (CTC) / PM", "Net Take Home","Gross Salary"))) {
+                                            if ($sal['plus_minus'] == 1) {
+                                                echo "Earning";
+                                            } else {
+                                                echo "Deduction";
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+
+        <p>
+            <b>Terms and Conditions:</b> <br/>
+            During employment of Company, you may be posted/ transferred to any of the offices/ Projects/ Divisions/ Departments/ Units/ Subsidiaries/ Sister concern of the Company, existing or to be set up at any other location in India. 
+        </p>
+        <p>PF & ESIC deduction will be made as per provision of PF – ESIC Act .</p>
+</html>

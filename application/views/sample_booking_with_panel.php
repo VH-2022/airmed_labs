@@ -1,0 +1,1304 @@
+<style>
+    .pdng_0 {padding: 0;}
+    .round {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
+        background-color: #222;    
+        color: #FFF;
+        text-align: center;  
+    }
+    .round.round-sm {
+        height: 10px;
+        width: 10px;
+        line-height: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        font-size: 0.7em;
+    }
+    .round.blue {
+        background-color: #3EA6CE;
+    }
+    .fillInfoClass{display:block !important; }
+    .chosen-container .chosen-results li.active-result {width: 100% !important;}
+    #order_table {height: 500px; overflow: scroll;}
+</style>
+<script src="<?php echo base_url(); ?>plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<link href="<?php echo base_url(); ?>user_assets/chosen/select.css" rel="stylesheet" type="text/css" media="all" />
+<link href="<?php echo base_url(); ?>plugins/timepick/css/timepicki.css" rel="stylesheet">
+<style>
+    .chosen-container {
+        display: inline-block;
+        font-size: 14px;
+        position: relative;
+        vertical-align: middle;
+        width: 100%;
+    }
+    #referral_by_chosen {
+        width: 89% !important;
+    }
+    .full_bg{background: rgba(0,0,0,0.3); width:100%; height:100%; float:left; padding:350px; position:fixed; z-index:9; top:0; bottom:0;}
+    .full_bg .loader img{width:70px; height:70px;}
+    .nav-justified>li{width:auto !important;}
+    .nav-justified>li.active{background:#eee; border-top:3px solid #3c8dbc;}
+</style>
+<div class="full_bg" style="display:none;" id="loader_div">
+    <div class="loader">
+        <center><img src="http://static.heart.org/riskcalc/app/assets/img/loading.gif"></center>
+    </div>
+</div>
+<?php 
+$sub = 6;
+foreach ($login_data['branch_fk'] as $val) {
+    $btype[] = $val['branch_type_fk'];
+}
+?>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="nav-tabs-custom">
+            </div>
+<?php if ($success[0] != '') { ?>
+                <div class="alert alert-success alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">X</button>
+                <?php echo $success['0']; ?>
+                </div>
+            <?php } ?>
+<?php if (isset($error) != NULL) { ?>
+                <div class="alert alert-danger alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">X</button>
+                <?php echo $error['0']; ?>
+                </div>
+<?php } ?>
+            
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            <section class="content">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="box box-primary">
+
+                                <div class="box-header">
+                                    <!-- form start -->
+                                    <h3 class="box-title">User Details</h3>
+                                </div>
+
+                                <div class="box-body">
+<?php echo form_open_multipart("sample_booking/TelecallerCallBooking", array("role" => "form", "method" => "POST", "id" => "user_form")); ?>
+
+                                    <div id="hidden_test"></div>
+                                    <div class="col-md-12">
+                                        
+                                       
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Mobile :<span style="color:red;">*</span></label>
+                                            <div class="col-sm-9 pdng_0">
+                                                <input type="text" id="phone" name="phone" placeholder="Ex.9879879870" onkeyup="DelayedCallMe(200, this.value);" onblur="DelayedCallMe(200, this.value);" value="<?php echo ucwords($user_info[0]['mobile']); ?>" class="form-control"/>
+                                                <span style="color:red;" id="phone_error"></span>
+                                                <span style="color:red;" id="phone_error1"></span>
+                                                <input type="hidden" id="phone_check" value="0"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">New Customer Name :<span style="color:red;">*</span></label> 
+                                            <div class="col-sm-9 pdng_0">
+                                                <input type="text" id="name" name="name" value="<?php echo ucfirst($user_info[0]['full_name']); ?>" class="form-control"/>
+                                                <span style="color:red;" id="name_error"></span>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Test For :</label>
+                                            <div class="col-sm-9 pdng_0">
+                                                <select name="test_for" id="test_for" class="form-control" onchange="show_add_new_btn(this.value);" style="width:79%;float:left;margin-right:10px;">
+                                                    <option value="">Self</option>
+                                                    <option value="new">--Add New--</option>
+                                                </select>
+                                                <input type="button" class="btn btn-lm" id="add_new_btn" style="display:none;" onclick="check_new_user('new');" value="Add New" >
+                                                <span id="family_member_details" style="background:#F0F0F0;font-weight:bold;font-size:17px"></span>
+                                            </div>
+                                        </div>
+                                        <script>
+                                                    $email_varify = 1;
+                                                    function show_add_new_btn(val) {
+                                                    if (val == 'new') {
+                                                    $("#add_new_btn").attr("style", "");
+                                                    } else {
+                                                    $("#add_new_btn").attr("style", "display:none;");
+                                                            $("#family_member_details").html("");
+                                                    }
+                                                    var doc = $("#referral_by").val();
+                                                            get_doctor_test(doc);
+                                                    }
+                                            function check_new_user(val) {
+                                            if (val == 'new') {
+                                            $("#family_model").modal("show");
+                                            }
+                                            }
+                                            function add_new_member() {
+                                            var f_name = $("#f_name").val();
+                                                    var family_relation = $("#family_relation").val();
+                                                    var f_gender = $("#f_gender").val();
+                                                    var dob1 = $("#dob1").val();
+                                                    $("#f_name_error").html("");
+                                                    $("#f_relation_error").html("");
+                                                    var cnt = 0;
+                                                    if (f_name.trim() == '') {
+                                            cnt = 1;
+                                                    $("#f_name_error").html("Required.");
+                                            }
+                                            if (dob1.trim() == '') {
+                                            cnt = 1;
+                                                    $("#dob1_error").html("Required.");
+                                            }
+                                            if (family_relation.trim() == '') {
+                                            cnt = 1;
+                                                    $("#f_relation_error").html("Required.");
+                                            }
+                                            if (cnt == 1) {
+                                            return false;
+                                            }
+                                            //$("#test_for").append("<option value='new' selected>" + f_name + "</option>");
+                                            $("#family_model").modal("hide");
+                                                    var dob = $("#dob1").val();
+                                                    var nw_dob = dob.split("-");
+                                                    var n_date = <?= date("Y"); ?> - nw_dob[0];
+                                                    $("#family_model").modal("hide");
+                                                    $("#family_member_details").html(f_name + " / " + n_date + " Y " + f_gender);
+                                            }
+                                        </script>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="family_model" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">Add Family Member</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Name<i style="color:red;">*</i>:</label>
+                                                            <input type="text" name="f_name" id="f_name" class="form-control"/>
+                                                            <span style="color:red;" id="f_name_error"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Relation<i style="color:red;">*</i>:</label>
+                                                            <select name="family_relation" id="family_relation" class="form-control">
+                                                                <option value="">--Select--</option>
+                                                                <?php foreach ($relation1 as $fkey) { ?>
+                                                                    <option value="<?= $fkey["id"] ?>"><?= ucfirst($fkey["name"]); ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <span style="color:red;" id="f_relation_error"></span>
+                                                        </div> 
+                                                        <br>
+                                                        <div class="form-group col-sm-12  pdng_0">
+                                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Birth date:<span style="color:red;  font-size: 15px;">*</span></label>
+                                                            <div class="col-sm-9  pdng_0">
+                                                                <input type="text" id="dob1" placeholder='Birth date' name="f_dob" class="datepicker form-control" value="" style="width:70%"/>OR
+                                                            </div>	
+
+                                                            <div class="form-group col-sm-12  pdng_0">
+                                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">&nbsp;</label>
+                                                                <div class="col-sm-9 input-group pdng_0">
+
+                                                                    <span><input type="text" class="form-control number" minlength="0" maxlength="3" style="width:20%;" placeholder="Year" id="age_111" onkeyup="calculate_age1(this.value);"/></span>
+                                                                    <span><input type="text" class="form-control number" minlength="0" maxlength="2" style="width:20%;" placeholder="Month" id="age_211" onkeyup="calculate_age1(this.value);"/></span>&nbsp;&nbsp;&nbsp;
+                                                                    <span><input type="text" class="form-control number" minlength="0" maxlength="2" style="width:20%" placeholder="Day" id="age_311" onkeyup="calculate_age1(this.value);"/></span>
+                                                                    <span style="color:red;" id="dob_error1"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <script>
+                                                                    function calculate_age1(val)
+                                                                    {
+                                                                    /* var today_date = '<?= date("Y-m-d"); ?>';
+                                                                     var get_date_data = today_date.split("-");
+                                                                     
+                                                                     var new_date = get_date_data[0] - val; */
+
+                                                                    var year = $('#age_111').val();
+                                                                            var month = $('#age_211').val();
+                                                                            var day = $('#age_311').val();
+                                                                            var d = new Date();
+                                                                            var days = d.setDate(d.getDate() - day);
+                                                                            var months = d.setMonth(d.getMonth() - month);
+                                                                            var years = d.setFullYear(d.getFullYear() - year);
+                                                                            // document.write('Today is: ' + d.toLocaleString());
+                                                                            console.log(d);
+                                                                            var news = d.toLocaleString(days + months + years);
+                                                                            var today = news.split(",");
+                                                                            new_date = today[0];
+                                                                            var nw_date = new_date.split("/");
+                                                                            nw_date = nw_date[2] + "-" + nw_date[0] + "-" + nw_date[1];
+                                                                            nw_date = d.toISOString().split('T')[0];
+                                                                            $("#dob1").val(nw_date);
+                                                                    }
+                                                            //alert("1");
+                                                            //var aag = _calculateAge(date('1992-09-30');
+                                                            //alert(aag);
+
+                                                        </script>
+                                                        <br>
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Gender<i style="color:red;">*</i>:</label>
+                                                            <select name="family_gender" id="f_gender" class="form-control">
+                                                                <option value="male">Male</option>
+                                                                <option value="female">Female</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Phone:</label>
+                                                            <input type="text" name="f_phone" class="form-control"/>
+                                                            <span style="color:red;" id="f_phone_error"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Email:</label>
+                                                            <input type="text" name="f_email" class="form-control"/>
+                                                            <span style="color:red;" id="f_email_error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" id="family_add_btn" onclick="add_new_member();">Add</button>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="doctor_add" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">Add Doctor</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Name<i style="color:red;">*</i>:</label>
+                                                            <input type="text" name="d_name" id="d_name" class="form-control"/>
+                                                            <span style="color:red;" id="d_name_error"></span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="recipient-name" class="control-label">Mobile:</label>
+                                                            <input type="text" name="d_mobile" id="d_mobile" class="form-control"/>
+                                                            <span style="color:red;" id="d_mobile_error"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" id="family_add_btn" onclick="add_doctor();">Add</button>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Email :</label>
+                                            <div class="col-sm-9 pdng_0">
+<?php /* <input type="text" onblur="check_email(this.value);" id="email" class="form-control" name="email" value="<?php echo ucwords($user_info[0]['email']); ?>"/> */ ?>
+                                                <input type="text" id="email" onblur="check_email(this.value);" class="form-control" name="email" value="<?php echo ucwords($user_info[0]['email']); ?>"/> 
+                                                <small>(if email is not exist then use <b><a href="javascript:void(0);" onclick="email.value = 'noreply@airmedlabs.com'">noreply@airmedlabs.com</a></b>)</small>
+                                                <span style="color:red;" id="email_error"></span>
+                                                <span style="color:red;" id="email_error1"></span>
+                                                <input type="hidden" id="email_check" value="0"/>
+                                            </div>
+                                        </div>
+
+                                       
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Gender :<span style="color:red;  font-size: 15px;">*</span></label>
+                                            <div class="col-sm-9 pdng_0">
+                                                <select name="gender" id="gender" class="form-control">
+                                                    <option value="">--Select--</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select> 
+                                                <span style="color:red;" id="gender_error"></span>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Birth date:<span style="color:red;  font-size: 15px;">*</span></label>
+                                            <div class="col-sm-9  pdng_0">
+                                                <input type="text" id="dob" placeholder='Birth date' name="dob" class="datepicker form-control" value="" style="width:70%"/>OR
+                                            </div>	
+
+                                            <div class="form-group col-sm-12  pdng_0">
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">&nbsp;</label>
+                                                <div class="col-sm-9 input-group pdng_0">
+
+                                                    <span><input type="text" class="form-control number" minlength="0" maxlength="3" style="width:20%;" placeholder="Year" id="age_1" onkeyup="calculate_age(this.value);"/></span>
+                                                    <span><input type="text" class="form-control number" minlength="0" maxlength="2" style="width:20%;" placeholder="Month" id="age_2" onkeyup="calculate_age(this.value);"/></span>&nbsp;&nbsp;&nbsp;
+                                                    <span><input type="text" class="form-control number" minlength="0" maxlength="2" style="width:20%" placeholder="Day" id="age_3" onkeyup="calculate_age(this.value);"/></span>
+                                                    <span style="color:red;" id="dob_error"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+
+                                            function calculate_age(val)
+                                            {
+                                                /* var today_date = '<?= date("Y-m-d"); ?>';
+                                                 var get_date_data = today_date.split("-");
+                                                 
+                                                 var new_date = get_date_data[0] - val; */
+
+                                                var year = $('#age_1').val();
+                                                var month = $('#age_2').val();
+                                                var day = $('#age_3').val();
+
+                                                var d = new Date();
+                                                var days = d.setDate(d.getDate() - day);
+                                                var months = d.setMonth(d.getMonth() - month);
+                                                var years = d.setFullYear(d.getFullYear() - year);
+
+                                                // document.write('Today is: ' + d.toLocaleString());
+                                                console.log(d);
+                                                var news = d.toLocaleString(days + months + years);
+
+                                                var today = news.split(",");
+
+                                                new_date = today[0];
+                                                var nw_date = new_date.split("/");
+                                                nw_date = nw_date[2] + "-" + nw_date[0] + "-" + nw_date[1];
+
+                                                nw_date = d.toISOString().split('T')[0];
+                                                $("#dob").val(nw_date);
+                                            }
+                                            function _calculateAge(birthday) { // birthday is a date
+                                                var ageDifMs = Date.now() - birthday.getTime();
+                                                var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                                                return Math.abs(ageDate.getUTCFullYear() - 1970);
+                                            }
+                                           
+
+                                        </script>
+										
+										<div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Branch :<span style="color:red;">*</span></label> 
+                                            <div class="col-sm-9 pdng_0">
+                                                <select id="branch" onchange="get_test(this.value)" name="branch" class="form-control" style="width: 100%">
+                                                   <?php
+                                                    $brancharray=array();
+													foreach ($branchlist as $branch) {
+                                                            ?>
+                                                            <option value="<?php echo $branch['id']; ?>"><?php echo ucwords($branch['branch_name']) . " - " . $branch['branch_code']; ?></option>
+															
+			<?php
+                                     $brancharray[$branch['id']]=$branch['city'];               }
+                                                    ?>
+                                                </select>
+												
+                                                <span style="color:red" id="branch_error"></span>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        
+                                        <div class="form-group col-sm-12  pdng_0">
+                                            <label for="exampleInputFile" class="col-sm-3 pdng_0">Referral By :<span style="color:red">*</span></label>
+                                            <div class="col-sm-9 pdng_0">
+                                                <select name="referral_by" id="referral_by" onchange="get_doctor_test(this.value);" class="chosen chosen-select">
+												
+                                                </select>
+                                                 <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#doctor_add" >ADD</button>
+                                                <small>(if referral by is not exist then select <b>--SELF--</b>)</small>
+                                                <span style="color:red;" id="referral_by_error"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="box box-primary">
+                                <div class="box-header">
+
+                                    <h3 class="box-title">Book Test/Package</h3>
+                                    <div id="panel" class="pull-right">
+                                        
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="col-md-12" id="all_packages">
+                                            <div class="col-md-12">
+                                                <div class="col-md-12">
+                                                    <div id="search_test">
+                                                        <select class="chosen chosen-select" data-live-search="true" id="test" data-placeholder="Select Test" onchange="get_test_price();">
+
+                                                        </select>
+                                                    </div>
+                                                    <span style="color:red;" id="test_error"></span>
+                                                </div>
+                                                
+                                                <span id="loader_div" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-right:10px"> </span> 
+                                                <button class="btn btn-primary" id="show_test_btn" onclick="show_test_model();" type="button" style="display:none;">Add</button> 
+
+                                            </div>
+                                            <br><br>
+                                            <table class="table table-striped" id="city_wiae_price">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Test/Package Name</th>
+                                                        <th>Price</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="t_body">
+                                                    <?php
+                                                    $cnt = 0;
+                                                    ?>
+                                                </tbody>
+                                            </table>
+
+                                            <br>
+                                            <br/>
+                                            
+                                            <div class="col-md-12">
+                                                <div class="col-md-12" style="padding:0">
+                                                    <p class="lead">Amount</p>
+                                                    <div class="table-responsive" style="overflow:hidden">
+                                                        <div class="col-sm-7 pdng_1" style="float:right;">
+                                                           
+                                                        </div>
+                                                        <script>
+                                                            function ApplyCollectionCharge(val) {
+
+                                                                var ttl_price = $("#total_id").val();
+                                                                if (ttl_price == null) {
+                                                                    ttl_price = 0;
+                                                                }
+                                                                if (val.checked == true) {
+                                                                    $("#total_id").val(+ttl_price + 100);
+                                                                }
+                                                                if (val.checked == false) {
+                                                                    var ttl_price = ttl_price - 100;
+                                                                    if (ttl_price < 0) {
+                                                                        ttl_price = 0;
+                                                                    }
+                                                                    $("#total_id").val(ttl_price);
+                                                                }
+                                                                var dscnt = $("#discount").val();
+                                                                get_discount_price(dscnt, '3');
+                                                            }
+                                                        </script>
+                                                        <table class="table">
+
+                                                            <tr>
+                                                                <th>Total Amount: Rs. </th>
+                                                                <th><div id="total_id_div"><input type="text" name="total_amount" id="total_id" value="0" readonly="" class="form-control"/></div></th>
+                                                            </tr>
+
+                                                            <tr id="testdiscount">
+                                                                <th>Discount:</th>
+                                                                <td><input style="width:50%;float: left;" type="text" min="0"  onkeypress="return isNumberKey(event)" onkeyup="get_discount_price(this.value, '2');" value="0" name="discount" id="discount" class="form-control"/>
+                                                                    <div style="width:40%;float: left;margin-left: 7px;"> % <input type="radio" onchange="get_discount_price(this.value, '3');" id="price_per_discount" name="discount_type" checked="checked" value="per" style="margin-right:5px;"> Flat <input type="radio" name="discount_type" style="margin-left:5px;" onchange="get_discount_price(this.value, '4');" value="flat">  </div>
+                                                                    <span id="d_price_error" style="color:red;"></span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Payable Amount: Rs.</th>
+                                                                <td><div id="payable_div"><input type="text" name="payable" id="payable_val" value="0" readonly="" class="form-control"/></div></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Receive Amount: RS.</th>
+                                                                <td><input type="text" onkeyup="get_discount_price(this.value, '1');" style="width:50%;float: left" value="0" name="received_amount"  onkeypress="return isNumberKey(event)" id="received_amount" class="form-control"/>
+                                                                    <select name="payment_via" class="form-control" style="width:50%;float: left">
+                                                                        <?php foreach ($payment_type as $key) { ?>
+                                                                            <option value="<?= strtoupper($key["name"]) ?>"><?= strtoupper($key["name"]) ?></option>
+<?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </div>
+                                                    <label for="exampleInputFile">Note :</label> <textarea class="form-control" name="note" id="note"><?php echo $query[0]['note']; ?></textarea>
+                                                    
+                                                </div><!-- /.col -->
+                                            </div><!-- /.row -->
+                                        </div><!-- /.box -->
+                                    </div>
+                                    <input type="hidden" name="submit_type" id="submit_type" value="0"/>
+                                    
+                               
+                                    <div class="box-footer">
+                                        <input type="button" onclick="submit_type1('1');" class="btn btn-primary" value="Book Test" id="submit_book_button"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" id="order_details" style="display: none;">
+                                <div class="box box-primary">
+                                    <div class="box-header">
+                                        <!-- form start -->
+                                        <h3 class="box-title">Order Details</h3>
+                                    </div>
+                                    <div class="box-body" id="order_table">
+                                    </div>
+                                </div>
+                            </div>
+<?php echo form_close(); ?>
+                            </section>
+
+     <input type="hidden" value="<?= $branchlist[0]["city"]; ?>" id="hbranchcity" />                        
+   <script type="text/javascript" src="<?php echo base_url(); ?>user_assets/chosen/chosen.jquery.js"></script>
+                            
+
+                        </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-content -->
+                </div><!-- nav-tabs-custom -->
+        </div>
+        <!-- /.row -->
+</section>
+<div id="myModal_view" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title clr_fff">Package Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-content" id="description">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="sub_test_modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title clr_fff">Test Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel-content" id="sub_test">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="<?php echo base_url(); ?>plugins/timepick/js/timepicki.js"></script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+<script src="<?php echo base_url(); ?>/user_assets/bootstrap-datepicker.js"></script>
+<script  type="text/javascript">
+                        $(function () {
+
+                            $('.chosen-select').chosen();
+							$('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true
+    });
+
+                        });
+						var cityarray='<?= $cityjosn ?>';
+						var cityjosn=JSON.parse(cityarray);
+						
+						function bid_datepicker() {   }
+
+                                            function DelayedCallMe(num, val) {
+                                                    check_phn(val);
+                                            }
+                                            cust_id = "";
+                                            function check_phn(val) {
+                                                $("#phone_error1").html("");
+                                                $("#phone_error").html("");
+                                                if (checkmobile(val) == true) {
+                                                    $.ajax({
+                                                        url: "<?php echo base_url(); ?>Admin/check_phone",
+                                                        type: 'post',
+                                                        data: {phone: val, cust_id: cust_id},
+                                                        success: function (data) {
+                                                            var json_data = JSON.parse(data);
+                                                            if (json_data.data[0].count > 0) {
+                                                                
+                                                                
+                                                                get_user_info(json_data.data[0].id);
+                                                                $email_varify = 1;
+                                                                
+                                                            }
+                                                            $("#phone_check").val(data.trim());
+                                                        }
+                                                    });
+                                                } else if (val == '') {
+                                                    $("#phone_error1").html("Please enter phone number.");
+                                                } else {
+                                                    $("#phone_error1").html("Invalid phone number.");
+                                                }
+                                            }
+ $email = '';
+                                        function get_user_info(val) {
+                                            if (val.trim() != '') {
+                                                $.ajax({
+                                                    url: "<?php echo base_url(); ?>Admin/get_user_info",
+                                                    type: 'post',
+                                                    data: {user_id: val},
+                                                    success: function (data) {
+														
+                                                        var json_data = JSON.parse(data);
+                                                        cust_id = json_data.user_info.id.trim();
+														
+                                                        if (json_data.user_info.full_name.trim()) {
+                                                            $("#name").val(json_data.user_info.full_name);
+                                                        } else {
+                                                            $("#name").val("");
+                                                        }
+                                                        if (json_data.user_info.mobile.trim()) {
+                                                            $("#phone").val(json_data.user_info.mobile);
+                                                        } else {
+                                                            $("#phone").val("");
+                                                        }
+                                                        if (json_data.user_info.email.trim()) {
+                                                            $("#email").val(json_data.user_info.email);
+                                                            $email = json_data.user_info.email;
+                                                        } else {
+                                                            $("#email").val("");
+                                                        }
+                                                        if (json_data.user_info.dob.trim()) {
+                                                            $("#dob").val(json_data.user_info.dob);
+                                                            bid_datepicker();
+                                                        } else {
+                                                            $("#dob").val("");
+                                                        }
+                                                        $("#test_for").html(json_data.user_info.family);
+                                                        if (json_data.user_info.gender.trim()) {
+															
+                                                            //$("#gender").val(json_data.gender);
+                                                            $("#gender:selected").removeAttr("selected");
+                                                            var elements = document.getElementById("gender").options;
+                                                            for (var i = 0; i < elements.length; i++) {
+                                                                elements[i].removeAttribute("selected");
+                                                                elements[i].selected = false;
+                                                            }
+                                                            for (var i = 0; i < elements.length; i++) {
+                                                                /*elements[i].selected = false;*/
+                                                                if (elements[i].value.toUpperCase() == json_data.user_info.gender.toUpperCase()) {
+                                                                    elements[i].setAttribute("selected", "selected");
+                                                                }
+                                                            }
+                                                        }
+                                                        var active_pkg = json_data.active_package;
+                                                        
+                                                       
+                                                    }
+                                                });
+                                                $email_varify = 1;
+                                                /* $.ajax({
+                                                    url: "<?php echo base_url(); ?>Admin/get_user_orders",
+                                                    type: 'post',
+                                                    data: {user_id: val},
+                                                    error: function (jqXHR, error, code) {
+                                                    },
+                                                    success: function (data) {
+                                                        if (data != '0') {
+                                                            $("#order_table").empty();
+                                                            $("#order_table").append(data);
+                                                            $("#order_details").show();
+                                                        } else {
+                                                            $("#order_details").hide();
+                                                        }
+                                                    }
+                                                }); */
+                                            } else {
+                                                $("#name").val('');
+                                                $("#phone").val('');
+                                                $("#email").val('');
+                                                var elements = document.getElementById("gender").options;
+                                                for (var i = 0; i < elements.length; i++) {
+                                                    elements[i].removeAttribute("selected");
+                                                    elements[i].selected = false;
+                                                }
+                                                
+                                                $("#order_details").attr("style", "display:none;");
+                                            }
+                                        }
+                                            											
+tst_details = '';
+    paneltst_details = '';
+    setTimeout(function () {
+		
+	<?php if($branchlist[0]["city"] != ""){ ?>	testcity =cityjosn[<?= $branchlist[0]["city"]; ?>]; <?php }else{ ?> testcity ="0"; <?php } ?>
+	
+
+        $.ajax({
+            url: '<?php echo base_url(); ?>Admin/get_refered_by',
+            type: 'post',
+            data: {val: testcity},
+            success: function (data) {
+                var json_data = JSON.parse(data);
+                $("#referral_by").html(json_data.refer);
+               
+                $('.chosen').trigger("chosen:updated");
+            },
+            error: function (jqXhr) {
+                $("#referral_by").html("");
+                
+            },
+            complete: function () {
+                //$("#shedule_loader_div").attr("style", "display:none;");
+                //$("#send_opt_1").removeAttr("disabled");
+            },
+        });
+		
+		<?php if($branchlist[0]["city"] != ""){ ?>	
+		var tst_cty = "<?= $branchlist[0]["city"]; ?>"; 
+		var branch_val ="<?= $branchlist[0]["id"]; ?>"; 
+		<?php  }else{ ?> 
+		var tst_cty = "0";
+		var branch_val ="0"; 
+		<?php } ?>
+	
+        $.ajax({
+            url: '<?php echo base_url(); ?>Admin/getbranch_test_list/' + tst_cty + "/" + branch_val,
+            type: 'post',
+            data: {val: tst_cty},
+            success: function (data) {
+                var json_data = JSON.parse(data);
+                
+                $("#t_body").html("");
+               
+                $("#hidden_test").html("");
+                $("#discount").html("0");
+                $("#payable_val").val("0");
+                $("#total_id").val("0");
+                $("#test").html("");
+                $("#test").html(json_data.test_list);
+                tst_details = json_data.test_ary;
+                
+                $('.chosen').trigger("chosen:updated");
+            }
+            ,
+        });
+        
+    }, 500);
+	function add_doctor() {
+                                                var d_name = $("#d_name").val();
+                                                var d_mobile = $("#d_mobile").val();
+                                                $("#d_name_error").html("");
+                                                $("#d_mobile_error").html("");
+                                                
+												var branch_val = $("#branch").val();
+												
+var val =branchtestjon[branch_val];
+var testcity=cityjosn[val];
+var cnt = 0;
+                                                if (d_name.trim() == '') {
+                                                    cnt = 1;
+                                                    $("#d_name_error").html("Required.");
+                                                }
+                                                if (d_mobile.trim() == '') {
+                                                    cnt = 1;
+                                                    $("#d_mobile_error").html("Required.");
+                                                }
+                                                if (cnt == 0) {
+                                                    $.ajax({
+                                                        url: "<?php echo base_url(); ?>Admin/add_doctor",
+                                                        type: 'post',
+                                                        data: {d_mobile: d_mobile, d_name: d_name, city: testcity},
+                                                        success: function (data) {
+                                                            $.ajax({
+                                                                url: '<?php echo base_url(); ?>Admin/get_refered_by',
+                                                                type: 'post',
+                                                                data: {val: testcity, selected: data},
+                                                                success: function (data) {
+                                                                    var json_data = JSON.parse(data);
+                                                                    $("#referral_by").html(json_data.refer);
+                                                                   
+                                                                    $('.chosen').trigger("chosen:updated");
+                                                                },
+                                                                error: function (jqXhr) {
+                                                                    $("#referral_by").html("");
+                                                                    //$("#test").html("");
+                                                                    //$("#existingCustomer12").html("");
+                                                                }
+                                                                ,
+                                                            });
+                                                            $("#doctor_add").modal("hide");
+                                                        }
+                                                    });
+                                                }
+
+                                            }
+											$city_cnt = <?= $cnt ?>;
+function get_test_price() {
+                                                            var test_val = $("#test").val();
+                                                            $("#test_error").html("");
+                                                          
+                                                            var cnt = 0;
+                                                            if (test_val.trim() == '') {
+                                                                $("#test_error").html("Test is required.");
+                                                                cnt = cnt + 1;
+                                                            }
+                                                            if (cnt > 0) {
+                                                                return false;
+                                                            }
+                                                            var skillsSelect = document.getElementById("test");
+                                                            var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
+                                                            var prc = selectedText.split('(Rs.');
+                                                            var prc1 = prc[1].split(')');
+                                                            //console.log(prc);
+                                                            var pm = skillsSelect.value;
+                                                            var explode = pm.split('-');
+                                                            /*Nishit code start*/
+                                                            var selected_tst_id = test_val.split("-");
+                                                            var is_sub_test = 0;
+                                                            for (var st = 0; st < tst_details.length; st++) {
+                                                                if (tst_details[st].id == selected_tst_id[1]) {
+                                                                    if (tst_details[st].sub_test != null) {
+                                                                        var sub_tst_lits = tst_details[st].sub_test.split("%@%");
+                                                                        var modal_txt = '';
+                                                                        for (var mt = 0; mt < sub_tst_lits.length; mt++) {
+                                                                            modal_txt += sub_tst_lits[mt] + "<br/>";
+                                                                        }
+                                                                        $("#sub_test").html(modal_txt);
+                                                                        is_sub_test = 1;
+                                                                    }
+                                                                }
+                                                            }
+                                                            /*Nihit code end*/
+                                                            if (explode[0] == 'p') {
+                                                                show_details(explode[1]);
+                                                                var clic = "'" + explode[1] + "'";
+                                                                $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td><a href="#" data-toggle="modal" data-target="#myModal_view" onclick="show_details(' + clic + ');">' + prc[0] + '</a></td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
+                                                            } else {
+                                                                if (is_sub_test != 1) {
+                                                                    $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
+                                                                }
+                                                                if (is_sub_test == 1) {
+                                                                    $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td><a href="#" data-toggle="modal" onclick="$(\'#sub_test_modal\'\).modal(\'show\'\);">' + prc[0] + '</a></td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
+                                                                }
+                                                            }
+                                                            $("#test option[value='1']").remove();
+                                                            var old_dv_txt = $("#hidden_test").html();
+                                                            /*Total price calculate start*/
+                                                            var old_price = $("#total_id").val();
+                                                            $("#total_id").val(+old_price + +prc1[0]);
+                                                            $("#total_id").val(+old_price + +prc1[0]);
+                                                            var dscnt = $("#discount").val();
+                                                            get_discount_price(dscnt, '4');
+                                                            /*Total price calculate end*/
+                                                            $("#hidden_test").html(old_dv_txt + '<input id="tr1_' + $city_cnt + '" type="hidden" name="test[]" value="' + skillsSelect.value + '"/>');
+                                                            $city_cnt = $city_cnt + 1;
+                                                            //$("#test").val("");
+                                                            $("#desc").val("");
+                                                            $("#test option[value='" + skillsSelect.value + "']").remove();
+                                                            $("#test").val('').trigger('chosen:updated');
+                                                            
+
+
+                                                        }
+														function get_discount_price(val, typ = null) {
+                                                            $("#d_price_error").html("");
+                                                            setTimeout(function () {
+                                                                if (val != '' || val != '0') {
+                                                                    var check_discount = 0;
+                                                                    if ($("#price_per_discount").is(':checked')) {
+                                                                        check_discount = 1;
+                                                                    }
+                                                                    if (typ == '1' || typ == '2' || typ == '3' || typ == '4') {
+                                                                        var total = $("#total_id").val();
+                                                                        var received_amount = $("#received_amount").val();
+                                                                        var discount1 = $("#discount").val();
+                                                                        //var payable_val = $("#payable_val").val();
+                                                                        var dis = val;
+                                                                        if (check_discount == 1 && dscn != '' && dscn != '0') {
+                                                                            var discountpercent = discount1 / 100;
+                                                                            var discountprice = total - (total * discountpercent) - received_amount;
+                                                                        } else {
+                                                                            var discountprice = total - received_amount - discount1;
+                                                                        }
+                                                                        /*if($("#collection_charge").is(":checked")){
+                                                                         discountprice = discountprice + 100;
+                                                                         }*/
+                                                                        //var payableamount = payable_val - discountprice;
+                                                                        $("#payable_val").val(discountprice);
+                                                                    } else if (typ == '5') {
+                                                                        var total1 = $("#total_id").val();
+                                                                        var dscn = $("#discount").val();
+                                                                        var received_amount = $("#received_amount").val();
+                                                                        if (check_discount == 1 && dscn != '' && dscn != '0') {
+                                                                            var discountpercent = dscn / 100;
+                                                                            var discountprice = (total1 * discountpercent) - received_amount;
+                                                                        } else {
+                                                                            var discountprice = total1 - received_amount;
+                                                                        }
+                                                                        //$("#total_id").val(payableamount_total);
+                                                                        $("#payable_val").val(discountprice);
+                                                                    }
+                                                                } else {
+                                                                    var ttl = $("#total_id").val();
+                                                                    $("#payable_val").val(ttl);
+                                                                }
+                                                                var d_price = $("#payable_val").val();
+                                                                d_price = parseInt(d_price);
+                                                                if (d_price < 0) {
+                                                                    $("#d_price_error").html("<br><br>Invalid Discount.");
+                                                                }
+                                                            }, 1000);
+                                                        }
+														function delete_city_price(id, prc, name, value) {
+                                                            var tst = confirm('Are you sure?');
+                                                            if (tst == true) {
+                                                                /*Total price calculate start*/
+                                                                $('#test').append('<option value="' + value + '">' + name + ' (Rs.' + prc + ')</option>').trigger("chosen:updated");
+                                                                var old_price = $("#total_id").val();
+                                                                $("#total_id").val(old_price - prc);
+                                                                var dscnt = $("#discount").val();
+                                                                get_discount_price(dscnt, '4');
+                                                                /*Total price calculate end*/
+                                                                $("#tr_" + id).remove();
+                                                                $("#tr1_" + id).remove();
+                                                                //get_test($("#test_city"));
+                                                            }
+                                                           
+                                                        }
+														$('.number').keypress(function (event) {
+        var $this = $(this);
+        if ((event.which != 46 || $this.val().indexOf('.') != -1) &&
+                ((event.which < 48 || event.which > 57) &&
+                        (event.which != 0 && event.which != 8))) {
+            event.preventDefault();
+        }
+
+        var text = $(this).val();
+        if ((event.which == 46) && (text.indexOf('.') == -1)) {
+            setTimeout(function () {
+                if ($this.val().substring($this.val().indexOf('.')).length > 3) {
+                    $this.val($this.val().substring(0, $this.val().indexOf('.') + 3));
+
+                }
+            }, 1);
+        }
+
+        if ((text.indexOf('.') != -1) &&
+                (text.substring(text.indexOf('.')).length > 2) &&
+                (event.which != 0 && event.which != 8) &&
+                ($(this)[0].selectionStart >= text.length - 2)) {
+            event.preventDefault();
+        }
+    });
+
+    $('.number').bind("paste", function (e) {
+        var text = e.originalEvent.clipboardData.getData('Text');
+        if ($.isNumeric(text)) {
+            if ((text.substring(text.indexOf('.')).length > 3) && (text.indexOf('.') > -1)) {
+                e.preventDefault();
+                $(this).val(text.substring(0, text.indexOf('.') + 3));
+            }
+        } else {
+            e.preventDefault();
+        }
+    });
+
+
+    function isNumberKey(evt)
+    {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31
+                && (charCode < 48 || charCode > 57)) {
+            if (charCode == 45) {
+                return false;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+function submit_type1(val) {
+                                            $("#submit_book_button").attr("disabled", true);
+                                            var cnt = 0;
+                                            var name = $("#name").val();
+                                            var email = $("#email").val();
+                                            var phone = $("#phone").val();
+                                            var gender = $("#gender").val();
+                                            var dob = $("#dob").val();
+											var branch = $("#branch").val();
+                                           
+                                            $("#phone_error1").html("");
+                                            $("#d_price_error").html("");
+
+                                            $("#name_error").html("");
+                                            $("#email_error").html("");
+                                            $("#phone_error").html("");
+                                            
+                                            $("#test_error").html("");
+                                            $("#gender_error").html("");
+                                            $("#dob_error").html("");
+											 $("#referral_by_error").html("");
+                                            
+                                            if (name == '') {
+                                                cnt = cnt + 1;
+                                                $("#name_error").html("Required");
+                                                $("#submit_book_button").attr("disabled", false);
+                                            }
+                                            var reffered_by = $("#referral_by").val();
+                                            if (reffered_by.trim() == '') {
+                                                cnt = cnt + 1;
+                                                $("#referral_by_error").html("<br>Required");
+                                                $("#submit_book_button").attr("disabled", false);
+                                            }
+                                           
+                                            
+                                            if (gender == '') {
+                                                cnt = cnt + 1;
+                                                $("#gender_error").html("Required");
+                                                $("#submit_book_button").attr("disabled", false);
+                                            }
+                                            if (dob == '') {
+                                                cnt = cnt + 1;
+                                                $("#dob_error").html("Required");
+                                                $("#submit_book_button").attr("disabled", false);
+                                            }
+											if (branch == '') {
+                                                cnt = cnt + 1;
+                                                $("#submit_book_button").attr("disabled", false);
+                                            }
+                                            var d_price = $("#payable_val").val();
+                                            d_price = parseInt(d_price);
+                                            if (d_price < 0) {
+                                                cnt = cnt + 1;
+                                                $("#d_price_error").html("<br><br>Invalid Discount.");
+                                                $("#submit_book_button").removeAttr("disabled");
+                                            }
+                                            
+                                            
+                                            if (checkmobile(phone) == false) {
+                                                cnt = cnt + 1;
+                                                $("#phone_error").html("Invalid");
+                                                $("#submit_book_button").attr("disabled", false);
+                                            }
+                                            if ($("#hidden_test").html().trim() == '') {
+                                                cnt = cnt + 1;
+                                                if (cnt == 1) {
+                                                    $("#test_error").html("Please select test.");
+                                                    $("#submit_book_button").attr("disabled", false);
+                                                }
+                                            }
+                                            /* if ($email_varify != 1) {
+                                                cnt = cnt + 1;
+                                            } */
+                                            if (cnt > 0) {
+                                                return false;
+                                            }
+
+                                            $("#submit_type").val(val);
+                                            setTimeout(function () {
+
+                                                var val = $("#phone_check").val();
+                                                if (val > 0) {
+                                                    return false;
+                                                }
+												
+                                                $("#user_form").submit();
+                                                $("#submit_book_button").attr("disabled", true);
+                                                $("#loader_div").attr("style", "");
+                                               
+                                            }, 500);
+                                        }
+										
+										function checkmobile(mobile) {
+                                            var filter = /^[789]\d{9}$/;
+                                            if (filter.test(mobile)) {
+                                                if (mobile.length == 10) {
+                                                    return true;
+                                                } else {
+                                                    return false;
+                                                }
+                                            } else {
+                                                return false;
+                                            }
+                                        }
+function check_email(val) {
+                                                $("#email_error1").html("");
+                                                if (val == '' || val == 'noreply@airmedlabs.com') {
+                                                    $email_varify = 1;
+                                                    return false;
+                                                }
+                                                if (checkemail(val) == true) {
+                                                    $.ajax({
+                                                        url: "<?php echo base_url(); ?>Admin/check_email",
+                                                        type: 'post',
+                                                        data: {email: val, cust_id: cust_id},
+                                                        success: function (data) {
+                                                            if (data.trim() > 0 && $email != val) {
+                                                                $("#email_error1").html("This email address already used, Try different.");
+                                                            } else {
+                                                                $email_varify = 1;
+                                                            }
+                                                            $("#email_check").val(data.trim());
+                                                        }
+                                                    });
+                                                } else {
+                                                    $("#email_error1").html("Invalid email.");
+                                                    $email_varify = 0;
+                                                }
+                                            }
+var branchtestarray='<?= json_encode($brancharray) ?>';	
+var branchtestjon = JSON.parse(branchtestarray);
+
+function get_test(val) {
+var branch_val = $("#branch").val();
+var val =branchtestjon[branch_val];
+
+                                            
+                                            
+                                            $("#discount").val("0");
+                                            var dscnt = $("#discount").val();
+                                            get_discount_price(dscnt, '4');
+                                            if (val) {
+												$("#loader_div").show();
+                                                $.ajax({
+                                                    url: '<?php echo base_url(); ?>Admin/getbranch_test_list/' + val + "/" + branch_val,
+                                                    type: 'post',
+                                                    data: {val: val},
+                                                    success: function (data) {
+                                                        var json_data = JSON.parse(data);
+                                                        
+                                                        $("#t_body").html("");
+                                                        
+
+                                                        $("#hidden_test").html("");
+                                                        $("#discount").val("0");
+                                                        $("#payable_val").val("0");
+                                                        $("#total_id").val("0");
+                                                        $("#received_amount").val("0");
+                                                        $("#test").html("");
+                                                        
+                                                        $("#test").html(json_data.test_list);
+
+                                                        $('.chosen').trigger("chosen:updated");
+														$("#loader_div").hide();
+                                                    },
+                                                    complete: function () {
+                                                    },
+                                                });
+												var testcity=cityjosn[val];
+												
+												$("#referral_by").html("");
+												$.ajax({
+            url: '<?php echo base_url(); ?>Admin/get_refered_by',
+            type: 'post',
+            data: {val: testcity},
+            success: function (data) {
+                var json_data = JSON.parse(data);
+                $("#referral_by").html(json_data.refer);
+               
+                $('.chosen').trigger("chosen:updated");
+            },
+            error: function (jqXhr) {
+                $("#referral_by").html("");
+                
+            },
+            complete: function () {
+                //$("#shedule_loader_div").attr("style", "display:none;");
+                //$("#send_opt_1").removeAttr("disabled");
+            },
+        });
+												
+												
+                                            }
+                                        }
+										
+function get_doctor_test(doc) {
+<?php if($branchlist[0]["city"] != ""){ ?>	
+		var tst_cty = "<?= $branchlist[0]["city"]; ?>"; 
+		var branch_val ="<?= $branchlist[0]["id"]; ?>"; 
+		<?php  }else{ ?> 
+		var tst_cty = "0";
+		var branch_val ="0"; 
+		<?php } ?>
+
+                                            var val =tst_cty;
+											var branch_val = $("#branch").val();
+                                            if (branch_val == '') {
+                                                branch_val = 0;
+                                            }
+                                            if (val.trim()) {
+												$("#loader_div").show();
+                                                $.ajax({
+                                                    url: '<?php echo base_url(); ?>Admin/getbranch_doctor_test_list/' + val + "/" + branch_val + "/" + doc,
+                                                    type: 'post',
+                                                    data: {val: val.value},
+                                                    success: function (data) {
+                                                        if (data != 0) {
+                                                            var json_data = JSON.parse(data);
+                                                            if (json_data.discount == '0') {
+                                                                $("#testdiscount").hide();
+                                                            } else {
+                                                                $("#testdiscount").show();
+                                                            }
+                                                            $("#t_body").html("");
+                                                            $("#panelt_body").html("");
+                                                            $("#hidden_test").html("");
+                                                            $("#discount").val("0");
+                                                            $("#payable_val").val("0");
+                                                            $("#total_id").val("0");
+                                                            $("#received_amount").val("0");
+                                                            $("#test").html("");
+                                                            $("#collection_charge").removeAttr("checked");
+                                                            $("#test").html(json_data.test_list);
+                                                            tst_details = json_data.test_ary;
+                                                            $("#test_panel").html(json_data.test_list);
+                                                            paneltst_details = json_data.test_ary;
+
+                                                            $('.chosen').trigger("chosen:updated");
+															$("#loader_div").hide();
+                                                        }
+                                                    },
+                                                    complete: function () {
+                                                    },
+                                                });
+                                            }
+                                        }										
+	function show_details(val) {
+                                                            $.ajax({
+                                                                url: "<?php echo base_url(); ?>service/service_v2/package_details",
+                                                                type: "POST",
+                                                                data: {pid: val},
+                                                                error: function (jqXHR, error, code) {
+                                                                },
+                                                                success: function (data) {
+                                                                    var json_data = JSON.parse(data);
+                                                                    $("#description").empty();
+                                                                    $("#description").append('<p>' + json_data.data + '</p>');
+                                                                    // console.log(data);
+                                                                }
+                                                            });
+                                                        }
+        
+</script>

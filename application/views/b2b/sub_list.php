@@ -1,0 +1,420 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Test
+            <small></small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="<?php echo base_url(); ?>Dashboard"><i class="fa fa-dashboard"></i>Dashboard</a></li>
+            <li><a href="<?php echo base_url(); ?>test-master/test-list"><i class="fa fa-users"></i>Logistic</a></li>
+        </ol>
+    </section>
+    <?php 
+
+    $id = $this->uri->segment(4);
+    ?>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="modal fade" id="import" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="H4">Import List</h4>
+                    </div>
+                    <div class="modal-body"> 
+                        <?php $attributes = array('class' => 'form-horizontal', 'method' => 'POST'); ?>
+                        <?php
+                        echo form_open_multipart('b2b/test_master/importtest_csv', $attributes);
+                        ?>
+
+                        <div class="form-group">
+
+                            <label>Upload</label>
+                            <input type="file" name="testeximport" class="form-controll">
+                            <div style='color:red;' id='admin_name_add_alert'></div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="model_close" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <input type="submit" id="add_admin_submit" name="add_menu" class="btn btn-primary" value="Upload"/>
+                            <!--                            <button type="button" id="add_admin_submit"  data-dismiss="modal"  onclick="sub('admin_add');" name="add_menu" class="btn btn-primary" disabled=''> Add </button>-->
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title"><?= $labname ?> Test List</h3>
+<!-- <a style="float:right;margin-right:5px;" class ="btn btn-primary btn-sm" href='<?php echo base_url();?>b2b/Logistic_master/sub_add/<?php echo $id; ?>' data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-plus-circle" ></i><strong > Add</strong></a>
+                -->        
+                       <?php /* <a style="float:right;margin-right:5px;" href='<?php echo base_url()."b2b/"; ?>test_master/test_csv?city=<?= $city ?>' class="btn btn-primary btn-sm" ><strong > Export</strong></a>
+                        <a style="float:right;margin-right:5px;" data-toggle="modal"  data-target="#import"  class="btn btn-primary btn-sm" ><strong > Import</strong></a> */ ?>
+
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="widget">
+                            <?php if (isset($success) != NULL) { ?>
+                                <div class="alert alert-success alert-dismissable">
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    <?php echo $success['0']; ?>
+                                </div>
+                            <?php } ?>
+                            <div class="alert alert-success" id="profile_msg_suc" style="display: none;">
+                                <span id="msg_success"></span>
+                            </div>
+                        </div>
+                        <?php $attributes = array('class' => 'form-horizontal', 'method' => 'get', 'role' => 'form'); ?>
+                        <?php echo form_open('b2b/Logistic_master/sub_list/'.$id, $attributes); ?>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" name="search" placeholder="search" value="<?php
+                            if (isset($search) != NULL) {
+                                echo $search;
+                            }
+                            ?>" />
+                        </div>
+                     <?php   /* <div class="col-md-3">
+                            <select class="form-control" name="city">
+                                <option value="">--Select City--</option>
+                                <?php foreach ($citys as $key) { ?>
+                                    <option value="<?= ucfirst($key["id"]); ?>" <?php
+                                    if ($city != '') {
+                                        if ($city == $key["id"]) {
+                                            echo "selected";
+                                        }
+                                    }
+                                    ?> ><?= ucfirst($key["name"]); ?></option>
+                                        <?php } ?>
+                            </select>
+                        </div> */ ?>
+
+                        <input type="submit" value="Search" class="btn btn-primary btn-md">
+                        </form>
+                        <br> 
+                        <div class="tableclass">
+                            <table id="example4" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Test Name</th>
+                                         <th>Price</th>
+										 <th>Client MRP</th>
+                                         <th>B2b Price</th>
+										<th>Special Price</th>
+                                        <!--<th>A'bad Price</th>-->
+                                       <?php /* <th width="20%">Test Department</th> */ ?>
+                                        <th style="width: 10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $cnt = $counts;
+                                    foreach ($query as $row) {
+										
+										$mrp= round($row['price']);
+if ($row['newprice'] != "") {
+	$mrp=$row['newprice'];
+	
+}
+
+                                        $tid= $row['id'];
+                                 
+                                        $cnt++;
+                                        ?>
+                                        <tr> <td><?php echo $cnt; ?></td>
+                                            <td><?php echo ucwords($row['test_name']); ?></td>
+                                             <td><?php echo 'Rs.'.$row['price']; ?></td>
+											 <td><?php if($row['newprice'] != ""){ echo 'Rs.'.$row['newprice']; } ?></td>
+                                             <td><?php 
+                                             $b2bPrice = round($mrp-(($discount /100)*$mrp));
+                                             echo 'Rs.'.$b2bPrice;
+                                            ?></td>
+											<td>
+                                              <?php if($row['price_special'] !=''){
+                                                echo 'Rs.'.$row['price_special'];
+                                            }else{
+
+                                            } 
+                                                   ?>                       
+                                            </td>
+                                          <?php /*  <td>
+                                                <select class="form-control" id="department_ids" onchange="department_change('<?php echo $row['id']; ?>', this.value);">
+                                                    <option value="">Select Department</option>
+                                                    <?php foreach ($departmnet_list as $department) { ?>
+                                                        <option value="<?php echo $department['id']; ?>" <?php
+                                                        if ($department['id'] == $row['department']) {
+                                                            echo "selected";
+                                                        }
+                                                        ?>><?php echo ucwords($department['name']); ?></option>
+                                                            <?php } ?>
+                                                </select>
+                                            </td> */ ?>
+                                            <td>
+											
+                                                <a  href="javascript:void(0)" data-id="<?php echo $row['id']."_".$row['testtype']."_".$row['price_special']; ?>"  class="discount_id" >Set Special Price</a> 
+												
+												<a  href="javascript:void(0)" data-id="<?php echo $row['id']."_".$row['testtype']."_".$row['newprice']; ?>"  class="newmrpclassid" >Set New MRP</a> 
+                                                 
+                                            </td>
+                                        </tr>
+                                        
+                                        <?php }if (empty($query)) {
+                                        ?>
+                                        <tr>
+                                            <td colspan="4">No records found</td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="text-align:right;" class="box-tools">
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                                <?php echo $links; ?>
+                            </ul>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+<div class="modal fade" id="payment_model" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title">Edit Special Price</h4>
+                        </div>
+
+<form method="POST" role="form" id="testspricalform" accept-charset="utf-8">
+      <input type="hidden" name="id" value="" id="bid">
+      <input type="hidden" name="test_fk" value="" id="b_id">
+      <input type="hidden" name="lab_id" value="<?php echo $id; ?>" id="l_id">
+	  <input type="hidden" name="testtype" value="" id="testtype">
+	  
+                        <div class="modal-body">
+                               <div class="form-group">
+                                <label for="recipient-name" class="control-label">Special Price:</label>
+                                <input type="text" class="form-control" id="j_amount" name="price_special"  value="">
+                             
+                                <span style="color:red;" id="amount_error"></span>
+                            </div>
+                           
+                           
+                            
+                        </div>
+                        <div class="modal-footer">
+
+                            <!--                            <button type="button" class="btn btn-primary" id="amount_submit_btn" disabled="">Add</button>-->
+                    
+							<button type="Submit" class="btn btn-primary" >Submit</button>
+                            
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+    </form>                    </div>
+
+                </div>
+            </div>
+			
+	<div class="modal fade" id="payment_model1" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">×</button>
+                            <h4 class="modal-title">Edit New Test Price</h4>
+                        </div>
+
+<form method="POST" role="form" id="testspricalform1" accept-charset="utf-8">
+      <input type="hidden" name="id" value="" id="bid1">
+      <input type="hidden" name="test_fk" value="" id="b_id1">
+      <input type="hidden" name="lab_id" value="<?php echo $id; ?>" id="l_id1">
+	  <input type="hidden" name="testtype" value="" id="testtype1">
+	  
+                        <div class="modal-body">
+                               <div class="form-group">
+                                <label for="recipient-name" class="control-label">New Price:</label>
+                                <input type="text" class="form-control" id="j_amount1" name="price_special"  value="">
+                             
+                                <span style="color:red;" id="amount_error1"></span>
+                            </div>
+                           
+                           
+                            
+                        </div>
+                        <div class="modal-footer">
+
+                            <!--                            <button type="button" class="btn btn-primary" id="amount_submit_btn" disabled="">Add</button>-->
+                    
+							<button type="Submit" class="btn btn-primary" >Submit</button>
+                            
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+    </form>                    </div>
+
+                </div>
+            </div>		
+   
+         
+<script type="text/javascript">
+    $(function () {
+        $("#example1").dataTable();
+        $('#example3').dataTable({
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "iDisplayLength": 10,
+            "searching": false
+        });
+    });
+    function department_change(tid, did) {
+        var con = confirm('Are you sure you want to change department?');
+        if (con == true) {
+            var url = "<?php echo base_url()."b2b/";; ?>test_master/change_department";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {"tid": tid, "did": did}, // serializes the form's elements.
+                success: function (data)
+                {
+                    $("#msg_success").html("");
+                    $("#msg_success").html("Department Changed Successfully.");
+                    $("#profile_msg_suc").show();
+                    timeount();
+                }
+            });
+        }
+    }
+    function timeount() {
+        setTimeout(function () {
+            $("#profile_msg_suc").hide();
+        }, 5000);
+    }
+</script>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    $('.discount_id').click(function(){
+		/*  */
+		$('#b_id').val("");
+		$('#testtype').val("");
+		$('#j_amount').val("");
+
+		var product = $(this).data('id');
+		var splittest=product.split("_");
+		var testid=splittest[0];
+		var testtype=splittest[1];
+		var pricespi=splittest[2];
+		$('#b_id').val(testid);
+		$('#testtype').val(testtype);
+		$('#j_amount').val(pricespi);
+		$('#payment_model').modal('show');
+		/* $.ajax({
+            url:"<?php echo base_url();?>b2b/Logistic_master/new_edit/",
+            type:"POST",
+            data:{tid:product,lab_id:lab_id},
+            success:function(response){
+				
+				var json_data = JSON.parse(response);
+                console.log(json_data);
+                var bid = json_data.TID;
+                 var special = json_data.Special;
+                 var B_ID = json_data.BID;
+                 $('#bid').val(B_ID);
+                $('#b_id').val(bid);
+               
+                $('#j_amount').val(special);
+                $('#payment_model').modal('show');      
+            }
+        }); */
+      /*$('#payment_model').modal('show');*/
+  
+      
+    });
+ $('.newmrpclassid').click(function(){
+		/*  */
+		$('#b_id1').val("");
+		$('#testtype1').val("");
+		$('#j_amount1').val("");
+
+		var product = $(this).data('id');
+		var splittest=product.split("_");
+		var testid=splittest[0];
+		var testtype=splittest[1];
+		var pricespi=splittest[2];
+		$('#b_id1').val(testid);
+		$('#testtype1').val(testtype);
+		$('#j_amount1').val(pricespi);
+		$('#payment_model1').modal('show');
+		
+  
+      
+    });	
+  })
+</script>
+
+<script type="text/javascript">
+    function Submit_type(){
+       
+       var test =$('#b_id').val();
+       var lab_id = $('#l_id').val();
+       var sprice = $('#j_amount').val();
+	   var ttype=$('#testtype').val();
+     
+       $.ajax({
+        type:"POST",
+        url:"<?php echo base_url();?>b2b/Logistic_master/new_add_sub",
+        data:{test:test,lab_id:lab_id,sprice:sprice,ttype:ttype},
+         success:function(data){ 
+             if(data=='1'){   window.location.reload(); }
+              else{
+               $('#amount_error').html("Please Enter Price").show();
+             }
+            }
+       })
+    }
+	function Submit_type1(){
+       
+       var test =$('#b_id1').val();
+       var lab_id = $('#l_id1').val();
+       var sprice = $('#j_amount1').val();
+	   var ttype=$('#testtype1').val();
+     
+       $.ajax({
+        type:"POST",
+        url:"<?php echo base_url();?>b2b/Logistic_master/new_add_mrp",
+        data:{test:test,lab_id:lab_id,sprice:sprice,ttype:ttype},
+         success:function(data){ 
+		     if(data=='1'){   window.location.reload(); }
+              else{
+               $('#amount_error1').html("Please Enter Price").show();
+             }
+            }
+       })
+    }
+$("#testspricalform").on("submit", function(){
+  Submit_type();
+   return false;
+ });
+$("#testspricalform1").on("submit", function(){
+  Submit_type1();
+   return false;
+ }) 
+</script>
