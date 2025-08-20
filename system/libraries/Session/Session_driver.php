@@ -122,6 +122,7 @@ abstract class CI_Session_driver implements SessionHandlerInterface {
 	 */
 	protected function _cookie_destroy()
 	{
+		die('herere');
 		return setcookie(
 			$this->_config['cookie_name'],
 			NULL,

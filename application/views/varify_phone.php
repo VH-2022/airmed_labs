@@ -31,7 +31,7 @@
                                         <!--<a href="javascript:void(0);" onclick="resend_otp();">Resend OTP</a>--> 
                                         <a href="javascript:void(0);" id="resend_opt" style="display:none;" onclick="resend_otp();">Resend OTP</a>
                                         <a href="javascript:void(0);" id="mycounter"></a>
-                                        <button type="button" id="verify_btn" onclick="check_otp();" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Verify</button>
+                                        <button type="button" id="verify_btn" onclick="check_otp();" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Verify 123</button>
                                     </div>
                                 </div>
                             </div>
@@ -104,6 +104,7 @@ countdown( "mycounter", 2, 0 );
                 }
 
                 function check_otp() {
+                    alert('hello');
                     $("#otp_success").html("");
                     $("#otp_error").html("");
 					$("#verify_btn").prop("disabled", true);
