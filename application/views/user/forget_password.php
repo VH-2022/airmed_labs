@@ -8,16 +8,19 @@
                 <div class="col-sm-12 pdng_0">
                     <div class="col-sm-6">
                         <div class="login_main">
-                            <?php if (isset($getmsg1) != NULL) { ?>
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success fade in">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                    <?= $this->session->flashdata('success'); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if ($this->session->flashdata('error')): ?>
                                 <div class="alert alert-danger fade in">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-                                    <?php echo $getmsg1['0']; ?>
+                                    <?= $this->session->flashdata('error'); ?>
                                 </div>
-                                <!-- <div class="alert alert-danger">
-                                <?php echo $getmsg1['0']; ?>
-                                 </div> -->
-                            <?php } ?>
-
+                            <?php endif; ?>
 
                             <form action="<?php echo base_url(); ?>user_forget/index" method="post">
                                 <div class="login_dark_back">
@@ -27,10 +30,10 @@
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
                                             <span class="input-group-addon" style="">
-                                                <i class="fa fa-envelope"></i>
+                                                <i class="fa fa-phone"></i>
                                             </span>
-                                            <input class="form-control" type="text" name="email" placeholder="Enter Email" ></br>
-                                            <spam id="captch_error" style="color:red;"><?php echo form_error('email'); ?></spam>
+                                            <input class="form-control" maxlength="10" pattern="[0-9]{10}" title="Enter 10 digit mobile number"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text" name="phone_no" placeholder="Enter Phone No" ></br>
+                                            <spam id="captch_error" style="color:red;"><?php echo form_error('phone_no'); ?></spam>
                                         </div> 
 
                                     </div>
@@ -40,7 +43,7 @@
 
                                         <div class="input-group">
 
-                                            <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
+                                            <button type="submit" id="send_btn"  class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
                                         </div>
                                     </div>
                                     <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
@@ -97,8 +100,8 @@
 
 
     <script>
-        function recaptchaCallback() {
-            $('#send_btn').removeAttr('disabled');
-        }
-        ;
+        // function recaptchaCallback() {
+        //     $('#send_btn').removeAttr('disabled');
+        // }
+        // ;
     </script>

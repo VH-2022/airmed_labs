@@ -238,18 +238,41 @@ class Service_v2 extends CI_Controller {
             if ($row == 1) {
                 $user_info = $this->service_model->master_fun_get_tbl_val("user_change_phone", array('user_fk' => $id), array("id", "desc"));
                 $mobile = $user_info[0]['mobile'];
+                $patient_mob = "91" . $mobile;
                 $update = $this->service_model->master_fun_update("customer_master", $id, array("otp" => $OTP));
-                $sms_message = $this->user_master_model->master_fun_get_tbl_val("sms_master", array('status' => 1, "title" => "OTP"), array("id", "asc"));
-                $sms_message = preg_replace("/{{NAME}}/", ucfirst($name), $sms_message[0]["message"]);
-                $sms_message = preg_replace("/{{OTP}}/", $OTP, $sms_message);
-                $sms_message = preg_replace("/{{PRICE}}/", "", $sms_message);
-                $this->load->helper("sms");
-                $notification = new Sms();
-                $mb_length = strlen($mobile);
-                $notification->send($mobile, $sms_message);
-                //echo "<pre>"; print_r($user_info); die();
-                //$update = $this->service_model->master_fun_update("customer_master", $data[0]["id"], array("otp" => '', "mobile" => $user_info[0]["mobile"], "status" => "1", "active" => "1"));
-                //$data = $this->service_model->master_fun_get_tbl_val("customer_master", array("id" => $id), array("id", "asc"));
+                $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
+
+                $payload = [
+                    "template_name"  => "user_send_otp_04",
+                    "broadcast_name" => "Register OTP Airmed",
+                    "parameters"     => [
+                        [
+                            "name"  => "1",
+                            "value" => (string)$OTP
+                        ]
+                    ]
+                ];
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, [
+                    CURLOPT_URL            => 'https://live-server-1110.wati.io/api/v1/sendTemplateMessage?whatsappNumber=' . $patient_mob,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POST           => true,
+                    CURLOPT_POSTFIELDS     => json_encode($payload),
+                    CURLOPT_HTTPHEADER     => [
+                        'Authorization: Bearer ' . $bearer_token,
+                        'Content-Type: application/json'
+                    ],
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_SSL_VERIFYPEER => false
+                ]);
+
+                $response = curl_exec($curl);
+                $error    = curl_error($curl);
+                curl_close($curl);
+                curl_close($curl);
+
                 echo $this->json_data("1", "", "");
             } else {
                 echo $this->json_data("0", "Invalid OTP.", "");
