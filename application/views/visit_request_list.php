@@ -89,18 +89,27 @@
                                                 <td><?php echo $row['from_location']; ?> </td>
                                                 <td><?php echo $row['to_location']; ?></td>
                                                 <td><?php echo $row['trip_type']; ?></td>
-                                                <td><?php echo $row['kilometers']; ?></td>
                                                 <td>
-                                                    <?php 
-                                                      if($row['trip_type'] == "Single"){
-                                                        $show_price = $row['kilometers'] * $phlebo_km_wise_rs;
-                                                      }else{
-                                                        $multiple = $row['kilometers'] * 2;
-                                                        $show_price = $multiple * $phlebo_km_wise_rs;
-                                                      } 
-                                                      
-                                                      echo $show_price; 
-                                                    ?>
+                                                <?php 
+                                                    if ($row['trip_type'] === "Single") {
+                                                        echo $row['kilometers'];
+                                                    } else {
+                                                        echo $row['kilometers'] * 2;
+                                                    }
+                                                ?>
+                                                <td>
+                                                <?php 
+                                                    $kilometers = floatval($row['kilometers']);  
+                                                    $rate_per_km = floatval($phlebo_km_wise_rs); // price per km
+
+                                                    if ($row['trip_type'] === "Single") {
+                                                        $show_price = $kilometers * $rate_per_km;
+                                                    } else {
+                                                        $total_km = $kilometers * 2;
+                                                        $show_price = $total_km * $rate_per_km;
+                                                    }
+                                                    echo number_format($show_price, 2);  
+                                                ?>
                                                 </td>
                                                 <td><?php echo $row['request_type']; ?></td>
                                                 <td><?php echo $row['date']; ?></td>

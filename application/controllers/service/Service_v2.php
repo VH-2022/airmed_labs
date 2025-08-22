@@ -229,6 +229,36 @@ class Service_v2 extends CI_Controller {
         }
     }
 
+    // function resend_opt_newuser() {
+    //     $id = $this->input->get_post('id');
+    //     $OTP = rand(11111, 99999);
+    //     if ($id != NULL && $OTP != NULL) {
+    //         $row = $this->service_model->master_num_rows("customer_master", array("id" => $id));
+    //         $data = $this->service_model->master_fun_get_tbl_val("customer_master", array("id" => $id), array("id", "asc"));
+    //         if ($row == 1) {
+    //             $user_info = $this->service_model->master_fun_get_tbl_val("user_change_phone", array('user_fk' => $id), array("id", "desc"));
+    //             $mobile = $user_info[0]['mobile'];
+    //             $update = $this->service_model->master_fun_update("customer_master", $id, array("otp" => $OTP));
+    //             $sms_message = $this->user_master_model->master_fun_get_tbl_val("sms_master", array('status' => 1, "title" => "OTP"), array("id", "asc"));
+    //             $sms_message = preg_replace("/{{NAME}}/", ucfirst($name), $sms_message[0]["message"]);
+    //             $sms_message = preg_replace("/{{OTP}}/", $OTP, $sms_message);
+    //             $sms_message = preg_replace("/{{PRICE}}/", "", $sms_message);
+    //             $this->load->helper("sms");
+    //             $notification = new Sms();
+    //             $mb_length = strlen($mobile);
+    //             $notification->send($mobile, $sms_message);
+    //             //echo "<pre>"; print_r($user_info); die();
+    //             //$update = $this->service_model->master_fun_update("customer_master", $data[0]["id"], array("otp" => '', "mobile" => $user_info[0]["mobile"], "status" => "1", "active" => "1"));
+    //             //$data = $this->service_model->master_fun_get_tbl_val("customer_master", array("id" => $id), array("id", "asc"));
+    //             echo $this->json_data("1", "", "");
+    //         } else {
+    //             echo $this->json_data("0", "Invalid OTP.", "");
+    //         }
+    //     } else {
+    //         echo $this->json_data("0", "Parameter not passed", "");
+    //     }
+    // }
+
     function resend_opt_newuser() {
         $id = $this->input->get_post('id');
         $OTP = rand(11111, 99999);

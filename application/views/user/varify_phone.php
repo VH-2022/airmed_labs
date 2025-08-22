@@ -48,7 +48,9 @@
             <!--<button onclick="onTimer()">Clickme</button>
             <div id="mycounter"></div>-->
             <script>
-
+                $(document).ready(function() {
+    $(".set_wallet_div").addClass("aftr_login_hdr");
+});
 
 //new counter for 2.00min															
                 function countdown(elementName, minutes, seconds)

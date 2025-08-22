@@ -652,7 +652,6 @@ class CI_Session {
 	public function userdata($key = NULL)
 	{
 
-		// die('here');
 		if (isset($key))
 		{
 			return isset($_SESSION[$key]) ? $_SESSION[$key] : NULL;
@@ -718,7 +717,6 @@ class CI_Session {
 	 */
 	public function unset_userdata($key)
 	{
-		die('here');
 		if (is_array($key))
 		{
 			foreach ($key as $k)

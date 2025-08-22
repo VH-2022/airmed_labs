@@ -9,11 +9,20 @@
                     <div class="login_main">
                         <div class="login_dark_back">
                             <h1 class="txt_green_clr res_txt_grn">Mobile Number Verification</h1>
-                            <?php if (!empty($msg)) { ?>
-                                <div class="alert alert-success alert-dismissable">
-                                    <?= $msg; ?>
+                            <?php if ($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success fade in">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                    <?= $this->session->flashdata('success'); ?>
                                 </div>
-                            <?php } ?>
+                            <?php endif; ?>
+
+                            <?php if ($this->session->flashdata('error')): ?>
+                                <div class="alert alert-danger fade in">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                    <?= $this->session->flashdata('error'); ?>
+                                </div>
+                            <?php endif; ?>
+
                         </div>
                         <div class="login_light_back">
                             <div class="col-sm-12 pdng_0 mrgn_btm_25px">
@@ -42,8 +51,14 @@
         </div>
      
        
-
+          <!-- end main-content -->
+    <script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>
+    <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
+    <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
         <script>
+            $(document).ready(function() {
+    $(".set_wallet_div").addClass("aftr_login_hdr");
+});
             // Countdown function
             function countdown(elementName, minutes, seconds) {
                 var element = document.getElementById(elementName);

@@ -22,6 +22,7 @@
                                 </div>
                             <?php endif; ?>
 
+
                             <form action="<?php echo base_url(); ?>user_forget/index" method="post">
                                 <div class="login_dark_back">
                                     <h1 class="txt_green_clr res_txt_grn">Forgot Password</h1>
@@ -30,10 +31,10 @@
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
                                             <span class="input-group-addon" style="">
-                                                <i class="fa fa-phone"></i>
+                                                <i class="fa fa-envelope"></i>
                                             </span>
                                             <input class="form-control" maxlength="10" pattern="[0-9]{10}" title="Enter 10 digit mobile number"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text" name="phone_no" placeholder="Enter Phone No" ></br>
-                                            <spam id="captch_error" style="color:red;"><?php echo form_error('phone_no'); ?></spam>
+                                            <spam id="captch_error" style="color:red;"><?php echo form_error('email'); ?></spam>
                                         </div> 
 
                                     </div>
@@ -43,7 +44,7 @@
 
                                         <div class="input-group">
 
-                                            <button type="submit" id="send_btn"  class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
+                                            <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
                                         </div>
                                     </div>
                                     <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
@@ -100,8 +101,8 @@
 
 
     <script>
-        // function recaptchaCallback() {
-        //     $('#send_btn').removeAttr('disabled');
-        // }
-        // ;
+        function recaptchaCallback() {
+            $('#send_btn').removeAttr('disabled');
+        }
+        ;
     </script>

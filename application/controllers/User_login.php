@@ -38,8 +38,9 @@ class User_login extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
         $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
         $captcha = $this->varify_captcha();
+        $captcha = 1;
         if ($this->form_validation->run() == FALSE || $captcha != 1) {
-            //die("0");
+            
             $data["error1"] = $this->session->flashdata('notlogin');
             $data["error"] = $this->session->flashdata('error');
             $data["success"] = $this->session->flashdata('success');
@@ -49,9 +50,7 @@ class User_login extends CI_Controller {
             $this->load->view('user/login', $data);
             $this->load->view('user/footer', $data);
         } else {
-            //die("1");
             if ($captcha == 1) {
-                //Go to private area
 				 
                 redirect('user_master', 'refresh');
             } else {

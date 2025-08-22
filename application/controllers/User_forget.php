@@ -19,7 +19,41 @@ class User_forget extends CI_Controller {
         $util->app_track();
     }
 
-    //comment by rohit
+    public function test_mail_config() {
+        $this->load->library('email');
+        print_r($this->email);
+    }
+
+    public function send_test_mail()
+    {
+        $this->load->library('email');
+        
+        $config = array(
+            'protocol'  => 'mail',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_port' => 587,
+            'smtp_user' => 'meetbhavsar.vhits@gmail.com', 
+            'smtp_pass' => 'iebwttlkwzwwvryu',         
+          
+        );
+        $this->email->initialize($config);
+
+        // Email details
+        $this->email->from('meetbhavsar.vhits@gmail.com', 'CI Test Mail');
+        $this->email->to('rohit@yopmail.com'); // Test recipient
+        $this->email->subject('CodeIgniter Test Mail');
+        $this->email->message('HH');
+
+        // Send
+        if ($this->email->send()) {
+            echo "✅ Test email sent successfully!";
+        } else {
+            echo "❌ Failed to send.<br>";
+            echo $this->email->print_debugger(); // Debug output
+        }
+    }
+
+    
     // function index() {
     //     $this->load->helper("Email");
     //     $email_cnt = new Email;
@@ -72,11 +106,10 @@ class User_forget extends CI_Controller {
     //     }
     // }
 
-    //new added by rohit
-     function index() {
+    function index() {
         $this->form_validation->set_rules('phone_no', 'Mobile no', 'trim|required');
-        // $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
-        // $captch = $this->varify_captcha();
+        $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
+        $captch = $this->varify_captcha();
         $captch = 1;
         $OTP = rand(11111, 99999);
         if ($this->form_validation->run() == FALSE||$captch!=1) {
@@ -84,14 +117,16 @@ class User_forget extends CI_Controller {
             if ($this->session->userdata('getmsg1') != null) {
                 $data['getmsg1'] = $this->session->userdata("getmsg1");
                 $this->session->unset_userdata('getmsg1');
-            }$this->load->view('user/header', $data);
+            }
+            $data['red_header_active'] = "2";
+            $this->load->view('user/header', $data);
             $this->load->view('user/forget_password', $data);
             $this->load->view('user/footer');
         } else {
             $phone_no = $this->input->post('phone_no');
             $check_phone = $this->master_model->master_num_rows("customer_master", array("mobile" => $phone_no, 'status' => '1'));
             if ($check_phone == '0') {
-                $this->session->set_userdata('getmsg1', array("Invalid Phone No Please Check It!"));
+                $this->session->set_flashdata('error', "Entered mobile number is not registered. Please check!");
                 redirect('user_forget', 'refresh');
             }
 
@@ -107,8 +142,9 @@ class User_forget extends CI_Controller {
 
             // send OTP on WhatsApp
             $response = $this->send_whatsapp_otp($phone_no, $OTP);
-            
+           
             if ($response['status'] == true) {
+                 
                 $this->session->set_flashdata('success', 'OTP has been sent to your WhatsApp number.');            
                 redirect('user_forget/verify_otp/'.$phone_no);
             } else {
@@ -176,6 +212,8 @@ class User_forget extends CI_Controller {
         }
 
         $data['phone_no'] = $phone_no;
+        $data['red_header_active'] = "2";
+        
         $this->load->view('user/header');
         $this->load->view('user/varify_otp', $data);
         $this->load->view('user/footer');
@@ -253,7 +291,6 @@ class User_forget extends CI_Controller {
             ]);
         }
     }
-
 
     function varify_captcha() {
         $recaptchaResponse = trim($this->input->get_post('g-recaptcha-response'));
