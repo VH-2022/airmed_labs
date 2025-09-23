@@ -18,12 +18,12 @@
 
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
-        <link href="<?php echo base_url(); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" />
+        <!-- <link href="<?php //echo base_url(); ?>plugins/bootstrap-datepicker/css/datepicker.css" rel="stylesheet" /> -->
         <link href="<?php echo base_url(); ?>dist/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url(); ?>plugins/iCheck/all.css" rel="stylesheet" type="text/css" />
         <!-- DATA TABLES -->
         <link href="<?php echo base_url(); ?>plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo base_url(); ?>assets/summernote/summernote.css" rel="stylesheet" type="text/css" />
+        <!-- <link href="<?php //echo base_url(); ?>assets/summernote/summernote.css" rel="stylesheet" type="text/css" /> -->
         <script src="<?php echo base_url(); ?>plugins/jQuery/jQuery-2.1.4.min.js"></script>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

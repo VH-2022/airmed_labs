@@ -308,8 +308,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url(); ?>dist/js/demo.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>js/admin.js" type="text/javascript"></script>
-<script src="<?= base_url(); ?>assets/summernote/summernote.js"></script>
-<script src="<?= base_url(); ?>assets/js/pages/forms.js"></script>
+<!-- <script src="<?php //base_url(); ?>assets/summernote/summernote.js"></script> -->
+<!-- <script src="<?php //base_url(); ?>assets/js/pages/forms.js"></script> -->
 
 <!-- Bootstrap 3.3.2 JS -->
 
@@ -789,7 +789,7 @@
     }
 </script>
 <script type="text/javascript" src="<?php echo base_url(); ?>user_assets/chosen/chosen.jquery.js"></script>
-<script src="http://websitedemo.co.in/phpdemoz/patholab/js/typeahead.min.js"></script>
+<!-- <script src="http://websitedemo.co.in/phpdemoz/patholab/js/typeahead.min.js"></script> -->
 <script type="text/javascript">
     $.ajax({
     url:'<?php echo base_url(); ?>Notification_Master/view',
