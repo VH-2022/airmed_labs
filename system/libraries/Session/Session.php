@@ -718,7 +718,7 @@ class CI_Session {
 	 */
 	public function unset_userdata($key)
 	{
-		die('here');
+		// die('here');
 		if (is_array($key))
 		{
 			foreach ($key as $k)

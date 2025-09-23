@@ -610,7 +610,7 @@ $this->db->update('employer_master',$data1);
 		
 	}
 	   function logout() {
-        $this->session->sess_destroy();
+       // $this->session->sess_destroy();
 		
 			$this->load->view('employer/header');
        redirect('Employerr/Employer/login',"refresh");

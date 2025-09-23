@@ -36,10 +36,11 @@ function is_lablogin() {
 }
 
 function loginuser() {
+    
     $CI = & get_instance();
 
     $CI->load->library('session');
-
+    
     return $CI->session->userdata('logged_in_user');
 }
 

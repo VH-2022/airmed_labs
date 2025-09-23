@@ -24,6 +24,7 @@ class Login extends CI_Controller {
     }
 
     function index() {
+        
         $data = '';
         if ($this->session->userdata('getmsg') != null) {
             $data['getmsg'] = $this->session->userdata("getmsg");
@@ -101,7 +102,7 @@ class Login extends CI_Controller {
                             'type' => $check_master_otp[0]["type"],
                             'permissions' => $permissions,
                         );
-
+                       
                         $this->session->set_userdata('logged_in', $sess_array);
                         echo json_encode(array("status" => "3", "msg" => "","type" => $check_master_otp[0]["type"]));
                         die();

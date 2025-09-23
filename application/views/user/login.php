@@ -35,9 +35,9 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12 pdng_0 ">
-                                        <script src='https://www.google.com/recaptcha/api.js'></script>
-                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
-                                        <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
+                                        <!-- <script src='https://www.google.com/recaptcha/api.js'></script> -->
+                                        <!-- <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
+                                        <spam id="captch_error" style="color:red;"><?php //echo form_error('g-recaptcha-response'); ?></spam> -->
 										<div class="form-group col-sm-4 pdng_0 pull-right">
                                             <div class="">
                                                 <a class="login_forgot" href="<?php echo base_url(); ?>user_forget" style="text-align:right;display:block;">Forgot Password?</a>
@@ -47,7 +47,8 @@
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="col-sm-3 pdng_0 pull-right">
-                                            <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button>
+                                            <!-- <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button> -->
+                                             <button type="submit" id="send_btn" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button>
                                         </div>
                                     </div>
 
@@ -139,7 +140,8 @@
         }
     </style>
     <script>
-                                    function recaptchaCallback() {
-                                        $('#send_btn').removeAttr('disabled');
-                                    }
+        // function recaptchaCallback() {
+        //     $('#send_btn').removeAttr('disabled');
+        // }
     </script>
+    

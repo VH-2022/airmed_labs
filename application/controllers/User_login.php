@@ -8,11 +8,14 @@ class User_login extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('user_login_model');
-        /* pinkesh code start */
         $this->load->model('user_master_model');
+        $this->load->library('session');   
+        if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
         $data['links'] = $this->user_master_model->master_fun_get_tbl_val("patholab_home_master", array("status" => 1), array("id", "asc"));
         $this->data['all_links'] = $data['links'];
-        /* pinkesh code start */
         $this->app_track();
     }
 	function app_track() {
@@ -21,8 +24,21 @@ class User_login extends CI_Controller {
         $util->app_track();
     }
 
+      public function set() {
+        $this->session->set_userdata('getmsg', 'Hello World');
+        echo "Session set!";
+    }
+
+    public function get() {
+        echo "<pre>";
+        print_r($this->session->all_userdata());
+    }   
+
     function index() {
-        $data = '';
+        phpinfo();
+        $this->session->set_userdata('getmsg', 'Your message here');
+        
+        $data = '';        
         if ($this->session->userdata('getmsg') != null) {
             $data['getmsg'] = $this->session->userdata("getmsg");
             $this->session->unset_userdata('getmsg');
@@ -32,28 +48,35 @@ class User_login extends CI_Controller {
             $this->session->unset_userdata('getmsg1');
         }
         $data["success"] = $this->session->flashdata('success');
+
         $this->load->library('form_validation');
 		
         $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
-        $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
-        $captcha = $this->varify_captcha();
+        // $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
+        // $captcha = $this->varify_captcha();
+        $captcha = 1;
+        
         if ($this->form_validation->run() == FALSE || $captcha != 1) {
-            //die("0");
+            
             $data["error1"] = $this->session->flashdata('notlogin');
             $data["error"] = $this->session->flashdata('error');
             $data["success"] = $this->session->flashdata('success');
 			$data['red_header_active'] = "2";
             /* Nishit capcha end */
+            
             $this->load->view('user/header', $data);
             $this->load->view('user/login', $data);
             $this->load->view('user/footer', $data);
         } else {
-            //die("1");
             if ($captcha == 1) {
-                //Go to private area
-				 
-                redirect('user_master', 'refresh');
+
+                
+
+                 print_r($this->session->userdata("logged_in_user"));
+                // die;
+                // $this->check_session();
+                redirect('User_master', 'refresh');
             } else {
 				$this->session->unset_userdata('logged_in_user');
                 $this->session->set_userdata('captcha2', "invalid captcha.please enter valid captcha!");
@@ -62,6 +85,7 @@ class User_login extends CI_Controller {
             }
         }
     }
+
     function varify_captcha() {
         $recaptchaResponse = trim($this->input->get_post('g-recaptcha-response'));
         $google_url = "https://www.google.com/recaptcha/api/siteverify";
@@ -83,6 +107,8 @@ class User_login extends CI_Controller {
             return 0;
         }
     }
+
+
     function verify_login() {
         $this->load->library('form_validation');
 
@@ -114,15 +140,11 @@ class User_login extends CI_Controller {
     }
 
     function check_database($password) {
-        // $this->load->library('session');
-        //Field validation succeeded.  Validate against database
+        $this->load->library('session');
         $username = $this->input->post('email');
-
         //query the database
         $result = $this->user_login_model->checklogin($username, $password);
-        //print_R($result) ;DIE();
         if ($result) {
-
             $sess_array = array();
             foreach ($result as $row) {
                 if ($row->mobile == '') {
@@ -133,7 +155,7 @@ class User_login extends CI_Controller {
                     'name' => $row->full_name,
                     'type' => $row->type,
                 );
-                $this->session->set_userdata('logged_in_user', $sess_array);
+                $this->session->set_userdata("logged_in_user", $sess_array);
             }
             return TRUE;
         } else {
@@ -231,6 +253,9 @@ class User_login extends CI_Controller {
 
     function google_login() {
 
+
+$all_session_data = $this->session->all_userdata();
+print_r($all_session_data); die;
         $name = $this->input->post('name');
         $id = $this->input->post('id');
         $email = $this->input->post('email');

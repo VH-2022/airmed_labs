@@ -39,7 +39,7 @@ class Admin extends CI_Controller
         $this->load->helper('string');
 
         if (!is_loggedin()) {
-
+            
             redirect('login');
         }
     }
@@ -392,7 +392,8 @@ class Admin extends CI_Controller
 
     function test()
     {
-
+        echo "<pre>";
+        print_r('test');
         if (!is_loggedin()) {
 
             redirect('login');
@@ -403,7 +404,8 @@ class Admin extends CI_Controller
 
 
         $data["login_data"] = logindata();
-
+        print_r($data['login_data']);
+        exit();
         $this->load->library("util");
         $util = new Util;
 
