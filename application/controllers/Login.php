@@ -24,7 +24,7 @@ class Login extends CI_Controller {
     }
 
     function index() {
-        
+
         $data = '';
         if ($this->session->userdata('getmsg') != null) {
             $data['getmsg'] = $this->session->userdata("getmsg");
@@ -47,7 +47,7 @@ class Login extends CI_Controller {
     }
 
     function verify_login() {
-        
+
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
@@ -62,10 +62,10 @@ class Login extends CI_Controller {
             $result = $this->login_model->checklogin($email, $password);
             if (!empty($result)) {
 
-                $techbranch = $this->login_model->get_val("select ub.*,br.branch_type_fk 
-                        from user_branch as ub 
-                        LEFT JOIN branch_master as br on br.id = ub.branch_fk  and br.status='1' 
-                        where ub.user_fk='" . $result[0]->id . "' and ub.status='1' 
+                $techbranch = $this->login_model->get_val("select ub.*,br.branch_type_fk
+                        from user_branch as ub
+                        LEFT JOIN branch_master as br on br.id = ub.branch_fk  and br.status='1'
+                        where ub.user_fk='" . $result[0]->id . "' and ub.status='1'
                         AND br.branch_type_fk='6'");
                 $log = array(
                     'user_id' => $result[0]->id,
@@ -91,7 +91,7 @@ class Login extends CI_Controller {
                     }
                     /* NISHIT CODEING START */
                     if ($check_master_otp[0]["login_type"] == 0) {
-                        $check_master_otp = $this->login_model->master_fun_get_tbl_val("admin_master", array('id' => $result[0]->id), array("id", "asc"));  
+                        $check_master_otp = $this->login_model->master_fun_get_tbl_val("admin_master", array('id' => $result[0]->id), array("id", "asc"));
 
                         $branch_data = $this->login_model->get_val("select ub.*,br.branch_type_fk from user_branch as ub LEFT JOIN branch_master as br on br.id = ub.branch_fk  and br.status='1' where ub.user_fk='" . $check_master_otp[0]["id"] . "' and ub.status='1'");
                         $sess_array = array(
@@ -102,7 +102,7 @@ class Login extends CI_Controller {
                             'type' => $check_master_otp[0]["type"],
                             'permissions' => $permissions,
                         );
-                       
+
                         $this->session->set_userdata('logged_in', $sess_array);
                         echo json_encode(array("status" => "3", "msg" => "","type" => $check_master_otp[0]["type"]));
                         die();
@@ -164,7 +164,7 @@ class Login extends CI_Controller {
     }
 
     function check_otp() {
-       
+
         $AdmnOtpChk = $this->session->userdata('AdmnOtpChk');
         $id = $AdmnOtpChk[0];
         $otp = $this->input->get_post('otp');

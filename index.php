@@ -29,18 +29,18 @@ function getUserIP()
 
 
 $user_ip = getUserIP();
-		
+
 	if (isset($_REQUEST['debugt']) && $_REQUEST['debugt'] == 1) {
 		echo $user_ip;
-		define('ENVIRONMENT',  'development');  
+		define('ENVIRONMENT',  'development');
 	}
-	
-	if($user_ip=='43.243.38.9612'){ 
-	
-		define('ENVIRONMENT',  'development');  
+
+	if($user_ip=='43.243.38.9612'){
+
+		define('ENVIRONMENT',  'development');
 	}else{
-			
-		define('ENVIRONMENT',  'development');  
+
+		define('ENVIRONMENT',  'development');
 	}
 
 switch (ENVIRONMENT)
@@ -56,7 +56,7 @@ ini_set('display_errors', 0);
 	case 'production':
 		ini_set('display_errors', 0);
 			error_reporting(0);
-		
+
 	break;
 
 	default:
