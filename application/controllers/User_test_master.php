@@ -36,6 +36,12 @@ class User_test_master extends CI_Controller {
         $util->app_track();
     }
 
+    function index(){
+         echo "<pre>";
+        print_r($this->session->userdata('logged_in_user'));
+        exit();
+    }
+
     /* function index() {
       //echo "here"; die();
 

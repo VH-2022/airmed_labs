@@ -14,7 +14,7 @@ $config['charset'] = 'UTF-8';
 $config['enable_hooks'] = true;
 $config['subclass_prefix'] = 'MY_';
 $config['composer_autoload'] = FALSE;
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-,()'; 
+$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-,()';
 $config['allow_get_array'] = TRUE;
 $config['enable_query_strings'] = FALSE;
 $config['controller_trigger'] = 'c';
@@ -62,7 +62,7 @@ $config['title'] = "AirmedLabs";
 $config['payumoneydetail'] = array('MERCHANT_KEY' => 'IcZRGO7S', 'SALT' => 'spjyl2ubfa', 'MERCHANT_ID' => '5669867',"URL"=>'https://secure.payu.in',"service_provider" => "payu_paisa");//Live
 $config['admin_booking_email'] = 'booking.airmed@gmail.com';
 $config['admin_report_sms'] = array('9879572294','9979774646','8511195347');
-$config['admin_alert_phone'] = array('8511153892','8511195347', '9726689090'); 
+$config['admin_alert_phone'] = array('8511153892','8511195347', '9726689090');
 $config['booking_alert_phone'] = array('9898463664','9726689090','9979774646','8511153892','7878015433');
 $config['sample_not_collect_alert'] = array('9898463664','9726689090','9979774646','8511153892');
 $config['phlebo_accept_job_alert'] = array('9898463664','9726689090','9979774646','8511153892');

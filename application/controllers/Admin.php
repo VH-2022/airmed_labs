@@ -133,12 +133,20 @@ class Admin extends CI_Controller
 
     public function test()
     {
+<<<<<<< HEAD
         if (! is_loggedin()) {
+=======
+        echo "<pre>";
+        print_r('test');
+        if (!is_loggedin()) {
+
+>>>>>>> 41be0cd32ac1d511419f632988e26b03a5b224b0
             redirect('login');
         }
 
         $data["login_data"] = logindata();
-
+        print_r($data['login_data']);
+        exit();
         $this->load->library("util");
         $util     = new Util;
         $login_id = $data["login_data"]['id'];

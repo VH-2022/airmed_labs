@@ -195,15 +195,19 @@
                                             $("#send_btn").attr("disabled", "disabled");
                                         },
                                         success: function (data) {
+                                            
                                             var json_data = JSON.parse(data);
                                       
                                             
                                             if (json_data.status == '3') {
+                                                console.log(data);
+                                            
                                                 if(json_data.type ==10){
                                                     setTimeout(function () {
                                                     window.location = '<?= base_url() ?>job-master/pending-list';
                                                                         }, 1000);
                                                 }else{
+                                                   
                                                 setTimeout(function () {
                                                     window.location = '<?= base_url() ?>Dashboard?id=<?php echo time(); ?>';
                                                                         }, 1000);

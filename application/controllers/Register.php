@@ -1,11 +1,14 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (! defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 
-class Register extends CI_Controller {
+class Register extends CI_Controller
+{
 
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('register_model');
         $this->load->library('form_validation');
@@ -14,29 +17,32 @@ class Register extends CI_Controller {
         $this->load->helper('string');
         /* pinkesh code start */
         $this->load->model('user_master_model');
-        $data['links'] = $this->user_master_model->master_fun_get_tbl_val("patholab_home_master", array("status" => 1), array("id", "asc"));
+        $data['links']           = $this->user_master_model->master_fun_get_tbl_val("patholab_home_master", ["status" => 1], ["id", "asc"]);
         $this->data['all_links'] = $data['links'];
         /* pinkesh code start */
         $this->app_track();
     }
 
-    function app_track() {
+    public function app_track()
+    {
         $this->load->library("Util");
         $util = new Util();
         $util->app_track();
     }
 
-    function checkmobile($mobile) {
+    public function checkmobile($mobile)
+    {
         $result = $this->user_master_model->checkemail($mobile);
         if ($result >= 1) {
             $this->form_validation->set_message('checkmobile', 'Mobile Number Already Exists!');
             return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
-    function checkmobilebyadmin() {
+    public function checkmobilebyadmin()
+    {
         $mobile = $this->input->post('mobile');
         $result = $this->user_master_model->checkemail($mobile);
         if ($result >= 1) {
@@ -46,7 +52,8 @@ class Register extends CI_Controller {
         }
     }
 
-    function checkemailbyadmin() {
+    public function checkemailbyadmin()
+    {
         $mobile = $this->input->post('email');
         $result = $this->user_master_model->checkemail1($mobile);
         if ($result >= 1) {
@@ -59,7 +66,7 @@ class Register extends CI_Controller {
     // function index() {
     //     $this->load->helper("Email");
     //     $email_cnt = new Email;
-        
+
     //     $data["test_city"] = $this->register_model->master_fun_get_tbl_val("test_cities", array("status" => "1"), array("name", "asc"));
     //     $data["success"] = $this->session->flashdata('success');
     //     $data["unsuccess"] = $this->session->flashdata('unsuccess');
@@ -78,7 +85,7 @@ class Register extends CI_Controller {
     //     $captcha = $this->varify_captcha();
     //     $captcha = 1;
     //     if ($this->form_validation->run() != FALSE && $captcha == 1) {
-    //         //die("1"); 
+    //         //die("1");
     //         $email = $this->input->post('email');
     //         $name = $this->input->post('name');
     //         $password = $this->input->post('password');
@@ -106,7 +113,6 @@ class Register extends CI_Controller {
     //             $sms_message = preg_replace("/{{NAME}}/", ucfirst($name), $sms_message[0]["message"]);
     //             $sms_message = preg_replace("/{{OTP}}/", $OTP, $sms_message);
     //             $sms_message = preg_replace("/{{PRICE}}/", "", $sms_message);
-               
     //             $this->load->helper("sms");
     //             $notification = new Sms();
     //             $mb_length = strlen($mobile);
@@ -129,12 +135,12 @@ class Register extends CI_Controller {
     //                     $get_phone = substr($mobile, 1);
     //                     $notification::send($get_phone, $sms_message);
     //                 }
-      
+
 
 	// 			}
-			
+
 	// 		 if (!empty($data)) {
-	// 			}            
+	// 			}
     //             /* Nishit send sms code end */
     //             /* Nishit code end */
     //             $this->session->set_flashdata("success", array("Registration Successfully.Please Check Your email for confirm Your Account"));
@@ -156,7 +162,7 @@ class Register extends CI_Controller {
     //             'img_path' => './captcha/',
     //             'img_url' => base_url() . 'captcha/',
     //             'img_width' => 140,
-    //             'img_height' => 32, 
+    //             'img_height' => 32,
     //             'expiration' => 7200
     //         );
     //         $data['captcha'] = create_captcha($vals);
@@ -234,8 +240,8 @@ class Register extends CI_Controller {
 
                 /* ===== Send OTP on WhatsApp using WATI ===== */
 
-                $patient_mob  = "91" . $mobile; 
-                
+                $patient_mob  = "91" . $mobile;
+
                 // make sure it has country code 91xxxxxxxxxx
                 $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
 
@@ -307,107 +313,100 @@ class Register extends CI_Controller {
 		$email_cnt = new Email;
 		$id = $this->input->get_post('id');
         $otp = $this->input->get_post('otp');
+
         if ($id != "" && $otp != "") {
-			$row = $this->service_model->master_num_rows("customer_master", array("id" => $id, "otp" => $otp));
-			
-            $data = $this->service_model->master_fun_get_tbl_val("customer_master", array("id" => $id), array("id", "asc"));
-      	
-			if ($row == 1) {
-				
-				
-                $user_info = $this->service_model->master_fun_get_tbl_val("user_change_phone", array('user_fk' => $id), array("id", "desc"));
-                
-				$update = $this->service_model->master_fun_update("customer_master", $data[0]["id"], array("otp" => '', "mobile" => $user_info[0]["mobile"], "status" => "1", "active" => "1"));
-                $data = $this->service_model->master_fun_get_tbl_val("customer_master", array("id" => $id), array("id", "asc"));
-                $referral = $this->service_model->master_fun_get_tbl_val("refer_code_master", array("cust_fk" => $id), array("id", "asc"));
-				
+            $row = $this->service_model->master_num_rows("customer_master", ["id" => $id, "otp" => $otp]);
 
-			if(count($referral)>0){
+            $data = $this->service_model->master_fun_get_tbl_val("customer_master", ["id" => $id], ["id", "asc"]);
 
-				if($referral[0]['used_code']!=""){
-				  $data_referral = $this->register_model->master_fun_get_tbl_val("refer_code_master", array("refer_code" => $referral[0]['used_code']), array("id", "asc"));
-              	
-					
-						//	$insert_code = $this->register_model->master_fun_insert("refer_code_master", array("cust_fk" => $insert, "refer_code" => $code, "used_code" => $usedcode));
-                // code for refer price
-				if(count($data_referral)>0){
-				$dataRef = $this->service_model->master_fun_get_tbl_val("customer_master", array("id" => $data_referral[0]['cust_fk']), array("id", "asc"));
-                
-                 $refemail = $dataRef[0]['email'];
-                    $ref_name = $dataRef[0]['full_name'];
-                     $query = $this->register_model->master_fun_get_tbl_val("wallet_master", array("status" => 1, "cust_fk" => $custfk), array("id", "desc"));
-                    $total = $query[0]['total'];
-                    $total+=100;
-					$dataIn = array(
-                        "cust_fk" => $dataRef[0]['id'],
-                        "credit" => 100,
-                        "total" => $total,
-                        "type" => "referral code",
-                        "created_time" => date('Y-m-d H:i:s')
-                    );
-					
-					$insert1 = $this->register_model->master_fun_insert("wallet_master", $dataIn);
-                    
-					
-					$dataIn = array(
-                        "cust_fk" => $id,
-                        "credit" => 100,
-                        "total" => 100,
-                        "type" => "referral code",
-                        "created_time" => date('Y-m-d H:i:s')
-                    );
-                    $insert1 = $this->register_model->master_fun_insert("wallet_master", $dataIn);
-                    $config['mailtype'] = 'html';
-                    $this->email->initialize($config);
-                    $message = '<div style="padding:0 4%;">
+            if ($row == 1) {
+
+                $user_info = $this->service_model->master_fun_get_tbl_val("user_change_phone", ['user_fk' => $id], ["id", "desc"]);
+
+                $update   = $this->service_model->master_fun_update("customer_master", $data[0]["id"], ["otp" => '', "mobile" => $user_info[0]["mobile"], "status" => "1", "active" => "1"]);
+                $data     = $this->service_model->master_fun_get_tbl_val("customer_master", ["id" => $id], ["id", "asc"]);
+                $referral = $this->service_model->master_fun_get_tbl_val("refer_code_master", ["cust_fk" => $id], ["id", "asc"]);
+
+                if (count($referral) > 0) {
+
+                    if ($referral[0]['used_code'] != "") {
+                        $data_referral = $this->register_model->master_fun_get_tbl_val("refer_code_master", ["refer_code" => $referral[0]['used_code']], ["id", "asc"]);
+
+                        //	$insert_code = $this->register_model->master_fun_insert("refer_code_master", array("cust_fk" => $insert, "refer_code" => $code, "used_code" => $usedcode));
+                        // code for refer price
+                        if (count($data_referral) > 0) {
+                            $dataRef = $this->service_model->master_fun_get_tbl_val("customer_master", ["id" => $data_referral[0]['cust_fk']], ["id", "asc"]);
+
+                            $refemail = $dataRef[0]['email'];
+                            $ref_name = $dataRef[0]['full_name'];
+                            $query    = $this->register_model->master_fun_get_tbl_val("wallet_master", ["status" => 1, "cust_fk" => $custfk], ["id", "desc"]);
+                            $total    = $query[0]['total'];
+                            $total += 100;
+                            $dataIn = [
+                                "cust_fk"      => $dataRef[0]['id'],
+                                "credit"       => 100,
+                                "total"        => $total,
+                                "type"         => "referral code",
+                                "created_time" => date('Y-m-d H:i:s'),
+                            ];
+
+                            $insert1 = $this->register_model->master_fun_insert("wallet_master", $dataIn);
+
+                            $dataIn = [
+                                "cust_fk"      => $id,
+                                "credit"       => 100,
+                                "total"        => 100,
+                                "type"         => "referral code",
+                                "created_time" => date('Y-m-d H:i:s'),
+                            ];
+                            $insert1            = $this->register_model->master_fun_insert("wallet_master", $dataIn);
+                            $config['mailtype'] = 'html';
+                            $this->email->initialize($config);
+                            $message = '<div style="padding:0 4%;">
                     <h4><b>You have one more refferal</b></h4>
                         <p>Dear, ' . ucfirst($ref_name) . '</p>
                         <p style="color:#7e7e7e;font-size:13px;">Congratulation You have One more refferal  </p>
                         <p style="color:#7e7e7e;font-size:13px;">Rs.100 has been Credited in your wallet</p>
                 </div>';
-                    $message = $email_cnt->get_design($message);
-                    $this->email->to($refemail);
-                    $this->email->from("donotreply@airmedpathlabs.com", "AirmedLabs");
-                    $this->email->subject("Refferal Amount Credited");
-                    $this->email->message($message);
-                    $this->email->send();
-			}
-            	}
-				}
-    
+                            $message = $email_cnt->get_design($message);
+                            $this->email->to($refemail);
+                            $this->email->from("donotreply@airmedpathlabs.com", "AirmedLabs");
+                            $this->email->subject("Refferal Amount Credited");
+                            $this->email->message($message);
+                            $this->email->send();
+                        }
+                    }
+                }
+
                 $config['mailtype'] = 'html';
                 $this->email->initialize($config);
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Confirm Your Register</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;font-weight: bold;">Dear ' . $name . ',</p>
-                        
+
                         <p style="color:#7e7e7e;font-size:13px;">Please confirm Your Email to get all services provided by Airmed PATH LAB</p>
 								<a href="' . base_url() . 'register/confirm_email/' . $confirm_code . '" style="background: rgb(103, 177, 163) none repeat scroll 0 0;color: #f9f9f9;padding: 1%;text-decoration: none;">Confirm</a>
                 </div>';
-			    $message = $email_cnt->get_design($message);
+                $message = $email_cnt->get_design($message);
                 $this->email->to($data[0]["email"]);
-//$this->email->to("jeel@virtualheight.com");
                 $this->email->from("donotreply@airmedpathlabs.com", 'AirmedLabs');
                 $this->email->subject("Please Confirm Your Register for AirmedLabs");
                 $this->email->message($message);
-                //$this->email->send();
-                /* Nishit code start */
-                /* Nishit send sms code start */
-                $sms_message = $this->user_master_model->master_fun_get_tbl_val("sms_master", array('status' => 1, "title" => "OTP"), array("id", "asc"));
+                $sms_message = $this->user_master_model->master_fun_get_tbl_val("sms_master", ['status' => 1, "title" => "OTP"], ["id", "asc"]);
                 $sms_message = preg_replace("/{{NAME}}/", ucfirst($name), $sms_message[0]["message"]);
                 $sms_message = preg_replace("/{{OTP}}/", $OTP, $sms_message);
                 $sms_message = preg_replace("/{{PRICE}}/", "", $sms_message);
-                $sms_message="Welcome To Airmed PATH LAB. Thank you For Register.";
-				$this->load->helper("sms");
+                $sms_message = "Welcome To Airmed PATH LAB. Thank you For Register.";
+                $this->load->helper("sms");
                 $notification = new Sms();
-				$mobie=$data[0]['mobile'];
-                $mb_length = strlen($mobile);
-				
+                $mobie        = $data[0]['mobile'];
+                $mb_length    = strlen($mobile);
+
                 if ($mb_length == 10) {
                     $notification->send($mobile, $sms_message);
                 }
                 if ($mb_length == 11 || $mb_length == 12 || $mb_length == 13) {
-                    $check_phone = substr($mobile, 0, 2);
+                    $check_phone  = substr($mobile, 0, 2);
                     $check_phone1 = substr($mobile, 0, 1);
                     $check_phone2 = substr($mobile, 0, 3);
                     if ($check_phone2 == '+91') {
@@ -422,37 +421,37 @@ class Register extends CI_Controller {
                         $get_phone = substr($mobile, 1);
                         $notification::send($get_phone, $sms_message);
                     }
-      
 
-				}
-				
-				echo $this->json_data("1", "", $data);
-				
+                }
+
+                echo $this->json_data("1", "", $data);
+
             } else {
                 echo $this->json_data("0", "Invalid OTP.", "");
             }
         } else {
             echo $this->json_data("0", "Parameter not passed", "");
         }
-   
-				
-				
-	}
-	 function json_data($status, $error_msg, $data = NULL) {
-        if ($data == NULL) {
-            $data = array();
+
+    }
+
+    public function json_data($status, $error_msg, $data = null)
+    {
+        if ($data == null) {
+            $data = [];
         }
-        $final = array("status" => $status, "error_msg" => $error_msg, "data" => $data);
+        $final = ["status" => $status, "error_msg" => $error_msg, "data" => $data];
         return str_replace("null", '" "', json_encode($final));
     }
 
-    function varify_captcha() {
+    public function varify_captcha()
+    {
         $recaptchaResponse = trim($this->input->get_post('g-recaptcha-response'));
-        $google_url = "https://www.google.com/recaptcha/api/siteverify";
-        $secret = '6Ld5_x8UAAAAAGn_AV4406lg29xu2hpQQJMaD2BC';
-        $ip = $_SERVER['REMOTE_ADDR'];
-        $url = $google_url . "?secret=" . $secret . "&response=" . $recaptchaResponse . "&remoteip=" . $ip;
-        $curl = curl_init();
+        $google_url        = "https://www.google.com/recaptcha/api/siteverify";
+        $secret            = '6Ld5_x8UAAAAAGn_AV4406lg29xu2hpQQJMaD2BC';
+        $ip                = $_SERVER['REMOTE_ADDR'];
+        $url               = $google_url . "?secret=" . $secret . "&response=" . $recaptchaResponse . "&remoteip=" . $ip;
+        $curl              = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
@@ -468,7 +467,8 @@ class Register extends CI_Controller {
         }
     }
 
-    public function check_captcha($str) {
+    public function check_captcha($str)
+    {
         $word = $this->session->userdata('captchaWord');
         if (strcmp(strtoupper($str), strtoupper($word)) == 0) {
             return true;
@@ -478,17 +478,18 @@ class Register extends CI_Controller {
         }
     }
 
-    function login($id) {
-        $result = $this->register_model->master_fun_get_tbl_val("customer_master", array("status" => "1", "id" => $id), array("id", "asc"));
+    public function login($id)
+    {
+        $result = $this->register_model->master_fun_get_tbl_val("customer_master", ["status" => "1", "id" => $id], ["id", "asc"]);
         if ($result[0]["mobile"] == '') {
             redirect("Register/varify_phone/" . $id);
         }
         foreach ($result as $row) {
-            $sess_array = array(
-                'id' => $row["id"],
+            $sess_array = [
+                'id'   => $row["id"],
                 'name' => $row["full_name"],
                 'type' => $row["type"],
-            );
+            ];
             $this->session->set_userdata('logged_in_user', $sess_array);
             if ($this->session->userdata('search_test_id') != null) {
                 redirect("user_master/order_search");
@@ -498,10 +499,11 @@ class Register extends CI_Controller {
         }
     }
 
-    function varify_phone($id = null) {
-        $data["user_info"] = $this->register_model->master_fun_get_tbl_val("customer_master", array("status" => "1", "id" => $id), array("id", "asc"));
+    public function varify_phone($id = null)
+    {
+        $data["user_info"] = $this->register_model->master_fun_get_tbl_val("customer_master", ["status" => "1", "id" => $id], ["id", "asc"]);
         if (empty($data["user_info"]) && $id == null) {
-            $this->session->set_flashdata("unsuccess", array("Oops somthing is wromg. Please try again."));
+            $this->session->set_flashdata("unsuccess", ["Oops somthing is wromg. Please try again."]);
             redirect("register/index");
         }
         $data["user_mb"] = $this->register_model->master_fun_get_tbl_val("user_change_phone", array("user_fk" => $id), array("id", "desc"));
@@ -513,37 +515,39 @@ class Register extends CI_Controller {
         $this->load->view('user/footer');
     }
 
-    function varify_phone1($id = null) {
-        $data["user_info"] = $this->register_model->master_fun_get_tbl_val("customer_master", array("status" => "1", "id" => $id), array("id", "asc"));
+    public function varify_phone1($id = null)
+    {
+        $data["user_info"] = $this->register_model->master_fun_get_tbl_val("customer_master", ["status" => "1", "id" => $id], ["id", "asc"]);
         if (empty($data["user_info"]) && $id == null) {
-            $this->session->set_flashdata("unsuccess", array("Oops somthing is wromg. Please try again."));
+            $this->session->set_flashdata("unsuccess", ["Oops somthing is wromg. Please try again."]);
             redirect("register/index");
         }
-        $data["user_mb"] = $this->register_model->master_fun_get_tbl_val("user_change_phone", array("user_fk" => $id), array("id", "desc"));
-        $data["id"] = $id;
-        $data["msg"] = "We'll send you OTP, Please verify here.It's take a few minutes.";
+        $data["user_mb"] = $this->register_model->master_fun_get_tbl_val("user_change_phone", ["user_fk" => $id], ["id", "desc"]);
+        $data["id"]      = $id;
+        $data["msg"]     = "We'll send you OTP, Please verify here.It's take a few minutes.";
         $this->load->view('user/header');
         $this->load->view('user/varify_phone1', $data);
         $this->load->view('user/footer');
     }
 
-    function confirm_email($code) {
+    public function confirm_email($code)
+    {
         $this->load->helper("Email");
         $email_cnt = new Email;
-        $result = $this->register_model->master_fun_get_tbl_val("customer_master", array("status" => 1, "confirm_code" => $code), array("id", "desc"));
+        $result    = $this->register_model->master_fun_get_tbl_val("customer_master", ["status" => 1, "confirm_code" => $code], ["id", "desc"]);
         //$id = $query[0]['id'];
-        $update = $this->register_model->master_fun_update1("customer_master", array("confirm_code" => $code), array("confirm_code" => "", "active" => 1));
+        $update = $this->register_model->master_fun_update1("customer_master", ["confirm_code" => $code], ["confirm_code" => "", "active" => 1]);
 
         if ($update) {
 
-            $sess_array = array();
+            $sess_array = [];
             foreach ($result as $row) {
-                $sess_array = array(
-                    'id' => $row['id'],
+                $sess_array = [
+                    'id'   => $row['id'],
                     'name' => $row['full_name'],
                     'type' => $row['type'],
-                );
-                $insert = $this->register_model->master_fun_insert("notification_master", array("title" => "Welcome To Airmed PATH LAB. Thank you For Register.", "url" => "user_master", "user_fk" => $row['id'], "status" => '1'));
+                ];
+                $insert             = $this->register_model->master_fun_insert("notification_master", ["title" => "Welcome To Airmed PATH LAB. Thank you For Register.", "url" => "user_master", "user_fk" => $row['id'], "status" => '1']);
                 $config['mailtype'] = 'html';
 
                 $this->email->initialize($config);
@@ -570,7 +574,8 @@ class Register extends CI_Controller {
         }
     }
 
-    function invite() {
+    public function invite()
+    {
         $this->load->view('user/header');
 
         $this->load->view('user/invite_view');

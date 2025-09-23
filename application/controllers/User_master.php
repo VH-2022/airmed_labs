@@ -8,7 +8,15 @@ class User_master extends CI_Controller {
     var $cash_back;
 
     function __construct() {
+       
+       // session_write_close(); 
         parent::__construct();
+        
+        $this->load->library('session');
+        $user_id = $this->session->userdata('user_id');
+$username = $this->session->userdata('username');
+        print_r($this->session->userdata());
+        die();
         $this->load->model('home_model');
         $this->load->model('user_master_model');
         $this->load->model('user_wallet_model');
@@ -19,10 +27,16 @@ class User_master extends CI_Controller {
         $this->load->library('pushserver');
         $this->load->library('pagination');
         $this->load->library('email');
+       $this->load->helper('login_helper');
+        
+     
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST');
         header("Access-Control-Allow-Headers: X-Requested-With");
-        $data["login_data"] = loginuser();
+      
+         $data["login_data"] = loginuser();
+        
+        
         $uid = $data["login_data"]['id'];
         if ($uid != 0) {
             $maxid = $this->user_wallet_model->total_wallet($uid);
@@ -40,13 +54,14 @@ class User_master extends CI_Controller {
         $offer_master = $this->user_master_model->master_fun_get_tbl_val("offer_master", array("status" => "1"), array("id", "asc"));
         $this->cash_back = $offer_master;
 
-        $data["test_city_session"] = $this->session->userdata("test_city");
-        if (empty($data["test_city_session"])) {
-            $this->session->set_userdata("test_city", "1");
-        }
+        // $data["test_city_session"] = $this->session->userdata("test_city");
+        // if (empty($data["test_city_session"])) {
+        //     $this->session->set_userdata("test_city", "1");
+        // }
     }
 
     function index() {
+      $data["login_data"] = loginuser();
         if ($this->session->flashdata("error")) {
             $data["error"] = $this->session->flashdata("error");
         }
@@ -55,7 +70,9 @@ class User_master extends CI_Controller {
             $data["test_city_session"] = 1;
             $this->session->set_userdata("test_city", "1");
         }
+
         $data["login_data"] = loginuser();
+        
         $data["user"] = $this->user_master_model->getUser($data["login_data"]["id"]);
         $data['success'] = $this->session->flashdata("success");
         $data['payment_success'] = $this->session->flashdata("payment_success");
@@ -119,7 +136,7 @@ class User_master extends CI_Controller {
         }
         $data["suggest_package"] = $suggest_package;
         $data["body_suggest_package"] = $body_suggest_package;
-
+        
         $this->load->view('user/header', $data);
         $this->load->view('user/home', $data);
         $this->load->view('user/footer');
