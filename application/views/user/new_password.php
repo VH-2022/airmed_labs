@@ -31,9 +31,13 @@
 
                                         <div class="col-sm-12 pdng_0">
                                             <script src='https://www.google.com/recaptcha/api.js'></script>
-                                            <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr" tabindex="11"></div>
+                                            <!-- <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr" tabindex="11"></div> -->
+                                            <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
+
+                                    <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
                                             <spam id="captch_error" style="color:red;"></spam><br>
                                             <span style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></span>
+
                                         </div>
 
                                         <div class="col-sm-12 pdng_0 mrgn_btm_25px">
@@ -86,6 +90,10 @@
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
 <script>
+    $(document).ready(function() {
+
+    $(".set_wallet_div").addClass("aftr_login_hdr");
+});
     function recaptchaCallback() {
         $('#send_btn').removeAttr('disabled');
     }

@@ -9,7 +9,7 @@ class User_login extends CI_Controller {
         parent::__construct();
         $this->load->model('user_login_model');
         $this->load->model('user_master_model');
-        $this->load->library('session');   
+        $this->load->library('session');
         if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -32,13 +32,13 @@ class User_login extends CI_Controller {
     public function get() {
         echo "<pre>";
         print_r($this->session->all_userdata());
-    }   
+    }
 
     function index() {
         phpinfo();
         $this->session->set_userdata('getmsg', 'Your message here');
-        
-        $data = '';        
+
+        $data = '';
         if ($this->session->userdata('getmsg') != null) {
             $data['getmsg'] = $this->session->userdata("getmsg");
             $this->session->unset_userdata('getmsg');
@@ -50,37 +50,31 @@ class User_login extends CI_Controller {
         $data["success"] = $this->session->flashdata('success');
 
         $this->load->library('form_validation');
-		
+
         $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
-        // $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
-        // $captcha = $this->varify_captcha();
+        $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
+        $captcha = $this->varify_captcha();
         $captcha = 1;
-        
         if ($this->form_validation->run() == FALSE || $captcha != 1) {
-            
+
             $data["error1"] = $this->session->flashdata('notlogin');
             $data["error"] = $this->session->flashdata('error');
             $data["success"] = $this->session->flashdata('success');
 			$data['red_header_active'] = "2";
             /* Nishit capcha end */
-            
+
             $this->load->view('user/header', $data);
             $this->load->view('user/login', $data);
             $this->load->view('user/footer', $data);
         } else {
             if ($captcha == 1) {
 
-                
-
-                 print_r($this->session->userdata("logged_in_user"));
-                // die;
-                // $this->check_session();
-                redirect('User_master', 'refresh');
+                redirect('user_master', 'refresh');
             } else {
 				$this->session->unset_userdata('logged_in_user');
                 $this->session->set_userdata('captcha2', "invalid captcha.please enter valid captcha!");
-               
+
 				redirect('user_login', 'refresh');
             }
         }

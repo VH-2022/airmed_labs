@@ -63,7 +63,6 @@ class Register extends CI_Controller
         }
     }
 
-    //comment by rohit
     // function index() {
     //     $this->load->helper("Email");
     //     $email_cnt = new Email;
@@ -86,7 +85,7 @@ class Register extends CI_Controller
     //     $captcha = $this->varify_captcha();
     //     $captcha = 1;
     //     if ($this->form_validation->run() != FALSE && $captcha == 1) {
-    //         //die("1"); 
+    //         //die("1");
     //         $email = $this->input->post('email');
     //         $name = $this->input->post('name');
     //         $password = $this->input->post('password');
@@ -114,7 +113,6 @@ class Register extends CI_Controller
     //             $sms_message = preg_replace("/{{NAME}}/", ucfirst($name), $sms_message[0]["message"]);
     //             $sms_message = preg_replace("/{{OTP}}/", $OTP, $sms_message);
     //             $sms_message = preg_replace("/{{PRICE}}/", "", $sms_message);
-
     //             $this->load->helper("sms");
     //             $notification = new Sms();
     //             $mb_length = strlen($mobile);
@@ -138,10 +136,11 @@ class Register extends CI_Controller
     //                     $notification::send($get_phone, $sms_message);
     //                 }
 
-    // 			}
 
-    // 		 if (!empty($data)) {
-    // 			}            
+	// 			}
+
+	// 		 if (!empty($data)) {
+	// 			}
     //             /* Nishit send sms code end */
     //             /* Nishit code end */
     //             $this->session->set_flashdata("success", array("Registration Successfully.Please Check Your email for confirm Your Account"));
@@ -163,7 +162,7 @@ class Register extends CI_Controller
     //             'img_path' => './captcha/',
     //             'img_url' => base_url() . 'captcha/',
     //             'img_width' => 140,
-    //             'img_height' => 32, 
+    //             'img_height' => 32,
     //             'expiration' => 7200
     //         );
     //         $data['captcha'] = create_captcha($vals);
@@ -175,7 +174,6 @@ class Register extends CI_Controller
     //     }
     // }
 
-    //new added by rohit
     public function index()
     {
         $this->load->helper("Email");
@@ -242,32 +240,40 @@ class Register extends CI_Controller
 
                 /* ===== Send OTP on WhatsApp using WATI ===== */
 
-                $patient_mob  = $mobile; // make sure it has country code 91xxxxxxxxxx
+                $patient_mob  = "91" . $mobile;
+
+                // make sure it has country code 91xxxxxxxxxx
                 $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
+
+                $payload = [
+                    "template_name"  => "user_send_otp_04",
+                    "broadcast_name" => "Register OTP Airmed",
+                    "parameters"     => [
+                        [
+                            "name"  => "1",
+                            "value" => (string)$OTP
+                        ]
+                    ]
+                ];
 
                 $curl = curl_init();
 
                 curl_setopt_array($curl, [
-                    CURLOPT_URL            => 'https://live-server-1110.wati.io/api/v1/sendTemplateMessage/' . $patient_mob,
+                    CURLOPT_URL            => 'https://live-server-1110.wati.io/api/v1/sendTemplateMessage?whatsappNumber=' . $patient_mob,
                     CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING       => '',
-                    CURLOPT_MAXREDIRS      => 10,
-                    CURLOPT_TIMEOUT        => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST  => 'POST',
-                    CURLOPT_POSTFIELDS     => '{
-                        "template_name": "bookingsend_hospital_airmed",
-                        "broadcast_name": "Register OTP Airmed ' . $patient_mob . '",
-                        "parameters": "[{\'name\':\'otp\', \'value\':\'' . $OTP . '\'}]"
-                    }',
+                    CURLOPT_POST           => true,
+                    CURLOPT_POSTFIELDS     => json_encode($payload),
                     CURLOPT_HTTPHEADER     => [
                         'Authorization: Bearer ' . $bearer_token,
-                        'Content-Type: application/json',
+                        'Content-Type: application/json'
                     ],
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_SSL_VERIFYPEER => false
                 ]);
 
                 $response = curl_exec($curl);
+                $error    = curl_error($curl);
+                curl_close($curl);
                 curl_close($curl);
                 // echo $response;  // debug
 
@@ -301,16 +307,13 @@ class Register extends CI_Controller
         }
     }
 
-    public function verify_otp()
-    {
+	function verify_otp(){
         $this->load->model('service_model');
         $this->load->helper("Email");
-
-        $email_cnt = new Email;
-
-        $id  = $this->input->get_post('id');
+		$email_cnt = new Email;
+		$id = $this->input->get_post('id');
         $otp = $this->input->get_post('otp');
-        
+
         if ($id != "" && $otp != "") {
             $row = $this->service_model->master_num_rows("customer_master", ["id" => $id, "otp" => $otp]);
 
@@ -503,9 +506,10 @@ class Register extends CI_Controller
             $this->session->set_flashdata("unsuccess", ["Oops somthing is wromg. Please try again."]);
             redirect("register/index");
         }
-        $data["user_mb"] = $this->register_model->master_fun_get_tbl_val("user_change_phone", ["user_fk" => $id], ["id", "desc"]);
-        $data["id"]      = $id;
-        $data["msg"]     = "We'll send you OTP, Please verify here. It's take a few minutes.";
+        $data["user_mb"] = $this->register_model->master_fun_get_tbl_val("user_change_phone", array("user_fk" => $id), array("id", "desc"));
+        $data["id"] = $id;
+        $data["msg"]     = "We'll send you OTP on your WhatsApp, Please verify here.";
+        $data['red_header_active'] = "2";
         $this->load->view('user/header');
         $this->load->view('user/varify_phone', $data);
         $this->load->view('user/footer');

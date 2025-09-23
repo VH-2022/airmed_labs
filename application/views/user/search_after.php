@@ -716,15 +716,17 @@
                                                                 <div class='col-sm-12 pdng_0 full_div'>
                                                                     <br>
                                                                     <script src='https://www.google.com/recaptcha/api.js'></script>
-                                                                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr"></div>
-                                                                    <spam id="captch_error" style="color:red;"></spam>
+                                                                    <!-- <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr"></div>
+                                                                    <spam id="captch_error" style="color:red;"></spam> -->
+                                                                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
+                                        <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
                                                                 </div>
                                                                 <a href="<?= base_url(); ?>register">Create a new account</a>
                                                             </div>
                                                             <div class="modal-footer srch_popup_full">
                                                                 <?php /* <button type="button" id="final_book" class="btn btn-default set_book_btnpopup" onclick='Validation();' disabled="true" style="display:none;" >Book Now</button>
                                                                   <button type="button" onclick="test();" disabled="true" id="check_otp" style="" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Verify</button> */ ?>
-                                                                <button type="button" onclick="check_user_login();" id="check_login" style="" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button>
+                                                                <button type="button" onclick="check_user_login();" id="check_login" style="" disabled class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button>
                                                             </div>
                                                         </div>
                                                         </form>
@@ -1086,7 +1088,8 @@
     <script type="text/javascript">
                                                             $captcha = 0;
                                                             function recaptchaCallback() {
-                                                            $captcha = 1;
+                                                                $captcha = 1;
+                                                                $('#check_login').removeAttr('disabled');
                                                             }
                                                             var $j = jQuery.noConflict();
                                                             $j(function(){

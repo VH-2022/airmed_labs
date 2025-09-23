@@ -38,7 +38,6 @@ $username = $this->session->userdata('username');
         
         
         $uid = $data["login_data"]['id'];
-        
         if ($uid != 0) {
             $maxid = $this->user_wallet_model->total_wallet($uid);
             $data['total'] = $this->user_wallet_model->master_fun_get_tbl_val("wallet_master", array("status" => 1, "id" => $maxid), array("id", "asc"));

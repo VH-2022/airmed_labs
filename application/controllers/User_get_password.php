@@ -25,9 +25,10 @@ class User_get_password extends CI_Controller {
                 'expiration' => 7200
             );
             $data['captcha'] = create_captcha($vals);
+            $data['red_header_active'] = "2";
             $this->session->set_userdata('captchaWord', $data['captcha']['word']);
             $this->load->view('user/header');
-            $this->load->view('user/new_password');
+            $this->load->view('user/new_password',$data);
             $this->load->view('user/footer');
         } else {
             $code = $this->uri->segment('3');
