@@ -39,7 +39,7 @@
                                 /* Nishit code start */
                                 $booking_date = explode(" ", $job_details[0]["date"]);
                                 /* End */
-                                if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10") {
+                                if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10" || $login_data['id'] == "50" || $login_data['id'] == "542" ) {
                                     ?>
                                     <div class="col-sm-12" style="padding-left:0">
                                         <div class="col-sm-4">
@@ -103,7 +103,7 @@
                                                     Rs.<?= ucfirst($value["price"]); ?>
                                                 </td>
                                                 <td>
-                                                  <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10") { ?>  <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["price"]); ?>', `<?= ucfirst($value["test_name"]); ?>`, '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
+                                                  <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10" || $login_data['id'] == "50" || $login_data['id'] == "542") { ?>  <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["price"]); ?>', `<?= ucfirst($value["test_name"]); ?>`, '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -123,7 +123,7 @@
                                                     Rs.<?= ucfirst($value["d_price"]); ?>
                                                 </td>
                                                 <td>
-                                                 <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id']=="1" || $login_data['id']=="10") { ?>   <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["d_price"]); ?>', '<?= ucfirst($value["title"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
+                                                 <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id']=="1" || $login_data['id']=="10" || $login_data['id'] == "50" || $login_data['id'] == "542") { ?>   <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["d_price"]); ?>', '<?= ucfirst($value["title"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10") { ?>
+                    <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10" || $login_data['id'] == "50" || $login_data['id'] == "542") { ?>
                     <div class="box-footer">
                         <input style="float:right;" class="btn btn-primary" value="Update" id="add_sub_parameter" type="button" onclick="UpdateJobTest();">
                     </div>
@@ -158,24 +158,24 @@
                 .map(function () {
                     return $(this).val();
                 }).get();
-			
-				
+
+
         var prc_variation = parseInt($new_price) - parseInt($main_price);
         console.log($main_price + " main");
         console.log($new_price + " new");
         console.log(prc_variation + " def");
         var check_price = parseInt($main_price) + parseInt($new_price) + parseInt(prc_variation);
         var cnf = confirm("Price difference is Rs." + prc_variation + ", Are you sure?");
-		
+
         /* if (check_price == 0) {
             alert("Invalid request.");
             return false;
         } */
         if (cnf == true) {
-			
+
 			if(exist_test_ids != ""){
-			
-		
+
+
             $.ajax({
                 url: '<?php echo base_url(); ?>job_master/update_job_test',
                 type: 'post',
@@ -193,7 +193,7 @@
                 complete: function () {
                 },
             });
-			
+
 			}else{ alert("Invalid request.");
             return false; }
         }
@@ -205,10 +205,10 @@
             .map(function () {
                 return $(this).val();
             }).get();
-			
+
 			var phone="<?= $custinfo[0]["mobile"]; ?>";
 			<?php if($boofamily[0]["family_member_fk"] != "0"){ ?> var test_for="<?= $boofamily[0]["family_member_fk"]; ?>";  <?php }else{ ?>
-			var test_for=""; 
+			var test_for="";
 			<?php } ?>
     $.ajax({
         url: '<?php echo base_url(); ?>admin/branch_doctor_test_list/<?php echo $job_details[0]["test_city"]; ?>/<?php echo $job_details[0]["branch_fk"]; ?>/<?php echo $job_details[0]["doctor"]; ?>',
@@ -410,12 +410,12 @@
                             .map(function () {
                                 return $(this).val();
                             }).get();
-							
+
 					var phone="<?= $custinfo[0]["mobile"]; ?>";
 			<?php if($boofamily[0]["family_member_fk"] != "0"){ ?> var test_for="<?= $boofamily[0]["family_member_fk"]; ?>";  <?php }else{ ?>
-			var test_for=""; 
+			var test_for="";
 			<?php } ?>
-			
+
                     $.ajax({
                         url: '<?php echo base_url(); ?>admin/branch_doctor_test_list/<?php echo $job_details[0]["test_city"]; ?>/<?php echo $job_details[0]["branch_fk"]; ?>/<?php echo $job_details[0]["doctor"]; ?>',
                                         type: 'GET',
