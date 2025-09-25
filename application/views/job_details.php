@@ -158,22 +158,22 @@
                             if (data != "0") {
                             $('#reportcontain').html(data);
                             $(".up,.down").click(function () {
-                            var row = $(this).parents("tr:first");
-                            if ($(this).is(".up")) {
-                            row.insertBefore(row.prev());
-                            } else {
-                            row.insertAfter(row.next());
-                            }
+                                var row = $(this).parents("tr:first");
+                                if ($(this).is(".up")) {
+                                    row.insertBefore(row.prev());
+                                } else {
+                                    row.insertAfter(row.next());
+                                }
                             });
                             $(".newadd").click(function () {
-                            var checkid = this.id;
-                            var splitchack = checkid.split("_")
-                                    var chtestid = splitchack[1];
-                            if ($('#' + checkid).is(':checked')) {
-                            $("#checkvalue_" + chtestid).val("1");
-                            } else {
-                            $("#checkvalue_" + chtestid).val("");
-                            }
+                                var checkid = this.id;
+                                var splitchack = checkid.split("_")
+                                var chtestid = splitchack[1];
+                                if ($('#' + checkid).is(':checked')) {
+                                    $("#checkvalue_" + chtestid).val("1");
+                                } else {
+                                    $("#checkvalue_" + chtestid).val("");
+                                }
                             });
                             }
                             }

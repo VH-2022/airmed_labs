@@ -51,6 +51,7 @@ class Add_result extends CI_Controller {
         if (!is_loggedin()) {
             redirect('login');
         }
+
         if ($this->session->userdata("closeFancyBox")) {
             $data["closeFancyBox"] = $this->session->userdata("closeFancyBox");
             $this->session->unset_userdata("closeFancyBox");
@@ -66,8 +67,8 @@ class Add_result extends CI_Controller {
             if (!in_array($data['test_id'], $testcollect)) {
 
                 echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><br><div class="alert alert-danger">
-  <strong>Please collect sample</strong> 
-</div>';
+                    <strong>Please collect sample</strong>
+                </div>';
                 die();
             }
         }
@@ -211,7 +212,7 @@ class Add_result extends CI_Controller {
         if ($collecttest == null) {
 
             echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><br><div class="alert alert-danger">
-  <strong>Please First Collected Sample</strong> 
+  <strong>Please First Collected Sample</strong>
 </div>';
             die();
         }
@@ -258,56 +259,21 @@ class Add_result extends CI_Controller {
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
-                            /* if ($data['user_data'][0]["age"] > 0 && $data['user_data'][0]["age"] < 6 && $data['user_data'][0]["age_type"] == 'D') {
-                              $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
-                              } else if ($data['user_data'][0]["age"] > 5 && $data['user_data'][0]["age_type"] == 'D') {
-                              $final_qry .= " AND gender='C' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
-                              $data["common"] = 0;
-                              } else if ($data['user_data'][0]["age"] > 0 && $data['user_data'][0]["age"] < 8 && $data['user_data'][0]["age_type"] == 'M') {
-                              $final_qry .= " AND gender='C' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='M'";
-                              $data["common"] = 0;
-                              } else if ($para_ref_rng[0]["gender"] == 'B' && $data['user_data'][0]["age_type"] == 'Y') {
-                              //$get_both_age = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='117' AND gender='B' AND `no_period` > ".$data['user_data'][0]["age"]." AND `type_period`='Y' ORDER BY id ASC");
-                              $final_qry .= " AND gender='B' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'MALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              //$get_male_age = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='117' AND gender='M' AND `no_period` > ".$data['user_data'][0]["age"]." AND `type_period`='Y' ORDER BY id ASC");
-                              //print_r($get_male_age);
-                              $final_qry .= " AND gender='M' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'FEMALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='F' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } */
+
                             if ($data['user_data'][0]["age"] == '') {
                                 $data['user_data'][0]["age"] = 0;
                             }
-                            /* if ($data['user_data'][0]["age_type"] == 'D') {
-                              $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
-                              } else if ($data['user_data'][0]["age_type"] == 'M') {
-                              $final_qry .= " AND gender='C' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='M'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'MALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='M' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'FEMALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='F' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              }
-                              else if ($para_ref_rng[0]["gender"] == 'B' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='B' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } */
+
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
                                 $data["common"] = 0;
@@ -316,8 +282,6 @@ class Add_result extends CI_Controller {
                                 $data["common"] = 0;
                             }
                             $final_qry = $final_qry . " ORDER BY (col1*1) ASC limit 0,1";
-
-                            //   if($para_key["id"]=="117"){ echo "<pre>"; print_r( $data['user_data'][0]); echo "</pre>"; echo    $final_qry; };
                             $final_qry1 = "SELECT * FROM `test_result_status` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                             $data["common"] = 1;
                             $data["para_ref_rng"] = $this->add_result_model->get_val($final_qry);
@@ -330,7 +294,6 @@ class Add_result extends CI_Controller {
                             $para[$cnt_1]["test_parameter_id"] = $get_test_parameter1["id"];
                             $para[$cnt_1]["new_order"] = $get_test_parameter1["order"];
                             $cnt_1++;
-                            //	if($para_key["id"]=="117"){ print_r($data['user_data'][0]); die(); };
                         }
                         $get_test_parameter1[0]['parameter'] = $para;
                         $new_data_array[] = $get_test_parameter1;
@@ -369,10 +332,7 @@ class Add_result extends CI_Controller {
         }
         $data["new_data_array"] = $new_data_array;
         $data['result_list'] = $this->add_result_model->master_fun_get_tbl_val("user_test_result", array('status' => 1, 'job_id' => $data['cid']), array("id", "asc"));
-//echo "<pre>";
-//print_r($data["new_data_array"]);
-//die();
-//$data['unit_list'] = $this->add_result_model->unit_list();
+
         if($_GET["debugt"]==1){
             echo "<pre>";print_r($data);die();
         }
@@ -389,7 +349,7 @@ class Add_result extends CI_Controller {
         $data["login_data"] = logindata();
         $data['cid'] = $this->uri->segment(3);
         $data['tid1'] = $this->uri->segment(4);
-		
+
 		if($data["login_data"]["id"] == "50")
             $data["allow_approve_test"] = 1;
         else
@@ -521,15 +481,15 @@ class Add_result extends CI_Controller {
                         $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                         $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                         /* if ($data['user_data'][0]["age"] > 0 && $data['user_data'][0]["age"] < 6 && $data['user_data'][0]["age_type"] == 'D') {
                           $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
@@ -628,7 +588,7 @@ class Add_result extends CI_Controller {
         $data["login_data"] = logindata();
         $data['cid'] = $this->input->get("jid");
         $data['tid1'] = $this->input->get("tid");
-		
+
 		if($data["login_data"]["id"] == "50")
             $data["allow_approve_test"] = 1;
         else
@@ -750,15 +710,15 @@ class Add_result extends CI_Controller {
                         $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                         $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1 FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                         /* if ($data['user_data'][0]["age"] > 0 && $data['user_data'][0]["age"] < 6 && $data['user_data'][0]["age_type"] == 'D') {
                           $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
@@ -1199,7 +1159,7 @@ class Add_result extends CI_Controller {
         //echo "<pre>";
         //print_r($_POST);
         //die();
-        
+
         $data["login_data"] = logindata();
         $login_data = $data["login_data"];
         $adminid = $data["login_data"]["id"];
@@ -1488,7 +1448,7 @@ class Add_result extends CI_Controller {
                         <p style="color:#7e7e7e;font-size:13px;"><b>Branch Name </b>: ' . $get_job_details[0]["branch_name"] . ' </p>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Order Id/Ref No. </b>: ' . $get_job_details[0]["order_id"] . '/' . $get_job_details[0]["id"] . ' </p>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Uploaded Result Test Name </b>: ' . $test_names . ' </p>
-                        <p style="color:#7e7e7e;font-size:13px;"><b>Result Added By </b>: ' . $get_admin_details1[0]["name"] . '-' . $get_admin_details1[0]["phone"] . ' </p>    
+                        <p style="color:#7e7e7e;font-size:13px;"><b>Result Added By </b>: ' . $get_admin_details1[0]["name"] . '-' . $get_admin_details1[0]["phone"] . ' </p>
                         <p style="color:#7e7e7e;font-size:13px;"><b><a href="' . base_url() . 'Approve_result_from_mail/all_test_approve_details_mail?jid=' . $get_job_details[0]["id"] . '&tid=' . implode(",", $send_approve_test_id_array) . '">Click Here</a></b> for approve test.</p>
                 </div>';
             $c_email = array();
@@ -2119,7 +2079,7 @@ class Add_result extends CI_Controller {
         }
         $data['page_title'] = 'AirmedLabs'; // pass data to the view
         ini_set('memory_limit', '128M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
-        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
 //$param = '"en-GB-x","A4","","",10,10,0,10,6,3,"P"'; // Landscape
 //$lorem = utf8_encode($html); // render the view into HTML
 //$html = "<!DOCTYPE html>                         <html><body>\u0627\u0644\u0643\u0647\u0631\u0628\u0627\u0621 \u0648 \u0627\u0644\u0633\u0628\u0627\u0643\u0629</body></html>      ";
@@ -2183,7 +2143,7 @@ class Add_result extends CI_Controller {
                     5, // margin right
                     72, // margin top
                     72, // margin bottom
-                    2, // margin header 
+                    2, // margin header
                     2); // margin footer
             $sign_url = $base_url . 'user_assets/images/dr_gupta_sign.png';
             $phone_url = $base_url . 'user_assets/images/pdf_phn_btn.png';
@@ -2232,7 +2192,7 @@ class Add_result extends CI_Controller {
                     5, // margin right
                     72, // margin top
                     72, // margin bottom
-                    2, // margin header 
+                    2, // margin header
                     2); // margin footer
             $pdf->SetHTMLFooter($content[0]["footer"]);
         }
@@ -2455,7 +2415,7 @@ class Add_result extends CI_Controller {
         $pdfFilePath1 = FCPATH . "/upload/report/" . $data['query'][0]['order_id'] . "_result.pdf";
         $data['page_title'] = 'AirmedLabs'; // pass data to the view
         ini_set('memory_limit', '512M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
-        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
         if (file_exists($pdfFilePath)) {
             $this->delete_downloadfile($pdfFilePath);
         }
@@ -2518,7 +2478,7 @@ class Add_result extends CI_Controller {
                 5, // margin right
                 72, // margin top
                 72, // margin bottom
-                2, // margin header 
+                2, // margin header
                 2); // margin footer
         $sign_url = $base_url . 'user_assets/images/dr_gupta_sign.png';
         $phone_url = $base_url . 'user_assets/images/pdf_phn_btn.png';
@@ -2679,15 +2639,15 @@ class Add_result extends CI_Controller {
                         $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                         $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                         /* if ($data['user_data'][0]["age_type"] == 'D') {
                           $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
@@ -2746,7 +2706,7 @@ class Add_result extends CI_Controller {
         $pdfFilePath1 = FCPATH . "/upload/report/" . $data['query'][0]['order_id'] . "_result.pdf";
         $data['page_title'] = 'AirmedLabs'; // pass data to the view
         ini_set('memory_limit', '512M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
-        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
 
         if (file_exists($pdfFilePath)) {
             $this->delete_downloadfile($pdfFilePath);
@@ -2821,7 +2781,7 @@ class Add_result extends CI_Controller {
                 7, // margin right
                 72, // margin top
                 72, // margin bottom
-                2, // margin header 
+                2, // margin header
                 2); // margin footer
         /* if($data["login_data"]["id"]==17){
           echo $header;
@@ -2945,7 +2905,7 @@ class Add_result extends CI_Controller {
                 $data["user_data"][0]['mobile']
             );
         }
-        
+
        if($data['cid']=='203181'){
                   $replace = array(
                     'pdf_barcode.png',
@@ -2960,10 +2920,10 @@ class Add_result extends CI_Controller {
                     strtoupper($data["query"][0]['test_city_name']),
                     $data["user_data"][0]['mobile']
                 );
-                  
+
             }
-        
-        
+
+
         $header = preg_replace($find, $replace, $content[0]["without_header"]);
         /* $pdf->SetHTMLHeader($header); */
         if ($branch_fk == 11) {
@@ -3020,7 +2980,7 @@ class Add_result extends CI_Controller {
                     5, // margin right
                     78, // margin top
                     74, // margin bottom
-                    8, // margin header 
+                    8, // margin header
                     2); // margin footer
         } else if ($branch_fk == 90) {
 
@@ -3029,7 +2989,7 @@ class Add_result extends CI_Controller {
                     5, // margin right
                     78, // margin top
                     74, // margin bottom
-                    8, // margin header 
+                    8, // margin header
                     2); // margin footer
         } else {
             $pdf->AddPage('p', // L - landscape, P - portrait
@@ -3045,7 +3005,7 @@ class Add_result extends CI_Controller {
         $data["pdfsize"] = $content[0]["withoutsize"];
         $data["header"] = $header;
         $data["footer"] = $content[0]["without_footer"];
-        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
         $pdf->WriteHTML($html);
         $pdf->Output($pdfFilePath, 'F'); // save to file because we can
         return $data['query'][0]['order_id'] . "_result.pdf";
@@ -3151,7 +3111,7 @@ class Add_result extends CI_Controller {
         $new_data_array = array();
         foreach ($tid as $tst_id) {
             if (in_array($tst_id, $approved_test)) {
-                $get_test_parameter = $this->add_result_model->get_val("SELECT 
+                $get_test_parameter = $this->add_result_model->get_val("SELECT
   `test_parameter`.*,
   `test_master`.`test_name`,
   tmd.method AS test_method,
@@ -3159,21 +3119,21 @@ class Add_result extends CI_Controller {
   `test_master`.report_type,
   `test_master`.department_fk,
   test_master.sample as sampletype,
-  test_department_master.`name` AS 'department_name' 
+  test_department_master.`name` AS 'department_name'
 FROM
-  `test_parameter` 
-  INNER JOIN `test_master` 
-    ON `test_parameter`.`test_fk` = `test_master`.`id` 
-  LEFT JOIN `test_department_master` 
-    ON test_department_master.`id` = `test_master`.`department_fk` 
-    LEFT JOIN `test_method` AS tmd 
+  `test_parameter`
+  INNER JOIN `test_master`
+    ON `test_parameter`.`test_fk` = `test_master`.`id`
+  LEFT JOIN `test_department_master`
+    ON test_department_master.`id` = `test_master`.`department_fk`
+    LEFT JOIN `test_method` AS tmd
     ON tmd.test_fk = test_master.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
 	LEFT JOIN branch_sample_type as btype
 	ON btype.test_fk=test_master.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
-WHERE `test_parameter`.`status` = '1' 
-  AND `test_master`.`status` = '1' 
-  AND `test_parameter`.`test_fk` = '" . $tst_id . "' 
-  AND test_parameter.center = '" . $processing_center . "' 
+WHERE `test_parameter`.`status` = '1'
+  AND `test_master`.`status` = '1'
+  AND `test_parameter`.`test_fk` = '" . $tst_id . "'
+  AND test_parameter.center = '" . $processing_center . "'
 ORDER BY `test_parameter`.order ASC ");
 
                 $pid = array();
@@ -3208,15 +3168,15 @@ ORDER BY `test_parameter`.order ASC ");
                         $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                         $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
 
                         if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
@@ -3241,18 +3201,18 @@ ORDER BY `test_parameter`.order ASC ");
                     $get_test_parameter1[0]['parameter'] = $para;
                     $new_data_array[] = $get_test_parameter1;
                 } else {
-                    $get_test_parameter1 = $this->add_result_model->get_val("SELECT 
+                    $get_test_parameter1 = $this->add_result_model->get_val("SELECT
   tm.id AS test_fk,
   tm.test_name,
   tm.PRINTING_NAME,
   tm.sample as sampletype,
   tmd.method AS test_method
 FROM
-  `test_master` AS tm 
-  LEFT JOIN `test_method` AS tmd 
+  `test_master` AS tm
+  LEFT JOIN `test_method` AS tmd
     ON tmd.test_fk = tm.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
 LEFT JOIN branch_sample_type as btype
-	ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'	
+	ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
 WHERE tm.id = '" . $tst_id . "'");
                     $graph_pic = $this->add_result_model->get_val("SELECT * FROM user_formula_pic WHERE `status`='1' AND type='1' AND job_fk='" . $data['cid'] . "' AND test_fk='" . $tst_id . "'");
                     $get_test_parameter1[0]['graph'] = $graph_pic;
@@ -3265,9 +3225,9 @@ WHERE tm.id = '" . $tst_id . "'");
         $data["new_data_array"] = $new_data_array;
         $data['result_list'] = $this->add_result_model->master_fun_get_tbl_val("user_test_result", array('status' => 1, 'job_id' => $data['cid']), array("id", "asc"));
         if ($data['type'] == 'wlp') {
-            
+
         } else {
-            
+
         }
         $data['page_title'] = 'AirmedLabs'; // pass data to the view
         ini_set('memory_limit', '128M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
@@ -3360,7 +3320,7 @@ WHERE tm.id = '" . $tst_id . "'");
                     5, // margin right
                     72, // margin top
                     72, // margin bottom
-                    2, // margin header 
+                    2, // margin header
                     2); // margin footer
             /* if($data["login_data"]["id"]==17){
               echo $header;
@@ -3425,10 +3385,10 @@ WHERE tm.id = '" . $tst_id . "'");
             /* $pdf->SetHTMLHeader($header); */
             $pdf->AddPage('p', // L - landscape, P - portrait
                     '', '', '', '', 5, // margin_left
-                    5, // margin right 
+                    5, // margin right
                     72, // margin top
                     72, // margin bottom
-                    2, // margin header 
+                    2, // margin header
                     2); // margin footer
             /* $pdf->SetHTMLFooter($content[0]["footer"]); */
 
@@ -3440,7 +3400,7 @@ WHERE tm.id = '" . $tst_id . "'");
             $data["pdfsize"] = $content[0]["withoutsize"];
         }
 
-        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+        $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
         if (file_exists($pdfFilePath)) {
             $this->delete_downloadfile($pdfFilePath);
         }
@@ -3497,7 +3457,7 @@ WHERE tm.id = '" . $tst_id . "'");
             header('Content-Length: ' . filesize($path)); // provide file size
             header('Connection: close');
             readfile($path); // push it out
-//    exit(); 
+//    exit();
         }
     }
 
@@ -3610,9 +3570,7 @@ WHERE tm.id = '" . $tst_id . "'");
         $data['parameter_list'] = $this->add_result_model->master_fun_get_tbl_val("test_parameter_master", array('status' => 1, "center" => $processing_center, "parameter_name !=" => ''), array("parameter_name", "asc"));
         $data['unit_list'] = $this->add_result_model->unit_list();
         $this->load->view('header');
-//$this->load->view('nav', $data);
         $this->load->view('add_test_parameter', $data);
-//$this->load->view('footer');
     }
 
     function add_value_all($tid) {
@@ -3901,8 +3859,8 @@ WHERE tm.id = '" . $tst_id . "'");
         $pdfFilePath = FCPATH . "/upload/report/" . $rand . "_result.pdf";
         $data['page_title'] = 'AirmedLabs'; // pass data to the view
         ini_set('memory_limit', '32M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
-        $html = $this->load->view('test_result_pdf', $data, true); // render the view into HTML 
-//echo $html=$this->html12($html); 
+        $html = $this->load->view('test_result_pdf', $data, true); // render the view into HTML
+//echo $html=$this->html12($html);
 //$html = str_split($html, 3);
 //print_r($html);
 //die();
@@ -4087,7 +4045,7 @@ WHERE tm.id = '" . $tst_id . "'");
         }
     }
 
-    
+
     // Send SMS in job_details
     function send_result($id) {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
@@ -4104,7 +4062,7 @@ WHERE tm.id = '" . $tst_id . "'");
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
             // $data['query1'] = $this->add_result_model->job_details($data['cid']);
             //$cus_id = $data['query1'][0]['custid'];
-            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1"); 
+            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1");
             $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
             if (empty($data['processing_center'])) {
                 $processing_center = '1';
@@ -4231,15 +4189,15 @@ WHERE tm.id = '" . $tst_id . "'");
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
@@ -4397,7 +4355,7 @@ WHERE tm.id = '" . $tst_id . "'");
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
             // $data['query1'] = $this->add_result_model->job_details($data['cid']);
             //$cus_id = $data['query1'][0]['custid'];
-            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1"); 
+            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1");
             $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
             if (empty($data['processing_center'])) {
                 $processing_center = '1';
@@ -4524,15 +4482,15 @@ WHERE tm.id = '" . $tst_id . "'");
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
@@ -4686,7 +4644,7 @@ WHERE tm.id = '" . $tst_id . "'");
         if (empty($check_is_approved)) {
             $insert = $this->add_result_model->master_fun_insert("approve_job_test", array('job_fk' => $jid, "test_fk" => $tid, "approve_by" => $data["login_data"]["id"], "created_date" => date("Y-m-d H:i:s")));
         } else {
-            
+
         }
         redirect("add_result/test_approve_details/" . $jid . "/" . $tid);
     }
@@ -4839,15 +4797,15 @@ WHERE tm.id = '" . $tst_id . "'");
                         $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                         $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                         /* if ($data['user_data'][0]["age"] > 0 && $data['user_data'][0]["age"] < 6 && $data['user_data'][0]["age_type"] == 'D') {
                           $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
@@ -5198,8 +5156,8 @@ WHERE tm.id = '" . $tst_id . "'");
         $data["login_data"] = logindata();
         $data['cid'] = $id;
         $testfk = $this->input->post('testid');
-        /* $this->form_validation->set_rules('testid[]', 'testid', 'trim|required');
-          if ($this->form_validation->run() != FALSE) { */
+        $newCheckTestId = $this->input->post('newcheck');
+
         if ($testfk != null) {
             $testfk = $this->input->post('testid');
             $new_page = $this->input->post('on_new_page');
@@ -5209,10 +5167,10 @@ WHERE tm.id = '" . $tst_id . "'");
 
                 $this->add_result_model->updateRowWhere('approve_job_test', array('test_fk' => $testfk[$i1], 'job_fk' => $id), array("position" => $i1, "new_page" => $new_page[$i1]));
             }
-            /* $formula = $this->add_result_model->get_val("SELECT * from use_formula where test_fk='" . $tst_id . "' and job_fk='" . $data['cid'] . "' and status='1'"); */
+
 
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
-            //print_r($data['query']);die();
+
             $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
             if (empty($data['processing_center'])) {
                 $processing_center = '1';
@@ -5222,10 +5180,7 @@ WHERE tm.id = '" . $tst_id . "'");
             $branch_fk = $data["branch_fk"] = $data['query'][0]["branch_fk"];
             $data['user_booking_info'] = $this->add_result_model->master_fun_get_tbl_val("booking_info", array('status' => 1, 'id' => $data['query'][0]["booking_info"]), array("id", "asc"));
             $data['user_data'] = $this->add_result_model->master_fun_get_tbl_val("customer_master", array('status' => 1, 'id' => $data['query'][0]["custid"]), array("id", "asc"));
-            /* if (empty($data['user_data'][0]["gender"]) && empty($data['user_data'][0]["age"])) {
-              $data['user_data'][0]["gender"] = 'male';
-              $data['user_data'][0]["age"] = 24;
-              } */
+
             $get_approved_test_list = $this->add_result_model->master_fun_get_tbl_val("approve_job_test", array('status' => '1', 'job_fk' => $data['cid']), array("id", "asc"));
             $approved_test = array();
             foreach ($get_approved_test_list as $at_key) {
@@ -5301,34 +5256,13 @@ WHERE tm.id = '" . $tst_id . "'");
             $tid = array_unique($tid);
             $cnt = 0;
             $new_data_array = array();
-			$chknabltestscope = $this->add_result_model->get_val("SELECT * FROM `nabltestscope_master` WHERE `status`=1 AND `branch_fk`='".$data['query'][0]['branch_fk']."' AND `testcity_fk` = '".$data['query'][0]['test_city']."'");			
+			$chknabltestscope = $this->add_result_model->get_val("SELECT * FROM `nabltestscope_master` WHERE `status`=1 AND `branch_fk`='".$data['query'][0]['branch_fk']."' AND `testcity_fk` = '".$data['query'][0]['test_city']."'");
+
             foreach ($tid as $tst_id) {
                 if (in_array($tst_id, $approved_test)) {
+                // if (in_array($tst_id, $approved_test) && in_array($tst_id, $newCheckTestId)) {
 
-                    $get_test_parameter = $this->add_result_model->get_val("SELECT 
-  `test_parameter`.*,
-  `test_master`.`test_name`,
-  tmd.method AS test_method,
-  test_master.PRINTING_NAME,
-  `test_master`.report_type,
-  `test_master`.department_fk,
-  test_master.sample as sampletype,
-  test_department_master.`name` AS 'department_name' 
-FROM
-  `test_parameter` 
-  INNER JOIN `test_master` 
-    ON `test_parameter`.`test_fk` = `test_master`.`id` 
-  LEFT JOIN `test_department_master` 
-    ON test_department_master.`id` = `test_master`.`department_fk` 
-    LEFT JOIN `test_method` AS tmd 
-    ON tmd.test_fk = test_master.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
-	LEFT JOIN branch_sample_type as btype
-	ON btype.test_fk=test_master.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
-WHERE `test_parameter`.`status` = '1' 
-  AND `test_master`.`status` = '1' 
-  AND `test_parameter`.`test_fk` = '" . $tst_id . "' 
-  AND test_parameter.center = '" . $processing_center . "' 
-ORDER BY `test_parameter`.order ASC ");
+                    $get_test_parameter = $this->add_result_model->get_val("SELECT `test_parameter`.*, `test_master`.`test_name`, tmd.method AS test_method, test_master.PRINTING_NAME, `test_master`.report_type, `test_master`.department_fk, test_master.sample as sampletype, test_department_master.`name` AS 'department_name' FROM `test_parameter` INNER JOIN `test_master` ON `test_parameter`.`test_fk` = `test_master`.`id` LEFT JOIN `test_department_master` ON test_department_master.`id` = `test_master`.`department_fk` LEFT JOIN `test_method` AS tmd ON tmd.test_fk = test_master.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1' LEFT JOIN branch_sample_type as btype ON btype.test_fk=test_master.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1' WHERE `test_parameter`.`status` = '1' AND `test_master`.`status` = '1' AND `test_parameter`.`test_fk` = '" . $tst_id . "' AND test_parameter.center = '" . $processing_center . "' ORDER BY `test_parameter`.order ASC");
                     $pid = array();
                     foreach ($get_test_parameter as $tp_key) {
                         if (!empty($tp_key["parameter_fk"])) {
@@ -5339,13 +5273,12 @@ ORDER BY `test_parameter`.order ASC ");
                         $para = $this->add_result_model->get_val("SELECT * FROM `test_parameter_master` WHERE `status`='1' AND id IN (" . implode(",", $pid) . ") ORDER BY FIELD(id," . implode(",", $pid) . ")");
                         $cnt_1 = 0;
                         foreach ($para as $para_key) {
-                            /* $formula = $this->add_result_model->get_val("SELECT * from use_formula where test_fk='" . $tst_id . "' and job_fk='" . $data['cid'] . "' and status='1'"); */
+
                             $get_test_parameter[$cnt_1]['use_formula'] = "";
 
                             $gettest = $this->add_result_model->get_val("SELECT new_page from approve_job_test where test_fk='" . $tst_id . "' and job_fk='" . $data['cid'] . "' and status='1'");
                             $get_test_parameter[$cnt_1]['on_new_page'] = $gettest[0]["new_page"];
 
-                            /* Report type start */
                             $culure_design = $this->add_result_model->get_val("SELECT id,title,html FROM `parameter_culture` WHERE center='" . $processing_center . "' AND test_fk='" . $tst_id . "' AND STATUS='1'");
                             $get_test_parameter[$cnt_1]['culture_design'] = $culure_design;
                             /* End */
@@ -5353,39 +5286,14 @@ ORDER BY `test_parameter`.order ASC ");
                             $graph_pic = $this->add_result_model->get_val("SELECT * FROM user_formula_pic WHERE `status`='1' and type='1' AND job_fk='" . $data['cid'] . "' AND test_fk='" . $tst_id . "'");
                             $get_test_parameter[$cnt_1]['graph'] = $graph_pic;
                             $get_test_parameter1 = $get_test_parameter[$cnt_1];
-//echo "SELECT * from user_test_result where test_id='".$tst_id."' and parameter_id='" . $para_key["id"] . "' and job_id='".$data['cid']."' and  status='1'";
+
                             $para_user_val = $this->add_result_model->get_val("SELECT * from user_test_result where test_id='" . $tst_id . "' and parameter_id='" . $para_key["id"] . "' and job_id='" . $data['cid'] . "' and  status='1'");
                             $para[$cnt_1]["user_val"] = $para_user_val;
                             $para_culture_val = $this->add_result_model->get_val("SELECT * from user_test_result where test_id='" . $tst_id . "' and job_id='" . $data['cid'] . "' and result is not NULL and status='1'");
                             $para[$cnt_1]["user_culture_val"] = $para_culture_val;
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
-                            $final_qry = "SELECT *,
-  CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
-    ELSE (
-      CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
-      END
-    ) 
-  END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
-                            /* if ($data['user_data'][0]["age_type"] == 'D') {
-                              $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
-                              } else if ($data['user_data'][0]["age_type"] == 'M') {
-                              $final_qry .= " AND gender='C' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='M'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'MALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='M' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'FEMALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='F' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if ($para_ref_rng[0]["gender"] == 'B' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='B' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } */
+                            $final_qry = "SELECT *, CASE WHEN (type_period = 'Y') THEN (no_period * 365) ELSE ( CASE WHEN (type_period = 'M') THEN (no_period * 30) ELSE no_period END ) END AS col1 FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
+
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
                                 $data["common"] = 0;
@@ -5406,7 +5314,7 @@ ORDER BY `test_parameter`.order ASC ");
                             $cnt_1++;
                         }
                         $get_test_parameter1[0]['parameter'] = $para;
-						
+
 						if(!empty($chknabltestscope)){
 							$nabltestscope = $this->add_result_model->get_val("SELECT * FROM `nabltestscope_master` WHERE `status`=1 AND `branch_fk`='".$data['query'][0]['branch_fk']."' AND `testcity_fk` = '".$data['query'][0]['test_city']."' AND FIND_IN_SET($tst_id,`tests_fk`)");
 							if(!empty($nabltestscope)){
@@ -5415,49 +5323,39 @@ ORDER BY `test_parameter`.order ASC ");
 								$get_test_parameter1[0]['nablprint'] = array("test_scope" => '3');
 							}
 						}
-						
+
                         $new_data_array[] = $get_test_parameter1;
                     } else {
-                        /* $get_test_parameter1 = $this->add_result_model->get_val("SELECT id as test_fk,test_name,test_master.PRINTING_NAME,test_master.method as test_method FROM `test_master` WHERE id='" . $tst_id . "'"); */
-                        $get_test_parameter1 = $this->add_result_model->get_val("SELECT 
-  tm.id AS test_fk,
-  tm.test_name,
-  tm.PRINTING_NAME,
-  tm.sample as sampletype,
-  tmd.method AS test_method 
-FROM
-  `test_master` AS tm 
-  LEFT JOIN `test_method` AS tmd 
-    ON tmd.test_fk = tm.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
-LEFT JOIN branch_sample_type as btype
-	ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'	
-WHERE tm.id = '" . $tst_id . "' ");
+
+                        $get_test_parameter1 = $this->add_result_model->get_val("SELECT tm.id AS test_fk, tm.test_name, tm.PRINTING_NAME, tm.sample as sampletype, tmd.method AS test_method FROM `test_master` AS tm LEFT JOIN `test_method` AS tmd ON tmd.test_fk = tm.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1' LEFT JOIN branch_sample_type as btype ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1' WHERE tm.id = '" . $tst_id . "'");
                         $graph_pic = $this->add_result_model->get_val("SELECT * FROM user_formula_pic WHERE `status`='1' and type='1' AND job_fk='" . $data['cid'] . "' AND test_fk='" . $tst_id . "'");
                         $get_test_parameter1[0]['graph'] = $graph_pic;
-						
+
 						if(!empty($chknabltestscope)){
 							$nabltestscope = $this->add_result_model->get_val("SELECT * FROM nabltestscope_master WHERE status=1 AND branch_fk ='".$data['query'][0]['branch_fk']."' AND testcity_fk = '".$data['query'][0]['test_city']."' AND FIND_IN_SET($tst_id,tests_fk)");
-							if(!empty($nabltestscope)){							
+							if(!empty($nabltestscope)){
 								$get_test_parameter1[0]['nablprint'] = $nabltestscope[0];
 							}else{
 								$get_test_parameter1[0]['nablprint'] = array("test_scope" => '3');
 							}
 						}
-						
+
                         $new_data_array[] = $get_test_parameter1[0];
                     }
+
+                    $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "34", "date_time" => date("Y-m-d H:i:s"),"test_id" => $tst_id));
 
                     $cnt++;
                 }
             }
 
-			
+
             $data["new_data_array"] = $new_data_array;
             $data['result_list'] = $this->add_result_model->master_fun_get_tbl_val("user_test_result", array('status' => 1, 'job_id' => $data['cid']), array("id", "asc"));
             $pdfFilePath = FCPATH . "/upload/report/" . $data['query'][0]['order_id'] . "_result_wlpd.pdf";
             $pdfFilePath1 = FCPATH . "/upload/report/" . $data['query'][0]['order_id'] . "_result.pdf";
             $data['page_title'] = 'AirmedLabs'; // pass data to the view
-            ini_set('memory_limit', '512M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
+            ini_set('memory_limit', '512M');
 
             if (file_exists($pdfFilePath)) {
                 $this->delete_downloadfile($pdfFilePath);
@@ -5487,22 +5385,11 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data["collection_date"] = $this->add_result_model->get_val("SELECT date_time FROM `job_log` WHERE `status`='1' AND `message_fk`='3' and `job_status` LIKE '%-7%' AND job_fk='" . $data['cid'] . "' order by id desc");
             $data["completed_date"] = $this->add_result_model->get_val("SELECT date_time FROM `job_log` WHERE `status`='1' AND `message_fk`='3' and `job_status` LIKE '%-2%' AND job_fk='" . $data['cid'] . "' order by id desc");
 
-//            $approve_test_last_time = $this->add_result_model->get_val("SELECT MAX(created_date) As date_time
-//                    FROM approve_job_test where status = '1' 
-//                    AND job_fk ='" . $data['cid'] . "'");
-
-
-
 
             if (!empty($data["completed_date"])) {
                 $data["completed_date1"] = $data["completed_date"][0]["date_time"];
             } else {
                 $data["completed_date1"] = date("Y-m-d H:i:s");
-//                if ($data["login_data"]['type'] == "6") {
-//                    $data["completed_date1"] = $approve_test_last_time[0]["date_time"];
-//                } else {
-//                    $data["completed_date1"] = date("Y-m-d H:i:s");
-//                }
             }
 
             if (!empty($data["collection_date"])) {
@@ -5594,42 +5481,21 @@ WHERE tm.id = '" . $tst_id . "' ");
                     strtoupper($data["query"][0]['test_city_name']),
                     $data["user_data"][0]['mobile']
                 );
-                  
+
             }
 
-            
+
             $header = preg_replace($find, $replace, $content[0]["header"]);
-            /* echo $header;
-              echo $html;
-              echo $content[0]["footer"]; die(); */
-            //$pdf->SetHTMLHeader($header);
 
-
-
-
-
-
-            /* $pdf->AddPage('p', // L - landscape, P - portrait
-              '', '', '', '', 5, // margin_left
-              5, // margin right
-              72, // margin top
-              72, // margin bottom
-              2, // margin header
-              5); // margin footer */
 
             $pdf->AddPage('p', // L - landscape, P - portrait
                     '', '', '', '', 5, // margin_left
                     5, // margin right
                     5, // margin top
                     5, // margin bottom
-                    5, // margin header 
+                    5, // margin header
                     5); // margin footer
 
-            /* if($data["login_data"]["id"]==17){
-              echo $header;
-              echo $html;
-              echo $content[0]["footer"];die();
-              } */
             $sign_url = $base_url . 'user_assets/images/dr_gupta_sign.png';
             $phone_url = $base_url . 'user_assets/images/pdf_phn_btn.png';
             $emailimg = $base_url . 'user_assets/images/email-icon.png';
@@ -5642,15 +5508,12 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data['footer'] = str_replace("* Denotes Test not in", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $data['footer']);
             $data['footer'] = str_replace("NABL Scope ** Refered Test", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $data['footer']);
 
-            /* echo "<pre>"; print_r($data); die(); */
-
             $data["pdfsize"] = $content[0]["withsize"];
 
-            $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+            $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
 
             $pdf->WriteHTML($html);
-            //echo $html;die(); 
-            /*   echo $pdf->Output(); die(); */
+
             $pdf->Output($pdfFilePath, 'F'); // save to file because we can
 
             $name1 = $this->without_approve_report($data);
@@ -5667,10 +5530,9 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $this->add_result_model->master_fun_insert("report_master", $data1);
             }
             $this->add_result_model->master_fun_update('job_master', array('id', $id), array("report_approve_by" => $data["login_data"]["id"]));
-            //print_R($data1); die();
             $this->session->set_flashdata("success", array("Report successfully attached."));
-            $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
-            
+            // $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
+
             $auto_completejob = $this->add_result_model->get_val("select auto_completejob from branch_master where status='1' AND id='" . $data['query'][0]["branch_fk"] . "'")[0]['auto_completejob'];
             $tid = $this->add_result_model->get_val("select * from use_formula where status='1' AND job_fk='$id'");
 			$count11 = 0;
@@ -5679,13 +5541,13 @@ WHERE tm.id = '" . $tst_id . "' ");
                     $count11++;
                 }
             }
-			
+
             if ($count11 == count($tid) && $auto_completejob == 1) {
                 $this->job_mark_completed($data['cid']);
 				$this->getstock($data['cid']);
                 $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '8-2', "message_fk" => "3", "date_time" => date("Y-m-d H:i:s")));
             }
-            
+
             redirect("job-master/job-details/" . $id);
         } else {
             show_404();
@@ -5803,11 +5665,11 @@ WHERE tm.id = '" . $tst_id . "' ");
             $tid = array_unique($tid);
             $cnt = 0;
             $new_data_array = array();
-			$chknabltestscope = $this->add_result_model->get_val("SELECT * FROM `nabltestscope_master` WHERE `status`=1 AND `branch_fk`='".$data['query'][0]['branch_fk']."' AND `testcity_fk` = '".$data['query'][0]['test_city']."'");			
+			$chknabltestscope = $this->add_result_model->get_val("SELECT * FROM `nabltestscope_master` WHERE `status`=1 AND `branch_fk`='".$data['query'][0]['branch_fk']."' AND `testcity_fk` = '".$data['query'][0]['test_city']."'");
             foreach ($tid as $tst_id) {
                 if (in_array($tst_id, $approved_test)) {
 
-                    $get_test_parameter = $this->add_result_model->get_val("SELECT 
+                    $get_test_parameter = $this->add_result_model->get_val("SELECT
                     `test_parameter`.*,
                     `test_master`.`test_name`,
                     tmd.method AS test_method,
@@ -5815,21 +5677,21 @@ WHERE tm.id = '" . $tst_id . "' ");
                     `test_master`.report_type,
                     `test_master`.department_fk,
                     test_master.sample as sampletype,
-                    test_department_master.`name` AS 'department_name' 
+                    test_department_master.`name` AS 'department_name'
                     FROM
-                    `test_parameter` 
-                    INNER JOIN `test_master` 
-                        ON `test_parameter`.`test_fk` = `test_master`.`id` 
-                    LEFT JOIN `test_department_master` 
-                        ON test_department_master.`id` = `test_master`.`department_fk` 
-                        LEFT JOIN `test_method` AS tmd 
+                    `test_parameter`
+                    INNER JOIN `test_master`
+                        ON `test_parameter`.`test_fk` = `test_master`.`id`
+                    LEFT JOIN `test_department_master`
+                        ON test_department_master.`id` = `test_master`.`department_fk`
+                        LEFT JOIN `test_method` AS tmd
                         ON tmd.test_fk = test_master.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
                         LEFT JOIN branch_sample_type as btype
                         ON btype.test_fk=test_master.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
-                    WHERE `test_parameter`.`status` = '1' 
-                    AND `test_master`.`status` = '1' 
-                    AND `test_parameter`.`test_fk` = '" . $tst_id . "' 
-                    AND test_parameter.center = '" . $processing_center . "' 
+                    WHERE `test_parameter`.`status` = '1'
+                    AND `test_master`.`status` = '1'
+                    AND `test_parameter`.`test_fk` = '" . $tst_id . "'
+                    AND test_parameter.center = '" . $processing_center . "'
                     ORDER BY `test_parameter`.order ASC ");
                     $pid = array();
                     foreach ($get_test_parameter as $tp_key) {
@@ -5863,15 +5725,15 @@ WHERE tm.id = '" . $tst_id . "' ");
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
                                 CASE
-                                    WHEN (type_period = 'Y') 
-                                    THEN (no_period * 365) 
+                                    WHEN (type_period = 'Y')
+                                    THEN (no_period * 365)
                                     ELSE (
                                     CASE
-                                        WHEN (type_period = 'M') 
-                                        THEN (no_period * 30) 
-                                        ELSE no_period 
+                                        WHEN (type_period = 'M')
+                                        THEN (no_period * 30)
+                                        ELSE no_period
                                     END
-                                    ) 
+                                    )
                                 END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                             /* if ($data['user_data'][0]["age_type"] == 'D') {
                               $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
@@ -5908,7 +5770,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                             $cnt_1++;
                         }
                         $get_test_parameter1[0]['parameter'] = $para;
-						
+
 						if(!empty($chknabltestscope)){
 							$nabltestscope = $this->add_result_model->get_val("SELECT * FROM `nabltestscope_master` WHERE `status`=1 AND `branch_fk`='".$data['query'][0]['branch_fk']."' AND `testcity_fk` = '".$data['query'][0]['test_city']."' AND FIND_IN_SET($tst_id,`tests_fk`)");
 							if(!empty($nabltestscope)){
@@ -5917,35 +5779,35 @@ WHERE tm.id = '" . $tst_id . "' ");
 								$get_test_parameter1[0]['nablprint'] = array("test_scope" => '3');
 							}
 						}
-						
+
                         $new_data_array[] = $get_test_parameter1;
                     } else {
                         /* $get_test_parameter1 = $this->add_result_model->get_val("SELECT id as test_fk,test_name,test_master.PRINTING_NAME,test_master.method as test_method FROM `test_master` WHERE id='" . $tst_id . "'"); */
-                        $get_test_parameter1 = $this->add_result_model->get_val("SELECT 
+                        $get_test_parameter1 = $this->add_result_model->get_val("SELECT
                         tm.id AS test_fk,
                         tm.test_name,
                         tm.PRINTING_NAME,
                         tm.sample as sampletype,
-                        tmd.method AS test_method 
+                        tmd.method AS test_method
                         FROM
-                        `test_master` AS tm 
-                        LEFT JOIN `test_method` AS tmd 
+                        `test_master` AS tm
+                        LEFT JOIN `test_method` AS tmd
                             ON tmd.test_fk = tm.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
                         LEFT JOIN branch_sample_type as btype
-                            ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'	
+                            ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
                         WHERE tm.id = '" . $tst_id . "' ");
                         $graph_pic = $this->add_result_model->get_val("SELECT * FROM user_formula_pic WHERE `status`='1' and type='1' AND job_fk='" . $data['cid'] . "' AND test_fk='" . $tst_id . "'");
                         $get_test_parameter1[0]['graph'] = $graph_pic;
-						
+
 						if(!empty($chknabltestscope)){
 							$nabltestscope = $this->add_result_model->get_val("SELECT * FROM nabltestscope_master WHERE status=1 AND branch_fk ='".$data['query'][0]['branch_fk']."' AND testcity_fk = '".$data['query'][0]['test_city']."' AND FIND_IN_SET($tst_id,tests_fk)");
-							if(!empty($nabltestscope)){							
+							if(!empty($nabltestscope)){
 								$get_test_parameter1[0]['nablprint'] = $nabltestscope[0];
 							}else{
 								$get_test_parameter1[0]['nablprint'] = array("test_scope" => '3');
 							}
 						}
-						
+
                         $new_data_array[] = $get_test_parameter1[0];
                     }
 
@@ -5953,7 +5815,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                 }
             }
 
-			
+
             $data["new_data_array"] = $new_data_array;
             $data['result_list'] = $this->add_result_model->master_fun_get_tbl_val("user_test_result", array('status' => 1, 'job_id' => $data['cid']), array("id", "asc"));
             $pdfFilePath = FCPATH . "/upload/report/" . $data['query'][0]['order_id'] . "_result_wlpd.pdf";
@@ -5990,7 +5852,7 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data["completed_date"] = $this->add_result_model->get_val("SELECT date_time FROM `job_log` WHERE `status`='1' AND `message_fk`='3' and `job_status` LIKE '%-2%' AND job_fk='" . $data['cid'] . "' order by id desc");
 
             //            $approve_test_last_time = $this->add_result_model->get_val("SELECT MAX(created_date) As date_time
-            //                    FROM approve_job_test where status = '1' 
+            //                    FROM approve_job_test where status = '1'
             //                    AND job_fk ='" . $data['cid'] . "'");
 
 
@@ -6096,10 +5958,10 @@ WHERE tm.id = '" . $tst_id . "' ");
                     strtoupper($data["query"][0]['test_city_name']),
                     $data["user_data"][0]['mobile']
                 );
-                  
+
             }
 
-            
+
             $header = preg_replace($find, $replace, $content[0]["header"]);
             /* echo $header;
               echo $html;
@@ -6124,7 +5986,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                     5, // margin right
                     5, // margin top
                     5, // margin bottom
-                    5, // margin header 
+                    5, // margin header
                     5); // margin footer
 
             /* if($data["login_data"]["id"]==17){
@@ -6147,13 +6009,13 @@ WHERE tm.id = '" . $tst_id . "' ");
 
             $data["pdfsize"] = $content[0]["withsize"];
 
-            $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+            $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
 
             $pdf->WriteHTML($html);
-            //echo $html;die(); 
+            //echo $html;die();
             /*   echo $pdf->Output(); die(); */
             $pdf->Output($pdfFilePath, 'F'); // save to file because we can
-			
+
             $name1 = $this->without_approve_report($data);
 
             $name = $data['query'][0]['order_id'] . "_result_wlpd.pdf";
@@ -6173,7 +6035,7 @@ WHERE tm.id = '" . $tst_id . "' ");
             $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
 
             $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "33", "date_time" => date("Y-m-d H:i:s")));
-            
+
             $auto_completejob = $this->add_result_model->get_val("select auto_completejob from branch_master where status='1' AND id='" . $data['query'][0]["branch_fk"] . "'")[0]['auto_completejob'];
             $tid = $this->add_result_model->get_val("select * from use_formula where status='1' AND job_fk='$id'");
 			$count11 = 0;
@@ -6188,18 +6050,18 @@ WHERE tm.id = '" . $tst_id . "' ");
 				$this->getstock($data['cid']);
                 $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '8-2', "message_fk" => "3", "date_time" => date("Y-m-d H:i:s")));
             }*/
-			
+
 			//$branch_fk = $data["user_data"][0]['branch_fk'];
-			
+
 			$feedbackurl = "http://airmedlabs.com/feedback?pid=". $id ."&cid=" . $branch_fk;
-			
-            $patient_mob = $data["user_data"][0]['mobile']; //$data['query'][0]["mobile"];			
+
+            $patient_mob = $data["user_data"][0]['mobile']; //$data['query'][0]["mobile"];
 			$patient_mob = str_replace(" ","", $patient_mob);
             $patient_name = strtoupper($data["user_data"][0]['full_name']); //$data['query'][0]["full_name"];
             if(strlen($patient_mob) == 10)
                 $patient_mob = "91" . $patient_mob;
 
-            
+
             //$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjI1MTA3Ny1iMTRlLTQ1NTQtYWM5OC0xZTVkY2QwYWI2MTciLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.pTLNa2xcI4XxOEoaFhy3zYrzf7mH-T7DhnhTPNCy56c";
 		//	$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NjI2MDIyOC0yNDY5LTQ3ZjctYWUxNS0xZDI2Y2RiYmEwODIiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMTIvMDgvMjAyMiAwNjoxMTowOSIsImRiX25hbWUiOiJ3YXRpTGl2ZTExMTAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.vP9idscn5_9jG5mscsmc_p5KLAbwDiKGMF_2zfhoybs";
 
@@ -6231,8 +6093,8 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
             $response = curl_exec($curl);
 
             curl_close($curl);
-            
-            $resp = json_decode($response); 
+
+            $resp = json_decode($response);
 
             $msg1 = "";
             if($resp->result == true)
@@ -6246,25 +6108,25 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
                 $msg1 = "fail";
                 $this->add_result_model->master_fun_update1("report_master", array('job_fk' => $id), array("whatsapp_sent_status" => "0"));
             }
-			
+
 			$this->add_result_model->master_fun_insert("whatsapp_sent_detail", array("job_id" => $id, "name" => strtoupper($data["user_data"][0]['full_name']), "mobile" => $patient_mob, "reporturl" => "http://airmedlabs.com/upload/report/". $name, "labid" => $id, "regi_date" => $data["collection_date"], "senttime" => date("Y-m-d H:i:s"), "resp_status" => $msg1, "sent_by_user" => $data["login_data"]["id"]));
 
             $return1 = array('msg' => $msg1, "file" => "http://airmedlabs.com/upload/report/". $name,"docnumber"=>$data['query'][0]["dmobile"]);
 
             //$return1 = array('msg' => $msg1 );
-            
+
             $docmobile = $data['query'][0]["dmobile"];
             if(
-            //     $docmobile == "9825324056" || $docmobile == "9425107412" 
+            //     $docmobile == "9825324056" || $docmobile == "9425107412"
             // || $docmobile == "9824040706" || $docmobile == "9974557757"
             // || $docmobile == "9825085059" || $docmobile == "9879725516"
 			// || $docmobile == "9879531100" || $docmobile == "8000664008" || $docmobile=="9601198035" || $docmobile=="9825326024" ||$docmobile=="9825074020" ||$docmobile=="9825026577" ||$docmobile=="9825444786" ||$docmobile=="9825300005" ||$docmobile=="9825326029" ||$docmobile=="9879658056" ||$docmobile=="9898097723" ||$docmobile=="9998902118" ||$docmobile=="9510042964" ||$docmobile=="9427950041" ||$docmobile=="9824045708" ||$docmobile=="9824030986" ||$docmobile=="9825015096" || $docmobile == "9825865560" || $docmobile == "9824017767" || $docmobile == "9979607072" || $docmobile == "9904333669" || $docmobile == "9426417678" || $docmobile == "9426755855" || $docmobile == "9374643422" || $docmobile == "9825018372" || $docmobile == "9699988161" || $docmobile == "9909979236" || $docmobile == "8160681524" || $docmobile == "9099911260" || $docmobile == "9574083948" || $docmobile == "9824018887" || $docmobile == "9825125175" || $docmobile == "9825038648" || $docmobile == "9825036391" || $docmobile == "9825016581" || $docmobile == "9879760095" || $docmobile == "9825259391" || $docmobile == "9879682506" || $docmobile == "9426676731" || $docmobile == "9824022853" || $docmobile == "9824046773" || $docmobile == "9898718948" || $docmobile == "9825232402" || $docmobile == "9825851210" || $docmobile == "7567214502" || $docmobile == "9687548601" || $docmobile == "8160662262" || $docmobile == "9099041157" || $docmobile == "9824040048" || $docmobile == "9825020750" || $docmobile == "9825065637" || $docmobile == "9825294429" || $docmobile == "9825955345" || $docmobile == "8928878596" || $docmobile == "8141584080" || $docmobile == "9824169250" || $docmobile == "9712984320" || $docmobile == "8160247460" || $docmobile == "9825024932" || $docmobile == "8689843222" || $docmobile == "9825493635" || $docmobile == "9824265642" || $docmobile == "9879204018" || $docmobile == "9316586705" || $docmobile == "9825021923" || $docmobile == "9051812908" || $docmobile == "9825597968" || $docmobile == "9828339753" || $docmobile == "9898072886" || $docmobile == "9825115419" || $docmobile == "9825523564" || $docmobile == "9909359464" || $docmobile == "9925965133" || $docmobile == "7043353855" || $docmobile == "9898184554" || $docmobile == "9904333669" || $docmobile == "9714777668" || $docmobile == "9824050492" || $docmobile == "9099019431" || $docmobile == "9825889345" || $docmobile=="9904088768" || $docmobile=="9825063553"
-			// || 
+			// ||
             (isset($data['query'][0]["notify"]) && $data['query'][0]["notify"]==1)
 			) {
 
                 $docname = $data['query'][0]["dname"];
-                
+
                 if(strlen($docmobile) == 10)
                     $docmobile = "91" . $docmobile;
 
@@ -6294,13 +6156,13 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
 
 				$response1 = curl_exec($curl1);
 
-				curl_close($curl1); 
+				curl_close($curl1);
 				//echo $response;
 				$resp1 = json_decode($response1);
                 // echo "<pre>";print_r($resp); die();
 
             }
-			
+
 			$send_emp = 0;
             if($send_emp == 1) {
 
@@ -6310,7 +6172,7 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
                 if(strlen($patient_mob) == 10)
                     $patient_mob = "91" . $patient_mob;
 
-                
+
                 //$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjI1MTA3Ny1iMTRlLTQ1NTQtYWM5OC0xZTVkY2QwYWI2MTciLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.pTLNa2xcI4XxOEoaFhy3zYrzf7mH-T7DhnhTPNCy56c";
 			//	$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NjI2MDIyOC0yNDY5LTQ3ZjctYWUxNS0xZDI2Y2RiYmEwODIiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMTIvMDgvMjAyMiAwNjoxMTowOSIsImRiX25hbWUiOiJ3YXRpTGl2ZTExMTAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.vP9idscn5_9jG5mscsmc_p5KLAbwDiKGMF_2zfhoybs";
 				$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
@@ -6343,15 +6205,15 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
 
                 curl_close($curl);
             }
-            
-            
+
+
             echo json_encode($return1);
-            
+
             //redirect("job-master/job-details/" . $id);
         } else {
             show_404();
         }
-      
+
     }
 
     function send_reporttest_whatsapp($id) {
@@ -6365,21 +6227,21 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
         /* $this->form_validation->set_rules('testid[]', 'testid', 'trim|required');
           if ($this->form_validation->run() != FALSE) { */
         if ($testfk != null) {
-            
+
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
 
             $result_report = $this->add_result_model->master_fun_get_tbl_val("report_master", array('job_fk' => $id), array("id", "asc"));
             if (!empty($result_report)) {
-                
+
                 $filename = $result_report[0]["report"];
                 if($filename != "")
                 {
-                
+
                     $patient_mob = $data['query'][0]["mobile"];
                     $patient_name = $data['query'][0]["full_name"];
                     if(strlen($patient_mob) == 10)
                         $patient_mob = "91" . $patient_mob;
-                    
+
                     //$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjI1MTA3Ny1iMTRlLTQ1NTQtYWM5OC0xZTVkY2QwYWI2MTciLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.pTLNa2xcI4XxOEoaFhy3zYrzf7mH-T7DhnhTPNCy56c";
 				//	$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NjI2MDIyOC0yNDY5LTQ3ZjctYWUxNS0xZDI2Y2RiYmEwODIiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMTIvMDgvMjAyMiAwNjoxMTowOSIsImRiX25hbWUiOiJ3YXRpTGl2ZTExMTAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.vP9idscn5_9jG5mscsmc_p5KLAbwDiKGMF_2zfhoybs";
 					$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
@@ -6410,8 +6272,8 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
                     $response = curl_exec($curl);
 
                     curl_close($curl);
-                    
-                    $resp = json_decode($response); 
+
+                    $resp = json_decode($response);
 
                     $msg1 = "";
                     //if($resp->result == true)
@@ -6425,15 +6287,15 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
                         $msg1 = "fail";
                         $this->add_result_model->master_fun_update1("report_master", array('job_fk' => $id), array("whatsapp_sent_status" => "0"));
                     }
-                    
+
                     $return1 = array('msg' => $msg1);
-                    
+
                     $docmobile = $data['query'][0]["dmobile"];
                     $docname = $data['query'][0]["dname"];
                     if(strlen($docmobile) == 10)
                         $docmobile = "91" . $docmobile;
 
-                    
+
                     $curl1 = curl_init();
 
                     curl_setopt_array($curl1, array(
@@ -6459,15 +6321,15 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
 
                     $response1 = curl_exec($curl1);
 
-                    curl_close($curl1); 
+                    curl_close($curl1);
                     //echo $response;
 
                     $resp1 = json_decode($response1);
-                    
+
                     echo json_encode($return1);
                 }
-            }            
-            
+            }
+
         } else {
             show_404();
         }
@@ -6569,7 +6431,7 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
             foreach ($tid as $tst_id) {
                 if (in_array($tst_id, $approved_test)) {
 
-                    $get_test_parameter = $this->add_result_model->get_val("SELECT 
+                    $get_test_parameter = $this->add_result_model->get_val("SELECT
   `test_parameter`.*,
   `test_master`.`test_name`,
   tmd.method AS test_method,
@@ -6577,21 +6439,21 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
   `test_master`.report_type,
   `test_master`.department_fk,
   test_master.sample as sampletype,
-  test_department_master.`name` AS 'department_name' 
+  test_department_master.`name` AS 'department_name'
 FROM
-  `test_parameter` 
-  INNER JOIN `test_master` 
-    ON `test_parameter`.`test_fk` = `test_master`.`id` 
-  LEFT JOIN `test_department_master` 
-    ON test_department_master.`id` = `test_master`.`department_fk` 
-    LEFT JOIN `test_method` AS tmd 
+  `test_parameter`
+  INNER JOIN `test_master`
+    ON `test_parameter`.`test_fk` = `test_master`.`id`
+  LEFT JOIN `test_department_master`
+    ON test_department_master.`id` = `test_master`.`department_fk`
+    LEFT JOIN `test_method` AS tmd
     ON tmd.test_fk = test_master.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
 	LEFT JOIN branch_sample_type as btype
 	ON btype.test_fk=test_master.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
-WHERE `test_parameter`.`status` = '1' 
-  AND `test_master`.`status` = '1' 
-  AND `test_parameter`.`test_fk` = '" . $tst_id . "' 
-  AND test_parameter.center = '" . $processing_center . "' 
+WHERE `test_parameter`.`status` = '1'
+  AND `test_master`.`status` = '1'
+  AND `test_parameter`.`test_fk` = '" . $tst_id . "'
+  AND test_parameter.center = '" . $processing_center . "'
 ORDER BY `test_parameter`.order ASC ");
                     $pid = array();
                     foreach ($get_test_parameter as $tp_key) {
@@ -6625,15 +6487,15 @@ ORDER BY `test_parameter`.order ASC ");
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
 
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
@@ -6659,18 +6521,18 @@ ORDER BY `test_parameter`.order ASC ");
                         $new_data_array[] = $get_test_parameter1;
                     } else {
                         /* $get_test_parameter1 = $this->add_result_model->get_val("SELECT id as test_fk,test_name,test_master.PRINTING_NAME,test_master.method as test_method FROM `test_master` WHERE id='" . $tst_id . "'"); */
-                        $get_test_parameter1 = $this->add_result_model->get_val("SELECT 
+                        $get_test_parameter1 = $this->add_result_model->get_val("SELECT
   tm.id AS test_fk,
   tm.test_name,
   tm.PRINTING_NAME,
   tm.sample as sampletype,
-  tmd.method AS test_method 
+  tmd.method AS test_method
 FROM
-  `test_master` AS tm 
-  LEFT JOIN `test_method` AS tmd 
+  `test_master` AS tm
+  LEFT JOIN `test_method` AS tmd
     ON tmd.test_fk = tm.id AND tmd.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and tmd.status='1'
 LEFT JOIN branch_sample_type as btype
-	ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'	
+	ON btype.test_fk=tm.id AND btype.branch_fk='" . $data['processing_center'][0]["branch_fk"] . "' and btype.status='1'
 WHERE tm.id = '" . $tst_id . "' ");
                         $graph_pic = $this->add_result_model->get_val("SELECT * FROM user_formula_pic WHERE `status`='1' and type='1' AND job_fk='" . $data['cid'] . "' AND test_fk='" . $tst_id . "'");
                         $get_test_parameter1[0]['graph'] = $graph_pic;
@@ -6794,7 +6656,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                     5, // margin right
                     5, // margin top
                     5, // margin bottom
-                    5, // margin header 
+                    5, // margin header
                     5); // margin footer
 
             /* if($data["login_data"]["id"]==17){
@@ -6811,15 +6673,15 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data['header'] = $header;
 
             $data['footer'] = $contentfooter;
-            
+
             $data['footer'] = str_replace("* Denotes Test not in", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $data['footer']);
             $data['footer'] = str_replace("NABL Scope ** Refered Test", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $data['footer']);
             /* echo "<pre>"; print_r($data); die(); */
 
             $data["pdfsize"] = $content[0]["withsize"];
-            
 
-            $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
+
+            $html = $this->load->view('result_pdf', $data, true); // render the view into HTML
 
             $pdf->WriteHTML($html);
 
@@ -6832,8 +6694,8 @@ WHERE tm.id = '" . $tst_id . "' ");
             show_404();
         }
     }
-    
-    
+
+
     function job_mark_completed($cid) {
         $this->load->model("job_model");
         if (!is_loggedin()) {
@@ -6845,9 +6707,7 @@ WHERE tm.id = '" . $tst_id . "' ");
         $email_cnt = new Email;
         $data["login_data"] = logindata();
         $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
-        // $cid = $this->uri->segment('3');
         $update = $this->job_model->master_fun_update("job_master", array("id", $cid), array("status" => "2"));
-        //$this->job_model->master_fun_insert("job_log", array("job_fk" => $cid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "message_fk" => "3", "date_time" => date("Y-m-d H:i:s")));
         if ($update) {
             $data = $this->job_model->master_fun_get_tbl_val("job_master", array("id" => $cid), array("id", "asc"));
             $notify_customer = $data[0]["notify_cust"];
@@ -6933,14 +6793,10 @@ WHERE tm.id = '" . $tst_id . "' ");
                             $message1 = $email_cnt->get_design($message1);
                             $c_email[] = $email;
                             $this->email->to(implode(",", $c_email));
-							/*if($branch==4){
-								$this->email->cc('pagaravpath@gmail.com'); //pagaravpath@gmail.com for Gandhinagar-Pagarav Branch
-							}*/
-                            //  $this->email->to('jeel@virtualheight.com');
+
                             $this->email->from($this->config->item('admin_booking_email'), "AirmedLabs");
                             $this->email->subject("Report Completed");
                             $this->email->message($message1);
-                            //$this->email->attach(implode(',',$attatchPath));
                             $this->email->send();
 
                             $family_member_name = $this->job_model->get_family_member_name($cid);
@@ -6949,10 +6805,6 @@ WHERE tm.id = '" . $tst_id . "' ");
                                 $c_email[] = $family_member_name[0]["email"];
                                 if (!empty($c_email)) {
                                     $this->email->to(implode(",", $c_email));
-									/*if($branch==4){
-										$this->email->cc('pagaravpath@gmail.com'); //pagaravpath@gmail.com for Gandhinagar-Pagarav Branch
-									}*/
-                                    //  $this->email->to('jeel@virtualheight.com');
                                     $this->email->from($this->config->item('admin_booking_email'), "AirmedLabs");
                                     $this->email->subject("Report Completed");
                                     $this->email->message($message1);
@@ -6963,7 +6815,6 @@ WHERE tm.id = '" . $tst_id . "' ");
                                             $this->email->attach($attatchPath);
                                         }
                                     }
-                                    //$this->email->attach(implode(',',$attatchPath));
                                     $this->email->send();
                                 }
                             }
@@ -6971,22 +6822,11 @@ WHERE tm.id = '" . $tst_id . "' ");
                     }
                 }
             }
-
-            /* Nishit check job discount start 
-              if ($job_details[0]["discount"] > 0) {
-              $order_discount = round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
-              $payable_price = $job_details[0]["price"] - round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
-              $c_message = "Dear customer, Your \n Booking ID : " . $job_details[0]["order_id"] . "\n Total price : Rs." . $job_details[0]["price"] . " \n Discount price : Rs." . $order_discount . " \n Payable price : Rs." . $payable_price . " \n For any query please call (8101161616).\n Thanks for using Airmed.";
-              $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => $mobile, "message" => $c_message, "created_date" => date("Y-m-d H:i:s")));
-              }
-              END */
-
             $this->session->set_flashdata("success", array("Job successfully mark as completed."));
-            //redirect("job-master/pending-list", "refresh");
         }
     }
-    
-    
+
+
      function getstock($jobid) {
         $this->load->model("add_result_model");
         $this->load->model("job_model");
@@ -7026,7 +6866,6 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $tid[] = $tp_key["sub_test"];
             }
         }
-        //echo "<pre>";print_R($tid); die();
         $tid = array_unique($tid);
 
         /* END */
@@ -7035,12 +6874,10 @@ WHERE tm.id = '" . $tst_id . "' ");
 
 
         $branch = $jobdetils[0]["branch_fk"];
-        //$pc = $this->job_model->get_val("SELECT * FROM `processing_center` WHERE `status`='1' AND `lab_fk`='" . $branch . "'");
-        //$branch = $pc[0]["branch_fk"];
         $branallmachine = $this->job_model->get_val("SELECT GROUP_CONCAT(DISTINCT machine_fk) AS machin FROM `inventory_machine_branch` WHERE STATUS='1' AND `branch_fk`='$branch' GROUP BY branch_fk");
         if (!empty($branallmachine)) {
 			$macineaall = $branallmachine[0]["machin"];
-			//echo "<pre>";print_r($approve_job_test_id);die();  
+			//echo "<pre>";print_r($approve_job_test_id);die();
 			foreach ($tid as $tst_id) {
 				if (in_array($tst_id, $approve_job_test_id)) {
 					$test = $tst_id;
@@ -7059,30 +6896,9 @@ WHERE tm.id = '" . $tst_id . "' ");
 				}
 			}
 		}
-
-
-
-
-        /* $branch = $jobdetils[0]["branch_fk"];
-          $branallmachine = $this->job_model->get_val("SELECT GROUP_CONCAT(DISTINCT machine_fk) AS machin FROM `inventory_machine_branch` WHERE STATUS='1' AND `branch_fk`='$branch' GROUP BY branch_fk");
-          $macineaall = $branallmachine[0]["machin"];
-          $getjoballtest = $this->job_model->get_val("SELECT id,test_fk,performed,performed_reason FROM use_formula WHERE job_fk='$jobid'");
-          foreach ($getjoballtest as $gettest) {
-          $test = $gettest["test_fk"];
-          $performed = $gettest["performed"];
-          $performed_reason = $gettest["performed_reason"];
-          $getjobtest = $this->job_model->get_val("SELECT id,machine_fk,item_fk,quantity FROM `inventory_test_machine` WHERE test_fk='" . $test . "' AND  machine_fk IN($macineaall) AND status='1'");
-          foreach ($getjobtest as $man) {
-          $getusereagent = $this->job_model->get_val("SELECT id FROM `inventory_usedreagent` WHERE status='1' AND `branchfk`='$branch' AND `reaqgentfk`='" . $man["item_fk"] . "' ORDER BY id DESC");
-          $getreagentid = $getusereagent[0]["id"];
-          if ($getreagentid != "") {
-          $this->job_model->master_fun_insert("inventory_jobstock", array("branchid" => $branch, "jobid" => $jobid, "usedreagent_fk" => $getreagentid, "testid" => $test, "itemfk" => $man["item_fk"], "timeperfomace" => $performed, "perform_reason" => $performed_reason, "useditem" => $man["quantity"], "creteddate" => date("Y-m-d H:i:s")));
-          }
-          }
-          } */
     }
-    
-    
+
+
     function get_job_details($job_id) {
         $this->load->model("job_model");
         $job_details = $this->job_model->master_fun_get_tbl_val("job_master", array("status !=" => "0", "id" => $job_id), array("id", "asc"));
@@ -7101,7 +6917,7 @@ WHERE tm.id = '" . $tst_id . "' ");
             $package_name = array();
             foreach ($book_package as $key) {
 
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -7117,7 +6933,7 @@ WHERE tm.id = '" . $tst_id . "' ");
         }
         return $job_details;
     }
-    
+
     function check_send_report($cid, $smsalert) {
         $this->load->model('job_model');
         if (!is_loggedin()) {
@@ -7266,7 +7082,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                             $this->email->send();
                         }
                     }
-                    // Case Back Email end			
+                    // Case Back Email end
                 }
                 /* Nishit cashback end */
                 $book_test_details = array();
@@ -7283,7 +7099,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                         $message1 = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $name . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Report completed successfully for test ' . implode(",", $book_test_details) . ' </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $orderid . ' </p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $orderid . ' </p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
                     } else {
@@ -7375,9 +7191,9 @@ WHERE tm.id = '" . $tst_id . "' ");
         }
         return 1;
     }
-    
-    
-    
+
+
+
      function send_result_auto_complete($id) {
         $this->load->model("add_result_model");
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
@@ -7393,7 +7209,7 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
             // $data['query1'] = $this->add_result_model->job_details($data['cid']);
             //$cus_id = $data['query1'][0]['custid'];
-            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1"); 
+            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1");
             $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
             if (empty($data['processing_center'])) {
                 $processing_center = '1';
@@ -7518,15 +7334,15 @@ WHERE tm.id = '" . $tst_id . "' ");
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
@@ -7660,8 +7476,8 @@ WHERE tm.id = '" . $tst_id . "' ");
                 }
                 $custmobile = $cust_rel_mobile;
 
-                $data['send_sms_no'] = $this->add_result_model->get_val("SELECT `send_report_sms`.*,`admin_master`.`name` FROM `send_report_sms` 
-				INNER JOIN `admin_master` ON `send_report_sms`.`send_by`=`admin_master`.id 
+                $data['send_sms_no'] = $this->add_result_model->get_val("SELECT `send_report_sms`.*,`admin_master`.`name` FROM `send_report_sms`
+				INNER JOIN `admin_master` ON `send_report_sms`.`send_by`=`admin_master`.id
 				WHERE `send_report_sms`.`status`='1' AND send_report_sms.`job_fk`='" . $data['cid'] . "'");
 
                 return array("status" => "1", "sms" => $sms_text, "mobile" => $mobile, "custmobile" => $custmobile, "history" => $data['send_sms_no']);
@@ -7677,18 +7493,18 @@ WHERE tm.id = '" . $tst_id . "' ");
     473457,473458,473459,473460)');
 
         if(!empty($get_job_by_id)){
-            
+
              $this->db->trans_start();
-            
+
             foreach($get_job_by_id as $job_value){
                 $job_id = $job_value['id'];
                 $job_date = $job_value['date'];
 
-                $this->add_result_model->master_fun_update("job_log", array("job_fk", $job_id), array("date_time" => 
+                $this->add_result_model->master_fun_update("job_log", array("job_fk", $job_id), array("date_time" =>
                 $job_date));
 
                 echo "Updated job_log for job_fk: " . $job_id . " | New date_time: " . $job_date . "<br>";
-                
+
             }
             $this->db->trans_complete();
 
@@ -7702,10 +7518,10 @@ WHERE tm.id = '" . $tst_id . "' ");
             echo "No jobs found!";
         }
 
-       
+
     }
-    
-    
+
+
 
 }
 
