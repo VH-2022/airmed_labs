@@ -68,11 +68,11 @@ Class Add_result_model extends CI_Model {
 
 
 
-        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.views,j.test_city,j.discount,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
+        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.views,j.test_city,j.discount,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
 
-    ON pb.job_fk = j.id 
+    ON pb.job_fk = j.id
 
-  LEFT JOIN package_master p 
+  LEFT JOIN package_master p
 
     ON p.id = pb.package_fk where j.id!='' and j.status in (7,8) ";
 
@@ -158,11 +158,11 @@ Class Add_result_model extends CI_Model {
 
 
 
-        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.booking_info,j.views,j.discount,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
+        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.booking_info,j.views,j.discount,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
 
-    ON pb.job_fk = j.id 
+    ON pb.job_fk = j.id
 
-  LEFT JOIN package_master p 
+  LEFT JOIN package_master p
 
     ON p.id = pb.package_fk where j.id!=' ' and  j.status in (7,8) ";
 
@@ -246,11 +246,11 @@ Class Add_result_model extends CI_Model {
 
 
 
-        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
+        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
 
-    ON pb.job_fk = j.id 
+    ON pb.job_fk = j.id
 
-  LEFT JOIN package_master p 
+  LEFT JOIN package_master p
 
     ON p.id = pb.package_fk where";
 
@@ -268,7 +268,7 @@ Class Add_result_model extends CI_Model {
 
         return $result->result_array();
 
-    } 
+    }
 
 
 
@@ -316,19 +316,11 @@ Class Add_result_model extends CI_Model {
 
         return $data['user'];
 
-    } 
+    }
 
 	public function job_details1($id) {
 
-        $query = $this->db->query("SELECT dm.full_name as dname, j.status,j.collection_charge,j.model_type,j.b2b_id,j.branch_fk, tc.name as test_city_name, j.address as address1, j.invoice, j.portal, j.note, j.sample_collection, j.booking_info, j.payment_type, j.payable_amount, j.test_city, j.id, j.order_id, j.price, j.discount, GROUP_CONCAT(distinct t.test_name SEPARATOR '#') testname, GROUP_CONCAT(distinct p.title SEPARATOR '@') packagename, GROUP_CONCAT(distinct p.id SEPARATOR '%') packageid, GROUP_CONCAT(distinct t.id ORDER BY jtl.position ASC) testid, j.date, j.status, j.sample_collection, c.id custid, c.created_date regi_date, c.age,c.dob, c.full_name, c.mobile, c.gender, c.email, c.address, c.country, c.state, c.city, c.pic, c.type, c.password, dm.mobile dmobile,dm.notify FROM job_master j LEFT JOIN approve_job_test jtl ON jtl.job_fk = j.`id` LEFT JOIN customer_master c ON c.id = j.`cust_fk` LEFT JOIN test_master t ON t.id = jtl.test_fk LEFT JOIN book_package_master pb
-
-                ON pb.job_fk = j.id
-
-                LEFT JOIN package_master p
-
-                ON p.id = pb.package_fk
-
-                LEFT JOIN doctor_master dm ON dm.id = j.`doctor` inner join test_cities as tc on j.test_city = tc.id where j.id = '" . $id . "' GROUP BY j.id ORDER BY j.id DESC");
+        $query = $this->db->query("SELECT dm.full_name as dname, j.status,j.collection_charge,j.model_type,j.b2b_id,j.branch_fk, tc.name as test_city_name, j.address as address1, j.invoice, j.portal, j.note, j.sample_collection,bm.nabl_logo, j.booking_info, j.payment_type, j.payable_amount, j.test_city, j.id, j.order_id, j.price, j.discount, GROUP_CONCAT(distinct t.test_name SEPARATOR '#') testname, GROUP_CONCAT(distinct p.title SEPARATOR '@') packagename, GROUP_CONCAT(distinct p.id SEPARATOR '%') packageid, GROUP_CONCAT(distinct t.id ORDER BY jtl.position ASC) testid, j.date, j.status, j.sample_collection, c.id custid, c.created_date regi_date, c.age,c.dob, c.full_name, c.mobile, c.gender, c.email, c.address, c.country, c.state, c.city, c.pic, c.type, c.password, dm.mobile dmobile,dm.notify FROM job_master j LEFT JOIN approve_job_test jtl ON jtl.job_fk = j.`id` LEFT JOIN customer_master c ON c.id = j.`cust_fk` LEFT JOIN test_master t ON t.id = jtl.test_fk LEFT JOIN book_package_master pb ON pb.job_fk = j.id LEFT JOIN package_master p ON p.id = pb.package_fk LEFT JOIN doctor_master dm ON dm.id = j.`doctor` inner join test_cities as tc on j.test_city = tc.id LEFT JOIN branch_master bm ON bm.id = j.branch_fk where j.id = '" . $id . "' GROUP BY j.id ORDER BY j.id DESC");
 
         $data['user'] = $query->result_array();
 
@@ -376,7 +368,7 @@ Class Add_result_model extends CI_Model {
 
     }
 
-    
+
 
     public function job_details_outsource($id) {
 
@@ -410,13 +402,13 @@ Class Add_result_model extends CI_Model {
 
 	function updateRowWhere($table, $where, $data) {
 
-		
+
 
         $this->db->where($where);
 
         $this->db->update($table, $data);
 
-	
+
 
         return 1;
 

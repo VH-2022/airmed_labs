@@ -5170,7 +5170,7 @@ WHERE tm.id = '" . $tst_id . "'");
 
 
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
-
+           
             $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
             if (empty($data['processing_center'])) {
                 $processing_center = '1';

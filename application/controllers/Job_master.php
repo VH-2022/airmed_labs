@@ -288,6 +288,7 @@ class Job_master extends CI_Controller
         $data["login_data"] = logindata();
         $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
         $cntr_arry = array();
+
         // echo "<pre>"; print_r($data["login_data"]['branch_fk']); die;
         if (!empty($data["login_data"]['branch_fk'])) {
             foreach ($data["login_data"]['branch_fk'] as $key) {
@@ -8563,15 +8564,13 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div></center>
         $city = $this->input->post("city");
         $refer = '';
         if (!empty($city) && empty($plm)) {
-            //$referral_list = $this->job_model->master_fun_get_tbl_val("branch_master", array('status' => 1, "parent_fk" => $plm), array("branch_name", "asc"));
-            $referral_list = $this->job_model->get_val("SELECT * FROM `branch_master` WHERE `status`='1' AND city='" . $city . "' order by branch_name asc");
+            $referral_list = $this->job_model->get_val("SELECT * FROM `branch_master` WHERE `status` IN (1,2) AND city='" . $city . "' order by branch_name asc");
         }
         if (!empty($plm)) {
-            //$referral_list = $this->job_model->master_fun_get_tbl_val("branch_master", array('status' => 1, "parent_fk" => $plm), array("branch_name", "asc"));
-            $referral_list = $this->job_model->get_val("select * from branch_master where status='1' and (parent_fk ='" . $plm . "' or id='" . $plm . "') order by branch_name asc");
+            $referral_list = $this->job_model->get_val("select * from branch_master where `status` IN (1,2) and (parent_fk ='" . $plm . "' or id='" . $plm . "') order by branch_name asc");
         }
         if (empty($city) && empty($plm)) {
-            $referral_list = $this->job_model->get_val("select * from branch_master where status='1' order by branch_name asc");
+            $referral_list = $this->job_model->get_val("select * from branch_master where `status` IN (1,2) order by branch_name asc");
         }
         foreach ($referral_list as $referral) {
             if (!empty($data["cntr_arry"])) {
@@ -8589,9 +8588,6 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div></center>
                 }
                 $refer .= '>' . ucwords($referral['branch_name']) . '</option>';
             }
-        }
-        if ($refer == '') {
-            //echo "<option value=''>Data not available.</option>";
         }
         echo $refer;
     }

@@ -81,7 +81,7 @@ class Branch_Master extends CI_Controller {
             $data['query'][$i]["processing_center"]=$processing_center;
             $i++;
         }
-		
+
         $data['city'] = $this->Branch_Model->list_city();
         $data['branch_type'] = $this->Branch_Model->type_list();
         $data['branch'] = $this->Branch_Model->master_get_branch();
@@ -167,8 +167,6 @@ class Branch_Master extends CI_Controller {
         $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
         $data['city'] = $this->Branch_Model->list_city();
         $data['success'] = $this->session->flashdata("success");
-//Vishal COde Start
-
         $data['branch_type'] = $this->Branch_Model->type_list();
         $data['branch_list'] = $this->Branch_Model->get_list();
 
@@ -178,18 +176,15 @@ class Branch_Master extends CI_Controller {
         $this->form_validation->set_rules('branch_code', 'Branch Code', 'trim|required|xss_clean');
         $this->form_validation->set_rules('branch_name', 'Branch Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
-//        $this->form_validation->set_rules('address', 'Address', 'trim|required|xss_clean');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
 
         if ($this->form_validation->run() != FALSE) {
-            //echo "<pre>"; print_r($_POST); die();
-            //vishal COde Start
 
             $branch_type_fk = explode('-', $this->input->post('branch_type_fk'));
             $post['branch_type_fk'] = $branch_type_fk[0];
             $post['parent_fk'] = $this->input->post('parent_fk');
 
-            //vishal Code End
+
             $post['branch_code'] = $this->input->post('branch_code');
             $post['branch_name'] = $this->input->post('branch_name');
             $post['city'] = $this->input->post('city');
@@ -201,19 +196,20 @@ class Branch_Master extends CI_Controller {
             $post['createddate'] = date('Y-m-d h:i:s');
             $post['created_by'] = $data['user']->id;
             $post['updated_by'] = $data['user']->id;
-            
-                        $post['auto_completejob'] = $this->input->post('auto_completejob');
+
+            $post['auto_completejob'] = $this->input->post('auto_completejob');
             $post['smsalert'] = ($this->input->post('sms_alert') == '') ? 0 : 1;
             $post['emailalert'] = ($this->input->post('email_alert') == '') ? 0 : 1;
             $post['ipd'] = ($this->input->post('ipd') == '') ? 0 : 1;
+            $post['nabl_logo'] = ($this->input->post('nabl_logo') == '') ? 0 : 1;
 
             $bid=$this->Branch_Model->master_get_insert("branch_master", $post);
 			$city=$this->input->post('city');
-			
+
 			 $this->db->query("INSERT INTO test_branch_price (test_fk,price,branch_fk,TYPE) SELECT  test_fk,price,'$bid','1' FROM `test_master_city_price` WHERE STATUS='1' AND city_fk='$city'");
-		
-		$this->db->query("INSERT INTO test_branch_price (test_fk,price,branch_fk,TYPE) SELECT  package_fk,d_price,'$bid','2' FROM `package_master_city_price` WHERE status='1' AND city_fk='$city'");
-		
+
+		    $this->db->query("INSERT INTO test_branch_price (test_fk,price,branch_fk,TYPE) SELECT  package_fk,d_price,'$bid','2' FROM `package_master_city_price` WHERE status='1' AND city_fk='$city'");
+
 
             $this->session->set_flashdata("success", 'Branch successfully Added.');
             redirect("Branch_Master/Branch_list", "refresh");
@@ -294,9 +290,9 @@ class Branch_Master extends CI_Controller {
         if($status == '2'){
             $status = 0;
         }
-        
+
         $data['query'] = $this->Branch_Model->master_tbl_update("branch_master", $cid, array("whatsapp_report_send" => $status));
-        
+
         $this->session->set_flashdata("success", 'Branch successfully whatsapp setting update.');
         redirect("Branch_Master/Branch_list", "refresh");
     }
@@ -309,22 +305,12 @@ class Branch_Master extends CI_Controller {
         if($status == '2'){
             $status = 0;
         }
-        
+
         $data['query'] = $this->Branch_Model->master_tbl_update("branch_master", $cid, array("allow_whatsapp" => $status));
-        
+
         $this->session->set_flashdata("success", 'Branch successfully whatsapp setting update.');
         redirect("Branch_Master/Branch_list", "refresh");
     }
-
-    /* public function JobDoc_Delete()
-      {
-      $cid = $this->uri->segment('3');
-
-      $data['query'] = $this->Branch_model->master_get_spam($cid);
-
-      $this->session->set_flashdata('success','Branch Successfull Deleted');
-      redirect('Branch_Master/Branch_list','refresh');
-      } */
 
     function Branch_edit() {
 
@@ -337,17 +323,14 @@ class Branch_Master extends CI_Controller {
         $ids = $data['cid'];
         $data['view_data'] = $this->Branch_Model->master_get_view($ids);
         $data['city'] = $this->Branch_Model->list_city();
-
-        //VIshal Code start
         $data['branch_type'] = $this->Branch_Model->type_list();
         $data['branch_list'] = $this->Branch_Model->get_list();
-        //Vishal COde End
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules('branch_type_fk', 'Branch Type', 'trim|required');
         $this->form_validation->set_rules('branch_code', 'Branch Code', 'trim|required|xss_clean');
         $this->form_validation->set_rules('branch_name', 'Branch Name', 'trim|required|xss_clean');
         $this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
-//        $this->form_validation->set_rules('address', 'Address', 'trim|required|xss_clean');
         $this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
 
         if ($this->form_validation->run() != FALSE) {
@@ -366,11 +349,12 @@ class Branch_Master extends CI_Controller {
             $post['status'] = 1;
             $post['created_by'] = $data['user']->id;
             $post['updated_by'] = $data['user']->id;
-			
+
 			$post['smsalert'] = $this->input->post('sms_alert');
             $post['emailalert'] = $this->input->post('email_alert');
             $post['auto_completejob'] = $this->input->post('auto_completejob');
             $post['ipd'] = $this->input->post('ipd');
+            $post['nabl_logo'] = $this->input->post('nabl_logo');
             $data['query'] = $this->Branch_Model->master_tbl_update("branch_master", $ids, $post);
 
             $cnt = 0;
