@@ -4038,6 +4038,534 @@ WHERE `package_test`.`status` = '1'
         exit;
     }
 
+    function export_out_source_test_report()
+    {
+        $search_data = array();
+        $plm = $data['plm2'] = $search_data["plm"] = $this->input->get('plm');
+        $user = $data['user2'] = $search_data["user"] = $this->input->get('user');
+        $date = $data['date2'] = $search_data["date"] = $this->input->get('date');
+        $end_date = $data['end_date'] = $search_data["end_date"] = $this->input->get("end_date");
+        $p_oid = $data['p_oid'] = $search_data["p_oid"] = $this->input->get('p_oid');
+        $p_ref = $data['p_ref'] = $search_data["p_ref"] = $this->input->get('p_ref');
+        $mobile = $data['mobile'] = $search_data["mobile"] = $this->input->get('mobile');
+        $referral_by = $data['referral_by'] = $search_data["referral_by"] = $this->input->get('referral_by');
+        $status = $data['statusid'] = $search_data["status"] = $this->input->get('status');
+        $branch = $data['branch'] = $search_data["branch"] = $data["branch"] = $this->input->get('branch');
+        $payment = $data['payment2'] = $search_data["payment"] = $data["payment"] = $this->input->get('payment');
+        $test_pack = $data['test_pack'] = $search_data["test_pack"] = $this->input->get('test_package');
+        $city = $data['tcity'] = $search_data["city"] = $this->input->get('city');
+        $withsample = $data['withsample'] = $search_data["withsample"] = $this->input->get_post('withsample');
+        $data["login_data"] = logindata();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['branchlist'] = $this->registration_admin_model->get_val("SELECT * from branch_master where status='1'");
+        $cntr_arry = array();
+        if (!empty($data["login_data"]['branch_fk'])) {
+            foreach ($data["login_data"]['branch_fk'] as $key) {
+                $cntr_arry[] = $key["branch_fk"];
+            }
+            $data['branchlist'] = $this->registration_admin_model->get_val("SELECT * from branch_master where status='1' and id in (" . implode(",", $cntr_arry) . ")");
+        }
+        $data['test_cities'] = $this->registration_admin_model->get_val("SELECT * from test_cities where status='1'");
+        $test_packages = explode("_", $test_pack);
+        $alpha = $test_packages[0];
+        $tp_id = $test_packages[1];
+        if ($alpha == 't') {
+            $t_id = $tp_id;
+        }
+        if ($alpha == 'p') {
+            $p_id = $tp_id;
+        }
+        if ($branch != '') {
+            $cntr_arry = array();
+            $cntr_arry = $branch;
+        }
+        /* PLM start */
+        if (empty($branch) && $plm != '') {
+            if (empty($branch) && !empty($city) && empty($plm)) {
+                $plm_branch = $this->job_model->get_val("SELECT GROUP_CONCAT(id) AS id FROM `branch_master` WHERE `status`='1' AND city='" . $city . "' GROUP BY status");
+            }
+            if (empty($branch) && !empty($plm)) {
+                $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(id) AS id from branch_master where status='1' and (parent_fk ='" . $plm . "' or id='" . $plm . "') GROUP BY status");
+            }
+            if (empty($branch) && empty($city) && empty($plm)) {
+                $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(id) AS id from branch_master where status='1' GROUP BY status");
+            }
+            $plm_branch = explode(",", $plm_branch[0]["id"]);
+            $cntr_arry = array_merge(array($plm), $plm_branch);
+        } else {
+            $cntr_arry = $branch;
+        }
+        /* PLM END */
+
+
+
+        if ($data["login_data"]['type'] == '6') {
+            $login_id = $data["login_data"]['id'];
+            $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(bm.id) AS id
+                    FROM branch_master bm
+                    LEFT JOIN user_branch ub on ub.branch_fk = bm.id
+                    WHERE ub.user_fk = '$login_id'
+                    AND bm.status='1' GROUP BY bm.status");
+
+            $plm_branch = explode(",", $plm_branch[0]["id"]);
+            $cntr_arry = $plm_branch;
+        }
+
+
+
+        $search_data['cntr_arry'] = $cntr_arry;
+        $search_data['t_id'] = $t_id;
+        $search_data['p_id'] = $p_id;
+
+        $result = $this->job_model->csv_job_list($search_data);
+
+        $is_regular_test = false;
+        $is_panel_test = false;
+        /* Nishit code start */
+
+        $new_array = array();
+        foreach ($result as $kkey) {
+            $is_regular_test = false;
+            $is_panel_test = false;
+            $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $kkey["id"] . "'");
+            /* Check sub test start */
+            $job_tst_lst = array();
+            $job_sub_tst_lst = array();
+            foreach ($job_test_list as $st_key) {
+                //echo $st_key['test_fk'];
+                $job_sub_test_list = $this->job_model->get_val("SELECT `sub_test_master`.test_fk,`sub_test_master`.`sub_test`,test_master.`test_name` FROM `sub_test_master` INNER JOIN `test_master` ON `sub_test_master`.`sub_test`=`test_master`.`id` WHERE `sub_test_master`.`status`='1' AND `test_master`.`status`='1' AND `sub_test_master`.`test_fk`='" . $st_key['test_fk'] . "'");
+                $job_sub_tst_lst[] = $job_sub_test_list;
+                $st_key["sub_test"] = $job_sub_test_list;
+                $job_tst_lst[] = $st_key;
+            }
+
+            $package_ids = $this->job_model->get_job_booking_package($kkey["id"]);
+
+            $is_show = 1;
+            $test_list = array();
+            $package_list = array();
+            if (!empty($test_pack)) {
+                $is_show = 0;
+                foreach ($job_test_list as $f_key) {
+                    if (!in_array($f_key["test_name"], $test_list)) {
+                        $test_list[] = $f_key["test_name"];
+                    }
+                    if (strpos(trim(strtoupper($f_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
+                        $is_show = 1;
+                    }
+                }
+
+                foreach ($package_ids as $p_key) {
+                    $package_list[] = $p_key["name"];
+                    if (strpos(trim(strtoupper($p_key["name"])), trim(strtoupper($test_pack))) !== false) {
+                        $is_show = 1;
+                    }
+                    foreach ($p_key["test"] as $p_key) {
+                        if (!in_array($p_key["test_name"], $test_list)) {
+                            $test_list[] = $p_key["test_name"];
+                        }
+                        if (strpos(trim(strtoupper($p_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
+                            $is_show = 1;
+                        }
+                    }
+                }
+
+                foreach ($job_sub_tst_lst as $p_key) {
+                    foreach ($p_key as $ss_p_key) {
+                        if (!in_array($ss_p_key["test_name"], $test_list)) {
+                            $test_list[] = $ss_p_key["test_name"];
+                        }
+                        if (strpos(trim(strtoupper($ss_p_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
+                            $is_show = 1;
+                        }
+                    }
+                }
+            } else {
+                $is_show = 0;
+                foreach ($job_test_list as $f_key) {
+                    if (!in_array($f_key["test_name"], $test_list)) {
+                        $test_list[] = $f_key["test_name"];
+                    }
+                    if ($f_key["is_panel"] == "1") {
+                        $is_panel_test = true;
+                    } else {
+                        $is_regular_test = true;
+                    }
+                    $is_show = 1;
+                }
+
+                foreach ($package_ids as $p_key) {
+                    $package_list[] = $p_key["name"];
+                    foreach ($p_key["test"] as $p_key) {
+                        if (!in_array($p_key["test_name"], $test_list)) {
+                            $test_list[] = $p_key["test_name"];
+                        }
+                        $is_show = 1;
+                    }
+                }
+
+                foreach ($job_sub_tst_lst as $p_key) {
+                    foreach ($p_key as $ss_p_key) {
+                        if (!in_array($ss_p_key["test_name"], $test_list)) {
+                            $test_list[] = $ss_p_key["test_name"];
+                        }
+                        $is_show = 1;
+                    }
+                }
+            }
+            /* END */
+            $kkey["is_show"] = $is_show;
+            $coma = "";
+            if (!empty($package_list)) {
+                $coma = ", ";
+            }
+            $kkey["test_name"] = implode(", ", $package_list) . $coma . implode(", ", $test_list);
+            $test_type = "Regular";
+            if ($is_panel_test == true && $is_regular_test == true) {
+                $test_type = "Regular + Panel";
+            } else if ($is_panel_test == true) {
+                $test_type = "Panel";
+            } else if ($is_regular_test == true) {
+                $test_type = "Regular";
+            }
+            $kkey['test_type'] = $test_type;
+            $new_array[] = $kkey;
+        }
+
+        /* Nishit code end */
+        if (!isset($_REQUEST['de'])) {
+            header("Content-type: application/csv");
+            header("Content-Disposition: attachment; filename=\"Out_Source_Test_Report-" . date('d-M-Y') . ".csv\"");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, array("Reg No.", "Order Id", "Test City", "Branch", "Date", "Patient Name", "Mobile No.", "Doctor", "Doctor_code", "Doctor_Mobile", "PRO", "Speciality", "Special Discount",  "Test Type", "Job Status", "Payment Type", "Sample From", "New Patient/old Patient", "Portal", "Remark", "Added By", "Total Price", "Discount(RS.)", "Received Amount", "Cash", 'Card', "Payumoney", "CHEQUE", "Debited From Wallet", "Creditor Remain", "Due Amount", "Sample Received Date", "Sample Received Time", "Processing Date", "Processing Time", "Completed Time", "Report Generated Time", "Phlebo TAT (In Hour)", "Processing TAT (In Hour)", "Max TAT (In Hour)", "Processing Delay (In Hour)", "test name", "test price", "test disc %", "test disc", "billing", "total disc", "total billing", "IPD", 'Age', "Outsource","Lab Name"));
+        }
+        /* Nishit code start */
+        $cnt = 1;
+
+        foreach ($new_array as $key) {
+            if ($key["is_show"] == 1) {
+                if ($key['status'] == 1) {
+                    $j_status = "Waiting For Approval";
+                }
+                if ($key['status'] == 6) {
+                    $j_status = "Approved";
+                }
+                if ($key['status'] == 7) {
+                    $j_status = "Sample Collected";
+                }
+                if ($key['status'] == 8) {
+                    $j_status = "Processing";
+                }
+                if ($key['status'] == 2) {
+                    $j_status = "Completed";
+                }
+                $sample_collected = 'No';
+                if ($key["sample_collection"] == 1) {
+                    $sample_collected = 'Yes';
+                }
+                $addr = '';
+                if (!empty($key["address"])) {
+                    $addr = $key["address"];
+                } else {
+                    $addr = $key["address1"];
+                }
+                if (!$key["payable_amount"]) {
+                    $key["payable_amount"] = 0;
+                }
+                /* Nishit 18-08-2017 START */
+                $payment_mode = array();
+                $creditor_remark = array();
+                $discount = 0;
+                if ($key["discount"] > 0) {
+                    $discount = round($key["price"] * $key["discount"] / 100);
+                }
+                $added_by = "Online";
+                if (!empty($key["phlebo_added_by"])) {
+                    $added_by = $key["phlebo_added_by"] . " (Phlebo)";
+                } else if (!empty($key["added_by"])) {
+                    $added_by = $key["added_by"];
+                }
+                $cash = 0.0;
+                $card = 0.0;
+                $cheque = 0.0;
+                $other = 0.0;
+                $collection_type = $this->job_model->get_val("SELECT REPLACE (GROUP_CONCAT(remark,','), 'credited by', 'Creditor Name : ') AS remark, (`payment_type`) AS payment_type,sum(job_master_receiv_amount.amount) as amount FROM `job_master_receiv_amount` WHERE `status`='1' AND job_fk='" . $key["id"] . "' GROUP BY payment_type ORDER BY payment_type ASC");
+
+                if (count($collection_type) > 0) {
+                    foreach ($collection_type as $ct) {
+                        if (strtoupper($ct["payment_type"]) == "CASH") {
+                            $payment_mode[] = "CASH";
+                            $cash += $ct["amount"];
+                        } else if (in_array(strtoupper($ct["payment_type"]), array("DEBIT CARD SWIPED THRU ICICI", "DEBIT CARD", "DEBIT CARD", "CREDIT CARD", "PayTm", "PAYTM"))) {
+                            $payment_mode[] = "CARD";
+                            $card += $ct["amount"];
+                        } else if (strtoupper($ct["payment_type"]) == "CHEQUE") {
+                            $payment_mode[] = "CHEQUE";
+                            $cheque += $ct["amount"];
+                        } else if (strtoupper($ct["payment_type"]) == "CREDITORS") {
+                            $creditor_remark[] = $ct["remark"];
+                        }
+                    }
+                }
+                $creditor = $this->job_model->get_val("SELECT credit,debit,paid   FROM `creditors_balance` WHERE status=1 and job_id=" . $key["id"]);
+
+                $creditor_cash_collected = 0.0;
+                $creditor_cash_due = 0.0;
+
+
+
+                if (count($creditor) > 0) {
+                    foreach ($creditor as $ct) {
+                        if (($ct["credit"]) > 0) {
+                            $payment_mode[] = "CREDITOR CREDIT";
+                            $creditor_cash_collected += $ct["credit"];
+                            $cash += $ct["credit"];
+                        }
+                        if (($ct["debit"]) > 0) {
+                            $payment_mode[] = "CREDITOR DEBIT";
+                            $creditor_cash_due += $ct["debit"];
+                        }
+                    }
+                }
+                $creditor_cash_due = $creditor_cash_due - $creditor_cash_collected;
+                $payumoneyRecord = $this->job_model->get_val("SELECT SUM(amount) as amount FROM `payment` WHERE STATUS='success' AND job_fk=" . $key["id"]);
+                $payumoney = 0.0;
+
+                if (count($payumoneyRecord) > 0) {
+                    foreach ($payumoneyRecord as $ct) {
+                        $payumoney += $ct["amount"];
+                    }
+                }
+
+                $dabitt_from_wallet = $this->job_model->get_val("SELECT IF(SUM(`debit`)>0,SUM(`debit`),0) AS dabit FROM `wallet_master` WHERE `job_fk`='" . $key["id"] . "' AND `status`='1'");
+                $due = round($key["price"] - $key["payable_amount"] - $discount - $dabitt_from_wallet[0]["dabit"]);
+                if ($dabitt_from_wallet[0]["dabit"] > 0) {
+                    $payment_mode[] = "WALLET";
+                }
+                if (strtoupper($key["payment_type"]) == "PAYUMONEY") {
+                    $payment_mode[] = "PAYUMONEY";
+                }
+
+                /* END */
+                if ($key["family_member_fk"] == 0) {
+                    $patient_name = $key["full_name"];
+                } else {
+                    $patient_name = $key["family_name"];
+                }
+
+
+
+                if (!isset($_REQUEST['de'])) {
+                    if ($key["oldpatient"] == '1') {
+                        $formpatient = "Old";
+                    } else {
+                        $formpatient = "New";
+                    }
+
+
+                    if ($data["login_data"]["id"] != '10') {
+                        $late_processing = 0;
+                        $late_sample_collection = 0;
+
+                        $max_test_tat = 0;
+                        $max_package_tat = 0;
+                        $max_tat = 0;
+                        $phlebo_tat = 0;
+                        $processing_tat = 0;
+
+                        $package_ids1 = [];
+                        $test_ids1 = [];
+                        $test_tat = [];
+                        $package_tat = [];
+                        $package_ids = $this->job_model->get_job_booking_package($key["id"]);
+                        foreach ($job_tst_lst as $key1) {
+                            $test_ids1[] = $this->job_model->get_val("select id from test_master where status='1' AND test_name like '%" . str_replace("'", "''", $key1['test_name']) . "%'");
+                        }
+                        foreach ($package_ids as $key2) {
+                            $package_ids1[] = $this->job_model->get_val("select id from package_master where status='1' AND title like '%" . str_replace("'", "''", $key2['name']) . "%'");
+                        }
+
+                        foreach ($test_ids1 as $key3) {
+                            $test_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='1' AND test_fk='" . $key3[0]['id'] . "'");
+                        }
+
+                        foreach ($package_ids1 as $key4)
+                            $package_ids1 = [];
+                        $test_ids1 = [];
+                        $test_tat = [];
+                        $package_tat = [];
+                        $job_test_list = [];
+                        $package_ids = $this->job_model->get_job_booking_package($key["id"]);
+                        $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $key["id"] . "'");
+
+                        foreach ($package_ids as $key2) {
+                            $package_ids1[] = $this->job_model->get_val("select id from package_master where status='1' AND title like '%" . str_replace("'", "''", $key2['name']) . "%'");
+                        }
+
+                        foreach ($job_test_list as $key3) {
+                            $test_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='1' AND test_fk='" . $key3['test_fk'] . "'");
+                        }
+
+                        foreach ($package_ids1 as $key4) {
+                            $package_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='2' AND test_fk='" . $key4[0]['id'] . "'");
+                        }
+                        if (!empty($test_tat)) {
+                            foreach ($test_tat as $key11) {
+                                if (!empty($key11)) {
+                                    if ($max_test_tat < $key11[0]['tat']) {
+                                        $max_test_tat = $key11[0]['tat'];
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!empty($package_tat)) {
+                            foreach ($package_tat as $key12) {
+                                if (!empty($key12)) {
+                                    if ($max_package_tat < $key12[0]['tat']) {
+                                        $max_package_tat = $key12[0]['tat'];
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($max_test_tat > $max_package_tat) {
+                            $max_tat = $max_test_tat;
+                        } else {
+                            $max_tat = $max_package_tat;
+                        }
+
+                        $sample_collect_time = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='6-7' AND job_fk=" . $key["id"]);
+                        $sample_date = date('Y-m-d', strtotime($sample_collect_time[0]['date_time']));
+                        $sample_time = date('H:i:s', strtotime($sample_collect_time[0]['date_time']));
+
+                        $processing = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='7-8' AND job_fk=" . $key["id"]);
+                        $processing_date = date('Y-m-d', strtotime($processing[0]['date_time']));
+                        $processing_time = date('H:i:s', strtotime($processing[0]['date_time']));
+
+                        if ($key['status'] == '8' || $key['status'] == '2') {
+                            $phlebo_tat = round(((strtotime($processing_time) - strtotime($sample_time)) / 60) / 60, 2);
+                        } else {
+                            $processing_date = $processing_time = $phlebo_tat = "Pending";
+                        }
+                        if ($key['status'] == '2') {
+                            $completion_time = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='8-2' AND job_fk=" . $key["id"]);
+
+                            $report_generate_time = $this->job_model->get_val("select created_date from report_master where status = 1 and job_fk=" .  $key["id"]);
+
+                            $interval = (new DateTime($report_generate_time[0]['created_date']))->diff(new DateTime($sample_collect_time[0]['date_time']));
+                            $processing_tat = $interval->format("%H:%i:%s");
+                            $completed_time1 = date('H:i:s', strtotime($completion_time[0]['date_time']));
+                            $report_generate_date1 = date('Y-m-d', strtotime($report_generate_time[0]['created_date']));
+                            $report_generate_time1 = date('H:i:s', strtotime($report_generate_time[0]['created_date']));
+                        } else {
+                            $processing_tat = "Pending";
+                            $completed_time1 = "Pending";
+                            $report_generate_time1 = "Pending";
+                        }
+
+                        if ($processing_tat != "Pending") {
+                            if ($processing_tat > $max_tat) {
+                                $is_processing_delay = $processing_tat - $max_tat;
+                            } else {
+                                $is_processing_delay = "";
+                            }
+                        } else {
+                            $is_processing_delay = "";
+                        }
+                    }
+
+                    $qry = "select a.*, b.*, tm.test_name from (select bjt.price p1, replace(bjt.test_fk, 't-','') test_fk, bjt.test_fk t123 from booked_job_test bjt where bjt.job_fk = " . $key["id"] . " and bjt.status = 1 and bjt.test_fk like 't-%' ) a inner join test_master tm on tm.id = a.test_fk left join (select test_fk testfk, branch_fk, price p2, case when replace(r_code, ' ', '') = 'SA1' then 50 when  replace(r_code, ' ', '') = 'SA2' then 50 when replace(r_code, ' ', '') = 'SA3' then 35 when  replace(r_code, ' ', '') = 'SA7' then 35 when  replace(r_code, ' ', '') = 'SA4' then 15 when  replace(r_code, ' ', '') = 'SA5' then 15 when  replace(r_code, ' ', '') = 'SA6' then 15 else 0 end code1, r_code from test_branch_price where branch_fk = " . $key["branch_fk"] . " and status = '1') b on a.test_fk = b.testfk and p1 = p2";
+
+                    $test_codes = $this->job_model->get_val($qry);
+                    $cnt = 0;
+                    $t_dsc = 0;
+                    $t_bil = 0;
+
+                    $outsource = "";
+                    if ($key["status"] != '0' && $key["status"] != '2') {
+                        $outsource = "Outsource";
+                    }
+                    if ($key["status"] == '2') {
+                        $outsource = "Outsource";
+                    }
+                    $this->load->library("util");
+                    $util = new Util;
+                    $age = $util->get_age($key["dob"]);
+                    $ageShow = "";
+                    if ($age[0] != 0) {
+                        $ageShow = $age[0] . " Y";
+                    }
+                    if ($age[0] == 0 && $age[1] != 0) {
+                        $ageShow = $age[1] . " M";
+                    }
+                    if ($age[0] == 0 && $age[1] == 0 && $age[2] != 0) {
+                        $ageShow = $age[2] . " D";
+                    }
+
+                    if (count($test_codes) > 0) {
+                        foreach ($test_codes as $code) {
+                            $labName = "";
+                            $outsourceqry = "select * from user_test_outsource where job_fk=". $key["id"] ." AND test_fk=" . $code['test_fk'] . " AND status='1'";
+                            $getOutSourceTest = $this->job_model->get_val($outsourceqry);
+                            if (empty($getOutSourceTest)) {
+                                continue;
+                            }else{
+                                $labqry = "select id,name from outsource_master where id=". $getOutSourceTest[0]["outsource_fk"] ." AND status='1'";
+                                $getLabName = $this->job_model->get_val($labqry);
+
+                                $labName = $getLabName[0]['name'];
+                            }
+                            $cnt++;
+                            $t_dsc += ($code["p1"] * $code["code1"] / 100);
+                            $t_bil += $code["p1"] - ($code["p1"] * $code["code1"] / 100);
+                            if ($cnt == count($test_codes)){
+                                fputcsv($handle, array($key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"], $key["doc_code"], $key["doctor_mobile"], (empty($key["pro"]) ? 'NO PRO MEETING' : $key["pro"]), $key["speciality"], $key["ra"] . "%", $key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, $code["test_name"], $code["p1"], $code["code1"], $code["code1"] > 0 ? ($code["p1"] * $code["code1"] / 100) : 0, $code["code1"] > 0 ? $code["p1"] - ($code["p1"] * $code["code1"] / 100) : $code["p1"], $t_dsc, $t_bil, $key["ipd"], $ageShow, $outsource,$labName));
+                            }else{
+                                fputcsv($handle, array($key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"], $key["doc_code"], $key["doctor_mobile"], (empty($key["pro"]) ? 'NO PRO MEETING' : $key["pro"]), $key["speciality"], $key["ra"] . "%",$key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, $code["test_name"], $code["p1"], $code["code1"], $code["code1"] > 0 ? ($code["p1"] * $code["code1"] / 100) : 0, $code["code1"] > 0 ? $code["p1"] - ($code["p1"] * $code["code1"] / 100) : $code["p1"],$t_dsc, $t_bil, $key["ipd"], $ageShow, $outsource,$labName));
+                            }
+
+                        }
+                    }
+
+                    if(!empty($package_ids[0])){
+                        foreach($package_ids[0]['test'] as $packageTest){
+                            $packageID = $package_ids[0]['package_fk'];
+                            $packageID = $this->db->escape('p-' . $packageID);
+
+                            $labName = "";
+                            $outsourceqry = "select * from user_test_outsource where job_fk=". $key["id"] ." AND test_fk=" . $packageTest['test_fk'] . " AND status='1'";
+                            $getOutSourceTest = $this->job_model->get_val($outsourceqry);
+                            if (empty($getOutSourceTest)) {
+                                continue;
+                            }else{
+                                $labqry = "select id,name from outsource_master where id=". $getOutSourceTest[0]["outsource_fk"] ." AND status='1'";
+                                $getLabName = $this->job_model->get_val($labqry);
+                                $labName = $getLabName[0]['name'];
+
+                                $getPackagePrice = $this->job_model->get_val("select price from booked_job_test where job_fk=". $key["id"] ." AND test_fk=" . $packageID . " AND status='1'");
+
+                            }
+                            $p1 = $getPackagePrice[0]['price'];
+                            $code1 = $key['discount'];
+                            $test_disc = ($code1 > 0) ? ($p1 * $code1 / 100) : 0;
+                            $billing   = ($code1 > 0) ? ($p1 - $test_disc) : $p1;
+
+                            $cnt++;
+                            fputcsv($handle, array($key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"], $key["doc_code"], $key["doctor_mobile"],(empty($key["pro"]) ? 'NO PRO MEETING' : $key["pro"]),$key["speciality"],$key["ra"] . "%", $key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, $packageTest['test_name'],$p1,$code1, $test_disc,$billing,$test_disc,$billing, $key["ipd"], $ageShow, $outsource,$labName));
+                        }
+                    }
+                }
+                $cnt++;
+            }
+        }
+        fclose($handle);
+        exit;
+    }
+
     function export_doctor_csv()
     {
 

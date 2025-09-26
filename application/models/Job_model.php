@@ -85,9 +85,9 @@ class Job_model extends CI_Model
     public function pending_job_search($user = null, $date = null, $city = null, $status = null, $mobile = null, $t_id = null, $p_id = null, $p_amount = null)
     {
 
-        $query = "SELECT j.id,j.branch_fk,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` LEFT JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
+        $query = "SELECT j.id,j.branch_fk,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` LEFT JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
     ON p.id = pb.package_fk where j.id!=' ' ";
 
         if ($user != "") {
@@ -132,59 +132,59 @@ class Job_model extends CI_Model
     public function num_row_srch_job_list($data = null)
     {
 
-        $query = "SELECT 
+        $query = "SELECT
   j.id
 FROM
-  job_master j 
-  LEFT JOIN job_test_list_master jtl 
-    ON jtl.job_fk = j.`id` 
-  INNER JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
+  job_master j
+  LEFT JOIN job_test_list_master jtl
+    ON jtl.job_fk = j.`id`
+  INNER JOIN customer_master c
+    ON c.id = j.`cust_fk`
 
-  LEFT JOIN 
-    (SELECT 
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(test_master.`test_name`) AS gtest_name,
-      jtl2.`job_fk` 
+      jtl2.`job_fk`
     FROM
-      test_master 
-      LEFT JOIN job_test_list_master jtl2 
+      test_master
+      LEFT JOIN job_test_list_master jtl2
         ON (
           jtl2.`test_fk` = test_master.`id`
-        ) 
-    GROUP BY jtl2.`job_fk`) AS temp_test_master 
-    ON temp_test_master.job_fk = j.`id` 
-    
-  LEFT JOIN 
-    (SELECT 
+        )
+    GROUP BY jtl2.`job_fk`) AS temp_test_master
+    ON temp_test_master.job_fk = j.`id`
+
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
-      bpm.`job_fk` 
+      bpm.`job_fk`
     FROM
-      `package_master` 
-      LEFT JOIN `book_package_master` bpm 
+      `package_master`
+      LEFT JOIN `book_package_master` bpm
         ON (
           `package_master`.`id` = bpm.`package_fk`
-        ) 
-    GROUP BY bpm.`job_fk`) AS temp_package_master 
-    ON temp_package_master.job_fk = j.`id` 
-    
-  LEFT JOIN test_master t 
-    ON t.id = jtl.test_fk 
-  LEFT JOIN book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
-    ON p.id = pb.package_fk 
-  LEFT JOIN `booking_info` 
-    ON j.`booking_info` = `booking_info`.`id` 
-  LEFT JOIN `doctor_master` 
-    ON j.`doctor` = `doctor_master`.`id` 
-  LEFT JOIN `report_master` 
-    ON `report_master`.`job_fk` = j.id 
-  LEFT JOIN wallet_master 
-    ON j.`id` = wallet_master.`job_fk` 
-  LEFT JOIN customer_family_master 
-    ON customer_family_master.`id` = `booking_info`.`family_member_fk` 
-  LEFT JOIN relation_master 
-    ON relation_master.`id` = customer_family_master.`relation_fk` 
+        )
+    GROUP BY bpm.`job_fk`) AS temp_package_master
+    ON temp_package_master.job_fk = j.`id`
+
+  LEFT JOIN test_master t
+    ON t.id = jtl.test_fk
+  LEFT JOIN book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
+    ON p.id = pb.package_fk
+  LEFT JOIN `booking_info`
+    ON j.`booking_info` = `booking_info`.`id`
+  LEFT JOIN `doctor_master`
+    ON j.`doctor` = `doctor_master`.`id`
+  LEFT JOIN `report_master`
+    ON `report_master`.`job_fk` = j.id
+  LEFT JOIN wallet_master
+    ON j.`id` = wallet_master.`job_fk`
+  LEFT JOIN customer_family_master
+    ON customer_family_master.`id` = `booking_info`.`family_member_fk`
+  LEFT JOIN relation_master
+    ON relation_master.`id` = customer_family_master.`relation_fk`
 WHERE 1=1 ";
         if ($data["p_ref"] != "") {
             $query .= " AND j.id='" . $data['p_ref'] . "'";
@@ -252,7 +252,7 @@ WHERE 1=1 ";
 
     public function row_srch_job_list($data = null, $limit = 0, $start = 0)
     {
-        $query = "SELECT 
+        $query = "SELECT
   j.id,
   j.branch_fk,
   gtest_name AS testname,
@@ -291,58 +291,58 @@ WHERE 1=1 ";
       '-',
       customer_family_master.`name`
     )
-  ) AS relation 
+  ) AS relation
 FROM
-  job_master j 
-  LEFT JOIN job_test_list_master jtl 
-    ON jtl.job_fk = j.`id` 
-  INNER JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
+  job_master j
+  LEFT JOIN job_test_list_master jtl
+    ON jtl.job_fk = j.`id`
+  INNER JOIN customer_master c
+    ON c.id = j.`cust_fk`
 
-  LEFT JOIN 
-    (SELECT 
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(test_master.`test_name`) AS gtest_name,
-      jtl2.`job_fk` 
+      jtl2.`job_fk`
     FROM
-      test_master 
-      LEFT JOIN job_test_list_master jtl2 
+      test_master
+      LEFT JOIN job_test_list_master jtl2
         ON (
           jtl2.`test_fk` = test_master.`id`
-        ) 
-    GROUP BY jtl2.`job_fk`) AS temp_test_master 
-    ON temp_test_master.job_fk = j.`id` 
-    
-  LEFT JOIN 
-    (SELECT 
+        )
+    GROUP BY jtl2.`job_fk`) AS temp_test_master
+    ON temp_test_master.job_fk = j.`id`
+
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
-      bpm.`job_fk` 
+      bpm.`job_fk`
     FROM
-      `package_master` 
-      LEFT JOIN `book_package_master` bpm 
+      `package_master`
+      LEFT JOIN `book_package_master` bpm
         ON (
           `package_master`.`id` = bpm.`package_fk`
-        ) 
-    GROUP BY bpm.`job_fk`) AS temp_package_master 
-    ON temp_package_master.job_fk = j.`id` 
-    
-  LEFT JOIN test_master t 
-    ON t.id = jtl.test_fk 
-  LEFT JOIN book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
-    ON p.id = pb.package_fk 
-  LEFT JOIN `booking_info` 
-    ON j.`booking_info` = `booking_info`.`id` 
-  LEFT JOIN `doctor_master` 
-    ON j.`doctor` = `doctor_master`.`id` 
-  LEFT JOIN `report_master` 
-    ON `report_master`.`job_fk` = j.id 
-  LEFT JOIN wallet_master 
-    ON j.`id` = wallet_master.`job_fk` 
-  LEFT JOIN customer_family_master 
-    ON customer_family_master.`id` = `booking_info`.`family_member_fk` 
-  LEFT JOIN relation_master 
-    ON relation_master.`id` = customer_family_master.`relation_fk` 
+        )
+    GROUP BY bpm.`job_fk`) AS temp_package_master
+    ON temp_package_master.job_fk = j.`id`
+
+  LEFT JOIN test_master t
+    ON t.id = jtl.test_fk
+  LEFT JOIN book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
+    ON p.id = pb.package_fk
+  LEFT JOIN `booking_info`
+    ON j.`booking_info` = `booking_info`.`id`
+  LEFT JOIN `doctor_master`
+    ON j.`doctor` = `doctor_master`.`id`
+  LEFT JOIN `report_master`
+    ON `report_master`.`job_fk` = j.id
+  LEFT JOIN wallet_master
+    ON j.`id` = wallet_master.`job_fk`
+  LEFT JOIN customer_family_master
+    ON customer_family_master.`id` = `booking_info`.`family_member_fk`
+  LEFT JOIN relation_master
+    ON relation_master.`id` = customer_family_master.`relation_fk`
 WHERE 1=1";
 
         if ($data["p_ref"] != "") {
@@ -408,9 +408,9 @@ WHERE 1=1";
     public function job_report_data($start_date = null, $end_date = null, $status = null, $branch = null)
     {
 
-        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.`discount`,j.date,j.booking_info,j.views,j.discount,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
+        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.`discount`,j.date,j.booking_info,j.views,j.discount,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
     ON p.id = pb.package_fk where j.id!=' '";
 
 
@@ -449,9 +449,9 @@ WHERE 1=1";
     public function srch_job_list($limit, $start, $data = null)
     {
 
-        $query = "SELECT j.id,j.branch_fk,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.order_id,j.invoice,j.ack,j.collection_charge,j.dispatch,j.doctor,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
+        $query = "SELECT j.id,j.branch_fk,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.order_id,j.invoice,j.ack,j.collection_charge,j.dispatch,j.doctor,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
     ON p.id = pb.package_fk where 1=1 ";
         if (!empty($data["cntr_arry"])) {
             $query .= " AND j.branch_fk  in (" . implode(",", $data["cntr_arry"]) . ")";
@@ -496,14 +496,7 @@ WHERE 1=1";
         return $result->num_rows();
     }
 
-    /* public function csv_job_list() {
-      $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.order_id,j.test_city,j.address,j.portal,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
-      ON pb.job_fk = j.id
-      LEFT JOIN package_master p
-      ON p.id = pb.package_fk where j.id!=' ' and j.status != '0' GROUP BY j.id ORDER BY j.id DESC";
-      $result = $this->db->query($query);
-      return $result->result_array();
-      } */
+
 
     public function csv_job_list($data = null)
     {
@@ -513,10 +506,10 @@ WHERE 1=1";
         $end_dt = explode("/", $data["end_date"]);
         $end_dat = $end_dt[2] . "-" . $end_dt[1] . "-" . $end_dt[0] . " 23:59:59";
 
-        $query = "SELECT 
+        $query = "SELECT
   j.id,j.ipd,c.dob,
   j.order_id,
- IF(booking_info.`family_member_fk`>0,( SELECT customer_family_master.`name` FROM customer_family_master WHERE  customer_family_master.`id`=`booking_info`.`family_member_fk`  ),c.full_name ) AS full_name ,  
+ IF(booking_info.`family_member_fk`>0,( SELECT customer_family_master.`name` FROM customer_family_master WHERE  customer_family_master.`id`=`booking_info`.`family_member_fk`  ),c.full_name ) AS full_name ,
   c.mobile,
   j.cust_fk,
   j.booking_info,
@@ -540,7 +533,7 @@ WHERE 1=1";
   doctor_master.`full_name` AS doctor_name,
   branch_master.`branch_name`,
   admin_master.name as added_by,
-  phlebo_master.name as phlebo_added_by, sum(jamt.amount) amountreceived, 
+  phlebo_master.name as phlebo_added_by, sum(jamt.amount) amountreceived,
   doctor_master.`doctor_pro` AS pro,
   doctor_master.`doctor_speciality` AS speciality,
   doctor_master.`doctor_code` AS doc_code,
@@ -548,44 +541,17 @@ WHERE 1=1";
   doctor_master.`doctor_area` AS doc_area,
   doctor_master.`mobile` AS doctor_mobile
 FROM
-  job_master j 
-  inner join test_cities tc 
-  on j.test_city=tc.id 
-  left join admin_master on j.added_by=admin_master.id 
-  left join phlebo_master on j.phlebo_added=phlebo_master.id 
-  LEFT  JOIN booking_info ON booking_info.id= j.booking_info 
+  job_master j
+  inner join test_cities tc
+  on j.test_city=tc.id
+  left join admin_master on j.added_by=admin_master.id
+  left join phlebo_master on j.phlebo_added=phlebo_master.id
+  LEFT  JOIN booking_info ON booking_info.id= j.booking_info
   left join sample_from on sample_from.id=j.sample_from
-  INNER JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
+  INNER JOIN customer_master c
+    ON c.id = j.`cust_fk`
 	left join job_master_receiv_amount jamt on j.id = jamt.job_fk AND jamt.createddate >='" . $strt_dat . "' AND jamt.createddate <='" . $end_dat . "' and jamt.status = 1 ";
-        //   if ($data["test_pack"] != "") {
-        /* $query .= "LEFT JOIN 
-    (SELECT 
-      GROUP_CONCAT(test_master.`test_name`) AS gtest_name,
-      jtl2.`job_fk` 
-    FROM
-      test_master 
-      LEFT JOIN job_test_list_master jtl2 
-        ON (
-          jtl2.`test_fk` = test_master.`id`
-        ) 
-    GROUP BY jtl2.`job_fk`) AS temp_test_master 
-    ON temp_test_master.job_fk = j.`id` 
-    
-  LEFT JOIN 
-    (SELECT 
-      GROUP_CONCAT(package_master.title) AS pname,
-      bpm.`job_fk` 
-    FROM
-      `package_master` 
-      LEFT JOIN `book_package_master` bpm 
-        ON (
-          `package_master`.`id` = bpm.`package_fk`
-        ) 
-    GROUP BY bpm.`job_fk`) AS temp_package_master 
-    ON temp_package_master.job_fk = j.`id`";
-        //   }
-        */
+
         $query .= " LEFT JOIN `doctor_master` ON `doctor_master`.`id`=j.`doctor` LEFT JOIN `branch_master` ON `branch_master`.`id`=j.`branch_fk` WHERE 1=1 ";
         if ($data["p_ref"] != "") {
             $query .= " AND j.id='" . $data['p_ref'] . "'";
@@ -631,9 +597,7 @@ FROM
         if ($data["referral_by"] != "") {
             $query .= " AND j.doctor='" . $data["referral_by"] . "'";
         }
-        /*if ($data["test_pack"] != "") {
-            $query .= " AND ((gtest_name) LIKE '%" . ($data["test_pack"]) . "%' OR (pname) LIKE '%" . ($data["test_pack"]) . "%')";
-        }*/
+
         if ($data["status"] != "" && $data["status"] != "0" && $data["status"] != "Dispatched") {
             $query .= " and  j.status != '0' AND j.status='" . $data["status"] . "'";
         }
@@ -666,10 +630,10 @@ FROM
         }
 
         $query .= " UNION ";
-        $query .= " SELECT 
+        $query .= " SELECT
   j.id,j.ipd,c.dob,
   j.order_id,
- IF(booking_info.`family_member_fk`>0,( SELECT customer_family_master.`name` FROM customer_family_master WHERE  customer_family_master.`id`=`booking_info`.`family_member_fk`  ),c.full_name ) AS full_name ,  
+ IF(booking_info.`family_member_fk`>0,( SELECT customer_family_master.`name` FROM customer_family_master WHERE  customer_family_master.`id`=`booking_info`.`family_member_fk`  ),c.full_name ) AS full_name ,
   c.mobile,
   j.cust_fk,
   j.booking_info,
@@ -693,7 +657,7 @@ FROM
   doctor_master.`full_name` AS doctor_name,
   branch_master.`branch_name`,
   admin_master.name as added_by,
-  phlebo_master.name as phlebo_added_by, sum(jamt.amount) amountreceived, 
+  phlebo_master.name as phlebo_added_by, sum(jamt.amount) amountreceived,
   doctor_master.`doctor_pro` AS pro,
   doctor_master.`doctor_speciality` AS speciality,
   doctor_master.`doctor_code` AS doc_code,
@@ -701,16 +665,16 @@ FROM
   doctor_master.`doctor_area` AS doc_area,
   doctor_master.`mobile` AS doctor_mobile
 FROM
-  job_master j 
-  inner join test_cities tc 
-  on j.test_city=tc.id 
-  left join admin_master on j.added_by=admin_master.id 
-  left join phlebo_master on j.phlebo_added=phlebo_master.id 
-  LEFT  JOIN booking_info ON booking_info.id= j.booking_info 
+  job_master j
+  inner join test_cities tc
+  on j.test_city=tc.id
+  left join admin_master on j.added_by=admin_master.id
+  left join phlebo_master on j.phlebo_added=phlebo_master.id
+  LEFT  JOIN booking_info ON booking_info.id= j.booking_info
   left join sample_from on sample_from.id=j.sample_from
   left join source_master srcm on srcm.id=j.other_reference
-  INNER JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
+  INNER JOIN customer_master c
+    ON c.id = j.`cust_fk`
 	inner join job_master_receiv_amount jamt on j.id = jamt.job_fk AND jamt.createddate >='" . $strt_dat . "' AND jamt.createddate <='" . $end_dat . "' and jamt.status = 1 LEFT JOIN `doctor_master` ON `doctor_master`.`id`=j.`doctor` LEFT JOIN `branch_master` ON `branch_master`.`id`=j.`branch_fk` ";
         $query .= " WHERE 1=1 ";
         if ($data["p_ref"] != "") {
@@ -735,9 +699,7 @@ FROM
         if ($data["referral_by"] != "") {
             $query .= " AND j.doctor='" . $data["referral_by"] . "'";
         }
-        /*if ($data["test_pack"] != "") {
-            $query .= " AND ((gtest_name) LIKE '%" . ($data["test_pack"]) . "%' OR (pname) LIKE '%" . ($data["test_pack"]) . "%')";
-        }*/
+
         if ($data["status"] != "" && $data["status"] != "0" && $data["status"] != "Dispatched") {
             $query .= " and  j.status != '0' AND j.status='" . $data["status"] . "'";
         }
@@ -781,14 +743,14 @@ FROM
     }
     public function csv_job_list2($data = null)
     {
-        $query = "SELECT 
+        $query = "SELECT
   j.id,
   j.order_id,
   c.full_name,
   c.mobile,
   j.cust_fk,
   j.booking_info,
-  gtest_name AS testname, 
+  gtest_name AS testname,
   pname AS packagename,
   j.doctor,
   j.test_city,
@@ -806,38 +768,38 @@ FROM
   j.discount,
   tc.name as test_city_name,
   doctor_master.`full_name` AS doctor_name,
-  branch_master.`branch_name` 
+  branch_master.`branch_name`
 FROM
-  job_master j 
-  inner join test_cities tc 
-  on j.test_city=tc.id 
-  INNER JOIN customer_master c 
+  job_master j
+  inner join test_cities tc
+  on j.test_city=tc.id
+  INNER JOIN customer_master c
     ON c.id = j.`cust_fk` ";
         //   if ($data["test_pack"] != "") {
-        $query .= "LEFT JOIN 
-    (SELECT 
+        $query .= "LEFT JOIN
+    (SELECT
       GROUP_CONCAT(test_master.`test_name`) AS gtest_name,
-      jtl2.`job_fk` 
+      jtl2.`job_fk`
     FROM
-      test_master 
-      LEFT JOIN job_test_list_master jtl2 
+      test_master
+      LEFT JOIN job_test_list_master jtl2
         ON (
           jtl2.`test_fk` = test_master.`id`
-        ) 
-    GROUP BY jtl2.`job_fk`) AS temp_test_master 
-    ON temp_test_master.job_fk = j.`id` 
-    
-  LEFT JOIN 
-    (SELECT 
+        )
+    GROUP BY jtl2.`job_fk`) AS temp_test_master
+    ON temp_test_master.job_fk = j.`id`
+
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
-      bpm.`job_fk` 
+      bpm.`job_fk`
     FROM
-      `package_master` 
-      LEFT JOIN `book_package_master` bpm 
+      `package_master`
+      LEFT JOIN `book_package_master` bpm
         ON (
           `package_master`.`id` = bpm.`package_fk`
-        ) 
-    GROUP BY bpm.`job_fk`) AS temp_package_master 
+        )
+    GROUP BY bpm.`job_fk`) AS temp_package_master
     ON temp_package_master.job_fk = j.`id` LEFT JOIN `doctor_master` ON `doctor_master`.`id`=j.`doctor` LEFT JOIN `branch_master` ON `branch_master`.`id`=j.`branch_fk`";
         //   }
         $query .= " WHERE 1=1 ";
@@ -912,9 +874,9 @@ FROM
     public function pending_job_search_telecaller($user = null, $date = null, $city = null, $status = null, $mobile = null, $t_id = null, $p_id = null, $p_amount = null)
     {
 
-        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile AS mobile1,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
+        $query = "SELECT j.id,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile AS mobile1,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
     ON p.id = pb.package_fk where j.id!=' ' ";
         if ($user != "") {
             $query .= " AND j.cust_fk='$user'";
@@ -1016,12 +978,12 @@ FROM
 
     public function job_details($id)
     {
-        $query = $this->db->query("SELECT j.branch_fk,dm.full_name as dname,j.added_by,j.phlebo_added,  phlebo_master.name as phlebo_added_by, c.dob,dm.mobile as dmobile,j.model_type,j.b2b_id,j.send_sms,j.send_email,j.pin,j.collection_charge,j.collectioncharge_amount,j.sample_from,sample_from.name as sample_from_name,j.clinical_history,j.prescription_message,j.prescription_file,j.status,j.barcode,j.portal,j.notify_cust,j.report_status,j.discount_note,j.other_reference,j.invoice,j.note,j.sample_collection,j.booking_info,j.payment_type,j.payable_amount,j.test_city,j.id,j.order_id,j.price,j.discount,GROUP_CONCAT(distinct t.test_name SEPARATOR  '#') testname,GROUP_CONCAT(distinct p.title SEPARATOR  '@') packagename,GROUP_CONCAT(distinct p.id SEPARATOR '%') packageid,GROUP_CONCAT(t.id) testid,j.date,j.status,j.sample_collection,c.id custid ,c.full_name ,c.mobile,c.gender,c.email,c.address,c.country,c.state,c.city,c.pic,c.type,c.password,j.ipd FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` LEFT JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p  
+        $query = $this->db->query("SELECT j.branch_fk,dm.full_name as dname,j.added_by,j.phlebo_added,  phlebo_master.name as phlebo_added_by, c.dob,dm.mobile as dmobile,j.model_type,j.b2b_id,j.send_sms,j.send_email,j.pin,j.collection_charge,j.collectioncharge_amount,j.sample_from,sample_from.name as sample_from_name,j.clinical_history,j.prescription_message,j.prescription_file,j.status,j.barcode,j.portal,j.notify_cust,j.report_status,j.discount_note,j.other_reference,j.invoice,j.note,j.sample_collection,j.booking_info,j.payment_type,j.payable_amount,j.test_city,j.id,j.order_id,j.price,j.discount,GROUP_CONCAT(distinct t.test_name SEPARATOR  '#') testname,GROUP_CONCAT(distinct p.title SEPARATOR  '@') packagename,GROUP_CONCAT(distinct p.id SEPARATOR '%') packageid,GROUP_CONCAT(t.id) testid,j.date,j.status,j.sample_collection,c.id custid ,c.full_name ,c.mobile,c.gender,c.email,c.address,c.country,c.state,c.city,c.pic,c.type,c.password,j.ipd FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` LEFT JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
     ON p.id = pb.package_fk
     left JOIN `sample_from` ON `j`.`sample_from`=sample_from.`id`
-    left join phlebo_master on j.phlebo_added=phlebo_master.id 
+    left join phlebo_master on j.phlebo_added=phlebo_master.id
 LEFT JOIN doctor_master dm ON dm.id=j.`doctor`	where j.id=$id GROUP BY j.id ORDER BY j.id DESC");
         $data['user'] = $query->result_array();
         return $data['user'];
@@ -1029,7 +991,7 @@ LEFT JOIN doctor_master dm ON dm.id=j.`doctor`	where j.id=$id GROUP BY j.id ORDE
 
     public function get_b2b_job_details($id)
     {
-        $query = $this->db->query("SELECT 
+        $query = $this->db->query("SELECT
   j.branch_fk,
   dm.full_name AS dname,
   c.dob,
@@ -1073,17 +1035,17 @@ LEFT JOIN doctor_master dm ON dm.id=j.`doctor`	where j.id=$id GROUP BY j.id ORDE
   c.city,
   c.pic,
   c.type,
-  c.password 
+  c.password
 FROM
-  job_master j 
-  LEFT JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
-  LEFT JOIN `sample_from` 
-    ON `j`.`sample_from` = sample_from.`id` 
-  LEFT JOIN doctor_master dm 
-    ON dm.id = j.`doctor` 
-WHERE j.id = '" . $id . "' 
-GROUP BY j.id 
+  job_master j
+  LEFT JOIN customer_master c
+    ON c.id = j.`cust_fk`
+  LEFT JOIN `sample_from`
+    ON `j`.`sample_from` = sample_from.`id`
+  LEFT JOIN doctor_master dm
+    ON dm.id = j.`doctor`
+WHERE j.id = '" . $id . "'
+GROUP BY j.id
 ORDER BY j.id DESC ");
         $data['user'] = $query->result_array();
         return $data['user'];
@@ -1298,9 +1260,9 @@ ORDER BY j.id DESC ");
         GROUP_CONCAT(DISTINCT b.test_name) testname, GROUP_CONCAT( DISTINCT p.`title`) packagename,c.`full_name`,c.id uid
 FROM    book_without_login a
         LEFT JOIN test_master b
-            ON FIND_IN_SET(b.id, a.test_fk) 
-            LEFT JOIN package_master p 
-            ON FIND_IN_SET(p.id, a.`package_fk`) 
+            ON FIND_IN_SET(b.id, a.test_fk)
+            LEFT JOIN package_master p
+            ON FIND_IN_SET(p.id, a.`package_fk`)
             LEFT JOIN customer_master c ON c.`mobile`=a.`mobile`
 			where a.status = '1'
 GROUP   BY a.id ORDER BY a.id DESC";
@@ -1315,9 +1277,9 @@ GROUP   BY a.id ORDER BY a.id DESC";
         GROUP_CONCAT(DISTINCT b.test_name) testname, GROUP_CONCAT( DISTINCT p.`title`) packagename,c.`full_name`,c.id uid
 FROM    book_without_login a
         LEFT JOIN test_master b
-            ON FIND_IN_SET(b.id, a.test_fk) 
-            LEFT JOIN package_master p 
-            ON FIND_IN_SET(p.id, a.`package_fk`) 
+            ON FIND_IN_SET(b.id, a.test_fk)
+            LEFT JOIN package_master p
+            ON FIND_IN_SET(p.id, a.`package_fk`)
             LEFT JOIN customer_master c ON c.`mobile`=a.`mobile` where a.status != '0' and c.status = '1'  ";
 
         if ($mobile != "") {
@@ -1358,9 +1320,9 @@ FROM    book_without_login a
         GROUP_CONCAT(DISTINCT b.test_name) testname, GROUP_CONCAT( DISTINCT p.`title`) packagename,c.`full_name`,c.id uid
 FROM    book_without_login a
         LEFT JOIN test_master b
-            ON FIND_IN_SET(b.id, a.test_fk) 
-            LEFT JOIN package_master p 
-            ON FIND_IN_SET(p.id, a.`package_fk`) 
+            ON FIND_IN_SET(b.id, a.test_fk)
+            LEFT JOIN package_master p
+            ON FIND_IN_SET(p.id, a.`package_fk`)
             LEFT JOIN customer_master c ON c.`mobile`=a.`mobile` where a.status != '0'  ";
 
         if ($mobile != "") {
@@ -1467,9 +1429,9 @@ FROM    book_without_login a
         GROUP_CONCAT(DISTINCT b.test_name) testname, GROUP_CONCAT( DISTINCT p.`title`) packagename,c.`full_name`,c.id uid
 FROM    book_without_login a
         LEFT JOIN test_master b
-            ON FIND_IN_SET(b.id, a.test_fk) 
-            LEFT JOIN package_master p 
-            ON FIND_IN_SET(p.id, a.`package_fk`) 
+            ON FIND_IN_SET(b.id, a.test_fk)
+            LEFT JOIN package_master p
+            ON FIND_IN_SET(p.id, a.`package_fk`)
             LEFT JOIN customer_master c ON c.`mobile`=a.`mobile` where a.status != '0' GROUP BY a.id ORDER BY a.id DESC";
 
         $result = $this->db->query($query);
@@ -1511,7 +1473,7 @@ FROM    book_without_login a
 
     function get_suggested_test($pid)
     {
-        $qry = "SELECT `suggested_test`.*,`test_master`.`test_name`,`test_master`.`price` FROM `suggested_test` 
+        $qry = "SELECT `suggested_test`.*,`test_master`.`test_name`,`test_master`.`price` FROM `suggested_test`
           INNER JOIN `test_master` ON `test_master`.`id`=`suggested_test`.`test_id`
           WHERE `suggested_test`.`status`='1' AND `test_master`.`status`='1' AND `suggested_test`.`p_id`='$pid'";
         $query = $this->db->query($qry);
@@ -1588,10 +1550,9 @@ FROM    book_without_login a
             $query12 = $this->db->query("SELECT `package_test`.`test_fk`,test_master.`test_name` FROM `package_test` INNER JOIN `test_master` ON `package_test`.`test_fk`=`test_master`.`id` WHERE `test_master`.`status`='1' AND `package_test`.`status`='1' AND `package_test`.`package_fk`='" . $value["package_fk"] . "'");
             $data['test_list'] = $query12->result_array();
             if (!empty($data['user1'])) {
-                $package_name[] = array("name" => $value["title"], "test" => $data['test_list']);
-                //$package_name[] = array("name" => $value["title"] . "<small style='color:green;'>(Active package)</small>", "test" => $data['test_list']);
+                $package_name[] = array("package_fk" => $value["package_fk"] ,"name" => $value["title"], "test" => $data['test_list']);
             } else {
-                $package_name[] = array("name" => $value["title"], "test" => $data['test_list']);
+                $package_name[] = array("package_fk" => $value["package_fk"],"name" => $value["title"], "test" => $data['test_list']);
             }
         }
         if (!empty($package_name)) {
@@ -1604,10 +1565,10 @@ FROM    book_without_login a
     public function spam_job_list_count($data = null)
     {
 
-        $query = "SELECT 
+        $query = "SELECT
   j.id
 FROM
-  job_master j 
+  job_master j
 WHERE 1=1 ";
         if ($data["p_ref"] != "") {
             $query .= " AND j.id='" . $data['p_ref'] . "'";
@@ -1636,10 +1597,10 @@ WHERE 1=1 ";
 
     public function spam_job_filter($data = null, $limit = 0, $start = 0)
     {
-        $query = "SELECT 
+        $query = "SELECT
   j.id
 FROM
-  job_master j 
+  job_master j
 WHERE 1=1";
 
         if ($data["p_ref"] != "") {
@@ -1682,7 +1643,7 @@ WHERE 1=1";
     public function spam_job_data($limit, $start, $data = null)
     {
 
-        $query = "SELECT j.id,j.branch_fk,j.date,j.collection_charge,j.dispatch,j.doctor,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j  INNER JOIN customer_master c ON c.id=j.`cust_fk`  
+        $query = "SELECT j.id,j.branch_fk,j.date,j.collection_charge,j.dispatch,j.doctor,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j  INNER JOIN customer_master c ON c.id=j.`cust_fk`
      where 1=1 ";
         $query .= " AND j.status = '0' GROUP BY j.id ORDER BY j.id DESC LIMIT $start , $limit ";
         $result = $this->db->query($query);
@@ -1691,7 +1652,7 @@ WHERE 1=1";
 
     public function csv_job_list1($data = null)
     {
-        $query = "SELECT 
+        $query = "SELECT
   j.id,
   j.branch_fk,
   gtest_name AS testname,
@@ -1733,61 +1694,61 @@ WHERE 1=1";
       '-',
       customer_family_master.`name`
     )
-  ) AS relation 
+  ) AS relation
 FROM
-  job_master j 
-  LEFT JOIN job_test_list_master jtl 
-    ON jtl.job_fk = j.`id` 
-  INNER JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
-    LEFT JOIN branch_master 
+  job_master j
+  LEFT JOIN job_test_list_master jtl
+    ON jtl.job_fk = j.`id`
+  INNER JOIN customer_master c
+    ON c.id = j.`cust_fk`
+    LEFT JOIN branch_master
     ON branch_master.id=j.branch_fk
     LEFT JOIN test_cities
-    ON test_cities.id=j.test_city 
-  LEFT JOIN 
-    (SELECT 
+    ON test_cities.id=j.test_city
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(test_master.`test_name` SEPARATOR  '   ') AS gtest_name,
-      jtl2.`job_fk` 
+      jtl2.`job_fk`
     FROM
-      test_master 
-      LEFT JOIN job_test_list_master jtl2 
+      test_master
+      LEFT JOIN job_test_list_master jtl2
         ON (
           jtl2.`test_fk` = test_master.`id`
-        ) 
-    GROUP BY jtl2.`job_fk`) AS temp_test_master 
-    ON temp_test_master.job_fk = j.`id` 
-    
-  LEFT JOIN 
-    (SELECT 
+        )
+    GROUP BY jtl2.`job_fk`) AS temp_test_master
+    ON temp_test_master.job_fk = j.`id`
+
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(package_master.title SEPARATOR  '   ') AS pname,
-      bpm.`job_fk` 
+      bpm.`job_fk`
     FROM
-      `package_master` 
-      LEFT JOIN `book_package_master` bpm 
+      `package_master`
+      LEFT JOIN `book_package_master` bpm
         ON (
           `package_master`.`id` = bpm.`package_fk`
-        ) 
-    GROUP BY bpm.`job_fk`) AS temp_package_master 
-    ON temp_package_master.job_fk = j.`id` 
-    
-  LEFT JOIN test_master t 
-    ON t.id = jtl.test_fk 
-  LEFT JOIN book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
-    ON p.id = pb.package_fk 
-  LEFT JOIN `booking_info` 
-    ON j.`booking_info` = `booking_info`.`id` 
-  LEFT JOIN `doctor_master` 
-    ON j.`doctor` = `doctor_master`.`id` 
-  LEFT JOIN `report_master` 
-    ON `report_master`.`job_fk` = j.id 
-  LEFT JOIN wallet_master 
-    ON j.`id` = wallet_master.`job_fk` 
-  LEFT JOIN customer_family_master 
-    ON customer_family_master.`id` = `booking_info`.`family_member_fk` 
-  LEFT JOIN relation_master 
-    ON relation_master.`id` = customer_family_master.`relation_fk` 
+        )
+    GROUP BY bpm.`job_fk`) AS temp_package_master
+    ON temp_package_master.job_fk = j.`id`
+
+  LEFT JOIN test_master t
+    ON t.id = jtl.test_fk
+  LEFT JOIN book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
+    ON p.id = pb.package_fk
+  LEFT JOIN `booking_info`
+    ON j.`booking_info` = `booking_info`.`id`
+  LEFT JOIN `doctor_master`
+    ON j.`doctor` = `doctor_master`.`id`
+  LEFT JOIN `report_master`
+    ON `report_master`.`job_fk` = j.id
+  LEFT JOIN wallet_master
+    ON j.`id` = wallet_master.`job_fk`
+  LEFT JOIN customer_family_master
+    ON customer_family_master.`id` = `booking_info`.`family_member_fk`
+  LEFT JOIN relation_master
+    ON relation_master.`id` = customer_family_master.`relation_fk`
 WHERE 1=1";
 
         if ($data["p_ref"] != "") {
@@ -1854,39 +1815,39 @@ WHERE 1=1";
     public function new_num_row_srch_job_list($data = null)
     {
 
-        $query = "SELECT 
+        $query = "SELECT
   j.id
 FROM
-  job_master j 
-  LEFT JOIN job_test_list_master jtl 
-    ON jtl.job_fk = j.`id` 
-  INNER JOIN customer_master c 
+  job_master j
+  LEFT JOIN job_test_list_master jtl
+    ON jtl.job_fk = j.`id`
+  INNER JOIN customer_master c
     ON c.id = j.`cust_fk` ";
         if ($data["test_pack"] != "") {
-            $query .= "LEFT JOIN 
-    (SELECT 
+            $query .= "LEFT JOIN
+    (SELECT
       GROUP_CONCAT(test_master.`test_name`) AS gtest_name,
-      jtl2.`job_fk` 
+      jtl2.`job_fk`
     FROM
-      test_master 
-      LEFT JOIN job_test_list_master jtl2 
+      test_master
+      LEFT JOIN job_test_list_master jtl2
         ON (
           jtl2.`test_fk` = test_master.`id`
-        ) 
-    GROUP BY jtl2.`job_fk`) AS temp_test_master 
-    ON temp_test_master.job_fk = j.`id` 
-    
-  LEFT JOIN 
-    (SELECT 
+        )
+    GROUP BY jtl2.`job_fk`) AS temp_test_master
+    ON temp_test_master.job_fk = j.`id`
+
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
-      bpm.`job_fk` 
+      bpm.`job_fk`
     FROM
-      `package_master` 
-      LEFT JOIN `book_package_master` bpm 
+      `package_master`
+      LEFT JOIN `book_package_master` bpm
         ON (
           `package_master`.`id` = bpm.`package_fk`
-        ) 
-    GROUP BY bpm.`job_fk`) AS temp_package_master 
+        )
+    GROUP BY bpm.`job_fk`) AS temp_package_master
     ON temp_package_master.job_fk = j.`id` ";
         }
         $query .= " WHERE 1=1 ";
@@ -1993,9 +1954,9 @@ FROM
     public function new_srch_job_list($limit, $start, $data = null)
     {
 
-        $query = "SELECT j.id,j.branch_fk,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.order_id,j.invoice,j.ack,j.collection_charge,j.dispatch,j.doctor,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
-    ON pb.job_fk = j.id 
-  LEFT JOIN package_master p 
+        $query = "SELECT j.id,j.branch_fk,GROUP_CONCAT(distinct t.test_name) testname,GROUP_CONCAT(distinct p.title) packagename,j.date,j.order_id,j.invoice,j.ack,j.collection_charge,j.dispatch,j.doctor,j.booking_info,j.discount,j.test_city,j.views,j.`payment_type`,j.sample_collection,c.full_name,c.mobile,j.`payable_amount`,j.status,j.price,c.id as cid FROM job_master j LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` INNER JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
+    ON pb.job_fk = j.id
+  LEFT JOIN package_master p
     ON p.id = pb.package_fk where 1=1 ";
         if (!empty($data["cntr_arry"])) {
             $query .= " AND j.branch_fk  in (" . implode(",", $data["cntr_arry"]) . ")";
@@ -2035,7 +1996,7 @@ FROM
   j.branch_fk,
   j.payable_amount,
   j.price,
-  j.status, 
+  j.status,
   j.views,
   j.date,
   j.collection_charge,
@@ -2069,7 +2030,7 @@ FROM
             $outsource = "SELECT 1 AS a,GROUP_CONCAT(DISTINCT job_fk) AS ids FROM `user_test_outsource` WHERE `status`='1' AND `created_date`>='" . $start_date . " 00:00:00' AND `created_date`<='" . $end_date . " 23:59:59' GROUP BY a";
             $result1 = $this->db->query($outsource);
             $outsource_result1 = $result1->result_array();
-            
+
         }
         if ($data["test_pack"] != "" && 2 == 1) {
             $query .= "LEFT JOIN
@@ -2084,7 +2045,7 @@ FROM
         )
     GROUP BY jtl2.`job_fk`) AS temp_test_master
     ON temp_test_master.job_fk = j.`id`
-   
+
   LEFT JOIN
     (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
@@ -2201,12 +2162,12 @@ FROM
 
     public function new_row_srch_job_list_count($data = null, $limit = null, $start = null)
     {
-        $query = "SELECT 
+        $query = "SELECT
   j.id,
   j.order_id
 FROM
-  job_master j 
-  INNER JOIN test_cities tc 
+  job_master j
+  INNER JOIN test_cities tc
     ON j.test_city = tc.id";
         if (!empty($data["outsource"])) {
             $end_d = explode("/", $data["end_date"]);
@@ -2230,7 +2191,7 @@ FROM
         )
     GROUP BY jtl2.`job_fk`) AS temp_test_master
     ON temp_test_master.job_fk = j.`id`
-   
+
   LEFT JOIN
     (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
@@ -2354,7 +2315,7 @@ FROM
 
     public function outsource_job_list($data = null, $limit = null, $start = null)
     {
-        $query = "SELECT 
+        $query = "SELECT
   j.id,
   j.cust_fk as cid,
   j.order_id,
@@ -2379,13 +2340,13 @@ FROM
   admin_master.name AS added_by,
   tc.name as test_city_name
 FROM
-  job_master j 
-  inner join test_cities tc 
-  on j.test_city=tc.id 
-  LEFT JOIN admin_master 
-  ON admin_master.id=j.added_by 
-  INNER JOIN customer_master c 
-    ON c.id = j.`cust_fk` 
+  job_master j
+  inner join test_cities tc
+  on j.test_city=tc.id
+  LEFT JOIN admin_master
+  ON admin_master.id=j.added_by
+  INNER JOIN customer_master c
+    ON c.id = j.`cust_fk`
     LEFT JOIN `booking_info` ON booking_info.`id`=j.`booking_info`
   LEFT JOIN customer_family_master
   ON customer_family_master.`id`= `booking_info`.`family_member_fk` join user_test_outsource tou on tou.job_fk = j.id join outsource_master os on tou.outsource_fk=os.id";
@@ -2456,7 +2417,7 @@ FROM
                 c.dob,
                 c.gender,
                 j.test_city,
-                j.status, 
+                j.status,
                 j.date,
                 j.barcode,
                 j.sample_collection,
@@ -2495,7 +2456,7 @@ FROM
                         )
                     GROUP BY jtl2.`job_fk`) AS temp_test_master
                     ON temp_test_master.job_fk = j.`id`
-                
+
                 LEFT JOIN
                     (SELECT
                     GROUP_CONCAT(package_master.title) AS pname,
@@ -2634,194 +2595,194 @@ FROM
         $hours4 = date('Y-m-d H:i:s', strtotime('-4 hours'));
         $date1 = new DateTime($hours168);
         $date2 = new DateTime('2024-11-01 00:00:00');
-        
+
         // Compare the dates
         if ($date1 < $date2) {
             $hours168= date('2024-11-01 00:00:00');
-        } 
+        }
         $query = "SELECT
         -- Completed
-            SUM(CASE 
-            WHEN j.date BETWEEN '$hours8' AND '$hours4' 
- and j.status=2            THEN 1 
-            ELSE 0 
+            SUM(CASE
+            WHEN j.date BETWEEN '$hours8' AND '$hours4'
+ and j.status=2            THEN 1
+            ELSE 0
         END) AS completed_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8'  and j.status=2
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS completed_count_8_to_16_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_16_to_20_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_20_to_24_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_24_to_36_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_36_to_72_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_72_to_168_hours,
 
         -- approve
-         SUM(CASE 
+         SUM(CASE
             WHEN j.date BETWEEN '$hours8' AND '$hours4' and j.status = 6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_8_to_16_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_16_to_20_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_20_to_24_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_24_to_36_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_36_to_72_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_72_to_168_hours,
 
         -- Sample received Collected
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours8' AND '$hours4' and j.status = 8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_8_to_16_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_16_to_20_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_20_to_24_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_24_to_36_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_36_to_72_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_72_to_168_hours,
 
          -- Sample Collected
-         SUM(CASE 
+         SUM(CASE
             WHEN j.date BETWEEN '$hours8' AND '$hours4' and j.status = 7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_8_to_16_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_16_to_20_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_20_to_24_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_24_to_36_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_36_to_72_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_72_to_168_hours,
 
-        SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours8' AND '$hours4'  
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours8' AND '$hours4'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_4_to_8_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours16' AND '$hours8' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours16' AND '$hours8'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_8_to_16_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours20' AND '$hours16' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours20' AND '$hours16'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_16_to_20_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours24' AND '$hours20' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours24' AND '$hours20'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_20_to_24_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours36' AND '$hours24' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours36' AND '$hours24'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_24_to_36_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours72' AND '$hours36' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours72' AND '$hours36'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_36_to_72_hours,
-      SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours168' AND '$hours72' 
-            THEN 1 
-            ELSE 0 
+      SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours168' AND '$hours72'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_72_to_168_hours
             FROM
         job_master j LEFT JOIN report_master
@@ -2867,194 +2828,194 @@ FROM
         $hours4 = date('Y-m-d H:i:s', strtotime('-4 hours'));
         $date1 = new DateTime($hours168);
         $date2 = new DateTime('2024-11-01 00:00:00');
-        
+
         // Compare the dates
         if ($date1 < $date2) {
             $hours168= date('2024-11-01 00:00:00');
-        } 
+        }
         $query = "SELECT
         -- Completed
-            SUM(CASE 
-            WHEN j.date BETWEEN '$hours8' AND '$hours4' 
- and j.status=2            THEN 1 
-            ELSE 0 
+            SUM(CASE
+            WHEN j.date BETWEEN '$hours8' AND '$hours4'
+ and j.status=2            THEN 1
+            ELSE 0
         END) AS completed_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8'  and j.status=2
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS completed_count_8_to_16_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_16_to_20_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_20_to_24_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_24_to_36_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_36_to_72_hours,
-        SUM(CASE 
-            WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status=2 
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status=2
+            THEN 1
+            ELSE 0
         END) AS completed_count_72_to_168_hours,
 
         -- approve
-         SUM(CASE 
+         SUM(CASE
             WHEN j.date BETWEEN '$hours8' AND '$hours4' and j.status = 6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_8_to_16_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_16_to_20_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_20_to_24_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_24_to_36_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_36_to_72_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status =6
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS approve_count_72_to_168_hours,
 
         -- Sample received Collected
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours8' AND '$hours4' and j.status = 8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_8_to_16_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_16_to_20_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_20_to_24_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_24_to_36_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_36_to_72_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status =8
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS received_count_72_to_168_hours,
 
          -- Sample Collected
-         SUM(CASE 
+         SUM(CASE
             WHEN j.date BETWEEN '$hours8' AND '$hours4' and j.status = 7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_4_to_8_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours16' AND '$hours8' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_8_to_16_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours20' AND '$hours16' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_16_to_20_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours24' AND '$hours20' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_20_to_24_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours36' AND '$hours24' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_24_to_36_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours72' AND '$hours36' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_36_to_72_hours,
-        SUM(CASE 
+        SUM(CASE
             WHEN j.date BETWEEN '$hours168' AND '$hours72' and j.status =7
-            THEN 1 
-            ELSE 0 
+            THEN 1
+            ELSE 0
         END) AS sample_count_72_to_168_hours,
 
-        SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours8' AND '$hours4'  
-            THEN 1 
-            ELSE 0 
+        SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours8' AND '$hours4'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_4_to_8_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours16' AND '$hours8' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours16' AND '$hours8'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_8_to_16_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours20' AND '$hours16' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours20' AND '$hours16'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_16_to_20_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours24' AND '$hours20' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours24' AND '$hours20'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_20_to_24_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours36' AND '$hours24' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours36' AND '$hours24'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_24_to_36_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours72' AND '$hours36' 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours72' AND '$hours36'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_36_to_72_hours,
-      SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours168' AND '$hours72' 
-            THEN 1 
-            ELSE 0 
+      SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and DATE BETWEEN '$hours168' AND '$hours72'
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_72_to_168_hours
             FROM
         job_master j LEFT JOIN report_master
@@ -3092,75 +3053,75 @@ FROM
     {
 
         $query = "SELECT j.id,
-  SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 4 AND 8 
-            THEN 1 
-            ELSE 0 
+  SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 4 AND 8
+            THEN 1
+            ELSE 0
         END) AS count_4_to_8_hours,
-    SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 8 AND 16 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 8 AND 16
+            THEN 1
+            ELSE 0
         END) AS count_8_to_16_hours,
-    SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 16 AND 20 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 16 AND 20
+            THEN 1
+            ELSE 0
         END) AS count_16_to_20_hours,
-    SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 20 AND 24 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 20 AND 24
+            THEN 1
+            ELSE 0
         END) AS count_20_to_24_hours,
-    SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 24 AND 36 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 24 AND 36
+            THEN 1
+            ELSE 0
         END) AS count_24_to_36_hours,
-    SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 36 AND 72 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 36 AND 72
+            THEN 1
+            ELSE 0
         END) AS count_36_to_72_hours,
-      SUM(CASE 
-            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 72 AND 168 
-            THEN 1 
-            ELSE 0 
+      SUM(CASE
+            WHEN TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 72 AND 168
+            THEN 1
+            ELSE 0
         END) AS count_72_to_168_hours,
-          SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 4 AND 8 
-            THEN 1 
-            ELSE 0 
+          SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 4 AND 8
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_4_to_8_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 8 AND 16 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 8 AND 16
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_8_to_16_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 16 AND 20 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 16 AND 20
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_16_to_20_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 20 AND 24 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 20 AND 24
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_20_to_24_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 24 AND 36 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 24 AND 36
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_24_to_36_hours,
-    SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 36 AND 72 
-            THEN 1 
-            ELSE 0 
+    SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 36 AND 72
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_36_to_72_hours,
-      SUM(CASE 
-            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 72 AND 168 
-            THEN 1 
-            ELSE 0 
+      SUM(CASE
+            WHEN report_master.whatsapp_sent_status is null and TIMESTAMPDIFF(HOUR, j.date, NOW()) BETWEEN 72 AND 168
+            THEN 1
+            ELSE 0
         END) AS whatsapp_count_72_to_168_hours
 FROM
   job_master j
@@ -3198,7 +3159,7 @@ FROM
         )
     GROUP BY jtl2.`job_fk`) AS temp_test_master
     ON temp_test_master.job_fk = j.`id`
-   
+
   LEFT JOIN
     (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
@@ -3334,7 +3295,7 @@ FROM
   j.branch_fk,
   j.payable_amount,
   j.price,
-  j.status, 
+  j.status,
   j.views,
   j.date,
   j.collection_charge,
@@ -3384,7 +3345,7 @@ FROM
         )
     GROUP BY jtl2.`job_fk`) AS temp_test_master
     ON temp_test_master.job_fk = j.`id`
-   
+
   LEFT JOIN
     (SELECT
       GROUP_CONCAT(package_master.title) AS pname,
@@ -3412,11 +3373,11 @@ FROM
 
         $date1 = new DateTime($hours1080);
         $date2 = new DateTime('2024-11-01 00:00:00');
-        
+
         // Compare the dates
         if ($date1 < $date2) {
             $hours1080= date('2024-11-01 00:00:00');
-        } 
+        }
         $hoursMap = [
             '72to1080' => [$hours1080, $hours72],
             '36to72' => [$hours72, $hours36],
@@ -3433,7 +3394,7 @@ FROM
         }
 
         if($data["ws"]==1){
-            $query .= " AND report_master.whatsapp_sent_status is null"; 
+            $query .= " AND report_master.whatsapp_sent_status is null";
         }
 
         // if (!empty($status)) {
