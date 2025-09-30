@@ -6,26 +6,6 @@ class Service_model extends CI_Model {
         $this->load->database();
     }
 
-    public function check_phlebo($email, $password) {
-        return $this->db->where("email", $email)
-                        ->where("password", $password) // 👉 real system ma hash karo
-                        ->where("status", 1)
-                        ->get("phlebo_master")
-                        ->row();
-    }
-
-    public function save_token($id, $token) {
-        $this->db->where("id", $id);
-        return $this->db->update("phlebo_master", ["auth_token" => $token]);
-    }
-
-    public function get_phlebo_by_token($token) {
-        return $this->db->where("auth_token", $token)
-                        ->where("status", 1)
-                        ->get("phlebo_master")
-                        ->row();
-    }
-
     public function master_fun_get_tbl_val($dtatabase, $condition, $order, $select = null) {
         $this->db->order_by($order[0], $order[1]);
         if ($select != null) {
@@ -96,52 +76,52 @@ class Service_model extends CI_Model {
     }
 
     function my_job($user_fk) {
-        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT
-    GROUP_CONCAT( p.title )
+        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT 
+    GROUP_CONCAT( p.title ) 
   FROM
-    package_master p
-    INNER JOIN book_package_master pm
-      ON pm.package_fk = p.id
-  WHERE pm.job_fk = j.`id`
+    package_master p 
+    INNER JOIN book_package_master pm 
+      ON pm.package_fk = p.id 
+  WHERE pm.job_fk = j.`id` 
   GROUP BY pm.`job_fk`) AS packge_name,j.`price`,j.`status` FROM job_master j LEFT JOIN job_test_list_master t ON j.id=t.`job_fk` LEFT JOIN test_master tm ON tm.id=t.`test_fk`  WHERE j.`status` IN (1,2,3,4,6,7,8) AND j.`cust_fk`='$user_fk' GROUP BY j.id order by j.id desc  ");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function pending_job($user_fk) {
-        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT
-    GROUP_CONCAT( p.title )
+        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT 
+    GROUP_CONCAT( p.title ) 
   FROM
-    package_master p
-    INNER JOIN book_package_master pm
-      ON pm.package_fk = p.id
-  WHERE pm.job_fk = j.`id`
+    package_master p 
+    INNER JOIN book_package_master pm 
+      ON pm.package_fk = p.id 
+  WHERE pm.job_fk = j.`id` 
   GROUP BY pm.`job_fk`) AS packge_name,j.`price`,j.`status` FROM job_master j LEFT JOIN job_test_list_master t ON j.id=t.`job_fk` LEFT JOIN test_master tm ON tm.id=t.`test_fk`  WHERE j.`status`=1 AND j.`cust_fk`='$user_fk' GROUP BY j.id  order by j.id desc");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function joblist_by_status($user_fk, $status) {
-        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT
-    GROUP_CONCAT( p.title )
+        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT 
+    GROUP_CONCAT( p.title ) 
   FROM
-    package_master p
-    INNER JOIN book_package_master pm
-      ON pm.package_fk = p.id
-  WHERE pm.job_fk = j.`id`
+    package_master p 
+    INNER JOIN book_package_master pm 
+      ON pm.package_fk = p.id 
+  WHERE pm.job_fk = j.`id` 
   GROUP BY pm.`job_fk`) AS packge_name,j.`price`,j.`status` FROM job_master j LEFT JOIN job_test_list_master t ON j.id=t.`job_fk` LEFT JOIN test_master tm ON tm.id=t.`test_fk`  WHERE j.`status`=$status AND j.`cust_fk`='$user_fk' GROUP BY j.id  order by j.id desc");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function completed_job($user_fk) {
-        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT
-    GROUP_CONCAT( p.title )
+        $query = $this->db->query("SELECT j.id,j.order_id,DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS date,GROUP_CONCAT(tm.`test_name`) test ,(SELECT 
+    GROUP_CONCAT( p.title ) 
   FROM
-    package_master p
-    INNER JOIN book_package_master pm
-      ON pm.package_fk = p.id
-  WHERE pm.job_fk = j.`id`
+    package_master p 
+    INNER JOIN book_package_master pm 
+      ON pm.package_fk = p.id 
+  WHERE pm.job_fk = j.`id` 
   GROUP BY pm.`job_fk`) AS packge_name,j.`price`,j.`status` FROM job_master j LEFT JOIN job_test_list_master t ON j.id=t.`job_fk` LEFT JOIN test_master tm ON tm.id=t.`test_fk`  WHERE j.`status`=2 AND j.`cust_fk`='$user_fk' GROUP BY j.id  order by j.id desc");
         $query1 = $query->result_array();
         return $query1;
@@ -154,14 +134,14 @@ class Service_model extends CI_Model {
     }
 
     function view_profile($user_fk) {
-        $query = $this->db->query("SELECT c.id,CONCAT(UCASE(LEFT(full_name, 1)),
+        $query = $this->db->query("SELECT c.id,CONCAT(UCASE(LEFT(full_name, 1)), 
                              SUBSTRING(full_name, 2)) as full_name,c.gender,c.email,c.mobile,c.address,c.pic,c.country,c.state,c.city,c.fbid,co.`country_name`,s.`state_name`,ci.`city_name`,re.refer_code,c.refer_price FROM customer_master c LEFT JOIN country co ON co.id=c.`country` LEFT JOIN state s ON s.id=c.`state` LEFT JOIN city ci ON ci.id=c.city LEFT JOIN refer_code_master re ON c.id=re.cust_fk WHERE c.`status`=1 AND c.id=$user_fk");
         $query1 = $query->result_array($user_fk);
         return $query1;
     }
 
     function doctor_view_profile($user_fk) {
-        $query = $this->db->query("SELECT c.id,CONCAT(UCASE(LEFT(full_name, 1)),
+        $query = $this->db->query("SELECT c.id,CONCAT(UCASE(LEFT(full_name, 1)), 
                              SUBSTRING(full_name, 2)) as full_name,c.gender,c.email,c.mobile,c.address,c.pic,c.state,c.city,s.`state_name`,ci.`city_name` FROM doctor_master c LEFT JOIN state s ON s.id=c.`state` LEFT JOIN city ci ON ci.id=c.city WHERE c.`status`=1 AND c.id=$user_fk");
         $query1 = $query->result_array($user_fk);
         return $query1;
@@ -175,7 +155,7 @@ class Service_model extends CI_Model {
 
     function wallet_history($user_fk) {
         //	$query = $this->db->query("SELECT id,debit,credit, DATE_FORMAT(DATE(created_time) ,'%d %b %y') AS date FROM `wallet_master` where cust_fk='$user_fk' and status=1");
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   w.id,
   w.debit,
   w.credit,
@@ -183,8 +163,8 @@ class Service_model extends CI_Model {
   DATE_FORMAT((w.created_time), '%d %b %y %h:%i %p') AS DATE, GROUP_CONCAT(t.`test_name`) testname,j.order_id,p.payomonyid
 
 FROM
-  `wallet_master` w
-  LEFT JOIN job_master j
+  `wallet_master` w 
+  LEFT JOIN job_master j 
   ON j.`id`=w.`job_fk`
  LEFT JOIN job_test_list_master jt
   ON j.`id`=jt.`job_fk` LEFT JOIN test_master t ON t.id=jt.`test_fk` LEFT JOIN payment p ON p.id=w.payment_id LEFT JOIN book_package_master pb ON pb.id=w.`package_fk`
@@ -196,17 +176,17 @@ WHERE w.cust_fk ='$user_fk'
 
     function payment_history($user_fk) {
         //	$query = $this->db->query("SELECT id,debit,credit, DATE_FORMAT(DATE(created_time) ,'%d %b %y') AS date FROM `wallet_master` where cust_fk='$user_fk' and status=1");
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   p.* ,DATE_FORMAT((p.paydate), '%d %b %y %h:%i %p') AS DATE, GROUP_CONCAT(t.`test_name`) testname,j.`order_id`,pb.`order_id` package_order_id,title AS packagename
 
 FROM
   `payment` p
-  inner JOIN job_master j
+  inner JOIN job_master j 
   ON j.`id`=p.`job_fk`
  LEFT JOIN job_test_list_master jt
   ON j.`id`=jt.`job_fk` LEFT JOIN test_master t ON t.id=jt.`test_fk` LEFT JOIN book_package_master pb ON pb.`id`=p.`package_fk`
   LEFT JOIN package_master pm ON pm.`id`=pb.`package_fk`
-WHERE p.uid = '$user_fk'
+WHERE p.uid = '$user_fk' 
    GROUP BY p.id ORDER BY p.id DESC");
         $query1 = $query->result_array();
         return $query1;
@@ -222,12 +202,12 @@ WHERE p.uid = '$user_fk'
     function suggest_test($pid) {
 
         /* $query = $this->db->query("SELECT s.*,t.id testid,t.test_name,t.price,t.description testdescription FROM `suggested_test` s LEFT JOIN test_master t ON t.id=s.`test_id`  WHERE s.p_id='$pid' AND s.status=1"); */
-        $query = $this->db->query("SELECT DISTINCT s.*,t.id testid,t.test_name,p.city AS city_fk,`test_master_city_price`.`price`,t.description testdescription FROM `suggested_test` s
-LEFT JOIN test_master t ON t.id=s.`test_id`
+        $query = $this->db->query("SELECT DISTINCT s.*,t.id testid,t.test_name,p.city AS city_fk,`test_master_city_price`.`price`,t.description testdescription FROM `suggested_test` s 
+LEFT JOIN test_master t ON t.id=s.`test_id` 
 LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
-  LEFT JOIN `test_master_city_price`
+  LEFT JOIN `test_master_city_price` 
     ON (`test_master_city_price`.`test_fk` = `s`.`test_id`  AND test_master_city_price.`city_fk`=p.`city`)
-
+  
  WHERE s.p_id='" . $pid . "' AND s.status=1");
         $query1 = $query->result_array();
         return $query1;
@@ -271,7 +251,7 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
     }
 
     function view_package_report($job_fk) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
       r.job_fk,
       r.test_fk,
       r.report,
@@ -286,9 +266,9 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
       jm.id,jm.cust_fk,jm.package_fk,jm.date,jm.order_id,jm.type,jm.job_fk
     FROM `book_package_master` jm
 
-      LEFT JOIN package_master t
+      LEFT JOIN package_master t 
         ON t.id = jm.`package_fk`
-      LEFT JOIN report_master r
+      LEFT JOIN report_master r 
         ON  r.`job_fk`= jm.`job_fk`  LEFT JOIN job_master j ON j.id=jm.`job_fk`
     WHERE jm.`job_fk` = '$job_fk'");
         $query1 = $query->result_array();
@@ -298,7 +278,7 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
     function view_test_report($jobfk) {
 
         //$query = $this->db->query("SELECT r.*,t.test_name,t.price FROM report_master r LEFT JOIN test_master t ON t.id=r.`test_fk` WHERE r.job_fk='$jobfk' AND r.status='1' ");
-        /* $query = $this->db->query("SELECT
+        /* $query = $this->db->query("SELECT 
           r.*,
           t.test_name,
           t.price,
@@ -313,7 +293,7 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
           WHERE jm.`job_fk` = '$jobfk'
           "); */
         /* Nishit change start */
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
       r.job_fk,
       r.test_fk,
       r.report,
@@ -325,15 +305,15 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
       t.price,
       j.status,
 	  j.order_id,
-      jm.*
+      jm.* 
     FROM `job_test_list_master` jm
 
-      LEFT JOIN test_master t
+      LEFT JOIN test_master t 
         ON t.id = jm.`test_fk`
-      LEFT JOIN report_master r
+      LEFT JOIN report_master r 
         ON jm.`test_fk` = r.`test_fk`  AND  r.`job_fk`= jm.`job_fk`  LEFT JOIN job_master j ON j.id=jm.`job_fk`
 
-    WHERE jm.`job_fk` = '$jobfk'
+    WHERE jm.`job_fk` = '$jobfk' 
 ");
         /* Nishit chnage end */
         $query1 = $query->result_array();
@@ -341,7 +321,7 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
     }
 
     function doctor_customer_job($doctor) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   j.id,
   j.order_id,
   DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS DATE,
@@ -349,22 +329,22 @@ LEFT JOIN `prescription_upload` p ON p.id=s.`p_id`
   j.`price`,
   j.`status`,c.`full_name`,c.`mobile`,c.`gender`,j.`doctor`
 FROM
-  job_master j
-  LEFT JOIN job_test_list_master t
-    ON j.id = t.`job_fk`
-  LEFT JOIN test_master tm
-    ON tm.id = t.`test_fk`
+  job_master j 
+  LEFT JOIN job_test_list_master t 
+    ON j.id = t.`job_fk` 
+  LEFT JOIN test_master tm 
+    ON tm.id = t.`test_fk` 
    LEFT JOIN customer_master c ON c.id=j.`cust_fk`
-WHERE j.`status` IN (1, 2, 3, 4)
-  AND j.`doctor` = '$doctor'
-GROUP BY t.job_fk
+WHERE j.`status` IN (1, 2, 3, 4) 
+  AND j.`doctor` = '$doctor' 
+GROUP BY t.job_fk 
 ORDER BY j.id DESC ");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function last_7_doctor_customer_job($doctor) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   j.id,
   j.order_id,
   DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS DATE,
@@ -372,22 +352,22 @@ ORDER BY j.id DESC ");
   j.`price`,
   j.`status`,c.`full_name`,c.`mobile`,c.`gender`,j.`doctor`
 FROM
-  job_master j
-  LEFT JOIN job_test_list_master t
-    ON j.id = t.`job_fk`
-  LEFT JOIN test_master tm
-    ON tm.id = t.`test_fk`
+  job_master j 
+  LEFT JOIN job_test_list_master t 
+    ON j.id = t.`job_fk` 
+  LEFT JOIN test_master tm 
+    ON tm.id = t.`test_fk` 
    LEFT JOIN customer_master c ON c.id=j.`cust_fk`
-WHERE j.`status` IN (1, 2, 3, 4)
+WHERE j.`status` IN (1, 2, 3, 4) 
   AND j.`doctor` = '$doctor' AND  j.date >= DATE(NOW()) - INTERVAL 4 DAY
-GROUP BY t.job_fk
+GROUP BY t.job_fk 
 ORDER BY j.id DESC");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function today_doctor_customer_job($doctor) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   j.id,
   j.order_id,
   DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS DATE,
@@ -395,22 +375,22 @@ ORDER BY j.id DESC");
   j.`price`,
   j.`status`,c.`full_name`,c.`mobile`,c.`gender`,j.`doctor`
 FROM
-  job_master j
-  LEFT JOIN job_test_list_master t
-    ON j.id = t.`job_fk`
-  LEFT JOIN test_master tm
-    ON tm.id = t.`test_fk`
+  job_master j 
+  LEFT JOIN job_test_list_master t 
+    ON j.id = t.`job_fk` 
+  LEFT JOIN test_master tm 
+    ON tm.id = t.`test_fk` 
    LEFT JOIN customer_master c ON c.id=j.`cust_fk`
-WHERE j.`status` IN (1, 2, 3, 4)
+WHERE j.`status` IN (1, 2, 3, 4) 
   AND j.`doctor` = '$doctor' AND  DATE(j.date) = CURDATE()
-GROUP BY t.job_fk
+GROUP BY t.job_fk 
 ORDER BY j.id DESC ");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function doctor_view_report($jobfk) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
       r.job_fk,
       r.test_fk,
       r.report,
@@ -422,15 +402,15 @@ ORDER BY j.id DESC ");
       t.price,
       j.status,
 	  j.order_id,
-      jm.*
+      jm.* 
     FROM `job_test_list_master` jm
 
-      LEFT JOIN test_master t
+      LEFT JOIN test_master t 
         ON t.id = jm.`test_fk`
-      LEFT JOIN report_master r
+      LEFT JOIN report_master r 
         ON jm.`test_fk` = r.`test_fk`  AND  r.`job_fk`= jm.`job_fk`  LEFT JOIN job_master j ON j.id=jm.`job_fk`
 
-    WHERE jm.`job_fk` = '$jobfk'
+    WHERE jm.`job_fk` = '$jobfk' 
 ");
 
         $query1 = $query->result_array();
@@ -438,12 +418,12 @@ ORDER BY j.id DESC ");
     }
 
     function doctor_get_year_month_count($did) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
 	DISTINCT (DATE_FORMAT((j.date), '%b %Y')) AS yearmotnth,
   COUNT(j.id) AS total, DATE_FORMAT((j.date), '%c') AS MONTH,DATE_FORMAT((j.date), '%Y') AS YEAR
 FROM
   job_master j
-WHERE j.`status` IN (1, 2, 3, 4)
+WHERE j.`status` IN (1, 2, 3, 4) 
   AND j.`doctor` = '$did'
 GROUP BY DATE_FORMAT((j.date), '%b %Y')
 ORDER BY j.id DESC");
@@ -452,7 +432,7 @@ ORDER BY j.id DESC");
     }
 
     function doctor_stat($drid, $month, $year) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   j.id,
   j.order_id,
   DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS DATE,
@@ -460,23 +440,23 @@ ORDER BY j.id DESC");
   j.`price`,
   j.`status`,c.`full_name`,c.`mobile`,c.`gender`,j.`doctor`,j.date
 FROM
-  job_master j
-  LEFT JOIN job_test_list_master t
-    ON j.id = t.`job_fk`
-  LEFT JOIN test_master tm
-    ON tm.id = t.`test_fk`
+  job_master j 
+  LEFT JOIN job_test_list_master t 
+    ON j.id = t.`job_fk` 
+  LEFT JOIN test_master tm 
+    ON tm.id = t.`test_fk` 
    LEFT JOIN customer_master c ON c.id=j.`cust_fk`
-WHERE j.`status` IN (1, 2, 3, 4)
-  AND j.`doctor` = '$drid' AND j.date >= '$year-$month-01'
+WHERE j.`status` IN (1, 2, 3, 4) 
+  AND j.`doctor` = '$drid' AND j.date >= '$year-$month-01' 
 AND j.date <= '$year-$month-31'
-GROUP BY t.job_fk
+GROUP BY t.job_fk 
 ORDER BY j.id DESC");
         $query1 = $query->result_array();
         return $query1;
     }
 
     function doctor_date_vise_report($did, $from, $to) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   j.id,
   j.order_id,
   DATE_FORMAT((j.date), '%d %b %y %h:%i %p') AS DATE,
@@ -487,19 +467,19 @@ ORDER BY j.id DESC");
   c.`mobile`,
   c.`gender`,
   j.`doctor`,
-  j.date
+  j.date 
 FROM
-  job_master j
-  LEFT JOIN job_test_list_master t
-    ON j.id = t.`job_fk`
-  LEFT JOIN test_master tm
-    ON tm.id = t.`test_fk`
-  LEFT JOIN customer_master c
-    ON c.id = j.`cust_fk`
-WHERE j.`status` IN (1, 2, 3, 4)
-  AND j.`doctor` = '$did'
+  job_master j 
+  LEFT JOIN job_test_list_master t 
+    ON j.id = t.`job_fk` 
+  LEFT JOIN test_master tm 
+    ON tm.id = t.`test_fk` 
+  LEFT JOIN customer_master c 
+    ON c.id = j.`cust_fk` 
+WHERE j.`status` IN (1, 2, 3, 4) 
+  AND j.`doctor` = '$did' 
  AND j.date BETWEEN  STR_TO_DATE('$from','%d-%m-%Y') AND STR_TO_DATE('$to','%d-%m-%Y')
-GROUP BY t.job_fk
+GROUP BY t.job_fk 
 ORDER BY j.id DESC ");
         $query1 = $query->result_array();
         return $query1;
@@ -531,7 +511,7 @@ GROUP   BY a.id");
     /* Nishit Phlebo start */
 
     function phlebo_time_slot_on_day($id, $date) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   `phlebo_calender`.*,
   `phlebo_day_master`.`date_no`,
   `phlebo_day_master`.`name`,
@@ -543,16 +523,16 @@ GROUP   BY a.id");
     `phlebo_time_slot`.`end_time`,
     '%l:%i %p'
   ) AS `end_time`,
-  `phlebo_time_slot`.`start_time` AS real_time
+  `phlebo_time_slot`.`start_time` AS real_time 
 FROM
-  `phlebo_calender`
-  INNER JOIN `phlebo_day_master`
-    ON `phlebo_calender`.`day_fk` = `phlebo_day_master`.`id`
-  INNER JOIN `phlebo_time_slot`
-    ON `phlebo_calender`.`time_slot_fk` = `phlebo_time_slot`.`id`
-WHERE `phlebo_calender`.`status` = '1'
-  AND `phlebo_day_master`.`status` = '1'
-  AND `phlebo_time_slot`.`status` = '1'
+  `phlebo_calender` 
+  INNER JOIN `phlebo_day_master` 
+    ON `phlebo_calender`.`day_fk` = `phlebo_day_master`.`id` 
+  INNER JOIN `phlebo_time_slot` 
+    ON `phlebo_calender`.`time_slot_fk` = `phlebo_time_slot`.`id` 
+WHERE `phlebo_calender`.`status` = '1' 
+  AND `phlebo_day_master`.`status` = '1' 
+  AND `phlebo_time_slot`.`status` = '1' 
   AND `phlebo_day_master`.`date_no` = '" . $id . "'");
         $query1 = $query->result_array();
         $get_time = date("H:i:s");
@@ -570,15 +550,15 @@ WHERE `phlebo_calender`.`status` = '1'
     }
 
     function get_user_family_member($uid) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   `customer_family_master`.*,
-  `relation_master`.`name` AS relation_name
+  `relation_master`.`name` AS relation_name 
 FROM
-  `customer_family_master`
-  INNER JOIN `relation_master`
-    ON `customer_family_master`.`relation_fk` = `relation_master`.`id`
-WHERE `customer_family_master`.`status` = '1'
-  AND `relation_master`.`status` = '1'
+  `customer_family_master` 
+  INNER JOIN `relation_master` 
+    ON `customer_family_master`.`relation_fk` = `relation_master`.`id` 
+WHERE `customer_family_master`.`status` = '1' 
+  AND `relation_master`.`status` = '1' 
   AND `customer_family_master`.`user_fk` = '" . $uid . "'");
         $query1 = $query->result_array();
         return $query1;
@@ -613,15 +593,15 @@ WHERE `customer_family_master`.`status` = '1'
     /* Nishit Phlebo end */
 
     function get_user_family_member_data($uid) {
-        $query = $this->db->query("SELECT
+        $query = $this->db->query("SELECT 
   `customer_family_master`.*,
-  `relation_master`.`name` AS relation_name
+  `relation_master`.`name` AS relation_name 
 FROM
-  `customer_family_master`
-  INNER JOIN `relation_master`
-    ON `customer_family_master`.`relation_fk` = `relation_master`.`id`
-WHERE `customer_family_master`.`status` = '1'
-  AND `relation_master`.`status` = '1'
+  `customer_family_master` 
+  INNER JOIN `relation_master` 
+    ON `customer_family_master`.`relation_fk` = `relation_master`.`id` 
+WHERE `customer_family_master`.`status` = '1' 
+  AND `relation_master`.`status` = '1' 
   AND `customer_family_master`.`id` = '" . $uid . "'");
         $query1 = $query->result_array();
         return $query1;
@@ -641,9 +621,9 @@ WHERE `customer_family_master`.`status` = '1'
     }
 
     public function job_details($id) {
-        $query = $this->db->query("SELECT dm.full_name as dname,j.status,j.invoice,j.portal,j.note,j.sample_collection,j.booking_info,j.payment_type,j.payable_amount,j.test_city,j.id,j.order_id,j.price,j.discount,GROUP_CONCAT(distinct t.test_name SEPARATOR  '#') testname,GROUP_CONCAT(distinct p.title SEPARATOR  '@') packagename,GROUP_CONCAT(distinct p.id SEPARATOR '%') packageid,GROUP_CONCAT(distinct t.id) testid,j.date,j.status,j.sample_collection,c.id custid ,c.created_date regi_date ,c.age,c.full_name ,c.mobile,c.gender,c.email,c.address,c.country,c.state,c.city,c.pic,c.type,c.password FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` LEFT JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb
-    ON pb.job_fk = j.id
-  LEFT JOIN package_master p
+        $query = $this->db->query("SELECT dm.full_name as dname,j.status,j.invoice,j.portal,j.note,j.sample_collection,j.booking_info,j.payment_type,j.payable_amount,j.test_city,j.id,j.order_id,j.price,j.discount,GROUP_CONCAT(distinct t.test_name SEPARATOR  '#') testname,GROUP_CONCAT(distinct p.title SEPARATOR  '@') packagename,GROUP_CONCAT(distinct p.id SEPARATOR '%') packageid,GROUP_CONCAT(distinct t.id) testid,j.date,j.status,j.sample_collection,c.id custid ,c.created_date regi_date ,c.age,c.full_name ,c.mobile,c.gender,c.email,c.address,c.country,c.state,c.city,c.pic,c.type,c.password FROM job_master j   LEFT JOIN job_test_list_master jtl ON jtl.job_fk=j.`id` LEFT JOIN customer_master c ON c.id=j.`cust_fk` LEFT JOIN test_master t ON t.id=jtl.test_fk LEFT JOIN  book_package_master pb 
+    ON pb.job_fk = j.id 
+  LEFT JOIN package_master p 
     ON p.id = pb.package_fk
 LEFT JOIN doctor_master dm ON dm.id=j.`doctor`	where j.id='" . $id . "' GROUP BY j.id ORDER BY j.id DESC");
         $data['user'] = $query->result_array();
@@ -662,7 +642,7 @@ function get_start_time($id) {
         $query1 = $this->db->query("select MAX(id) as id from phlabo_timer where user_fk='$id' AND stop_date IS NULL");
         $user = $query1->result_array();
         foreach ($user as $user1) {
-
+          
         }
         if ($user1 != NULL) {
             return $user1['id'];
@@ -691,13 +671,13 @@ function get_start_time($id) {
             $qry .= " AND paj.date >= '" . $new_date . "' AND paj.date <= '" . $second_new_date . "' ";
         }
 
-
+       
         if ($phlebo_fk != "") {
             $qry .= " AND paj.phlebo_fk = '".$phlebo_fk."'";
         }
-
+        
         $qry .= " order by paj.job_fk ASC";
-
+      
         $query = $this->db->query($qry);
 
         $query1 = $query->result_array();
@@ -705,8 +685,8 @@ function get_start_time($id) {
 //exit;
         return $query1;
     }
-
-
+    
+    
     //    reception api
 //    bhavik 15 feb 2018 start
     function reception_login($username) {
@@ -801,7 +781,7 @@ function get_start_time($id) {
         $query1 = $query->result_array();
         return $query1;
     }
-
+    
     public function get_one($dtatabase, $condition) {
       $query = $this->db->get_where($dtatabase, $condition);
       $result = $query->row();

@@ -1,55 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/*
-| -------------------------------------------------------------------------
-| URI ROUTING
-| -------------------------------------------------------------------------
-| This file lets you re-map URI requests to specific controller functions.
-|
-| Typically there is a one-to-one relationship between a URL string
-| and its corresponding controller class/method. The segments in a
-| URL normally follow this pattern:
-|
-|	example.com/class/method/id/
-|
-| In some instances, however, you may want to remap this relationship
-| so that a different class/function is called than the one
-| corresponding to the URL.
-|
-| Please see the user guide for complete details:
-|
-|	https://codeigniter.com/user_guide/general/routing.html
-|
-| -------------------------------------------------------------------------
-| RESERVED ROUTES
-| -------------------------------------------------------------------------
-|
-| There are three reserved routes:
-|
-|	$route['default_controller'] = 'welcome';
-|
-| This route indicates which controller class should be loaded if the
-| URI contains no data. In the above example, the "welcome" class
-| would be loaded.
-|
-|	$route['404_override'] = 'errors/page_missing';
-|
-| This route will tell the Router which controller/method to use if those
-| provided in the URL cannot be matched to a valid route.
-|
-|	$route['translate_uri_dashes'] = FALSE;
-|
-| This is not exactly a route, but allows you to automatically route
-| controller and method names that contain dashes. '-' isn't a valid
-| class or method name character, so it requires translation.
-| When you set this option to TRUE, it will replace ALL dashes in the
-| controller and method URI segments.
-|
-| Examples:	my-controller/index	-> my_controller/index
-|		my-controller/my-method	-> my_controller/my_method
-*/
-
 $route['banner-group/group-list'] = 'banner_group/group_list';
 $route['banner-group/group-add'] = 'banner_group/group_add';
 $route['banner-group/group-edit/(:num)'] = 'banner_group/group_edit/$1';
@@ -106,7 +57,7 @@ $route['doctor_api/(:any)'] = 'service/doctor_api/$1';
  *$route['api_v2/(:any)'] = 'service/Service_v2/$1';
 $route['api_v3/(:any)'] = 'service/Service_v3/$1';
  ************************************/
- 
+
  $route['api_v2/(:any)'] = 'service/Service_v2/$1';
 $route['api_v4/(:any)'] = 'service/Service_v4/$1';
 $route['api_v5/(:any)'] = 'service/Service_v5/$1';
@@ -120,9 +71,9 @@ $route['ios_api_v11/(:any)'] = 'service/Service_ios_v11/$1';
 $route['ios_api_v12/(:any)'] = 'service/Service_ios_v12/$1';
 $route['instument_api/(:any)'] = 'service/Instument/$1';
 
-$route['phlebo-api/(:any)'] = 'service/Phlebo_service/$1'; 
+$route['phlebo-api/(:any)'] = 'service/Phlebo_service/$1';
 $route['phlebo-api_v2/(:any)'] = 'service/Phlebo_service_v2/$1';
-$route['phlebo-api_v3/(:any)'] = 'service/Phlebo_service_v3/$1'; 
+$route['phlebo-api_v3/(:any)'] = 'service/Phlebo_service_v3/$1';
 $route['phlebo-api_v4/(:any)'] = 'service/Phlebo_service_v4/$1';
 $route['phlebo-api_v5/(:any)'] = 'service/Phlebo_service_v5/$1';
 $route['phlebo-api_v6/(:any)'] = 'service/Phlebo_service_v6/$1';
@@ -131,7 +82,8 @@ $route['phlebo-api_v8/(:any)'] = 'service/Phlebo_service_v8/$1';
 $route['phlebo-api_v9/(:any)'] = 'service/Phlebo_service_v9/$1';
 $route['phlebo-api_v10/(:any)'] = 'service/Phlebo_service_v10/$1';
 $route['phlebo-api_v11/(:any)'] = 'service/Phlebo_service_v11/$1';
-$route['pathologist-api/(:any)'] = 'service/Pathology_api/$1'; 
+$route['phlebo-api_v13/(:any)'] = 'service/Phlebo_service_v13/$1';
+$route['pathologist-api/(:any)'] = 'service/Pathology_api/$1';
 $route['404_override'] = 'pagenotfound'; // adding custom controller.
 $route['advertisement'] = 'user_master/advertisement';
 $route['founders'] = 'user_master/my_team';
