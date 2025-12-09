@@ -3,7 +3,7 @@
     <div class="footer-bottom bg-black-333">
         <div class="container pt-20">
             <div class="row">
-              
+
                 <div class="col-md-12 col-sm-12">
                     <ul class="list-inline footer_menu">
                         <li><a href="<?php echo base_url(); ?>user_master/about_us">About us</a></li>
@@ -28,13 +28,13 @@
             <div class="container pt-20 pb-20">
                 <div class="row">
                     <div class="col-sm-12">
-                      <!--  <p class="full_div text-center foot_copy">Airmed Pathology is India's fastest pathology service, creating a new benchmark for very high quality and best prices. 
-                            Airmeds employs state of art 39 touchpoints technology for assuring quality collection and testing across its tightly calibrated and controlled network 
-                            of labs, experienced pathologists  and phlebotomists. It offers booking of test in just 1 step. Coolpack and Barcode technology ensure safe sample transportation from heat, sunlight, contamination and human error. 
-                            Safeprick<sup>TM</sup> technology ensures minimum pain by precision laser guided blood collection. 
+                      <!--  <p class="full_div text-center foot_copy">Airmed Pathology is India's fastest pathology service, creating a new benchmark for very high quality and best prices.
+                            Airmeds employs state of art 39 touchpoints technology for assuring quality collection and testing across its tightly calibrated and controlled network
+                            of labs, experienced pathologists  and phlebotomists. It offers booking of test in just 1 step. Coolpack and Barcode technology ensure safe sample transportation from heat, sunlight, contamination and human error.
+                            Safeprick<sup>TM</sup> technology ensures minimum pain by precision laser guided blood collection.
                             It specializes in Diagnostic, Preventive and Chronic Disease Management. Its main tests include blood tests, free employee checkup, annual body check up, health test subscriptions.</p>
                         -->
-                        <div class="subscribe-div">
+                        <!-- <div class="subscribe-div">
                             <div class="form-group col-md-4 col-sm-8 col-sm-offset-1 col-md-offset-3">
 
                                 <input name="name" class="form-control ftr_nwsltr" placeholder="Subscribe Newsletter" id="sub_news" type="text">
@@ -43,7 +43,7 @@
                             <div class="form-group col-md-2 col-sm-2">
                                 <button type="button" onclick="subscribe_news();" class="btn btn-dark btn-theme-colored btn-flat mt_mns_15" >Subscribe</button>
                             </div>
-                        </div>
+                        </div> -->
                         <p class="font-13 text-black-777 m-0 text-center foot_copy">Copyright @ 2025 AirmedLabs. All rights reserved</p>
                         <?php /* <div class="widget no-border m-0">
                           <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-center flip sm-pull-none sm-text-center mt-sm-15 set_mrgn_res fb_tw_ul"style="width:160px">
@@ -365,7 +365,7 @@
                         window.location = "<?php echo base_url(); ?>Register/varify_phone1/" + jsondata.id;
                     }
                     //window.location = "<?php echo base_url(); ?>user_master";
-                } 
+                }
             });
 <?php } ?>
 
@@ -387,7 +387,7 @@
     pausePlay: true,
     pauseText: 'Pause',
     playText: 'Play',
-       
+
       });
     });
   </script>-->

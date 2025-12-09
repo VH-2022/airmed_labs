@@ -8,15 +8,14 @@ class User_master extends CI_Controller {
     var $cash_back;
 
     function __construct() {
-       
-       // session_write_close(); 
+
+       // session_write_close();
         parent::__construct();
-        
+
         $this->load->library('session');
         $user_id = $this->session->userdata('user_id');
-$username = $this->session->userdata('username');
-        print_r($this->session->userdata());
-        die();
+        $username = $this->session->userdata('username');
+
         $this->load->model('home_model');
         $this->load->model('user_master_model');
         $this->load->model('user_wallet_model');
@@ -27,16 +26,16 @@ $username = $this->session->userdata('username');
         $this->load->library('pushserver');
         $this->load->library('pagination');
         $this->load->library('email');
-       $this->load->helper('login_helper');
-        
-     
+        $this->load->helper('login_helper');
+
+
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST');
         header("Access-Control-Allow-Headers: X-Requested-With");
-      
+
          $data["login_data"] = loginuser();
-        
-        
+
+
         $uid = $data["login_data"]['id'];
         if ($uid != 0) {
             $maxid = $this->user_wallet_model->total_wallet($uid);
@@ -47,17 +46,11 @@ $username = $this->session->userdata('username');
                 $this->data['wallet_amount'] = 0;
             }
         }
-        /* pinkesh code start */
         $data['links'] = $this->user_master_model->master_fun_get_tbl_val("patholab_home_master", array("status" => 1), array("id", "asc"));
         $this->data['all_links'] = $data['links'];
-        /* pinkesh code end */
+
         $offer_master = $this->user_master_model->master_fun_get_tbl_val("offer_master", array("status" => "1"), array("id", "asc"));
         $this->cash_back = $offer_master;
-
-        // $data["test_city_session"] = $this->session->userdata("test_city");
-        // if (empty($data["test_city_session"])) {
-        //     $this->session->set_userdata("test_city", "1");
-        // }
     }
 
     function index() {
@@ -72,7 +65,7 @@ $username = $this->session->userdata('username');
         }
 
         $data["login_data"] = loginuser();
-        
+
         $data["user"] = $this->user_master_model->getUser($data["login_data"]["id"]);
         $data['success'] = $this->session->flashdata("success");
         $data['payment_success'] = $this->session->flashdata("payment_success");
@@ -136,7 +129,7 @@ $username = $this->session->userdata('username');
         }
         $data["suggest_package"] = $suggest_package;
         $data["body_suggest_package"] = $body_suggest_package;
-        
+
         $this->load->view('user/header', $data);
         $this->load->view('user/home', $data);
         $this->load->view('user/footer');
@@ -182,7 +175,7 @@ $username = $this->session->userdata('username');
                                     <div class="img-box">
                                         <img src="' . base_url() . 'upload/package/' . $key['image'] . '">
                                     </div>
-                                    <div class="txt-box"> 
+                                    <div class="txt-box">
                                         <h2 style="text-transform:uppercase;">' . ucfirst($key['title']) . '</h2>
                                         <!--<p>Your text here </p>-->
                                     </div>
@@ -207,7 +200,7 @@ $username = $this->session->userdata('username');
         $data["data"] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1","is_active" => "1"), array("title", "asc"));
         $data['test'] = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND test_master.is_view='1' AND `test_master_city_price`.`city_fk`='" . $city . "'");
         /* $data['package'] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1"), array("title", "asc")); */
-        $data['package'] = $this->user_master_model->get_val("SELECT 
+        $data['package'] = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -234,7 +227,7 @@ $username = $this->session->userdata('username');
         $data["data"] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1","is_active" => "1"), array("title", "asc"));
         $data['test'] = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND test_master.is_view='1' AND `test_master_city_price`.`city_fk`='" . $city . "'");
         /* $data['package'] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1"), array("title", "asc")); */
-        $data['package'] = $this->user_master_model->get_val("SELECT 
+        $data['package'] = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -311,25 +304,25 @@ $username = $this->session->userdata('username');
             $cnt++;
         }
         $data['all_search'] = $this->session->userdata('all');
-        $data["package"] = $this->user_master_model->get_val("SELECT 
+        $data["package"] = $this->user_master_model->get_val("SELECT
     `package_master`.*,
     `package_master_city_price`.`a_price` AS `a_price1`,
     `package_master_city_price`.`d_price` AS `d_price1`
   FROM
-    `package_master` 
-    INNER JOIN `package_master_city_price` 
-      ON `package_master`.`id` = `package_master_city_price`.`package_fk` 
-  WHERE `package_master`.`status` = '1' 
+    `package_master`
+    INNER JOIN `package_master_city_price`
+      ON `package_master`.`id` = `package_master_city_price`.`package_fk`
+  WHERE `package_master`.`status` = '1'
     AND `package_master_city_price`.`status` = '1' AND `package_master`.is_view='1' AND `package_master`.`is_active`='1' AND `package_master_city_price`.`city_fk` = '" . $data["test_city_session"] . "' ");
-        $data['relation_list'] = $this->user_master_model->get_val("SELECT 
+        $data['relation_list'] = $this->user_master_model->get_val("SELECT
   `customer_family_master`.*,
-  `relation_master`.`name` AS relation_name 
+  `relation_master`.`name` AS relation_name
 FROM
-  `customer_family_master` 
-  INNER JOIN `relation_master` 
-    ON `customer_family_master`.`relation_fk` = `relation_master`.`id` 
-WHERE `customer_family_master`.`status` = '1' 
-  AND `relation_master`.`status` = '1' 
+  `customer_family_master`
+  INNER JOIN `relation_master`
+    ON `customer_family_master`.`relation_fk` = `relation_master`.`id`
+WHERE `customer_family_master`.`status` = '1'
+  AND `relation_master`.`status` = '1'
   AND `customer_family_master`.`user_fk` = '" . $data['uid'] . "'");
         $data['job_address_list'] = $this->user_master_model->master_fun_get_tbl_val("user_address", array("status" => 1, "address !=" => "", "user_fk" => $data['uid']), array("address", "asc"));
         $data['customer_info'] = $this->user_master_model->master_fun_get_tbl_val("customer_master", array("id" => $data['uid']), array("address", "asc"));
@@ -941,7 +934,7 @@ WHERE `customer_family_master`.`status` = '1'
             $message = '<div style="padding:0 4%;">
                     <h4 style="color:#67B1A3;text-decoration: underline;">Confirm Your Email</h4>
                         <p style="color:#7e7e7e;font-size:13px;font-weight: bold;">>Hello ,' . $message1 . ',</p>
-                   
+
                 </div>';
             $message = $email_cnt->get_design($message);
             $this->email->to($this->config->item('admin_booking_email'));
@@ -1147,7 +1140,7 @@ WHERE `customer_family_master`.`status` = '1'
                 $this->email->send();
 
                 $message = '<div style="padding:0 4%;">
-<p style="font-weight: bold;">Thank you for contact us.we will contact you as soon as possible. </p>                        
+<p style="font-weight: bold;">Thank you for contact us.we will contact you as soon as possible. </p>
 <p style="font-weight: bold;">Your details</p>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Name : </b> ' . ucfirst($name) . '</p>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Email : </b> ' . $email . '</p>
@@ -1465,7 +1458,7 @@ WHERE `customer_family_master`.`status` = '1'
             $message = '<div style="padding:0 4%;">
                     <h4 style="color:#67B1A3;text-decoration: underline;">Inquiry Detail</h4>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Mobile : </b> ' . $mobile . '</p>
-                        <p style="color:#7e7e7e;font-size:13px;"><b>Package Name : </b> ' . $packagename . '</p> 
+                        <p style="color:#7e7e7e;font-size:13px;"><b>Package Name : </b> ' . $packagename . '</p>
                 </div>';
             $message = $email_cnt->get_design($message);
             $this->email->to($this->config->item('admin_booking_email'));
@@ -1790,7 +1783,7 @@ WHERE `customer_family_master`.`status` = '1'
             $package_name = array();
             foreach ($book_package as $key) {
 
-                $price1 = $this->user_master_model->get_val("SELECT 
+                $price1 = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -1835,7 +1828,7 @@ WHERE `customer_family_master`.`status` = '1'
         }
         if ($new_tid[0] == 'p') {
             $delete = $this->user_master_model->master_fun_update("book_package_master", array("id", $new_tid[1]), array("status" => "0"));
-            $price1 = $this->user_master_model->get_val("SELECT 
+            $price1 = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -1851,7 +1844,7 @@ WHERE `customer_family_master`.`status` = '1'
         if ($job_details[0]["payable_amount"] > $price) {
             $j_payable_price = $job_details[0]["payable_amount"] - $price;
         } else {
-            
+
         }
         $this->user_master_model->master_fun_update("job_master", array("id", $jid), array("price" => "0"));
     }
@@ -2004,7 +1997,7 @@ WHERE `customer_family_master`.`status` = '1'
         $this->load->view('user/footer', $data);
     }
 function feedback_ins() {
-       
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'trim|required');
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
@@ -2034,7 +2027,7 @@ function feedback_ins() {
                 echo 0;
             }
         }
-    } 
+    }
 }
 
 ?>
