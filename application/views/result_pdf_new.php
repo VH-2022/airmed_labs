@@ -69,9 +69,23 @@
         $currentpage = 0;
         $page_break = 0;
         $department_name = "";
+        $department_namebhargav = "";
         $pageStart = true;
         $departmentCount =0;
+        $counter = 1;
+        $departmentIndex = [];
+
+
+
         foreach ($new_data_array as $testidp) {
+             $dept = $testidp['department_name'];
+           if (!isset($departmentIndex[$dept])) {
+                    $departmentIndex[$dept] = $counter;
+                    $counter++;
+                }
+
+
+
             $parameter_cnt = 0;
 			$testdepart=$testidp["department_fk"];
             if (!empty($testidp[0]["parameter"]) || $testidp['report_type'] == 2) {
@@ -90,17 +104,16 @@
                         <?php
                         $pageStart = true;
                         echo "</div>";
+
                         ?>
                         <?php
                     } $parameter_cnt++;
 
-$departmentCount++;
+                    $departmentCount++;
                     if ($pageStart) {
                         $pagecount++;
 
-                        $finalpageArray[] = array("page" => "chapter" . $pagecount
-, "sample_type" => array(),'departmentCount'=>$departmentCount
-);
+                        $finalpageArray[] = array("page" => "chapter" . $pagecount, "sample_type" => array(),'departmentCount'=>$departmentCount,'counter' =>$counter);
                         $currentpage = $pagecount-1;
                         ?> <div class="chapter<?= $pagecount ?>" >
                         <?php
@@ -463,7 +476,7 @@ $departmentCount++;
                         </table>
                         <?php
                     }
-$departmentCount++;
+                    $departmentCount++;
 
                 }
                 ?>
@@ -474,53 +487,54 @@ $departmentCount++;
 
             echo "</div>";
             foreach ($finalpageArray as $page) {
+                echo $page['counter'] . 'rohit' ;
                 ?>
                 <htmlpageheader name="p<?php echo $page['page'] ?>"><?php
-            $hcnt = strlen(implode(',', array_unique($page['sample_type'])));
-            if ($hcnt > 2) {
-                $new_header = str_replace("FINAL", implode(',', array_unique($page['sample_type'])), $header);
-                $new_header = str_replace("Report Status", "Sample Type", $new_header);
-                echo $new_header;
-            } else {
-                echo $header;
-            }
-//echo json_encode($page); echo implode(',', $page['sample_type']);
+                    $hcnt = strlen(implode(',', array_unique($page['sample_type'])));
+                    if ($hcnt > 2) {
+                        $new_header = str_replace("FINAL", implode(',', array_unique($page['sample_type'])), $header);
+                        $new_header = str_replace("Report Status", "Sample Type", $new_header);
+                        echo $new_header;
+                    } else {
+                        echo $header;
+                    }
+
                 ?>
                 </htmlpageheader>
-            <?php
-            }
-            ?>
-            <htmlpagefooter name="footer"><?php echo $footer; ?></htmlpagefooter>
+
+                <?php
+                $footerHtml = str_replace(
+                ['{nba}'],
+                ['rohit'.$page['counter']],
+                $footer);
+            }?>
+
+            <htmlpagefooter name="footer"><?php echo $footerHtml; ?></htmlpagefooter>
 
     </body>
     <style>
 <?php
 $pdfsize = explode(",", $pdfsize);
-log_message('info', $finalpageArray[0]['page']
-);
-
-
 
 foreach ($finalpageArray as $page) {
     ?>
-            @page <?php echo $page['page
+    @page <?php echo $page['page'] ?> {
+        odd-header-name: p<?php echo $page['page'] ?>;
+        margin-left: 7%;
+        margin-right: 2%;
+        margin-header: <?= $pdfsize[0] ?>mm;
+        margin-footer: <?= $pdfsize[1] ?>mm;
+        margin-top: <?= $pdfsize[2] ?>%;
+        odd-footer-name:footer;,
 
-'] ?> {
-                odd-header-name: p<?php echo $page['page'] ?>;
-                margin-left: 7%;
-                margin-right: 2%;
-                margin-header: <?= $pdfsize[0] ?>mm;
-                margin-footer: <?= $pdfsize[1] ?>mm;
-                margin-top: <?= $pdfsize[2] ?>%;
-                odd-footer-name:footer;,
+    }
 
-            }
+    <?php echo $page['page'] ?> {
+        page: <?php echo $page['page'] ?>;
+        page-break-before: always;
+    }
 
-            .<?php echo $page['page'] ?> {
-                page: <?php echo $page['page'] ?>;
-                page-break-before: always;
-            }
-<?php }
+<?php  }
 ?>
 
 
