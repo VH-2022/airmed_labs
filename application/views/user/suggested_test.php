@@ -10,12 +10,12 @@
         vertical-align: middle; text-align: center;
         background-color: #80ACDD;
     }
-    ul.mySection label:hover { 
+    ul.mySection label:hover {
         background-color: #00A4EF; color: #fff; transition: all 0.25s;
     }
     ul.mySection label:hover h2 {color: #fff;}
-    ul.mySection input[type=checkbox]:checked ~ label { 
-        background-color: rgba(50, 200, 50, 1); 
+    ul.mySection input[type=checkbox]:checked ~ label {
+        background-color: rgba(50, 200, 50, 1);
     }
     input#btn { margin: 8px 18px; padding: 8px; }
 
@@ -211,9 +211,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
-                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            <!-- <div class="col-sm-6">
+                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+                            </div> -->
                         </div>
                     </div>
                 </div>

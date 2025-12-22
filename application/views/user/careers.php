@@ -107,13 +107,13 @@
         .jssora05l.jssora05lds { background-position: -10px -40px; opacity: .3; pointer-events: none; }
         .jssora05r.jssora05rds { background-position: -70px -40px; opacity: .3; pointer-events: none; }
         /* jssor slider thumbnail navigator skin 09 css */.jssort09-600-45 .p {    position: absolute;    top: 0;    left: 0;    width: 600px;    height: 45px;}.jssort09-600-45 .t {    font-family: verdana;    font-weight: normal;    position: absolute;    width: 100%;    height: 100%;    top: 0;    left: 0;    color:#fff;    line-height: 45px;    font-size: 20px;    padding-left: 10px;}
-		
+
 		.h3{    margin: 0;
     padding: 5px;
     background: #dc1d3c;
     color: #fff;
     border-bottom: 2px solid #000;}
-	
+
 	.btn-dark.btn-theme-colored.one{padding:3px 15px;}
     </style>
 <!-- Start main-content -->
@@ -136,8 +136,8 @@
         </div>
 
 
-    </section> 
-  
+    </section>
+
   <section>
 		<div class="container">
 			<div class="section-content book_test">
@@ -145,16 +145,16 @@
                     <div class="col-md-12 col-sm-12">
 						<div id="jssor_1" style="position: relative; margin: 0 auto; top: 0px; left: 0px; width: 1000px; height: 300px; overflow: hidden; visibility: hidden;">
 							<div data-u="slides" style="cursor: default; position: relative; top: 0px; left: 0px; width: 1000px; height: 300px; overflow: hidden;">
-								
+
 							 <div data-p="112.50" style="display: none;">
-									 <img data-u="image" src="<?php echo base_url(); ?>user_assets/images/new/c1.jpg" />	
+									 <img data-u="image" src="<?php echo base_url(); ?>user_assets/images/new/c1.jpg" />
 								</div>
 								<div data-p="112.50" style="display: none;">
 									 <img data-u="image" src="<?php echo base_url(); ?>user_assets/images/new/c3.jpg" />
-								</div> 
+								</div>
 								<div data-p="112.50" style="display: none;">
 									 <img data-u="image" src="<?php echo base_url(); ?>user_assets/images/new/c4.jpg" />
-								</div> 
+								</div>
 							</div>
 							<div data-u="navigator" class="jssorb01" style="bottom:16px;right:16px;">
 								<div data-u="prototype" style="width:12px;height:12px;"></div>
@@ -173,7 +173,7 @@
 			<div class="col-md-12">
 			<div class="our_careers">
 			<div class="col-md-12"><center><h2 style="margin-bottom:50px;">Our people are our biggest assets! Join us in our mission and make a difference through your work. </h2></center></div>
-			
+
 				<div class="col-md-3 col-sm-6">
 					<div class="careers_optn">
 						<h3 class="h3">Search all available jobs</h3>
@@ -234,7 +234,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 			</div>
 		</div>
@@ -249,15 +249,15 @@
                       - */ ?>
                     <div class="col-sm-4  col-xs-4">
 						<center><h2 ><strong  style="color:#bf2d37; font-weight:bold">BOOK</strong> <span style="color:#000">TEST</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/>
                     </div>
                     <div class="col-sm-4 col-xs-4">
 					<center><h2><strong  style="color:#bf2d37; font-weight:bold">MANAGE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/>
                     </div>
                     <div class="col-sm-4 col-xs-4">
 					<center><h2><strong  style="color:#bf2d37; font-weight:bold">SHARE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/>
                     </div>
 
 
@@ -266,37 +266,37 @@
             </div>
         </div>
     </section>
-	
+
 	<section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
 			<div class="col-sm-12" style="text-align:center;">
 			<div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-				 <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+				 <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
 			</div>
                            <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> </h1>
-							  
+
 							 </div>
 							 <div class="clearfix"></div><br/>
                               <div class="col-sm-6  pdng_0 col-sm-offset-4">
-							  <div class="col-sm-4">
+							        <!-- <div class="col-sm-4">
                                         <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
-                                    </div>
+                                    </div> -->
                                     <div class="col-sm-4">
                                         <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=54&w=173&src=user_assets/images/google_play.png"/></a>
                                     </div>
-                                    
+
                                 </div>
                             </div>
-								
+
 			</div>
         </div>
     </section>
-				
-                
+
+
 </div>
 <!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
+<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>-->
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
 <script type="text/javascript">jssor_1_slider_init();</script>

@@ -1,16 +1,16 @@
 <style>
     .vw_rprt_cntr {text-align: center;}
-    @media 
+    @media
     only screen and (max-width: 767px),
     (min-device-width: 360px) and (max-device-width: 640px)  {
         .vw_rprt_cntr {text-align: left;}
         /* Force table to not be like tables anymore */
-        .res_table_actv_pkg_dtl thead, .res_table_actv_pkg_dtl tbody, .res_table_actv_pkg_dtl th, .res_table_actv_pkg_dtl td,.res_table_actv_pkg_dtl tr { 
-            display: block; 
+        .res_table_actv_pkg_dtl thead, .res_table_actv_pkg_dtl tbody, .res_table_actv_pkg_dtl th, .res_table_actv_pkg_dtl td,.res_table_actv_pkg_dtl tr {
+            display: block;
         }
 
         /* Hide table headers (but not display: none;, for accessibility) */
-        .res_table_actv_pkg_dtl thead tr { 
+        .res_table_actv_pkg_dtl thead tr {
             position: absolute;
             top: -9999px;
             left: -9999px;
@@ -18,21 +18,21 @@
 
         .res_table_actv_pkg_dtl tr { border: 1px solid #ccc; }
 
-        .res_table_actv_pkg_dtl td { 
+        .res_table_actv_pkg_dtl td {
 
             border: none;
-            border-bottom: 1px solid #eee; 
+            border-bottom: 1px solid #eee;
             position: relative;
-            padding-left: 50% !important; 
+            padding-left: 50% !important;
         }
 
-        .res_table_actv_pkg_dtl td:before { 
+        .res_table_actv_pkg_dtl td:before {
             /* Now like a table header */
-            position: absolute; 
+            position: absolute;
             /* Top/left values mimic padding */
             <!-- top: 6px;
             left: 6px; -->
-            width: 45%; 
+            width: 45%;
             <!-- padding-right: 10px;  -->
             white-space: nowrap;
         }
@@ -60,7 +60,7 @@
     #phlebo_shedule > a {border: 1px solid #ccc; float: left; margin-right: 10px; margin-top: 10px;padding: 10px 10px 0; width: 47%;}
     #phlebo_shedule label{margin-right:10px; float:left;}
     #phlebo_shedule input{margin-top: 6px;}
-</style> 
+</style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <!-- Start main-content -->
@@ -74,11 +74,11 @@
                     <h1 class="txt_green_clr res_txt_grn">Active package Details</h1>
                 </div>
                 <div class="col-sm-12 pdng_0">
-                    <div id="exTab3" class="container">	
-                        <div class=""> 
+                    <div id="exTab3" class="container">
+                        <div class="">
                             <?php if (isset($success) != NULL) { ?>
                                 <div class="alert alert-success alert-dismissable">
-                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">ï¿½</button>
                                     <?php echo $success['0']; ?>
                                 </div>
                             <?php } ?>
@@ -117,7 +117,7 @@
                                                             <?php } ?>
                                                             <?php if ($key["job_details"][0]['status'] == "2") { ?>
                                                                 <img src="<?= base_url(); ?>user_assets/report_img/5.png">
-                                                            <?php } ?></td> 
+                                                            <?php } ?></td>
                                                         <td class="vw_rprt_cntr" style="vertical-align: middle;"><?php if ($key["job_details"][0]['status'] == "2") { ?>
                                                                 <a href="<?= base_url(); ?>upload/report/<?= $key["report"][0]["report"] ?>" target="_blank" class="btn btn-sm btn-primary">View Report</a>
                                                             <?php } else {
@@ -147,7 +147,7 @@
 <?php /* Nishit popup code start */ ?>
             <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
             <!--pinkesh code -->
-            <div class="modal fade" id="myModal_2" role="dialog"> 
+            <div class="modal fade" id="myModal_2" role="dialog">
                 <div class="modal-dialog aftr_srch_fill_info_sm_popup">
                     <!-- Modal content-->
 <?php echo form_open("user_test_master/book_test/" . $ids, array("role" => "form", "method" => "POST", "id" => "address_login")); ?>
@@ -162,7 +162,7 @@
                                     <input type="hidden" value="<?php echo $uid; ?>" name="book_user_id"/>
                                     <div id="contener_1">
                                         <div class="col-sm-12 pdng_0 full_div">
-                                            <label style="margin-top: 0;">Test For: <?= $active_package[0]["family"]; ?></label> 
+                                            <label style="margin-top: 0;">Test For: <?= $active_package[0]["family"]; ?></label>
                                             <input type="hidden" id="family" value="<?= $active_package[0]["family_fk"]; ?>"/>
                                         </div>
                                         <span id="contener_1_error" style="color:red; width:100%; float:left;"></span>
@@ -252,9 +252,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

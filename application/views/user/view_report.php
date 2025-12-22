@@ -46,9 +46,9 @@
 		<div class="container pdng_top_20px pdng_btm_30px">
 			<div class="row">
 				<!-- <div class="col-sm-12">
-				
+
 				<p class="login_title_p">Report</p>
-				
+
 				</div> -->
 				<div class="col-sm-12">
 						<h1 class="txt_green_clr res_txt_grn">Report</h1>
@@ -70,11 +70,11 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="row">
 				<div class="col-md-12">
 				 <?php foreach($report as $key)  { ?>
-					<div class="">         
+					<div class="">
 						  <table class="table table-bordered set_vw_rprt_tbl">
 							<tbody>
 							  <tr>
@@ -131,9 +131,9 @@
 							</div>
 						</div>-->
 					</div>
-					
+
 				 <?php } ?>
-					
+
 				</div>
 					</div>
 				<div class="row">
@@ -146,18 +146,18 @@
 							<div class="col-sm-6">
 								<a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
 							</div>
-							<div class="col-sm-6">
-								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-							</div>
+							<!-- <div class="col-sm-6">
+								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+							</div> -->
 						</div>
 					</div>
 				</div>
 			</div>
 					</div>
-				
+
 			</div>
 				</div>
-				
+
 			</div>
 		</div>
     </section>

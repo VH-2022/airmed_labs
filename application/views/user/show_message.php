@@ -58,9 +58,9 @@
 		<div class="container pdng_top_20px pdng_btm_30px">
 			<div class="row">
 				<!-- <div class="col-sm-12">
-				
+
 				<p class="login_title_p">Report</p>
-				
+
 				</div> -->
 				<div class="col-md-8 col-md-offset-2">
                     <div class="block-heading">
@@ -69,7 +69,7 @@
 						 </div>
                     </div>
                     <div class="flash-message">
-					
+
                                             </div> <!-- end .flash-message -->
                     <div class="msg_full_show_msg">
                                    <div class="widget set_showmsg_wdgt_mrgn">
@@ -79,12 +79,12 @@
                                     <?php echo $success['0']; ?>
                                 </div>
                             <?php } ?>
-                        
-					</div>   
+
+					</div>
 									  <?php foreach($allmassage as $key) {
 										  ?>
 										 <?php
-date_default_timezone_set('Asia/Calcutta'); 
+date_default_timezone_set('Asia/Calcutta');
 $datetime1 = date("Y-m-d H:i:s");
 $datetime1 = new DateTime($datetime1);
 $datetime2 = new DateTime($key['date']);
@@ -100,8 +100,8 @@ $elapsed = "Just Now";
 } else {
 $elapsed = date("Y-m-d", strtotime($key['date']));
 }
-?> 
-										  
+?>
+
 							<div class="msg_big_div design_msg">
                                     <div class="col-xs-4 col-sm-2 pdng_0">
 										<div style="width: 100%; float: left;text-align:center;">
@@ -120,19 +120,19 @@ $elapsed = date("Y-m-d", strtotime($key['date']));
 										<?php if($key['type']==1){ echo ucfirst($key['full_name']);} else{ echo "Admin";}?>
 										</div>
 										</div>
-										
+
                                     </div>
                                     <div class="col-xs-8 col-sm-10">
 									<p style=" font-size: 11px;line-height: 5px;margin: 0;">  <?php echo $key['date'];?></p>
                                         <div class="msg_content_div">
-										
+
                                             <p> <?php echo $key['message'];?></p>
-											
+
                                         </div>
                                     </div>
                             </div>
 									  <?php } ?>
-              
+
 <?php if($allmassage[0]['status']==1) {?>			  </div>
           <form role="form" action="<?php echo base_url(); ?>user_master/view_ticket_details/<?php echo $ticket; ?>" method="post" enctype="multipart/form-data">                    <div class="msg_full">
                         <div class="form-group">
@@ -151,16 +151,16 @@ $elapsed = date("Y-m-d", strtotime($key['date']));
 <h1 style="color:red;"> Closed</h1>
 <?php } ?>
                                                             <ul class="pagination pagination-sm no-margin pull-right">
-                         
+
                     </ul>
 
                 </div>
-				
-				
-				
-				
+
+
+
+
 			</div>
-			
+
 		<div class="row">
 				<div class="full_div pdng_top_35px">
 					<div class="col-sm-6">
@@ -171,19 +171,19 @@ $elapsed = date("Y-m-d", strtotime($key['date']));
 							<div class="col-sm-6">
 								<a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
 							</div>
-							<div class="col-sm-6">
-								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-							</div>
+							<!-- <div class="col-sm-6">
+								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+							</div> -->
 						</div>
 					</div>
 				</div>
 			</div>
-				
+
 					</div>
-				
-		
-			
-		
+
+
+
+
     </section>
 	</div>
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>

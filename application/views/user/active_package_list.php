@@ -1,16 +1,16 @@
 <style>
 .res_table_actv_pkg tbody tr:nth-child(2n) {background-color: #f5f6f7;}
-    @media 
+    @media
     only screen and (max-width: 767px),
     (min-device-width: 360px) and (max-device-width: 640px)  {
 
         /* Force table to not be like tables anymore */
-        .res_table_actv_pkg thead, .res_table_actv_pkg tbody, .res_table_actv_pkg th, .res_table_actv_pkg td,.res_table_actv_pkg tr { 
-            display: block; 
+        .res_table_actv_pkg thead, .res_table_actv_pkg tbody, .res_table_actv_pkg th, .res_table_actv_pkg td,.res_table_actv_pkg tr {
+            display: block;
         }
 
         /* Hide table headers (but not display: none;, for accessibility) */
-        .res_table_actv_pkg thead tr { 
+        .res_table_actv_pkg thead tr {
             position: absolute;
             top: -9999px;
             left: -9999px;
@@ -18,21 +18,21 @@
 
         .res_table_actv_pkg tr { border: 1px solid #ccc; }
 
-        .res_table_actv_pkg td { 
+        .res_table_actv_pkg td {
 
             border: none;
-            border-bottom: 1px solid #eee; 
+            border-bottom: 1px solid #eee;
             position: relative;
-            padding-left: 50% !important; 
+            padding-left: 50% !important;
         }
 
-        .res_table_actv_pkg td:before { 
+        .res_table_actv_pkg td:before {
             /* Now like a table header */
-            position: absolute; 
+            position: absolute;
             /* Top/left values mimic padding */
             <!-- top: 6px;
             left: 6px; -->
-            width: 45%; 
+            width: 45%;
             <!-- padding-right: 10px;  -->
             white-space: nowrap;
         }
@@ -119,9 +119,7 @@
                                 <div class="col-sm-6">
                                     <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                                 </div>
-                                <div class="col-sm-6">
-                                    <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

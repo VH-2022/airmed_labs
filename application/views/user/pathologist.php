@@ -1,4 +1,4 @@
-    
+
 
 <style>
    @media (max-width: 479px) and (min-width: 455px){
@@ -26,14 +26,14 @@
         </div>
 
 
-    </section> 
+    </section>
 
-    <section> 
+    <section>
         <div class="container pb-0">
             <div class="section-content team_photos">
                 <div class="row multi-row-clearfix">
-                    
-                    
+
+
                     <div class="col-sm-12 col-md-12 mb-60 sm-text-center" style="background:#f1f2f3; box-shadow:1px 1px 10px #ccc; padding:10px 0; float:left;width:100%;">
                         <div class="col-sm-3">
                             <div class="my_team_lft_div">
@@ -93,14 +93,14 @@
                             </div>
                         </div>
                     </div> -->
-                    
-                    
-                    
+
+
+
 
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
    <!-- <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
         <div class="container mbl_containr" style="padding-bottom:0">
             <div class="row">
@@ -110,15 +110,15 @@
                       - */ ?>
                     <div class="col-sm-4  col-xs-4">
                         <center><h2 ><strong  style="color:#bf2d37; font-weight:bold">BOOK</strong> <span style="color:#000">TEST</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/>
                     </div>
                     <div class="col-sm-4 col-xs-4">
                     <center><h2><strong  style="color:#bf2d37; font-weight:bold">MANAGE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/>
                     </div>
                     <div class="col-sm-4 col-xs-4">
                     <center><h2><strong  style="color:#bf2d37; font-weight:bold">SHARE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/>
                     </div>
 
 
@@ -133,7 +133,7 @@
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
                     <div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP
                         -- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> --
@@ -143,7 +143,7 @@
                     <div class="clearfix"></div><br/>
                     <div class="col-sm-6  pdng_0 col-sm-offset-4">
                         <div class="col-sm-4">
-                            <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
+                            <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
                         </div>
                         <div class="col-sm-4">
                             <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=54&w=173&src=user_assets/images/google_play.png"/></a>
@@ -159,7 +159,7 @@
 
 </div>
 <!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
+<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>-->
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
 <script>

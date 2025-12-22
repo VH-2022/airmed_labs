@@ -95,7 +95,7 @@
                         <div class="col-md-3 col-sm-5">
                             <?php foreach($suggest_package as $key1){ ?>
                             <h2 class="subtitle text-center txt_blue_clr" style="margin-bottom: 25px;COLOR:#000"><?= ucfirst($key1["name"])?></h2>
-                           
+
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 <?php foreach($key1["package"] as $p_key1){ ?>
                                 <div class="panel panel-default">
@@ -120,11 +120,11 @@
                                     </div>
                                 </div>
                                 <?php } ?>
-                              
+
                             </div>
-                            
+
                             <?php } ?>
-                         
+
                         </div>
                     </div>
                     <div class="border-btn mt-30"><span style="background-color:black"></span></div>
@@ -140,13 +140,13 @@
                         <!--  <h1 class="mbl_title center">App Communication Space</h1>-->
 
                         <div class="col-sm-4  col-xs-4">
-                            <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> 
+                            <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/>
                         </div>
                         <div class="col-sm-4 col-xs-4">
-                            <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/> 
+                            <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/>
                         </div>
                         <div class="col-sm-4 col-xs-4">
-                            <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/> 
+                            <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/>
                         </div>
 
 
@@ -161,16 +161,16 @@
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
                     <div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> </h1>
 
                     </div>
                     <div class="clearfix"></div><br/>
                     <div class="col-sm-6  pdng_0 col-sm-offset-4">
-                        <div class="col-sm-4">
-                            <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
-                        </div>
+                        <!-- <div class="col-sm-4">
+                            <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
+                        </div> -->
                         <div class="col-sm-4">
                             <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=54&w=173&src=user_assets/images/google_play.png"/></a>
                         </div>
@@ -185,7 +185,7 @@
 
 </div>
 <!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
+<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>-->
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
 <script>

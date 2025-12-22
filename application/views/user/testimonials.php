@@ -1,7 +1,7 @@
 <!-- Start main-content -->
   <div class="main-content">
     <!-- Section: home -->
-	
+
 	<section class="pdng_all_container">
       <div class="container pb-30 pdng_btm_30px">
 	      <div class="">
@@ -35,9 +35,9 @@
 							<div class="col-sm-6">
 								<a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
 							</div>
-							<div class="col-sm-6">
-								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-							</div>
+							<!-- <div class="col-sm-6">
+								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+							</div> -->
 						</div>
 					</div>
 				</div>

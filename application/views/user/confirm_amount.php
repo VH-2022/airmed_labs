@@ -123,7 +123,7 @@
                                 } else {
                                     echo 'style="display:none;"';
                                 }
-                                ?> >  
+                                ?> >
                                     <p style="font-weight:bold;">Total Rs.<?php echo $price + $package_price; ?></p>
                                 </div>
                             </div>
@@ -139,9 +139,9 @@
                                 <div class="col-sm-5">
                                     <b class="cnfrm_amnt_title_mrgn_btm">Your Wallet Balance</b>
                                     <?php if ($price != 0) { ?>
-                                        <div class="wbalance">  
+                                        <div class="wbalance">
                                             <p>Rs <?php echo $wallet; ?></p>
-                                        </div> 
+                                        </div>
                                     <?php } ?>
                                 </div>
                                 <div class="col-sm-1">
@@ -150,16 +150,16 @@
                                 <div class="col-sm-5">
                                     <b class="cnfrm_amnt_title_mrgn_btm">Payable Amount</b>
                                     <?php if ($test_exist != 0) { ?>
-                                        <div class="wbalance">  
+                                        <div class="wbalance">
                                             <p style="font-weight:bold;">Rs <?php echo $payamount; ?> (for test)</p>
                                         </div>
                                     <?php } ?>
                                     <?php if ($package_exist != 0) { ?>
-                                        <div class="wbalance">  
+                                        <div class="wbalance">
                                             <p style="font-weight:bold;">Rs.<?php echo $package_price; ?> (for package)</p>
                                         </div>
                                     <?php } ?>
-                                    <div class="wbalance">  
+                                    <div class="wbalance">
                                         <p style="font-weight:bold;">Total Rs.<?php echo $payamount + $package_price; ?></p>
                                     </div>
                                 </div>
@@ -223,7 +223,7 @@
 <!--<span class="cnfrm_amnt_spn col-xs-1">OR</span>-->
 <!--<button class="cnfrm_btn_noback col-xs-5 col-sm-4 pdng_0" id="crop_model" data-target="#myModal1" data-keyboard="false" data-backdrop="static" data-toggle="modal" type="button"><img class="cnfrm_two_img" src="<?php echo base_url(); ?>user_assets/images/new/cash_on_dlvry.png"/></button>-->
                                     </div>
-                                    <!--<div class="col-sm-6 pdng_0" style="margin-top:20px; float: left;">                              
+                                    <!--<div class="col-sm-6 pdng_0" style="margin-top:20px; float: left;">
                                     </div>-->
                                     <div role="dialog" id="myModal2" class="modal fade">
                                         <div class="modal-dialog">
@@ -448,9 +448,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

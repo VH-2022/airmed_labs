@@ -29,18 +29,18 @@
                                             <span class="input-group-addon" style="">
                                                 <i class="fa fa-file"></i>
                                             </span>
-                                           
+
                                             <input class="form-control" type="text" name="reg_no" placeholder="Enter Your Reg NO" ></br>
                                             <spam id="captch_error" style="color:red;"><?php echo form_error('email'); ?></spam>
-                                        </div> 
+                                        </div>
   <div class="input-group">
                                             <span class="input-group-addon" style="">
                                                 <i class="fa fa-phone"></i>
                                             </span>
-                                           
+
                                             <input class="form-control" type="text" name="reg_no" placeholder="Enter Your Mobile " ></br>
                                             <spam id="captch_error" style="color:red;"><?php echo form_error('email'); ?></spam>
-                                        </div> 
+                                        </div>
 
                                     </div>
 
@@ -60,7 +60,7 @@
                                 <?php
                                 $captcha = $this->session->userdata('captcha2');
                                 echo $captcha;
-                                ?> 
+                                ?>
                             </form>
                             <div class="login_face_gplus">
                                 <div class="col-sm-4 col-xs-6 pdng_lft_0">
@@ -88,9 +88,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
-                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            <!-- <div class="col-sm-6">
+                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+                            </div> -->
                         </div>
                     </div>
                 </div>

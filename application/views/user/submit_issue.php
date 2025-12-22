@@ -23,7 +23,7 @@
 					<div class="login_dark_back">
 						<p class="login_title_p">Submit Issue</p>
 					</div>
-				
+
 						<div class="col-sm-12 pdng_0 mrgn_btm_25px">
 							<div class="input-group" style="width:100%;">
 								<label>Suject</label>
@@ -38,9 +38,9 @@
 							</div>
 							<span style="color:red;"> <?php echo form_error('message');?></span>
 						</div>
-						
-						
-						
+
+
+
 						<div class="col-sm-12 pdng_0 mrgn_btm_25px">
 							<div class="input-group">
 								<button type="submit" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
@@ -54,9 +54,9 @@
 				<img class="regi_rgt_img" src="<?php echo base_url(); ?>user_assets/images/prescriptions_2.jpg"/>
 			</div>
 		</div>
-					
-					
-				
+
+
+
 			</div>
 			<div class="row">
 				<div class="full_div pdng_top_35px">
@@ -68,16 +68,16 @@
 							<div class="col-sm-6">
 								<a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
 							</div>
-							<div class="col-sm-6">
-								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-							</div>
+							<!-- <div class="col-sm-6">
+								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+							</div> -->
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 		</div>
-		
+
     </section>
-  
+
   <!-- end main-content -->

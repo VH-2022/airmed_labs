@@ -29,9 +29,9 @@
                 </div>
             </div>
         </div>
-    </section> 
-  
-    
+    </section>
+
+
     <section>
 	<div class="container">
 		<div class="row">
@@ -47,10 +47,10 @@
 						<div class="careet_dtls">
 							<div class="career_dtls_title">
 								<h2>Get to Know Us</h2>
-								
+
 							</div>
 							<div class="career_dtls_desc">
-							
+
 							<p class="desc_p">Airmed provides quality care and wellness packages to patients and best-in- class diagnosis support to doctors. We cater to direct consumers and patients referred by doctors and hospitals. Lab at your door step.</p>
 							<div class="col-md-6 col-sm-6">
 								<p><strong>Department :</strong> Pathology</p>
@@ -77,7 +77,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 	</div>
@@ -91,15 +91,15 @@
                       - */ ?>
                     <div class="col-sm-4  col-xs-4">
 						<center><h2 ><strong  style="color:#bf2d37; font-weight:bold">BOOK</strong> <span style="color:#000">TEST</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/>
                     </div>
                     <div class="col-sm-4 col-xs-4">
 					<center><h2><strong  style="color:#bf2d37; font-weight:bold">MANAGE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/>
                     </div>
                     <div class="col-sm-4 col-xs-4">
 					<center><h2><strong  style="color:#bf2d37; font-weight:bold">SHARE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                        <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/>
                     </div>
 
 
@@ -108,37 +108,36 @@
             </div>
         </div>
     </section>
-	
+
 	<section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
 			<div class="col-sm-12" style="text-align:center;">
 			<div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-				 <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+				 <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
 			</div>
                            <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> </h1>
-							  
+
 							 </div>
 							 <div class="clearfix"></div><br/>
                               <div class="col-sm-6  pdng_0 col-sm-offset-4">
-							  <div class="col-sm-4">
+							  		<!-- <div class="col-sm-4">
                                         <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
-                                    </div>
+                                    </div> -->
                                     <div class="col-sm-4">
                                         <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=54&w=173&src=user_assets/images/google_play.png"/></a>
                                     </div>
-                                    
+
                                 </div>
                             </div>
-								
+
 			</div>
         </div>
     </section>
-				
-                
+
+
 </div>
 <!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
+<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>-->
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
-

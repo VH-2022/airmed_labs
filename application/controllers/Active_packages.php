@@ -29,8 +29,8 @@ class Active_packages extends CI_Controller {
         if ($this->session->flashdata("error")) {
             $data["error"] = $this->session->flashdata("error");
         }
-        $data['active_package'] = $this->active_package_model->get_val("SELECT `active_package`.*,`package_master`.`title`,job_master.order_id FROM `active_package` 
-INNER JOIN `package_master` ON `package_master`.`id`=`active_package`.`package_fk` inner join job_master on `active_package`.`job_fk`=job_master.id 
+        $data['active_package'] = $this->active_package_model->get_val("SELECT `active_package`.*,`package_master`.`title`,job_master.order_id FROM `active_package`
+INNER JOIN `package_master` ON `package_master`.`id`=`active_package`.`package_fk` inner join job_master on `active_package`.`job_fk`=job_master.id
 WHERE `active_package`.`status`='1' AND `package_master`.`status`='1' AND job_master.status !='0' AND `active_package`.`user_fk`='" . $uid . "' AND (`active_package`.`parent`='0' OR `active_package`.`parent`=NULL)");
         $cnt = 0;
         foreach ($data['active_package'] as $key) {
@@ -109,7 +109,7 @@ WHERE `active_package`.`status`='1' AND `package_master`.`status`='1' AND job_ma
             $job_details[0]["book_test"] = $test_name;
             $package_name = array();
             foreach ($book_package as $key) {
-                $price1 = $this->active_package_model->get_val("SELECT 
+                $price1 = $this->active_package_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -149,7 +149,7 @@ WHERE `active_package`.`status`='1' AND `package_master`.`status`='1' AND job_ma
         $date = date('Y-m-d H:i:s');
         $user = $this->active_package_model->master_fun_get_tbl_val("customer_master", array('status' => 1, "id" => $uid), array("id", "asc"));
         $mobile = $user[0]["mobile"];
-        //echo $uid."-".$select_tests."-".$total; die();   
+        //echo $uid."-".$select_tests."-".$total; die();
         $booking_info_data = $this->active_package_model->master_fun_get_tbl_val("booking_info", array('id' => $booking_info), array("id", "asc"));
         $data = array(
             "order_id" => $order_id,
@@ -254,7 +254,7 @@ WHERE `active_package`.`status`='1' AND `package_master`.`status`='1' AND job_ma
             $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Booking has been successfully. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> You Booked :  ' . implode($test_package_name, ', ') . '  </p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> You Booked :  ' . implode($test_package_name, ', ') . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Your Booked Amount is Rs.' . $ttl_prc . '  </p>
 		<p style="color:#7e7e7e;font-size:13px;"> Mobile : ' . $destail[0]['mobile'] . '</p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>

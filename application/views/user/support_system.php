@@ -1,14 +1,14 @@
 <style>
-    @media 
+    @media
     only screen and (max-width: 767px)  {
 
         /* Force table to not be like tables anymore */
-        .res_table thead, .res_table tbody, .res_table th, .res_table td,.res_table tr { 
-            display: block; 
+        .res_table thead, .res_table tbody, .res_table th, .res_table td,.res_table tr {
+            display: block;
         }
 
         /* Hide table headers (but not display: none;, for accessibility) */
-        .res_table thead tr { 
+        .res_table thead tr {
             position: absolute;
             top: -9999px;
             left: -9999px;
@@ -16,21 +16,21 @@
 
         .res_table tr { border: 1px solid #ccc; }
 
-        .res_table td { 
+        .res_table td {
 
             border: none;
-            border-bottom: 1px solid #eee; 
+            border-bottom: 1px solid #eee;
             position: relative;
-            padding-left: 50% !important; 
+            padding-left: 50% !important;
         }
 
-        .res_table td:before { 
+        .res_table td:before {
             /* Now like a table header */
-            position: absolute; 
+            position: absolute;
             /* Top/left values mimic padding */
             <!-- top: 6px;
             left: 6px; -->
-            width: 45%; 
+            width: 45%;
             <!-- padding-right: 10px;  -->
             white-space: nowrap;
         }
@@ -55,14 +55,14 @@
         <div class="container pdng_top_20px pdng_btm_30px">
             <div class="row">
                 <!-- <div class="col-sm-12">
-                
+
                 <p class="login_title_p">Report</p>
-                
+
                 </div> -->
                 <div class="col-md-12">
                     <div class="col-sm-12 pdng_0">
                         <div class="login_dark_back">
-                            <h1 class="txt_green_clr res_txt_grn">Support/Help</h1>			
+                            <h1 class="txt_green_clr res_txt_grn">Support/Help</h1>
                             <?php if ($ticket != NULL) { ?>
                                 <a href="<?php echo base_url(); ?>user_master/add_ticket" class="btn btn-dark btn-theme-colored btn-flat pull-right">Add</a>
                             <?php } ?>
@@ -76,7 +76,7 @@
                                 </div>
                             <?php } ?>
 
-                        </div>   
+                        </div>
                     </div>
                     <?php if ($ticket != NULL) { ?><div class="res_table">
                             <table class="table payment_tbl">
@@ -144,9 +144,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
-                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            <!-- <div class="col-sm-6">
+                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+                            </div> -->
                         </div>
                     </div>
                 </div>
