@@ -2635,13 +2635,7 @@ GROUP BY `test_master`.`id`");
 
                     if ($tn[0] == 'pt') {
 
-                        $result = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`panel_tests`.`price` FROM
-
-  `test_master`
-
-  INNER JOIN `panel_tests`
-
-    ON `test_master`.`id` = `panel_tests`.`test_fk` WHERE `test_master`.`status`='1' AND `panel_tests`.`status`='1' AND `panel_tests`.`city_fk`='" . $test_city . "'  AND `panel_tests`.`panel_fk` = '" . $panel_fk . "'   AND `test_master`.`id`='" . $tn[1] . "'");
+                        $result = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`panel_tests`.`price` FROM `test_master` INNER JOIN `panel_tests` ON `test_master`.`id` = `panel_tests`.`test_fk` WHERE `test_master`.`status`='1' AND `panel_tests`.`status`='1' AND `panel_tests`.`city_fk`='" . $test_city . "' AND `panel_tests`.`panel_fk` = '" . $panel_fk . "' AND `test_master`.`id`='" . $tn[1] . "'");
 
                         $price += $result[0]["price"];
 
@@ -3180,9 +3174,7 @@ GROUP BY `test_master`.`id`");
 
                         $result1 = $query1->result();
 
-                        $active_package = $this->job_model->get_val("SELECT `active_package`.id FROM
-
-  `active_package` LEFT JOIN `package_master` ON `package_master`.`id` = `active_package`.`package_fk` WHERE `active_package`.`status` = '1' AND `due_to` >= '" . date("Y-m-d") . "' AND package_master.id='" . $tn[1] . "'  AND `active_package`.`user_fk` = '" . $customer . "' AND `active_package`.`parent`='0'");
+                        $active_package = $this->job_model->get_val("SELECT `active_package`.id FROM `active_package` LEFT JOIN `package_master` ON `package_master`.`id` = `active_package`.`package_fk` WHERE `active_package`.`status` = '1' AND `due_to` >= '" . date("Y-m-d") . "' AND package_master.id='" . $tn[1] . "' AND `active_package`.`user_fk` = '" . $customer . "' AND `active_package`.`parent`='0'");
 
                         if (empty($active_package[0]["id"]) || $active_package[0]["id"] == "") {
 
@@ -3199,13 +3191,7 @@ GROUP BY `test_master`.`id`");
 
                     if ($tn[0] == 'pt') {
 
-                        $result = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`panel_tests`.`price` FROM
-
-  `test_master`
-
-  INNER JOIN `panel_tests`
-
-    ON `test_master`.`id` = `panel_tests`.`test_fk` WHERE `test_master`.`status`='1' AND `panel_tests`.`status`='1' AND `panel_tests`.`city_fk`='" . $test_city . "'  AND `panel_tests`.`panel_fk` = '" . $panel_fk . "'   AND `test_master`.`id`='" . $tn[1] . "'");
+                        $result = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`panel_tests`.`price` FROM `test_master` INNER JOIN `panel_tests` ON `test_master`.`id` = `panel_tests`.`test_fk` WHERE `test_master`.`status`='1' AND `panel_tests`.`status`='1' AND `panel_tests`.`city_fk`='" . $test_city . "' AND `panel_tests`.`panel_fk` = '" . $panel_fk . "' AND `test_master`.`id`='" . $tn[1] . "'");
 
                         $price += $result[0]["price"];
 
@@ -3597,9 +3583,7 @@ GROUP BY `test_master`.`id`");
 
                         $tst_price = $this->job_model->get_val("select price from test_branch_price where test_fk='" . $tn[1] . "' and branch_fk='" . $branch . "' and type='2' and status='1'");
 
-                        $active_package = $this->job_model->get_val("SELECT `active_package`.id,`package_master`.title FROM
-
-  `active_package` LEFT JOIN `package_master` ON `package_master`.`id` = `active_package`.`package_fk` WHERE `active_package`.`status` = '1' AND `due_to` >= '" . date("Y-m-d") . "' AND package_master.id='" . $tn[1] . "'  AND `active_package`.`user_fk` = '" . $customer . "' AND `active_package`.`parent`='0'");
+                        $active_package = $this->job_model->get_val("SELECT `active_package`.id,`package_master`.title FROM `active_package` LEFT JOIN `package_master` ON `package_master`.`id` = `active_package`.`package_fk` WHERE `active_package`.`status` = '1' AND `due_to` >= '" . date("Y-m-d") . "' AND package_master.id='" . $tn[1] . "' AND `active_package`.`user_fk` = '" . $customer . "' AND `active_package`.`parent`='0'");
 
                         $testnames[] = $active_package[0]["title"];
 
@@ -3635,29 +3619,7 @@ GROUP BY `test_master`.`id`");
 
                     if ($smsalert == 1) {
 
-                        $job_details = $this->job_model->get_val("SELECT
-
-  job_master.*,
-
-  IF(booking_info.family_member_fk>0&&customer_family_master.phone>0,customer_family_master.phone,customer_master.mobile) AS phone_no
-
-FROM
-
-  `job_master`
-
-  INNER JOIN `booking_info`
-
-    ON `booking_info`.id = `job_master`.booking_info
-
-  LEFT JOIN `customer_family_master`
-
-    ON `customer_family_master`.id = booking_info.family_member_fk
-
-    LEFT JOIN `customer_master` ON `customer_master`.id = booking_info.user_fk
-
-WHERE job_master.id = '" . $insert . "'
-
-  AND job_master.status != '0' ");
+                        $job_details = $this->job_model->get_val("SELECT job_master.*, IF(booking_info.family_member_fk>0&&customer_family_master.phone>0,customer_family_master.phone,customer_master.mobile) AS phone_no FROM `job_master` INNER JOIN `booking_info` ON `booking_info`.id = `job_master`.booking_info LEFT JOIN `customer_family_master` ON `customer_family_master`.id = booking_info.family_member_fk LEFT JOIN `customer_master` ON `customer_master`.id = booking_info.user_fk WHERE job_master.id = '" . $insert . "' AND job_master.status != '0'");
 
                         $order_discount = round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
 
@@ -3699,29 +3661,7 @@ WHERE job_master.id = '" . $insert . "'
 
                 $this->job_model->master_fun_update("job_master", ["id", $insert], ["barcode" => $barcode]);
                 if ($branch == 188) {
-                    $job_details = $this->job_model->get_val("SELECT
-
-                    job_master.*,
-
-                    IF(booking_info.family_member_fk>0&&customer_family_master.phone>0,customer_family_master.phone,customer_master.mobile) AS phone_no
-
-                  FROM
-
-                    `job_master`
-
-                    INNER JOIN `booking_info`
-
-                      ON `booking_info`.id = `job_master`.booking_info
-
-                    LEFT JOIN `customer_family_master`
-
-                      ON `customer_family_master`.id = booking_info.family_member_fk
-
-                      LEFT JOIN `customer_master` ON `customer_master`.id = booking_info.user_fk
-
-                  WHERE job_master.id = '" . $insert . "'
-
-                    AND job_master.status != '0' ");
+                    $job_details = $this->job_model->get_val("SELECT job_master.*, IF(booking_info.family_member_fk>0&&customer_family_master.phone>0,customer_family_master.phone,customer_master.mobile) AS phone_no FROM `job_master` INNER JOIN `booking_info` ON `booking_info`.id = `job_master`.booking_info LEFT JOIN `customer_family_master` ON `customer_family_master`.id = booking_info.family_member_fk LEFT JOIN `customer_master` ON `customer_master`.id = booking_info.user_fk WHERE job_master.id = '" . $insert . "' AND job_master.status != '0'");
                     $payable_price = $job_details[0]["price"] - round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
 
                     $dr_name         = "";
@@ -3940,7 +3880,7 @@ WHERE job_master.id = '" . $insert . "'
 
                 if ($cut > 0) {
 
-                    $new_price = $ts['price'] - ($cut * $ts['price'] / 100);    
+                    $new_price = $ts['price'] - ($cut * $ts['price'] / 100);
                 } else {
 
                     $new_price = $ts['price'];

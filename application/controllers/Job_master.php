@@ -288,6 +288,7 @@ class Job_master extends CI_Controller
         $data["login_data"] = logindata();
         $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
         $cntr_arry = array();
+
         // echo "<pre>"; print_r($data["login_data"]['branch_fk']); die;
         if (!empty($data["login_data"]['branch_fk'])) {
             foreach ($data["login_data"]['branch_fk'] as $key) {
@@ -348,7 +349,7 @@ class Job_master extends CI_Controller
         $search_data['t_id'] = $t_id;
         $search_data['p_id'] = $p_id;
         $data['query'] = $this->job_model->new_row_srch_job_list($search_data, $config["per_page"], $page);
-      
+
 
         $data['count'] = 0 ;// $this->job_model->srch_job_list_count($search_data, $config["per_page"], $page);
 
@@ -1214,7 +1215,7 @@ class Job_master extends CI_Controller
         $branallmachine = $this->job_model->get_val("SELECT GROUP_CONCAT(DISTINCT machine_fk) AS machin FROM `inventory_machine_branch` WHERE STATUS='1' AND `branch_fk`='$branch' GROUP BY branch_fk");
         if (!empty($branallmachine)) {
             $macineaall = $branallmachine[0]["machin"];
-            //echo "<pre>";print_r($approve_job_test_id);die();  
+            //echo "<pre>";print_r($approve_job_test_id);die();
             foreach ($tid as $tst_id) {
                 if (in_array($tst_id, $approve_job_test_id)) {
                     $test = $tst_id;
@@ -1369,7 +1370,7 @@ class Job_master extends CI_Controller
         $data['family_error'] = $this->session->flashdata("family_error");
         $data['amount_history_success'] = $this->session->flashdata("amount_history_success");
         $data['amount_history_error'] = $this->session->flashdata("amount_history_error");
-        
+
 
         if ($this->session->userdata("amount_history_success")) {
             $data['amount_history_success'] = $this->session->userdata("amount_history_success");
@@ -1393,13 +1394,13 @@ class Job_master extends CI_Controller
         $data["b2b_job_detais"] = array();
         if (!empty($data['query'][0]["b2b_id"])) {
             $data["b2b_job_detais"] = $this->job_model->master_fun_get_tbl_val("sample_job_master", array('barcode_fk' => $data['query'][0]["b2b_id"]), array("id", "asc"));
-            $data["b2b_job_master_receiv_amount"] = $this->job_model->get_val("SELECT 
-            `sample_job_master_receiv_amount`.*,admin_master.name 
+            $data["b2b_job_master_receiv_amount"] = $this->job_model->get_val("SELECT
+            `sample_job_master_receiv_amount`.*,admin_master.name
             FROM
-            `sample_job_master_receiv_amount` 
-            LEFT JOIN `admin_master` 
-                ON `sample_job_master_receiv_amount`.`added_by` = `admin_master`.`id` 
-            WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["id"] . "' 
+            `sample_job_master_receiv_amount`
+            LEFT JOIN `admin_master`
+                ON `sample_job_master_receiv_amount`.`added_by` = `admin_master`.`id`
+            WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["id"] . "'
             AND sample_job_master_receiv_amount.status = '1'");
             //echo "<pre>"; print_r($data["b2b_job_detais"]); die();
         }
@@ -1452,7 +1453,7 @@ class Job_master extends CI_Controller
         }
         $data["emergency_tests"] = $this->job_model->master_fun_get_tbl_val("booking_info", array('id' => $data['query'][0]["booking_info"]), array("id", "asc"));
         $data["customer_info"] = $this->job_model->master_fun_get_tbl_val("customer_master", array('id' => $data['query'][0]["custid"]), array("id", "asc"));
-        $data["booking_info"] = $this->job_model->get_val("SELECT 
+        $data["booking_info"] = $this->job_model->get_val("SELECT
         `booking_info`.*,
         TIME_FORMAT(
             `phlebo_time_slot`.`start_time`,
@@ -1462,12 +1463,12 @@ class Job_master extends CI_Controller
             `phlebo_time_slot`.`end_time`,
             '%l:%i %p'
         ) AS `end_time`,
-        `customer_family_master`.`name` 
+        `customer_family_master`.`name`
         FROM
-        `booking_info` 
-        left JOIN `phlebo_time_slot` 
-            ON `booking_info`.`time_slot_fk` = `phlebo_time_slot`.`id` 
-        LEFT JOIN `customer_family_master` 
+        `booking_info`
+        left JOIN `phlebo_time_slot`
+            ON `booking_info`.`time_slot_fk` = `phlebo_time_slot`.`id`
+        LEFT JOIN `customer_family_master`
         ON `booking_info`.`family_member_fk` = `customer_family_master`.`id` where booking_info.id='" . $data['query'][0]["booking_info"] . "'");
 
 
@@ -1494,32 +1495,32 @@ class Job_master extends CI_Controller
             $para = $this->job_model->get_val("SELECT p.id as pid,p.test_fk,p.parameter_name,p.parameter_range,p.parameter_unit,g.id as gid,g.parameter_fk,g.subparameter_name,g.subparameter_range,g.subparameter_unit FROM test_parameter_master as p LEFT JOIN parameter_group_master as g ON p.id=g.parameter_fk WHERE p.status='1' AND p.test_fk='" . $tst_id . "' order by p.id ASC");
             array_push($test1, $para);
         }
-        $data["job_master_receiv_amount"] = $this->job_model->get_val("SELECT 
+        $data["job_master_receiv_amount"] = $this->job_model->get_val("SELECT
         `job_master_receiv_amount`.*,
         IF(
             `job_master_receiv_amount`.`phlebo_fk` > 0,
             CONCAT(phlebo_master.`name`,'',' (Phlebo)'),`admin_master`.`name`
         ) AS `name`,
-        payment_type_master.`name` AS pay_via 
+        payment_type_master.`name` AS pay_via
         FROM
-        `job_master_receiv_amount` 
-        LEFT JOIN `admin_master` 
-            ON `job_master_receiv_amount`.`added_by` = `admin_master`.`id` 
-        LEFT JOIN `payment_type_master` 
-            ON `payment_type_master`.`id` = `job_master_receiv_amount`.`payment_type` 
-            LEFT JOIN `phlebo_master` 
+        `job_master_receiv_amount`
+        LEFT JOIN `admin_master`
+            ON `job_master_receiv_amount`.`added_by` = `admin_master`.`id`
+        LEFT JOIN `payment_type_master`
+            ON `payment_type_master`.`id` = `job_master_receiv_amount`.`payment_type`
+            LEFT JOIN `phlebo_master`
             ON `phlebo_master`.`id`=`job_master_receiv_amount`.`phlebo_fk`
-        WHERE job_master_receiv_amount.job_fk = '" . $data['cid'] . "' 
+        WHERE job_master_receiv_amount.job_fk = '" . $data['cid'] . "'
         AND job_master_receiv_amount.status = '1'");
-        $data['relation_list'] = $this->job_model->get_val("SELECT 
+        $data['relation_list'] = $this->job_model->get_val("SELECT
         `customer_family_master`.*,
-        `relation_master`.`name` AS relation_name 
+        `relation_master`.`name` AS relation_name
         FROM
-        `customer_family_master` 
-        INNER JOIN `relation_master` 
-            ON `customer_family_master`.`relation_fk` = `relation_master`.`id` 
-        WHERE `customer_family_master`.`status` = '1' 
-        AND `relation_master`.`status` = '1' 
+        `customer_family_master`
+        INNER JOIN `relation_master`
+            ON `customer_family_master`.`relation_fk` = `relation_master`.`id`
+        WHERE `customer_family_master`.`status` = '1'
+        AND `relation_master`.`status` = '1'
         AND `customer_family_master`.`user_fk` = '" . $data['query'][0]["custid"] . "'");
         if (strlen($data["query"][0]["other_reference"]) < 3) {
             $source_data = $this->job_model->master_fun_get_tbl_val("source_master", array('id' => $data["query"][0]["other_reference"]), array("id", "asc"));
@@ -1557,15 +1558,15 @@ class Job_master extends CI_Controller
         $selected_package = $this->registration_admin_model->get_val("SELECT `book_package_master`.*,`package_master`.`title` FROM `book_package_master` INNER JOIN `package_master` ON `book_package_master`.`package_fk`=`package_master`.`id` WHERE `book_package_master`.`status`='1' AND `package_master`.`status`='1' AND `book_package_master`.`job_fk`='" . $data["cid"] . "'");
         $data["selected_package"] = array();
         foreach ($selected_package as $pkey) {
-            $package_test_list = $this->registration_admin_model->get_val("SELECT 
+            $package_test_list = $this->registration_admin_model->get_val("SELECT
             `package_test`.*,
-            `test_master`.`test_name` 
+            `test_master`.`test_name`
             FROM
-            `package_test` 
-            INNER JOIN `test_master` 
-                ON `package_test`.`test_fk` = `test_master`.`id` 
-            WHERE `package_test`.`status` = '1' 
-            AND `test_master`.`status` = '1' 
+            `package_test`
+            INNER JOIN `test_master`
+                ON `package_test`.`test_fk` = `test_master`.`id`
+            WHERE `package_test`.`status` = '1'
+            AND `test_master`.`status` = '1'
             AND `package_test`.`package_fk` = '" . $pkey["package_fk"] . "'");
             $pkey["test_list"] = $package_test_list;
             $data["selected_package"][] = $pkey;
@@ -1628,13 +1629,13 @@ class Job_master extends CI_Controller
         $data["b2b_job_detais"] = array();
         if (!empty($data['query'][0]["b2b_id"])) {
             $data["b2b_job_detais"] = $this->job_model->master_fun_get_tbl_val("sample_job_master", array('barcode_fk' => $data['query'][0]["b2b_id"]), array("id", "asc"));
-            $data["b2b_job_master_receiv_amount"] = $this->job_model->get_val("SELECT 
-  `sample_job_master_receiv_amount`.*,admin_master.name 
+            $data["b2b_job_master_receiv_amount"] = $this->job_model->get_val("SELECT
+  `sample_job_master_receiv_amount`.*,admin_master.name
 FROM
-  `sample_job_master_receiv_amount` 
-  LEFT JOIN `admin_master` 
-    ON `sample_job_master_receiv_amount`.`added_by` = `admin_master`.`id` 
-WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["id"] . "' 
+  `sample_job_master_receiv_amount`
+  LEFT JOIN `admin_master`
+    ON `sample_job_master_receiv_amount`.`added_by` = `admin_master`.`id`
+WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["id"] . "'
   AND sample_job_master_receiv_amount.status = '1'");
             //echo "<pre>"; print_r($data["b2b_job_detais"]); die();
         }
@@ -1680,7 +1681,7 @@ WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["
         }
         $data["emergency_tests"] = $this->job_model->master_fun_get_tbl_val("booking_info", array('id' => $data['query'][0]["booking_info"]), array("id", "asc"));
         $data["customer_info"] = $this->job_model->master_fun_get_tbl_val("customer_master", array('id' => $data['query'][0]["custid"]), array("id", "asc"));
-        $data["booking_info"] = $this->job_model->get_val("SELECT 
+        $data["booking_info"] = $this->job_model->get_val("SELECT
       `booking_info`.*,
       TIME_FORMAT(
         `phlebo_time_slot`.`start_time`,
@@ -1690,12 +1691,12 @@ WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["
         `phlebo_time_slot`.`end_time`,
         '%l:%i %p'
       ) AS `end_time`,
-      `customer_family_master`.`name` 
+      `customer_family_master`.`name`
     FROM
-      `booking_info` 
-      left JOIN `phlebo_time_slot` 
-        ON `booking_info`.`time_slot_fk` = `phlebo_time_slot`.`id` 
-      LEFT JOIN `customer_family_master` 
+      `booking_info`
+      left JOIN `phlebo_time_slot`
+        ON `booking_info`.`time_slot_fk` = `phlebo_time_slot`.`id`
+      LEFT JOIN `customer_family_master`
         ON `booking_info`.`family_member_fk` = `customer_family_master`.`id` where booking_info.id='" . $data['query'][0]["booking_info"] . "'");
         $f_data = $this->job_model->master_fun_get_tbl_val("customer_family_master", array('id' => $data["emergency_tests"][0]["family_member_fk"]), array("id", "asc"));
         $f_data1 = $this->job_model->master_fun_get_tbl_val("relation_master", array('id' => $f_data[0]["relation_fk"]), array("id", "asc"));
@@ -1720,32 +1721,32 @@ WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["
             $para = $this->job_model->get_val("SELECT p.id as pid,p.test_fk,p.parameter_name,p.parameter_range,p.parameter_unit,g.id as gid,g.parameter_fk,g.subparameter_name,g.subparameter_range,g.subparameter_unit FROM test_parameter_master as p LEFT JOIN parameter_group_master as g ON p.id=g.parameter_fk WHERE p.status='1' AND p.test_fk='" . $tst_id . "' order by p.id ASC");
             array_push($test1, $para);
         }
-        $data["job_master_receiv_amount"] = $this->job_model->get_val("SELECT 
+        $data["job_master_receiv_amount"] = $this->job_model->get_val("SELECT
   `job_master_receiv_amount`.*,
   IF(
     `job_master_receiv_amount`.`phlebo_fk` > 0,
     CONCAT(phlebo_master.`name`,'',' (Phlebo)'),`admin_master`.`name`
   ) AS `name`,
-  payment_type_master.`name` AS pay_via 
+  payment_type_master.`name` AS pay_via
 FROM
-  `job_master_receiv_amount` 
-  LEFT JOIN `admin_master` 
-    ON `job_master_receiv_amount`.`added_by` = `admin_master`.`id` 
-  LEFT JOIN `payment_type_master` 
-    ON `payment_type_master`.`id` = `job_master_receiv_amount`.`payment_type` 
-    LEFT JOIN `phlebo_master` 
+  `job_master_receiv_amount`
+  LEFT JOIN `admin_master`
+    ON `job_master_receiv_amount`.`added_by` = `admin_master`.`id`
+  LEFT JOIN `payment_type_master`
+    ON `payment_type_master`.`id` = `job_master_receiv_amount`.`payment_type`
+    LEFT JOIN `phlebo_master`
     ON `phlebo_master`.`id`=`job_master_receiv_amount`.`phlebo_fk`
-WHERE job_master_receiv_amount.job_fk = '" . $data['cid'] . "' 
+WHERE job_master_receiv_amount.job_fk = '" . $data['cid'] . "'
   AND job_master_receiv_amount.status = '1'");
-        $data['relation_list'] = $this->job_model->get_val("SELECT 
+        $data['relation_list'] = $this->job_model->get_val("SELECT
   `customer_family_master`.*,
-  `relation_master`.`name` AS relation_name 
+  `relation_master`.`name` AS relation_name
 FROM
-  `customer_family_master` 
-  INNER JOIN `relation_master` 
-    ON `customer_family_master`.`relation_fk` = `relation_master`.`id` 
-WHERE `customer_family_master`.`status` = '1' 
-  AND `relation_master`.`status` = '1' 
+  `customer_family_master`
+  INNER JOIN `relation_master`
+    ON `customer_family_master`.`relation_fk` = `relation_master`.`id`
+WHERE `customer_family_master`.`status` = '1'
+  AND `relation_master`.`status` = '1'
   AND `customer_family_master`.`user_fk` = '" . $data['query'][0]["custid"] . "'");
         if (strlen($data["query"][0]["other_reference"]) < 3) {
             $source_data = $this->job_model->master_fun_get_tbl_val("source_master", array('id' => $data["query"][0]["other_reference"]), array("id", "asc"));
@@ -1783,15 +1784,15 @@ WHERE `customer_family_master`.`status` = '1'
         $selected_package = $this->registration_admin_model->get_val("SELECT `book_package_master`.*,`package_master`.`title` FROM `book_package_master` INNER JOIN `package_master` ON `book_package_master`.`package_fk`=`package_master`.`id` WHERE `book_package_master`.`status`='1' AND `package_master`.`status`='1' AND `book_package_master`.`job_fk`='" . $data["cid"] . "'");
         $data["selected_package"] = array();
         foreach ($selected_package as $pkey) {
-            $package_test_list = $this->registration_admin_model->get_val("SELECT 
+            $package_test_list = $this->registration_admin_model->get_val("SELECT
   `package_test`.*,
-  `test_master`.`test_name` 
+  `test_master`.`test_name`
 FROM
-  `package_test` 
-  INNER JOIN `test_master` 
-    ON `package_test`.`test_fk` = `test_master`.`id` 
-WHERE `package_test`.`status` = '1' 
-  AND `test_master`.`status` = '1' 
+  `package_test`
+  INNER JOIN `test_master`
+    ON `package_test`.`test_fk` = `test_master`.`id`
+WHERE `package_test`.`status` = '1'
+  AND `test_master`.`status` = '1'
   AND `package_test`.`package_fk` = '" . $pkey["package_fk"] . "'");
             $pkey["test_list"] = $package_test_list;
             $data["selected_package"][] = $pkey;
@@ -2109,7 +2110,7 @@ WHERE `package_test`.`status` = '1'
                 }
             }
 
-            /* Nishit check job discount start 
+            /* Nishit check job discount start
               if ($job_details[0]["discount"] > 0) {
               $order_discount = round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
               $payable_price = $job_details[0]["price"] - round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
@@ -2271,7 +2272,7 @@ WHERE `package_test`.`status` = '1'
                             $this->email->send();
                         }
                     }
-                    // Case Back Email end			
+                    // Case Back Email end
                 }
                 /* Nishit cashback end */
                 $book_test_details = array();
@@ -2288,7 +2289,7 @@ WHERE `package_test`.`status` = '1'
                         $message1 = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $name . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Report completed successfully for test ' . implode(",", $book_test_details) . ' </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $orderid . ' </p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $orderid . ' </p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
                     } else {
@@ -2397,7 +2398,7 @@ WHERE `package_test`.`status` = '1'
             $data['query'] = $this->add_result_model->job_details1($data['cid']);
             // $data['query1'] = $this->add_result_model->job_details($data['cid']);
             //$cus_id = $data['query1'][0]['custid'];
-            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1"); 
+            //  $data['query'] = $this->add_result_model->get_val("SELECT c.mobile,cfm.phone FROM `customer_family_master` as cfm LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $cus_id . "' ORDER BY c.id DESC LIMIT 1");
             $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
             if (empty($data['processing_center'])) {
                 $processing_center = '1';
@@ -2522,15 +2523,15 @@ WHERE `package_test`.`status` = '1'
                             $para_ref_rng = $this->add_result_model->get_val("SELECT * FROM `parameter_referance_range` WHERE `status`='1' AND parameter_fk='" . $para_key["id"] . "' order by gender asc");
                             $final_qry = "SELECT *,
   CASE
-    WHEN (type_period = 'Y') 
-    THEN (no_period * 365) 
+    WHEN (type_period = 'Y')
+    THEN (no_period * 365)
     ELSE (
       CASE
-        WHEN (type_period = 'M') 
-        THEN (no_period * 30) 
-        ELSE no_period 
+        WHEN (type_period = 'M')
+        THEN (no_period * 30)
+        ELSE no_period
       END
-    ) 
+    )
   END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
@@ -3095,10 +3096,10 @@ WHERE `package_test`.`status` = '1'
 
         if ($data["login_data"]['type'] == '6') {
             $login_id = $data["login_data"]['id'];
-            $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(bm.id) AS id 
-                 FROM branch_master bm 
-                 LEFT JOIN user_branch ub on ub.branch_fk = bm.id 
-                 WHERE ub.user_fk = '$login_id' 
+            $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(bm.id) AS id
+                 FROM branch_master bm
+                 LEFT JOIN user_branch ub on ub.branch_fk = bm.id
+                 WHERE ub.user_fk = '$login_id'
                  AND bm.status='1' GROUP BY bm.status");
 
             $plm_branch = explode(",", $plm_branch[0]["id"]);
@@ -3112,7 +3113,7 @@ WHERE `package_test`.`status` = '1'
         $search_data['p_id'] = $p_id;
 
         $result = $this->job_model->csv_job_list($search_data);
-     
+
         // $result = $this->job_model->new_row_srch_job_list($search_data);
 
         //    print_r($result);
@@ -3228,7 +3229,7 @@ WHERE `package_test`.`status` = '1'
             $kkey['test_type'] = $test_type;
             $new_array[] = $kkey;
         }
-       
+
         /* Nishit code end */
         if (!isset($_REQUEST['de'])) {
             header("Content-type: application/csv");
@@ -3592,10 +3593,10 @@ WHERE `package_test`.`status` = '1'
 
         if ($data["login_data"]['type'] == '6') {
             $login_id = $data["login_data"]['id'];
-            $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(bm.id) AS id 
-                 FROM branch_master bm 
-                 LEFT JOIN user_branch ub on ub.branch_fk = bm.id 
-                 WHERE ub.user_fk = '$login_id' 
+            $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(bm.id) AS id
+                 FROM branch_master bm
+                 LEFT JOIN user_branch ub on ub.branch_fk = bm.id
+                 WHERE ub.user_fk = '$login_id'
                  AND bm.status='1' GROUP BY bm.status");
 
             $plm_branch = explode(",", $plm_branch[0]["id"]);
@@ -4029,6 +4030,534 @@ WHERE `package_test`.`status` = '1'
                         }
                     } else
                         fputcsv($handle, array($cnt, $key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"] . "-" . $key["doctor_mobile"], $key["test_name"], $key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_date1,  $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, "", 0, "", 0, 0, $key["ipd"], $ageShow, $outsource));
+                }
+                $cnt++;
+            }
+        }
+        fclose($handle);
+        exit;
+    }
+
+    function export_out_source_test_report()
+    {
+        $search_data = array();
+        $plm = $data['plm2'] = $search_data["plm"] = $this->input->get('plm');
+        $user = $data['user2'] = $search_data["user"] = $this->input->get('user');
+        $date = $data['date2'] = $search_data["date"] = $this->input->get('date');
+        $end_date = $data['end_date'] = $search_data["end_date"] = $this->input->get("end_date");
+        $p_oid = $data['p_oid'] = $search_data["p_oid"] = $this->input->get('p_oid');
+        $p_ref = $data['p_ref'] = $search_data["p_ref"] = $this->input->get('p_ref');
+        $mobile = $data['mobile'] = $search_data["mobile"] = $this->input->get('mobile');
+        $referral_by = $data['referral_by'] = $search_data["referral_by"] = $this->input->get('referral_by');
+        $status = $data['statusid'] = $search_data["status"] = $this->input->get('status');
+        $branch = $data['branch'] = $search_data["branch"] = $data["branch"] = $this->input->get('branch');
+        $payment = $data['payment2'] = $search_data["payment"] = $data["payment"] = $this->input->get('payment');
+        $test_pack = $data['test_pack'] = $search_data["test_pack"] = $this->input->get('test_package');
+        $city = $data['tcity'] = $search_data["city"] = $this->input->get('city');
+        $withsample = $data['withsample'] = $search_data["withsample"] = $this->input->get_post('withsample');
+        $data["login_data"] = logindata();
+        $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
+        $data['branchlist'] = $this->registration_admin_model->get_val("SELECT * from branch_master where status='1'");
+        $cntr_arry = array();
+        if (!empty($data["login_data"]['branch_fk'])) {
+            foreach ($data["login_data"]['branch_fk'] as $key) {
+                $cntr_arry[] = $key["branch_fk"];
+            }
+            $data['branchlist'] = $this->registration_admin_model->get_val("SELECT * from branch_master where status='1' and id in (" . implode(",", $cntr_arry) . ")");
+        }
+        $data['test_cities'] = $this->registration_admin_model->get_val("SELECT * from test_cities where status='1'");
+        $test_packages = explode("_", $test_pack);
+        $alpha = $test_packages[0];
+        $tp_id = $test_packages[1];
+        if ($alpha == 't') {
+            $t_id = $tp_id;
+        }
+        if ($alpha == 'p') {
+            $p_id = $tp_id;
+        }
+        if ($branch != '') {
+            $cntr_arry = array();
+            $cntr_arry = $branch;
+        }
+        /* PLM start */
+        if (empty($branch) && $plm != '') {
+            if (empty($branch) && !empty($city) && empty($plm)) {
+                $plm_branch = $this->job_model->get_val("SELECT GROUP_CONCAT(id) AS id FROM `branch_master` WHERE `status`='1' AND city='" . $city . "' GROUP BY status");
+            }
+            if (empty($branch) && !empty($plm)) {
+                $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(id) AS id from branch_master where status='1' and (parent_fk ='" . $plm . "' or id='" . $plm . "') GROUP BY status");
+            }
+            if (empty($branch) && empty($city) && empty($plm)) {
+                $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(id) AS id from branch_master where status='1' GROUP BY status");
+            }
+            $plm_branch = explode(",", $plm_branch[0]["id"]);
+            $cntr_arry = array_merge(array($plm), $plm_branch);
+        } else {
+            $cntr_arry = $branch;
+        }
+        /* PLM END */
+
+
+
+        if ($data["login_data"]['type'] == '6') {
+            $login_id = $data["login_data"]['id'];
+            $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(bm.id) AS id
+                    FROM branch_master bm
+                    LEFT JOIN user_branch ub on ub.branch_fk = bm.id
+                    WHERE ub.user_fk = '$login_id'
+                    AND bm.status='1' GROUP BY bm.status");
+
+            $plm_branch = explode(",", $plm_branch[0]["id"]);
+            $cntr_arry = $plm_branch;
+        }
+
+
+
+        $search_data['cntr_arry'] = $cntr_arry;
+        $search_data['t_id'] = $t_id;
+        $search_data['p_id'] = $p_id;
+
+        $result = $this->job_model->csv_job_list($search_data);
+
+        $is_regular_test = false;
+        $is_panel_test = false;
+        /* Nishit code start */
+
+        $new_array = array();
+        foreach ($result as $kkey) {
+            $is_regular_test = false;
+            $is_panel_test = false;
+            $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $kkey["id"] . "'");
+            /* Check sub test start */
+            $job_tst_lst = array();
+            $job_sub_tst_lst = array();
+            foreach ($job_test_list as $st_key) {
+                //echo $st_key['test_fk'];
+                $job_sub_test_list = $this->job_model->get_val("SELECT `sub_test_master`.test_fk,`sub_test_master`.`sub_test`,test_master.`test_name` FROM `sub_test_master` INNER JOIN `test_master` ON `sub_test_master`.`sub_test`=`test_master`.`id` WHERE `sub_test_master`.`status`='1' AND `test_master`.`status`='1' AND `sub_test_master`.`test_fk`='" . $st_key['test_fk'] . "'");
+                $job_sub_tst_lst[] = $job_sub_test_list;
+                $st_key["sub_test"] = $job_sub_test_list;
+                $job_tst_lst[] = $st_key;
+            }
+
+            $package_ids = $this->job_model->get_job_booking_package($kkey["id"]);
+
+            $is_show = 1;
+            $test_list = array();
+            $package_list = array();
+            if (!empty($test_pack)) {
+                $is_show = 0;
+                foreach ($job_test_list as $f_key) {
+                    if (!in_array($f_key["test_name"], $test_list)) {
+                        $test_list[] = $f_key["test_name"];
+                    }
+                    if (strpos(trim(strtoupper($f_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
+                        $is_show = 1;
+                    }
+                }
+
+                foreach ($package_ids as $p_key) {
+                    $package_list[] = $p_key["name"];
+                    if (strpos(trim(strtoupper($p_key["name"])), trim(strtoupper($test_pack))) !== false) {
+                        $is_show = 1;
+                    }
+                    foreach ($p_key["test"] as $p_key) {
+                        if (!in_array($p_key["test_name"], $test_list)) {
+                            $test_list[] = $p_key["test_name"];
+                        }
+                        if (strpos(trim(strtoupper($p_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
+                            $is_show = 1;
+                        }
+                    }
+                }
+
+                foreach ($job_sub_tst_lst as $p_key) {
+                    foreach ($p_key as $ss_p_key) {
+                        if (!in_array($ss_p_key["test_name"], $test_list)) {
+                            $test_list[] = $ss_p_key["test_name"];
+                        }
+                        if (strpos(trim(strtoupper($ss_p_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
+                            $is_show = 1;
+                        }
+                    }
+                }
+            } else {
+                $is_show = 0;
+                foreach ($job_test_list as $f_key) {
+                    if (!in_array($f_key["test_name"], $test_list)) {
+                        $test_list[] = $f_key["test_name"];
+                    }
+                    if ($f_key["is_panel"] == "1") {
+                        $is_panel_test = true;
+                    } else {
+                        $is_regular_test = true;
+                    }
+                    $is_show = 1;
+                }
+
+                foreach ($package_ids as $p_key) {
+                    $package_list[] = $p_key["name"];
+                    foreach ($p_key["test"] as $p_key) {
+                        if (!in_array($p_key["test_name"], $test_list)) {
+                            $test_list[] = $p_key["test_name"];
+                        }
+                        $is_show = 1;
+                    }
+                }
+
+                foreach ($job_sub_tst_lst as $p_key) {
+                    foreach ($p_key as $ss_p_key) {
+                        if (!in_array($ss_p_key["test_name"], $test_list)) {
+                            $test_list[] = $ss_p_key["test_name"];
+                        }
+                        $is_show = 1;
+                    }
+                }
+            }
+            /* END */
+            $kkey["is_show"] = $is_show;
+            $coma = "";
+            if (!empty($package_list)) {
+                $coma = ", ";
+            }
+            $kkey["test_name"] = implode(", ", $package_list) . $coma . implode(", ", $test_list);
+            $test_type = "Regular";
+            if ($is_panel_test == true && $is_regular_test == true) {
+                $test_type = "Regular + Panel";
+            } else if ($is_panel_test == true) {
+                $test_type = "Panel";
+            } else if ($is_regular_test == true) {
+                $test_type = "Regular";
+            }
+            $kkey['test_type'] = $test_type;
+            $new_array[] = $kkey;
+        }
+
+        /* Nishit code end */
+        if (!isset($_REQUEST['de'])) {
+            header("Content-type: application/csv");
+            header("Content-Disposition: attachment; filename=\"Out_Source_Test_Report-" . date('d-M-Y') . ".csv\"");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, array("Reg No.", "Order Id", "Test City", "Branch", "Date", "Patient Name", "Mobile No.", "Doctor", "Doctor_code", "Doctor_Mobile", "PRO", "Speciality", "Special Discount",  "Test Type", "Job Status", "Payment Type", "Sample From", "New Patient/old Patient", "Portal", "Remark", "Added By", "Total Price", "Discount(RS.)", "Received Amount", "Cash", 'Card', "Payumoney", "CHEQUE", "Debited From Wallet", "Creditor Remain", "Due Amount", "Sample Received Date", "Sample Received Time", "Processing Date", "Processing Time", "Completed Time", "Report Generated Time", "Phlebo TAT (In Hour)", "Processing TAT (In Hour)", "Max TAT (In Hour)", "Processing Delay (In Hour)", "test name", "test price", "test disc %", "test disc", "billing", "total disc", "total billing", "IPD", 'Age', "Outsource","Lab Name"));
+        }
+        /* Nishit code start */
+        $cnt = 1;
+
+        foreach ($new_array as $key) {
+            if ($key["is_show"] == 1) {
+                if ($key['status'] == 1) {
+                    $j_status = "Waiting For Approval";
+                }
+                if ($key['status'] == 6) {
+                    $j_status = "Approved";
+                }
+                if ($key['status'] == 7) {
+                    $j_status = "Sample Collected";
+                }
+                if ($key['status'] == 8) {
+                    $j_status = "Processing";
+                }
+                if ($key['status'] == 2) {
+                    $j_status = "Completed";
+                }
+                $sample_collected = 'No';
+                if ($key["sample_collection"] == 1) {
+                    $sample_collected = 'Yes';
+                }
+                $addr = '';
+                if (!empty($key["address"])) {
+                    $addr = $key["address"];
+                } else {
+                    $addr = $key["address1"];
+                }
+                if (!$key["payable_amount"]) {
+                    $key["payable_amount"] = 0;
+                }
+                /* Nishit 18-08-2017 START */
+                $payment_mode = array();
+                $creditor_remark = array();
+                $discount = 0;
+                if ($key["discount"] > 0) {
+                    $discount = round($key["price"] * $key["discount"] / 100);
+                }
+                $added_by = "Online";
+                if (!empty($key["phlebo_added_by"])) {
+                    $added_by = $key["phlebo_added_by"] . " (Phlebo)";
+                } else if (!empty($key["added_by"])) {
+                    $added_by = $key["added_by"];
+                }
+                $cash = 0.0;
+                $card = 0.0;
+                $cheque = 0.0;
+                $other = 0.0;
+                $collection_type = $this->job_model->get_val("SELECT REPLACE (GROUP_CONCAT(remark,','), 'credited by', 'Creditor Name : ') AS remark, (`payment_type`) AS payment_type,sum(job_master_receiv_amount.amount) as amount FROM `job_master_receiv_amount` WHERE `status`='1' AND job_fk='" . $key["id"] . "' GROUP BY payment_type ORDER BY payment_type ASC");
+
+                if (count($collection_type) > 0) {
+                    foreach ($collection_type as $ct) {
+                        if (strtoupper($ct["payment_type"]) == "CASH") {
+                            $payment_mode[] = "CASH";
+                            $cash += $ct["amount"];
+                        } else if (in_array(strtoupper($ct["payment_type"]), array("DEBIT CARD SWIPED THRU ICICI", "DEBIT CARD", "DEBIT CARD", "CREDIT CARD", "PayTm", "PAYTM"))) {
+                            $payment_mode[] = "CARD";
+                            $card += $ct["amount"];
+                        } else if (strtoupper($ct["payment_type"]) == "CHEQUE") {
+                            $payment_mode[] = "CHEQUE";
+                            $cheque += $ct["amount"];
+                        } else if (strtoupper($ct["payment_type"]) == "CREDITORS") {
+                            $creditor_remark[] = $ct["remark"];
+                        }
+                    }
+                }
+                $creditor = $this->job_model->get_val("SELECT credit,debit,paid   FROM `creditors_balance` WHERE status=1 and job_id=" . $key["id"]);
+
+                $creditor_cash_collected = 0.0;
+                $creditor_cash_due = 0.0;
+
+
+
+                if (count($creditor) > 0) {
+                    foreach ($creditor as $ct) {
+                        if (($ct["credit"]) > 0) {
+                            $payment_mode[] = "CREDITOR CREDIT";
+                            $creditor_cash_collected += $ct["credit"];
+                            $cash += $ct["credit"];
+                        }
+                        if (($ct["debit"]) > 0) {
+                            $payment_mode[] = "CREDITOR DEBIT";
+                            $creditor_cash_due += $ct["debit"];
+                        }
+                    }
+                }
+                $creditor_cash_due = $creditor_cash_due - $creditor_cash_collected;
+                $payumoneyRecord = $this->job_model->get_val("SELECT SUM(amount) as amount FROM `payment` WHERE STATUS='success' AND job_fk=" . $key["id"]);
+                $payumoney = 0.0;
+
+                if (count($payumoneyRecord) > 0) {
+                    foreach ($payumoneyRecord as $ct) {
+                        $payumoney += $ct["amount"];
+                    }
+                }
+
+                $dabitt_from_wallet = $this->job_model->get_val("SELECT IF(SUM(`debit`)>0,SUM(`debit`),0) AS dabit FROM `wallet_master` WHERE `job_fk`='" . $key["id"] . "' AND `status`='1'");
+                $due = round($key["price"] - $key["payable_amount"] - $discount - $dabitt_from_wallet[0]["dabit"]);
+                if ($dabitt_from_wallet[0]["dabit"] > 0) {
+                    $payment_mode[] = "WALLET";
+                }
+                if (strtoupper($key["payment_type"]) == "PAYUMONEY") {
+                    $payment_mode[] = "PAYUMONEY";
+                }
+
+                /* END */
+                if ($key["family_member_fk"] == 0) {
+                    $patient_name = $key["full_name"];
+                } else {
+                    $patient_name = $key["family_name"];
+                }
+
+
+
+                if (!isset($_REQUEST['de'])) {
+                    if ($key["oldpatient"] == '1') {
+                        $formpatient = "Old";
+                    } else {
+                        $formpatient = "New";
+                    }
+
+
+                    if ($data["login_data"]["id"] != '10') {
+                        $late_processing = 0;
+                        $late_sample_collection = 0;
+
+                        $max_test_tat = 0;
+                        $max_package_tat = 0;
+                        $max_tat = 0;
+                        $phlebo_tat = 0;
+                        $processing_tat = 0;
+
+                        $package_ids1 = [];
+                        $test_ids1 = [];
+                        $test_tat = [];
+                        $package_tat = [];
+                        $package_ids = $this->job_model->get_job_booking_package($key["id"]);
+                        foreach ($job_tst_lst as $key1) {
+                            $test_ids1[] = $this->job_model->get_val("select id from test_master where status='1' AND test_name like '%" . str_replace("'", "''", $key1['test_name']) . "%'");
+                        }
+                        foreach ($package_ids as $key2) {
+                            $package_ids1[] = $this->job_model->get_val("select id from package_master where status='1' AND title like '%" . str_replace("'", "''", $key2['name']) . "%'");
+                        }
+
+                        foreach ($test_ids1 as $key3) {
+                            $test_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='1' AND test_fk='" . $key3[0]['id'] . "'");
+                        }
+
+                        foreach ($package_ids1 as $key4)
+                            $package_ids1 = [];
+                        $test_ids1 = [];
+                        $test_tat = [];
+                        $package_tat = [];
+                        $job_test_list = [];
+                        $package_ids = $this->job_model->get_job_booking_package($key["id"]);
+                        $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $key["id"] . "'");
+
+                        foreach ($package_ids as $key2) {
+                            $package_ids1[] = $this->job_model->get_val("select id from package_master where status='1' AND title like '%" . str_replace("'", "''", $key2['name']) . "%'");
+                        }
+
+                        foreach ($job_test_list as $key3) {
+                            $test_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='1' AND test_fk='" . $key3['test_fk'] . "'");
+                        }
+
+                        foreach ($package_ids1 as $key4) {
+                            $package_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='2' AND test_fk='" . $key4[0]['id'] . "'");
+                        }
+                        if (!empty($test_tat)) {
+                            foreach ($test_tat as $key11) {
+                                if (!empty($key11)) {
+                                    if ($max_test_tat < $key11[0]['tat']) {
+                                        $max_test_tat = $key11[0]['tat'];
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!empty($package_tat)) {
+                            foreach ($package_tat as $key12) {
+                                if (!empty($key12)) {
+                                    if ($max_package_tat < $key12[0]['tat']) {
+                                        $max_package_tat = $key12[0]['tat'];
+                                    }
+                                }
+                            }
+                        }
+
+                        if ($max_test_tat > $max_package_tat) {
+                            $max_tat = $max_test_tat;
+                        } else {
+                            $max_tat = $max_package_tat;
+                        }
+
+                        $sample_collect_time = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='6-7' AND job_fk=" . $key["id"]);
+                        $sample_date = date('Y-m-d', strtotime($sample_collect_time[0]['date_time']));
+                        $sample_time = date('H:i:s', strtotime($sample_collect_time[0]['date_time']));
+
+                        $processing = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='7-8' AND job_fk=" . $key["id"]);
+                        $processing_date = date('Y-m-d', strtotime($processing[0]['date_time']));
+                        $processing_time = date('H:i:s', strtotime($processing[0]['date_time']));
+
+                        if ($key['status'] == '8' || $key['status'] == '2') {
+                            $phlebo_tat = round(((strtotime($processing_time) - strtotime($sample_time)) / 60) / 60, 2);
+                        } else {
+                            $processing_date = $processing_time = $phlebo_tat = "Pending";
+                        }
+                        if ($key['status'] == '2') {
+                            $completion_time = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='8-2' AND job_fk=" . $key["id"]);
+
+                            $report_generate_time = $this->job_model->get_val("select created_date from report_master where status = 1 and job_fk=" .  $key["id"]);
+
+                            $interval = (new DateTime($report_generate_time[0]['created_date']))->diff(new DateTime($sample_collect_time[0]['date_time']));
+                            $processing_tat = $interval->format("%H:%i:%s");
+                            $completed_time1 = date('H:i:s', strtotime($completion_time[0]['date_time']));
+                            $report_generate_date1 = date('Y-m-d', strtotime($report_generate_time[0]['created_date']));
+                            $report_generate_time1 = date('H:i:s', strtotime($report_generate_time[0]['created_date']));
+                        } else {
+                            $processing_tat = "Pending";
+                            $completed_time1 = "Pending";
+                            $report_generate_time1 = "Pending";
+                        }
+
+                        if ($processing_tat != "Pending") {
+                            if ($processing_tat > $max_tat) {
+                                $is_processing_delay = $processing_tat - $max_tat;
+                            } else {
+                                $is_processing_delay = "";
+                            }
+                        } else {
+                            $is_processing_delay = "";
+                        }
+                    }
+
+                    $qry = "select a.*, b.*, tm.test_name from (select bjt.price p1, replace(bjt.test_fk, 't-','') test_fk, bjt.test_fk t123 from booked_job_test bjt where bjt.job_fk = " . $key["id"] . " and bjt.status = 1 and bjt.test_fk like 't-%' ) a inner join test_master tm on tm.id = a.test_fk left join (select test_fk testfk, branch_fk, price p2, case when replace(r_code, ' ', '') = 'SA1' then 50 when  replace(r_code, ' ', '') = 'SA2' then 50 when replace(r_code, ' ', '') = 'SA3' then 35 when  replace(r_code, ' ', '') = 'SA7' then 35 when  replace(r_code, ' ', '') = 'SA4' then 15 when  replace(r_code, ' ', '') = 'SA5' then 15 when  replace(r_code, ' ', '') = 'SA6' then 15 else 0 end code1, r_code from test_branch_price where branch_fk = " . $key["branch_fk"] . " and status = '1') b on a.test_fk = b.testfk and p1 = p2";
+
+                    $test_codes = $this->job_model->get_val($qry);
+                    $cnt = 0;
+                    $t_dsc = 0;
+                    $t_bil = 0;
+
+                    $outsource = "";
+                    if ($key["status"] != '0' && $key["status"] != '2') {
+                        $outsource = "Outsource";
+                    }
+                    if ($key["status"] == '2') {
+                        $outsource = "Outsource";
+                    }
+                    $this->load->library("util");
+                    $util = new Util;
+                    $age = $util->get_age($key["dob"]);
+                    $ageShow = "";
+                    if ($age[0] != 0) {
+                        $ageShow = $age[0] . " Y";
+                    }
+                    if ($age[0] == 0 && $age[1] != 0) {
+                        $ageShow = $age[1] . " M";
+                    }
+                    if ($age[0] == 0 && $age[1] == 0 && $age[2] != 0) {
+                        $ageShow = $age[2] . " D";
+                    }
+
+                    if (count($test_codes) > 0) {
+                        foreach ($test_codes as $code) {
+                            $labName = "";
+                            $outsourceqry = "select * from user_test_outsource where job_fk=". $key["id"] ." AND test_fk=" . $code['test_fk'] . " AND status='1'";
+                            $getOutSourceTest = $this->job_model->get_val($outsourceqry);
+                            if (empty($getOutSourceTest)) {
+                                continue;
+                            }else{
+                                $labqry = "select id,name from outsource_master where id=". $getOutSourceTest[0]["outsource_fk"] ." AND status='1'";
+                                $getLabName = $this->job_model->get_val($labqry);
+
+                                $labName = $getLabName[0]['name'];
+                            }
+                            $cnt++;
+                            $t_dsc += ($code["p1"] * $code["code1"] / 100);
+                            $t_bil += $code["p1"] - ($code["p1"] * $code["code1"] / 100);
+                            if ($cnt == count($test_codes)){
+                                fputcsv($handle, array($key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"], $key["doc_code"], $key["doctor_mobile"], (empty($key["pro"]) ? 'NO PRO MEETING' : $key["pro"]), $key["speciality"], $key["ra"] . "%", $key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, $code["test_name"], $code["p1"], $code["code1"], $code["code1"] > 0 ? ($code["p1"] * $code["code1"] / 100) : 0, $code["code1"] > 0 ? $code["p1"] - ($code["p1"] * $code["code1"] / 100) : $code["p1"], $t_dsc, $t_bil, $key["ipd"], $ageShow, $outsource,$labName));
+                            }else{
+                                fputcsv($handle, array($key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"], $key["doc_code"], $key["doctor_mobile"], (empty($key["pro"]) ? 'NO PRO MEETING' : $key["pro"]), $key["speciality"], $key["ra"] . "%",$key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, $code["test_name"], $code["p1"], $code["code1"], $code["code1"] > 0 ? ($code["p1"] * $code["code1"] / 100) : 0, $code["code1"] > 0 ? $code["p1"] - ($code["p1"] * $code["code1"] / 100) : $code["p1"],$t_dsc, $t_bil, $key["ipd"], $ageShow, $outsource,$labName));
+                            }
+
+                        }
+                    }
+
+                    if(!empty($package_ids[0])){
+                        foreach($package_ids[0]['test'] as $packageTest){
+                            $packageID = $package_ids[0]['package_fk'];
+                            $packageID = $this->db->escape('p-' . $packageID);
+
+                            $labName = "";
+                            $outsourceqry = "select * from user_test_outsource where job_fk=". $key["id"] ." AND test_fk=" . $packageTest['test_fk'] . " AND status='1'";
+                            $getOutSourceTest = $this->job_model->get_val($outsourceqry);
+                            if (empty($getOutSourceTest)) {
+                                continue;
+                            }else{
+                                $labqry = "select id,name from outsource_master where id=". $getOutSourceTest[0]["outsource_fk"] ." AND status='1'";
+                                $getLabName = $this->job_model->get_val($labqry);
+                                $labName = $getLabName[0]['name'];
+
+                                $getPackagePrice = $this->job_model->get_val("select price from booked_job_test where job_fk=". $key["id"] ." AND test_fk=" . $packageID . " AND status='1'");
+
+                            }
+                            $p1 = $getPackagePrice[0]['price'];
+                            $code1 = $key['discount'];
+                            $test_disc = ($code1 > 0) ? ($p1 * $code1 / 100) : 0;
+                            $billing   = ($code1 > 0) ? ($p1 - $test_disc) : $p1;
+
+                            $cnt++;
+                            fputcsv($handle, array($key["id"], $key["order_id"], $key["test_city_name"], $key["branch_name"], $key["date"], $patient_name, $key["mobile"], $key["doctor_name"], $key["doc_code"], $key["doctor_mobile"],(empty($key["pro"]) ? 'NO PRO MEETING' : $key["pro"]),$key["speciality"],$key["ra"] . "%", $key["test_type"], $j_status, $key["payment_type"], $key["sample_from"], $formpatient, $key["portal"], $key["note"], $added_by, $key["price"], $discount, $due, $cash, $card, $payumoney, $cheque, $dabitt_from_wallet[0]["dabit"], $creditor_cash_due, $key["payable_amount"], $sample_date, $sample_time, $processing_date, $processing_time, $completed_time1, $report_generate_time1, $phlebo_tat, $processing_tat, $max_tat, $is_processing_delay, $packageTest['test_name'],$p1,$code1, $test_disc,$billing,$test_disc,$billing, $key["ipd"], $ageShow, $outsource,$labName));
+                        }
+                    }
                 }
                 $cnt++;
             }
@@ -4614,7 +5143,7 @@ WHERE `package_test`.`status` = '1'
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Create Account</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your account successfully created. </p>
-                        <p style="color:#7e7e7e;font-size:13px;"> Username/Email : . ' . $email . '  </p>  
+                        <p style="color:#7e7e7e;font-size:13px;"> Username/Email : . ' . $email . '  </p>
                         <p style="color:#7e7e7e;font-size:13px;"> Password : ' . $password . '  </p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
@@ -4695,7 +5224,7 @@ WHERE `package_test`.`status` = '1'
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Booking successfully. </p>
-                        <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>  
+                        <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>
                         <p style="color:#7e7e7e;font-size:13px;"> Your Booked Amount is Rs. ' . $price . '  </p>
                         <p style="color:#7e7e7e;font-size:13px;"> Payment Type : Cash on Blood Collection</p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
@@ -4793,7 +5322,7 @@ WHERE `package_test`.`status` = '1'
                     <h4><b>Dear ' . $name . '</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Suggested Test has been Generated. </p>
 						 <p style="color:#7e7e7e;font-size:13px;">Your Suggested Test are ' . implode($test_name_mail, ', ') . ' </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Order ID : ' . $orderid . '</p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Order ID : ' . $orderid . '</p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
                 $message1 = $email_cnt->get_design($message1);
@@ -4832,7 +5361,7 @@ WHERE `package_test`.`status` = '1'
         //print_r($data['query']); die();
         //print_r($data['query']); die();
         $data['test'] = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $data['query'][0]["city"] . "'");
-        /* $data["package"] = $this->job_model->get_val("SELECT 
+        /* $data["package"] = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -4893,7 +5422,7 @@ WHERE `package_test`.`status` = '1'
                 $test = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $data['query'][0]["city"] . "'");
             }
             if ($pids != NULL) {
-                $package = $this->job_model->get_val("SELECT 
+                $package = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -4904,7 +5433,7 @@ WHERE `package_test`.`status` = '1'
           WHERE `package_master`.`status` = '1'
           AND `package_master_city_price`.`status` = '1' AND package_master.`id` NOT IN ($pids) AND `package_master_city_price`.`city_fk` = '" . $data['query'][0]["city"] . "' ");
             } else {
-                $package = $this->job_model->get_val("SELECT 
+                $package = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -4917,7 +5446,7 @@ WHERE `package_test`.`status` = '1'
             }
         } else {
             $test = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $data['query'][0]["city"] . "'");
-            $package = $this->job_model->get_val("SELECT 
+            $package = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -5049,7 +5578,7 @@ WHERE `package_test`.`status` = '1'
                     <h4><b>Dear, ' . $name . '</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Suggested Test has been Generated. </p>
 						 <p style="color:#7e7e7e;font-size:13px;">Your Suggested Test are ' . implode($test_name_mail, ', ') . ' </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Order ID : ' . $orderid . '</p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Order ID : ' . $orderid . '</p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
         $message1 = $email_cnt->get_design($message1);
@@ -5252,7 +5781,7 @@ WHERE `package_test`.`status` = '1'
             $test_package_name[] = $price1[0]['test_name'];
         }
         foreach ($package as $key) {
-            $price1 = $this->job_model->get_val("SELECT 
+            $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -5268,7 +5797,7 @@ WHERE `package_test`.`status` = '1'
         }
 
         //echo $price ; die();
-        // Add in job master 
+        // Add in job master
         $data = array(
             "order_id" => $order_id,
             "cust_fk" => $uid,
@@ -5299,7 +5828,7 @@ WHERE `package_test`.`status` = '1'
         $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Booking successfully. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Your Booked Amount is Rs. ' . $price . '  </p>
         <p style="color:#7e7e7e;font-size:13px;"> Payment Type : Cash on Blood Collection</p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
@@ -5376,7 +5905,7 @@ WHERE `package_test`.`status` = '1'
         $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Booking successfully. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Your Booked Amount is Rs. ' . $payable . '  </p>
         <p style="color:#7e7e7e;font-size:13px;"> Payment Type : Cash on Blood Collection</p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
@@ -5570,7 +6099,7 @@ WHERE `package_test`.`status` = '1'
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Create Account</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your account successfully created. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> Username/Email : . ' . $email . '  </p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> Username/Email : . ' . $email . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Password : ' . $password . '  </p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
@@ -5592,7 +6121,7 @@ WHERE `package_test`.`status` = '1'
                 $test = $this->input->post('test');
                 $order_id = $this->get_job_id($test_city);
                 $date = date('Y-m-d H:i:s');
-                //$test = explode(',', $test);	
+                //$test = explode(',', $test);
                 $test_package_name = array();
                 $price = 0;
                 foreach ($test as $key) {
@@ -5673,7 +6202,7 @@ WHERE `package_test`.`status` = '1'
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Booking successfully. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> You Booked : . ' . implode($test_package_name, ', ') . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Your Booked Total Amount is Rs. ' . $this->input->post("total_amount") . '  </p>
     <p style="color:#7e7e7e;font-size:13px;"> Discount is ' . $this->input->post('discount') . '%  </p>
         <p style="color:#7e7e7e;font-size:13px;"> Your Booked Payable Amount is Rs. ' . $payable . '  </p>
@@ -5790,7 +6319,7 @@ WHERE `package_test`.`status` = '1'
                     <h4><b>Dear </b> ' . $name . '</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Suggested Test has been Generated. </p>
 						 <p style="color:#7e7e7e;font-size:13px;">Your Suggested Test are ' . implode($test_name_mail, ', ') . ' </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Order ID : ' . $orderid . '</p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Order ID : ' . $orderid . '</p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
                 $message1 = $email_cnt->get_design($message1);
@@ -5820,15 +6349,15 @@ WHERE `package_test`.`status` = '1'
             $data['query'][0]["city"] = 1;
         }
         $data['test'] = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $data['query'][0]["city"] . "'");
-        $data["package"] = $this->job_model->get_val("SELECT 
+        $data["package"] = $this->job_model->get_val("SELECT
     `package_master`.*,
     `package_master_city_price`.`a_price` AS `a_price1`,
     `package_master_city_price`.`d_price` AS `d_price1`
   FROM
-    `package_master` 
-    INNER JOIN `package_master_city_price` 
-      ON `package_master`.`id` = `package_master_city_price`.`package_fk` 
-  WHERE `package_master`.`status` = '1' 
+    `package_master`
+    INNER JOIN `package_master_city_price`
+      ON `package_master`.`id` = `package_master_city_price`.`package_fk`
+  WHERE `package_master`.`status` = '1'
     AND `package_master_city_price`.`status` = '1' AND `package_master_city_price`.`city_fk` = '" . $data['query'][0]["city"] . "' ");
         $this->job_model->master_fun_update("prescription_upload", array("id", $this->uri->segment(3)), array("is_read" => "1"));
         $data['unread'] = $this->job_model->master_fun_get_tbl_val("prescription_upload", array('status' => 1, "is_read" => "0"), array("id", "asc"));
@@ -5875,7 +6404,7 @@ WHERE `package_test`.`status` = '1'
                 $test = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $ctid . "'");
             }
             if ($pids != NULL) {
-                $package = $this->job_model->get_val("SELECT 
+                $package = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -5886,7 +6415,7 @@ WHERE `package_test`.`status` = '1'
           WHERE `package_master`.`status` = '1'
           AND `package_master_city_price`.`status` = '1' AND package_master.`id` NOT IN ($pids) AND `package_master_city_price`.`city_fk` = '" . $ctid . "' ");
             } else {
-                $package = $this->job_model->get_val("SELECT 
+                $package = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -5899,7 +6428,7 @@ WHERE `package_test`.`status` = '1'
             }
         } else {
             $test = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $ctid . "'");
-            $package = $this->job_model->get_val("SELECT 
+            $package = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -6054,7 +6583,7 @@ WHERE `package_test`.`status` = '1'
                     $sms_message = preg_replace("/{{TIME}}/", $s_time . " To " . $e_time, $sms_message);
                 }
                 $mobile = $customer_details[0]['mobile'];
-                //$sms_message="done"; 
+                //$sms_message="done";
                 //$notification::send($cmobile, $sms_message);
                 if (!empty($family_member_name)) {
                     $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => $customer_details[0]["mobile"], "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
@@ -6086,7 +6615,7 @@ WHERE `package_test`.`status` = '1'
             $package_name = array();
             foreach ($book_package as $key) {
 
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -6106,6 +6635,7 @@ WHERE `package_test`.`status` = '1'
     function get_job_log($jid)
     {
         $job_log = $this->job_model->master_fun_get_tbl_val("job_log", array('status' => 1, "job_fk" => $jid), array("id", "asc"));
+
         if (!empty($job_log)) {
             echo "<hr>";
             foreach ($job_log as $key) {
@@ -6141,6 +6671,12 @@ WHERE `package_test`.`status` = '1'
                 $newDate = date("d-M-Y g:i A", strtotime($originalDate));
                 $message = preg_replace("/{{ANAME}}/", "<b>" . ucfirst($admin_name) . "</b>", $message);
                 $message = preg_replace("/{{DATE}}/", $newDate, $message);
+                if($key["message_fk"] == 34 && !empty($key["test_id"])){
+                    $getTestName = $admin_details = $this->job_model->master_fun_get_tbl_val("test_master", array('status' => 1, "id" => $key["test_id"]), array("id", "asc"));
+
+                    $message = preg_replace("/{{TESTNAME}}/","  <b>" . $getTestName[0]['test_name'] . "</b>" , $message);
+
+                }
                 if ($key["message_fk"] == 3) {
 
                     /* NISHIT Status check start */
@@ -6278,14 +6814,14 @@ WHERE `package_test`.`status` = '1'
 
         $receivid = $this->input->post("hdn_tid");
         $rcv_time = $this->input->post("rcv_time");
-        
+
         $job_details = $this->job_model->master_fun_get_tbl_val("job_master", array("id" => $jid), array("id", "asc"));
 
         if($job_details[0]["payable_amount"] < $amount){
             $this->session->set_flashdata("amount_history_error", array("Given amount is more than payable amount."));
             redirect("job-master/job-details/" . $jid);
         }
-        
+
         if (!empty($receivid)) {
             //echo $receivid . " ";
             //echo $rcv_time;
@@ -6299,7 +6835,7 @@ WHERE `package_test`.`status` = '1'
           $this->job_model->master_fun_update("job_master", array("id", $jid), array("payable_amount" => $remaining_amount));
           $ttl_amount = $remaining_amount;
           } */
-        
+
         $sms_alert = $this->job_model->get_val("select smsalert from branch_master where id='" . $job_details[0]['branch_fk'] . "'")[0]['smsalert'];
         $payable_price = $job_details[0]["payable_amount"];
         $remaining_amount = $payable_price - $amount;
@@ -6557,7 +7093,7 @@ WHERE `package_test`.`status` = '1'
         $jid = $this->uri->segment(3);
         $referral_by = $this->input->post("referral_by");
         if ($jid != '' && $referral_by != '') {
-            
+
 
             $docMasterResult = $this->job_model->get_val("SELECT * FROM `doctor_master` WHERE `id` = '" . $referral_by . "'");
 
@@ -6567,7 +7103,7 @@ WHERE `package_test`.`status` = '1'
             }
 
             $this->job_model->master_fun_update("job_master", array("id", $jid), array("doctor" => $referral_by,"pro_id" => $doctor_pro_id));
-           
+
             $this->job_model->master_fun_insert("job_log", array("job_fk" => $jid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "25", "date_time" => date("Y-m-d H:i:s")));
 
             redirect("job-master/job-details/" . $jid);
@@ -6929,7 +7465,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
 
             $this->load->helper('file');
             unlink($path);
-            //die("OK"); 
+            //die("OK");
         }
         $pdf->Output($pdfFilePath, 'F'); // save to file because we can
         $name = $data['query'][0]['order_id'] . "_invoice.pdf";
@@ -7146,7 +7682,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
 
             $this->load->helper('file');
             unlink($path);
-            //die("OK"); 
+            //die("OK");
         }
         $pdf->Output($pdfFilePath, 'F'); // save to file because we can
         $name = $data['query'][0]['order_id'] . "_invoice_withotletterhead.pdf";
@@ -7228,7 +7764,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
             $package_name = array();
             foreach ($book_package as $key) {
 
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -7680,7 +8216,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
         }
         //print_r($selected_test);print_r($selected_package); die();
         $test = $this->job_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='1' AND `test_master_city_price`.`city_fk`='" . $data['query'][0]["city"] . "'");
-        $package = $this->job_model->get_val("SELECT 
+        $package = $this->job_model->get_val("SELECT
               `package_master`.*,
               `package_master_city_price`.`a_price` AS `a_price1`,
               `package_master_city_price`.`d_price` AS `d_price1`
@@ -7746,7 +8282,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
             /* Pinkesh send sms code start */
             foreach ($mobile2 as $mobile) {
 
-                //$sms_message="done"; 
+                //$sms_message="done";
                 //echo $cust_details[0]["mobile"]."-".$sms_message; die();
                 $notification::send($mobile, $sms_message);
             }
@@ -7777,7 +8313,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
             $sms_message = preg_replace("/{{NAME}}/", ucfirst($cust_details[0]["full_name"]), $sms_message[0]["message"]);
             $sms_message = preg_replace("/{{LINK}}/", base_url() . "u/j/" . $jid, $sms_message);
             $mobile = $cust_details[0]['mobile'];
-            //$sms_message="done"; 
+            //$sms_message="done";
             //echo $cust_details[0]["mobile"]."-".$sms_message; die();
             $notification::send($cust_details[0]["mobile"], $sms_message);
         }
@@ -7886,17 +8422,17 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
             $this->job_model->master_fun_insert("job_log", array("job_fk" => $jid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "24", "date_time" => date("Y-m-d H:i:s")));
             /* Nishit check job discount start */
             if ($discount_per > 0) {
-                $job_details = $this->job_model->get_val("SELECT 
+                $job_details = $this->job_model->get_val("SELECT
   job_master.*,
   IF(booking_info.family_member_fk>0&&customer_family_master.phone>0,customer_family_master.phone,customer_master.mobile) AS phone_no
 FROM
-  `job_master` 
-  INNER JOIN `booking_info` 
-    ON `booking_info`.id = `job_master`.booking_info 
-  LEFT JOIN `customer_family_master` 
-    ON `customer_family_master`.id = booking_info.family_member_fk 
+  `job_master`
+  INNER JOIN `booking_info`
+    ON `booking_info`.id = `job_master`.booking_info
+  LEFT JOIN `customer_family_master`
+    ON `customer_family_master`.id = booking_info.family_member_fk
     LEFT JOIN `customer_master` ON `customer_master`.id = booking_info.user_fk
-WHERE job_master.id = '" . $jid . "' 
+WHERE job_master.id = '" . $jid . "'
   AND job_master.status != '0' ");
 
                 $branch = $job_details[0]["branch_fk"];
@@ -7942,8 +8478,8 @@ WHERE job_master.id = '" . $jid . "'
                                 <td>';
             $cnt = 1;
             foreach ($phlebo_booking as $p_key) {
-                $j_details = $this->job_model->get_val("SELECT job_master.*,`test_cities`.`name` as test_city_name FROM job_master 
-INNER JOIN `test_cities` ON job_master.`test_city`=`test_cities`.`id` 
+                $j_details = $this->job_model->get_val("SELECT job_master.*,`test_cities`.`name` as test_city_name FROM job_master
+INNER JOIN `test_cities` ON job_master.`test_city`=`test_cities`.`id`
 WHERE `job_master`.`id`='" . $p_key["job_fk"] . "' AND `job_master`.`status`!='0' AND `job_master`.`sample_collection`='0'");
                 $t_address = $p_key["address"];
                 if (empty($p_key["address"])) {
@@ -8171,7 +8707,7 @@ WHERE `job_master`.`id`='" . $p_key["job_fk"] . "' AND `job_master`.`status`!='0
 
         if ($data["panelcount"][0]['c'] > 0) {
             $pdf->SetHTMLHeader('<body>
-        
+
 <div class="pdf_container">
             <div class="main_set_pdng_div_panel">
                 <div class="brdr_full_div">
@@ -8191,7 +8727,7 @@ Tel: 01166444444 </b><div></center>
         }
         if ($data["panelcount"][0]['c'] > 0 && $data['query'][0]["branch_fk"] == 10) {
             $pdf->SetHTMLHeader('<body>
-        
+
 <div class="pdf_container">
             <div class="main_set_pdng_div_panel">
                 <div class="brdr_full_div">
@@ -8473,8 +9009,8 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div></center>
             header('Cache-Control: private', false);
             header('Content-Type: ' . $mime);  // Add the mime type from Code igniter.
             header('Content-Disposition: attachment; filename="' . basename($name) . '"');  // Add the file name
-            // header('Content-Type: application/pdf'); 
-            // header('Content-Disposition: attachment; filename= 
+            // header('Content-Type: application/pdf');
+            // header('Content-Disposition: attachment; filename=
             //       "Example.pdf"');  // Add the file name
             header('Content-Transfer-Encoding: binary');
             header('Content-Length: ' . filesize($path)); // provide file size
@@ -8556,15 +9092,13 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div></center>
         $city = $this->input->post("city");
         $refer = '';
         if (!empty($city) && empty($plm)) {
-            //$referral_list = $this->job_model->master_fun_get_tbl_val("branch_master", array('status' => 1, "parent_fk" => $plm), array("branch_name", "asc"));
-            $referral_list = $this->job_model->get_val("SELECT * FROM `branch_master` WHERE `status`='1' AND city='" . $city . "' order by branch_name asc");
+            $referral_list = $this->job_model->get_val("SELECT * FROM `branch_master` WHERE `status` IN (1,2) AND city='" . $city . "' order by branch_name asc");
         }
         if (!empty($plm)) {
-            //$referral_list = $this->job_model->master_fun_get_tbl_val("branch_master", array('status' => 1, "parent_fk" => $plm), array("branch_name", "asc"));
-            $referral_list = $this->job_model->get_val("select * from branch_master where status='1' and (parent_fk ='" . $plm . "' or id='" . $plm . "') order by branch_name asc");
+            $referral_list = $this->job_model->get_val("select * from branch_master where `status` IN (1,2) and (parent_fk ='" . $plm . "' or id='" . $plm . "') order by branch_name asc");
         }
         if (empty($city) && empty($plm)) {
-            $referral_list = $this->job_model->get_val("select * from branch_master where status='1' order by branch_name asc");
+            $referral_list = $this->job_model->get_val("select * from branch_master where `status` IN (1,2) order by branch_name asc");
         }
         foreach ($referral_list as $referral) {
             if (!empty($data["cntr_arry"])) {
@@ -8582,9 +9116,6 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div></center>
                 }
                 $refer .= '>' . ucwords($referral['branch_name']) . '</option>';
             }
-        }
-        if ($refer == '') {
-            //echo "<option value=''>Data not available.</option>";
         }
         echo $refer;
     }
@@ -8861,7 +9392,7 @@ ORDER BY `branch_name` ASC");
                 $message1 = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $query[0]["full_name"] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Report completed successfully. </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $query[0]["order_id"] . ' </p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $query[0]["order_id"] . ' </p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
                 $message1 = $email_cnt->get_design($message1);
@@ -8960,7 +9491,7 @@ ORDER BY `branch_name` ASC");
                 $message1 = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $query[0]["full_name"] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Report completed successfully. </p>
-                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $query[0]["order_id"] . ' </p>    
+                        <p style="color:#7e7e7e;font-size:13px;">Your Report ID : ' . $query[0]["order_id"] . ' </p>
 		<p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
                 $message1 = $email_cnt->get_design($message1);
@@ -9025,7 +9556,7 @@ ORDER BY `branch_name` ASC");
             }
 
 
-            /*  $cust_fk = $this->job_model->get_val("SELECT cust_fk FROM job_master master  WHERE id='" . $jid . "' ORDER BY id DESC LIMIT 1"); 
+            /*  $cust_fk = $this->job_model->get_val("SELECT cust_fk FROM job_master master  WHERE id='" . $jid . "' ORDER BY id DESC LIMIT 1");
               $data['cust_fk1']= $this->job_model->get_val("SELECT * FROM booking_info  WHERE user_fk='" . $id . "' ORDER BY id DESC");
               $job_details = $this->job_model->get_val("SELECT c.email,cfm.email as custemail  FROM `booking_info` as b LEFT JOIN `customer_family_master` as cfm on b.user_fk =cfm.user_fk LEFT JOIN `customer_master` as c on c.id =cfm.user_fk WHERE cfm.user_fk ='" .  $id . "' AND b.family_member_fk != 'null'");
              */
@@ -9273,10 +9804,10 @@ ORDER BY `branch_name` ASC");
         $cnt = 0;
         if (!empty($job_id) && !empty($job_id1)) {
             $j_details = $this->job_model->get_val("SELECT * FROM `use_formula` WHERE `job_fk` in (" . $job_id1 . ") and status='1'");
-            
+
             $nwar = array();
             foreach ($j_details as $nkey) {
-            
+
                 $outsourceHours="";
                 if($outsource){
                     $outsourceHours = $this->job_model->get_val("SELECT test_fk,outsource_fk,created_date,tat FROM `outsource_test_price` WHERE status='1' AND outsource_fk='" . $outsource[0]["outsource_fk"] . "' AND  test_fk ='" . $nkey["test_fk"] . "'");
@@ -9779,22 +10310,22 @@ ORDER BY `branch_name` ASC");
         $this->load->helper("sms");
         $notification = new Sms();
         $mobile = array("9879572294", "9979774646", "9879111678");
-        $sms_message = "Patient Name:  UMA GUPTA (AHM-10041) 
+        $sms_message = "Patient Name:  UMA GUPTA (AHM-10041)
 
- MP BY QBC 
+ MP BY QBC
 MP BY QBC :- Negative
- URINE ROUTINE EXAMINATION 
-Volume :-  Adequate 
- Colour  :-  Pale Yellow 
- Appearance :-  Clear 
- Reaction :-  Acidic 
- Sp. Gravity :-  1.015 
- Protein :-  Nil 
- Glucose  :-  Nil 
- Bile Salts :-  Absent 
- Bile Pigments :-  Absent 
- Pus Cells :- 30-35Red Cells :- 2-3Epithelial Cells :- 1-2Casts :-  Absent 
- Crystals :-  Absent 
+ URINE ROUTINE EXAMINATION
+Volume :-  Adequate
+ Colour  :-  Pale Yellow
+ Appearance :-  Clear
+ Reaction :-  Acidic
+ Sp. Gravity :-  1.015
+ Protein :-  Nil
+ Glucose  :-  Nil
+ Bile Salts :-  Absent
+ Bile Pigments :-  Absent
+ Pus Cells :- 30-35Red Cells :- 2-3Epithelial Cells :- 1-2Casts :-  Absent
+ Crystals :-  Absent
  Fungus :-  Absent .";
         // $notification->send("9879572294", $sms_message);
         $notification->send("9426065145", $sms_message);
@@ -9846,21 +10377,22 @@ Volume :-  Adequate
         $jobs = $this->input->get("jobs");
         if ($jobs != "") {
             $job_test_list = $this->job_model->get_val("SELECT t.test_name,a.test_fk AS testid,a.`new_page` FROM  `approve_job_test` a LEFT JOIN test_master t ON t.`id`=a.`test_fk` WHERE a.status='1' AND a.job_fk='$jobs' GROUP BY a.`id` ORDER BY a.position ASC");
-?><table class="table table-striped" id="sort">
+            ?><table class="table table-striped" id="sort">
                 <tbody id="">
                     <?php
                     foreach ($job_test_list as $test) {
                         if ($test['testid'] != "") {
                     ?>
                             <tr>
+                                <td><input type="checkbox" name="newcheck[]" value="<?= $test['testid']; ?>"></td>
                                 <td><input type="hidden" name="testid[]" value="<?= $test['testid']; ?>"></td>
                                 <td><?= $test['test_name']; ?></td>
                                 <td>
                                     <input type="hidden" id="checkvalue_<?= $test['testid'] ?>" name="on_new_page[]" value="<?php
-                                                                                                                            if ($test['new_page'] == 1) {
-                                                                                                                                echo "1";
-                                                                                                                            }
-                                                                                                                            ?>" />
+                                    if ($test['new_page'] == 1) {
+                                        echo "1";
+                                    }
+                                    ?>" />
                                     <input class="newadd" <?php
                                                             if ($test['new_page'] == 1) {
                                                                 echo "checked";
@@ -9941,7 +10473,7 @@ Volume :-  Adequate
                 header('Pragma: public');
                 header('Expires: 0');
                 header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-                header('Cache-Control: private', false); // required for certain browsers 
+                header('Cache-Control: private', false); // required for certain browsers
                 header('Content-Type: application/pdf');
                 //        header('Content-Disposition: attachment; filename="' . basename($filename) . '";');
                 header('Content-Disposition: inline="' . basename($filename) . '";');
@@ -10000,7 +10532,7 @@ Volume :-  Adequate
                     }
                 }
 
-                $test = $this->job_model->get_val("SELECT 
+                $test = $this->job_model->get_val("SELECT
   test_master.`id`,
   `test_master`.`TEST_CODE`,
   `test_master`.`test_name`,
@@ -10012,31 +10544,31 @@ Volume :-  Adequate
   `test_master`.`status`,
   `test_master_city_price`.`price`,
   t_tst AS sub_test,
-  lab_doc_discount.`price` AS d_price 
+  lab_doc_discount.`price` AS d_price
 FROM
-  `test_master` 
-  INNER JOIN `test_master_city_price` 
-    ON `test_master`.`id` = `test_master_city_price`.`test_fk` 
-  LEFT JOIN 
-    (SELECT 
+  `test_master`
+  INNER JOIN `test_master_city_price`
+    ON `test_master`.`id` = `test_master_city_price`.`test_fk`
+  LEFT JOIN
+    (SELECT
       GROUP_CONCAT(tmm.`test_name` SEPARATOR '%@%') AS t_tst,
-      tm.`id` 
+      tm.`id`
     FROM
-      `sub_test_master` 
-      LEFT JOIN `test_master` tm 
-        ON `sub_test_master`.`test_fk` = tm.`id` 
-      LEFT JOIN test_master tmm 
-        ON `sub_test_master`.`sub_test` = tmm.id 
-    WHERE `sub_test_master`.`status` = '1' 
-    GROUP BY tm.`id`) AS tst 
-    ON tst.id = `test_master`.`id` 
+      `sub_test_master`
+      LEFT JOIN `test_master` tm
+        ON `sub_test_master`.`test_fk` = tm.`id`
+      LEFT JOIN test_master tmm
+        ON `sub_test_master`.`sub_test` = tmm.id
+    WHERE `sub_test_master`.`status` = '1'
+    GROUP BY tm.`id`) AS tst
+    ON tst.id = `test_master`.`id`
     LEFT JOIN `lab_doc_discount` ON `lab_doc_discount`.`test_fk`=`test_master`.`id` and lab_doc_discount.lab_fk='" . $branch_fk . "' and lab_doc_discount.doc_fk='" . $doctor_fk . "' and lab_doc_discount.status='1'
-WHERE `test_master`.`status` = '1' 
-  AND `test_master_city_price`.`status` = '1' 
-  AND `test_master_city_price`.`city_fk` = '" . $city_fk . "' 
+WHERE `test_master`.`status` = '1'
+  AND `test_master_city_price`.`status` = '1'
+  AND `test_master_city_price`.`city_fk` = '" . $city_fk . "'
 GROUP BY `test_master`.`id`");
 
-                $package = $this->job_model->get_val("SELECT 
+                $package = $this->job_model->get_val("SELECT
               `package_master`.*,
               `package_master_city_price`.`a_price` AS `a_price1`,
               `package_master_city_price`.`d_price` AS `d_price1`
@@ -10444,9 +10976,9 @@ GROUP BY `test_master`.`id`");
                 $data['hours'] = $_GET['hours'];
                 $data['status'] = $_GET['status'];
                 $data['branch'] = $_GET['branch'];
-               
+
                 $data['ws'] = $_GET['ws'];
-               
+
                 $search_data = array();
 
                 $data["login_data"] = logindata();
@@ -10524,7 +11056,7 @@ GROUP BY `test_master`.`id`");
                 $util = new Util;
 
                 $debug = $_GET['debug'];
-                $hours = $_GET['hours']; 
+                $hours = $_GET['hours'];
                 $status = $_GET['status'];
                 $ws = $_GET['ws'];
                 $search_data = array();
@@ -10615,7 +11147,7 @@ GROUP BY `test_master`.`id`");
                 $search_data['status'] = $status;
                 $search_data['ws'] = $ws;
                 $data['query'] = $this->job_model->new_row_srch_hours_job_list($search_data, $config["per_page"], $page);
-             
+
 
                 if ($_GET['debug'] == 'count') {
                     echo "<pre>";
@@ -10855,7 +11387,7 @@ GROUP BY `test_master`.`id`");
                     /* END */
                     $cnt++;
                 }
-              
+
 
                 $url = "http://" . $_SERVER['HTTP_HOST'] . ":" . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
                 $this->session->set_userdata("job_master_r", $url);
@@ -10882,7 +11414,7 @@ GROUP BY `test_master`.`id`");
                     $search_data['allow_city'] = $allow_city;
                     $cntr_arry = array();
                     if ($branch != '') {
-                     
+
                         $cntr_arry = $branch;
                     } else {
                         $branch = $cntr_arry;
@@ -10891,7 +11423,7 @@ GROUP BY `test_master`.`id`");
                         if (empty($branch) && !empty($city)) {
                             $plm_branch = $this->job_model->get_val("SELECT GROUP_CONCAT(id) AS id FROM `branch_master` WHERE `status`='1' AND city='" . $city . "' GROUP BY status");
                         }
-                      
+
                         if (empty($branch) && empty($city)) {
                             $plm_branch = $this->job_model->get_val("select GROUP_CONCAT(id) AS id from branch_master where status='1' GROUP BY status");
                         }
@@ -10900,22 +11432,22 @@ GROUP BY `test_master`.`id`");
                     } else {
                         $cntr_arry = $branch;
                     }
-                   
+
                     // echo "<pre>";
                     // print_r($cntr_arry);
                     // die;
                     /* PLM END */
                     $search_data['cntr_arry'] = $cntr_arry;
-                    
-                    
+
+
 
                     $data['count'] = $this->job_model->srch_job_list_count($search_data, $config["per_page"], $page);
 
-                   
-                        
+
+
                         print_r(json_encode($data['count']));
                         die;
-                    
+
                 }
 
                 function hours_list_export()
@@ -10926,9 +11458,9 @@ GROUP BY `test_master`.`id`");
                     }
                     $this->load->library("util");
                     $util = new Util;
-    
+
                     $debug = $_GET['debug'];
-                    $hours = $_GET['hours']; 
+                    $hours = $_GET['hours'];
                     $status = $_GET['status'];
                     $ws = $_GET['ws'];
                     $search_data = array();
@@ -10949,7 +11481,7 @@ GROUP BY `test_master`.`id`");
                     $sample_from = $data['sample_from'] = $search_data["sample_from"] = $this->input->get_post('sample_from');
                     $withsample = $data['withsample'] = $search_data["withsample"] = $this->input->get_post('withsample');
                     $sample_not_processed_collected = $data['sample_not_processed'] = $search_data["sample_not_processed"] = $this->input->get_post('sample_not_processed');
-    
+
                     if(!empty($branch)){
                         $branch= explode(",",$branch);
                     }
@@ -10974,7 +11506,7 @@ GROUP BY `test_master`.`id`");
                         }
                     }
                     /* End */
-    
+
                     $search_data['allow_city'] = $allow_city;
                     $test_packages = explode("_", $test_pack);
                     $alpha = $test_packages[0];
@@ -10985,7 +11517,7 @@ GROUP BY `test_master`.`id`");
                     if ($alpha == 'p') {
                         $p_id = $tp_id;
                     }
-    
+
                     if ($statusid == '0') {
                         $data["deleted_selected"] = 1;
                     }
@@ -11019,8 +11551,8 @@ GROUP BY `test_master`.`id`");
                     $search_data['status'] = $status;
                     $search_data['ws'] = $ws;
                     $data['query'] = $this->job_model->new_row_srch_hours_job_list($search_data, $config["per_page"], $page);
-                 
-    
+
+
                     if ($_GET['debug'] == 'count') {
                         echo "<pre>";
                         print_r( $data['query']);
@@ -11037,9 +11569,9 @@ GROUP BY `test_master`.`id`");
                         $f_data1 = $this->job_model->master_fun_get_tbl_val("relation_master", array('id' => $f_data[0]["relation_fk"]), array("id", "asc"));
                         //$doctor_data = $this->job_model->master_fun_get_tbl_val("doctor_master", array('id' => $key["doctor"]), array("id", "asc"));
                         $doctor_data = $this->job_model->master_fun_get_tbl_val_with_select("full_name,mobile", "doctor_master", array('id' => $key["doctor"]), array("id", "asc"));
-    
+
                         $pro_data = $this->job_model->master_fun_get_tbl_val_with_select("pro_name", "pro_master", array('id' => $key["pro_id"]), array("id", "asc"));
-    
+
                         //  $data['query'][$cnt]["send_repor_sms"] = $this->job_model->master_fun_get_tbl_val("send_report_sms", array('job_fk' => $key["id"], "status" => "1"), array("id", "asc"));
                         // $data['query'][$cnt]["send_report_mail"] = $this->job_model->master_fun_get_tbl_val("send_report_mail", array('job_fk' => $key["id"], "status" => "1"), array("id", "asc"));
                         /* Nishit 11-8 start */
@@ -11104,7 +11636,7 @@ GROUP BY `test_master`.`id`");
                                 $data['query'][$cnt]["age"] = $age[2];
                                 $data['query'][$cnt]["age_type"] = 'D';
                             }
-    
+
                             if ($age[0] == 0 && $age[1] == 0 && $age[2] == 0) {
                                 $data['query'][$cnt]["age"] = '0';
                                 $data['query'][$cnt]["age_type"] = 'D';
@@ -11125,7 +11657,7 @@ GROUP BY `test_master`.`id`");
                             $st_key["sub_test"] = $job_sub_test_list;
                             $job_tst_lst[] = $st_key;
                         }
-    
+
                         //die("OK");
                         /* END */
                         $data['query'][$cnt]["job_test_list"] = $job_tst_lst;
@@ -11160,7 +11692,7 @@ GROUP BY `test_master`.`id`");
                                     }
                                 }
                             }
-    
+
                             foreach ($job_tst_lst as $p_key) {
                                 foreach ($p_key["sub_test"] as $sst_key) {
                                     if (strpos(trim(strtoupper($sst_key["test_name"])), trim(strtoupper($test_pack))) !== false) {
@@ -11170,12 +11702,12 @@ GROUP BY `test_master`.`id`");
                             }
                         }
                         $data['query'][$cnt]["is_show"] = $is_show;
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
                         $late_processing = 0;
                         $late_sample_collection = 0;
                         if ($key['status'] == '7') {
@@ -11189,12 +11721,12 @@ GROUP BY `test_master`.`id`");
                                 }
                             }
                         }
-    
+
                         $max_test_tat = 0;
                         $max_package_tat = 0;
                         $max_tat = 0;
                         if ($key['status'] == '8') {
-    
+
                             $processing_time = $this->job_model->get_val("select job_status,date_time from job_log where status='1' AND job_status='7-8' AND job_fk=" . $key["id"]);
                             $package_ids1 = [];
                             $test_ids1 = [];
@@ -11203,11 +11735,11 @@ GROUP BY `test_master`.`id`");
                             foreach ($job_tst_lst as $key) {
                                 $test_ids1[] = $this->job_model->get_val("select id from test_master where status='1' AND test_name like '%" . str_replace("'", "''", $key['test_name']) . "%'");
                             }
-    
+
                             foreach ($package_ids as $key) {
                                 $package_ids1[] = $this->job_model->get_val("select id from package_master where status='1' AND title like '%" . str_replace("'", "''", $key['name']) . "%'");
                             }
-    
+
                             foreach ($test_ids1 as $key) {
                                 $test_tat[] = $this->job_model->get_val("select tat from test_tat where status='1' AND type='1' AND test_fk='" . $key[0]['id'] . "'");
                             }
@@ -11224,7 +11756,7 @@ GROUP BY `test_master`.`id`");
                                     }
                                 }
                             }
-    
+
                             if (!empty($package_tat)) {
                                 foreach ($package_tat as $key) {
                                     if ($key[0]['tat'] != "") {
@@ -11234,13 +11766,13 @@ GROUP BY `test_master`.`id`");
                                     }
                                 }
                             }
-    
+
                             if ($max_test_tat > $max_package_tat) {
                                 $max_tat = $max_test_tat;
                             } else {
                                 $max_tat = $max_package_tat;
                             }
-    
+
                             if (!empty($processing_time)) {
                                 $date1 = strtotime($processing_time[0]['date_time']);
                                 $date2 = strtotime(date("Y-m-d H:i:s"));
@@ -11252,32 +11784,32 @@ GROUP BY `test_master`.`id`");
                                 }
                             }
                         }
-    
+
                         $data['query'][$cnt]["late_sample_collection"] = $late_sample_collection;
                         $data['query'][$cnt]["late_processing"] = $late_processing;
-    
+
                         /* END */
                         $cnt++;
                     }
-                  
-    
+
+
                     header("Content-type: application/csv");
                     header("Content-Disposition: attachment; filename=\"Outsource_Jobs_Report-" . date('d-M-Y') . ".csv\"");
                     header("Pragma: no-cache");
                     header("Expires: 0");
                     $handle = fopen('php://output', 'w');
-             
+
                     fputcsv($handle, array("No.", "Reg No.", "Order Id","Branch Name", "Customer Name", "Test/Package Name",  "Date", "Job Status",'Duration'));
-        
+
                     $cnt = 1;
                     $new_array = $data['query'];
-                    
+
                     foreach ($new_array as $key) {
                         foreach ($branchlist as $branch) {
-                            
+
                             if ($key['branch_fk'] == $branch['id']) {
                                 $key["branch_name"]= $branch['branch_name'];
-    
+
                             }
                         }
 
@@ -11285,7 +11817,7 @@ GROUP BY `test_master`.`id`");
                             $patient_name=  ucwords($key['full_name']);
                           } else {
                             $patient_name= ucfirst($key['relation']);
-                           } 
+                           }
 
                            $test_list=[];
                            foreach ($key["job_test_list"] as $test) {
@@ -11295,20 +11827,20 @@ GROUP BY `test_master`.`id`");
                                    $is_panel = '(Panel)';
                                }
                             $test_list[]= ucwords($test['test_name']) . $is_panel;
-                               
+
                            }
-                         
-                      
+
+
                            foreach ($key["package"] as $key3) {
-                               
+
                             $test_list[]=  ucfirst($key3["name"]);
                                foreach ($key3["test"] as $kt_key) {
                                    $package_id_1 .= $kt_key['test_fk'] . ',';
                                    $kt_key["test_name"];
                                    if (!in_array($kt_key["test_fk"], $test_list)) {
-                                    
+
                                     $test_list[]= $kt_key["test_name"];
-                                      
+
                                    }
                                }
                            }
@@ -11333,7 +11865,7 @@ GROUP BY `test_master`.`id`");
                         if ($key['status'] == 0) {
                             $status= "User Deleted";
                         }
-                          $hoursTitle =""; 
+                          $hoursTitle ="";
                         if($hours=="4to8"){
                             $hoursTitle="4 hours to 8 hours";
                         }
@@ -11356,13 +11888,13 @@ GROUP BY `test_master`.`id`");
                             $hoursTitle="72 hours & +";
                         }
                     fputcsv($handle, array($cnt, $key["id"], $key["order_id"], $key["branch_name"],$patient_name,$key["test_name"], $key["date"], $status,$hoursTitle));
-                            
+
                             $cnt++;
-                        
+
                     }
                     fclose($handle);
                     exit;
-                  
+
                 }
 
                 function report_update(){
@@ -11371,7 +11903,7 @@ GROUP BY `test_master`.`id`");
                     if(!empty($get_job_data)){
                         foreach($get_job_data as $job_data){
                             $jobId = $job_data['id'];
-                            $orderId = $job_data['order_id']; 
+                            $orderId = $job_data['order_id'];
 
                             $pdf_name_withlh =  $orderId . "_printresult_wlpd.pdf";
                             $pdf_name_withoutlh =  $orderId . "_printresult.pdf";
@@ -11383,9 +11915,9 @@ GROUP BY `test_master`.`id`");
                     }else {
                         log_message('error', 'No jobs found or get_val returned invalid data.');
                     }
-                    
+
                 }
         }
 
-      
+
                     ?>

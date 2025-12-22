@@ -57,7 +57,7 @@
             .pagenum:before { content: counter(page); }
         </style>
     </head>
-    <body> 
+    <body>
 
         <?php
         $finalpageArray = array();
@@ -99,16 +99,16 @@
                         $pagecount++;
                         $finalpageArray[] = array("page" => "chapter" . $pagecount, "sample_type" => array());
                         $currentpage = $pagecount - 1;
-                        ?> <div class="chapter<?= $pagecount ?>" > 
+                        ?> <div class="chapter<?= $pagecount ?>" >
                         <?php
                         $pageStart = false;
                     }
-					
+
 					if ($department_name != $testidp["department_name"])
                         if ($testidp["department_name"] == "BIOCHEMISTRY")
-							if($query[0]['branch_fk'] == "2")
+							if($query[0]['nabl_logo'] == "1")
 								echo '<div style="position:absolute;padding:7px;left:0;right:0;width:100%;text-align:right;"><img style="width:50px;height:50px;" src="nabl_logo.jpg" /></div>';
-					
+
                     ?>
 
                         <table style="margin:0 auto" width="98%" class="mdl_tbl_full1" repeat_header="1" class="chapter<?= $pagecount ?> ">
@@ -130,7 +130,7 @@
                                             echo '<br />' .  ucwords(($testidp["department_name"]));
                                         else
                                             echo ucwords(($testidp["department_name"]));
-									} 
+									}
 									$department_name = $testidp["department_name"];
                                 ?></center></p></td>
                             </tr>
@@ -218,17 +218,17 @@
                                                     $finalpageArray[$pagecount - 1]["sample_type"][] = $testidp["sampletype"];
                                                     ?></td>
                                                 <?php
-                                                $res = ''; 
+                                                $res = '';
                                                 $is_text = 0;
                                                 if (isset($parameter["para_ref_rng"][0]['id'])) {
                                                     ?>
-                                                    <?php 
+                                                    <?php
 													if($testdepart=='5'){
-														
+
 													    if (is_numeric($parameter['user_val'][0]["value"]))
                                                         {	$res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', ''); }else{
                                                             $res = $parameter['user_val'][0]["value"];
-                                                        }														
+                                                        }
                                                     }else{ $res = $parameter['user_val'][0]["value"]; } ?><?php $status; ?>
                                                 <?php } else { ?>
                                                     <?php
@@ -246,15 +246,15 @@
                                                             }
                                                         }
                                                     } else {
-														
+
 														if($testdepart=='5'){
-                                                            if (is_numeric($parameter['user_val'][0]["value"])){	
-                                                                $res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', ''); 
+                                                            if (is_numeric($parameter['user_val'][0]["value"])){
+                                                                $res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', '');
                                                             }else{
 	                                                            $res = $parameter['user_val'][0]["value"];
-                                                            } 
-                                                        }else{															
-                                                            $res = $parameter['user_val'][0]["value"];														
+                                                            }
+                                                        }else{
+                                                            $res = $parameter['user_val'][0]["value"];
 														}
                                                     }
                                                     ?>
@@ -276,7 +276,7 @@
                                                         }
                                                     }
                                                     ?>
-                                                </td> 
+                                                </td>
                                                 <?php if ($is_text == 0 && strlen($res) <= 20) { ?>
                                                     <td valign="top" style="width: 20%;font-size: 12px;"><?php echo $parameter['parameter_unit']; ?></td>
                                                     <td style="width: 30%;font-size: 12px;" >  <?php
@@ -343,9 +343,9 @@
                                             $is_text = 0;
                                             if (isset($parameter["para_ref_rng"][0]['id'])) {
                                                 ?>
-                                                <?php if($testdepart=='5'){ 
-                                                    if (is_numeric($parameter['user_val'][0]["value"])){	
-                                                        $res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', ''); 
+                                                <?php if($testdepart=='5'){
+                                                    if (is_numeric($parameter['user_val'][0]["value"])){
+                                                        $res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', '');
                                                     }else{
 	                                                    $res = $parameter['user_val'][0]["value"];
                                                     } }else{ $res = $parameter['user_val'][0]["value"]; } ?><?php $status; ?>
@@ -363,9 +363,9 @@
                                                         }
                                                     }
                                                 } else {
-													if($testdepart=='5'){ 
+													if($testdepart=='5'){
                                                         if (is_numeric($parameter['user_val'][0]["value"])){
-                                                            $res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', ''); 
+                                                            $res = number_format((float)$parameter['user_val'][0]["value"], 2, '.', '');
                                                         }else{
 	                                                        $res = $parameter['user_val'][0]["value"];
                                                         } }else{
@@ -377,7 +377,7 @@
                                                 <?php
                                                 echo $res;
                                                 ?>
-                                            </td> 
+                                            </td>
                                             <td style="width: 20%;"></td>
                                             <td style="width: 30%;font-size: 12px;"><?php echo $parameter['user_val'][0]["value2"]; ?></td>
                                         </tr>
@@ -407,14 +407,14 @@
                         <?php
                     }
                 }
-                
+
                 ?>
                 <?php
                 if ($pageStart) {
                     $pagecount++;
                     $finalpageArray[] = array("page" => "chapter" . $pagecount, "sample_type" => array());
                     $currentpage = $pagecount - 1;
-                    ?> <div class="chapter<?= $pagecount ?>" > 
+                    ?> <div class="chapter<?= $pagecount ?>" >
                     <?php
                     $pageStart = false;
                 }
@@ -442,7 +442,7 @@
                                 <tr style="text-align: center; width: 100%;">
                                     <td>
                                 <center>
-                                    <img src="<?= FCPATH; ?>upload/report/graph/<?= $g_key["pic"] ?>" height="auto" width="100%"/> 
+                                    <img src="<?= FCPATH; ?>upload/report/graph/<?= $g_key["pic"] ?>" height="auto" width="100%"/>
                                     <?php if (count($testidp['graph']) == $itest) { ?>
                                         <br>
                                     <?php } ?>
@@ -475,7 +475,7 @@
             } else {
                 echo $header;
             }
-//echo json_encode($page); echo implode(',', $page['sample_type']); 
+//echo json_encode($page); echo implode(',', $page['sample_type']);
                 ?>
                 </htmlpageheader>
             <?php }
@@ -497,7 +497,7 @@ foreach ($finalpageArray as $page) {
                 margin-footer: <?= $pdfsize[1] ?>mm;
                 margin-top: <?= $pdfsize[2] ?>%;
                 odd-footer-name:footer;,
-                                        		
+
             }
 
             .<?php echo $page['page'] ?> {
@@ -506,8 +506,8 @@ foreach ($finalpageArray as $page) {
             }
 <?php }
 ?>
-    
-         
+
+
     </style>
 </html>
 <?php
