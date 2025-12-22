@@ -395,11 +395,14 @@ WHERE `customer_family_master`.`status` = '1'
 
     function home_upload_prescription() {
         /* pinkesh code start */
+
         $this->load->helper("Email");
         $email_cnt = new Email;
         $this->load->model('user_login_model');
         $this->load->model('register_model');
         $mobile = $this->input->post('mobile');
+        $name = $this->input->post('name');
+
         $city = $this->input->post('city');
         $city = $this->session->userdata("test_city");
         if ($city == '') {
@@ -413,6 +416,7 @@ WHERE `customer_family_master`.`status` = '1'
         $reg_pass = $this->input->post('reg_pass');
         $reg_gender = $this->input->post('reg_gender');
         $captcha = $this->varify_captcha();
+        $user_name1 = $name;
         if ($mobile != '' && $desc != '' && $captcha == 1) {
             $count = $this->user_master_model->num_row('customer_master', array("email" => $email, "status" => '1'));
             $check = $this->user_master_model->num_row('customer_master', array("mobile" => $mobile, "status" => '1', "active" => '1'));
@@ -449,7 +453,7 @@ WHERE `customer_family_master`.`status` = '1'
                     $filename = $doc_data['file_name'];
                     $order_id = random_string('numeric', 13);
                     $date = date('Y-m-d H:i:s');
-                    $insert = $this->user_master_model->master_fun_insert("prescription_upload", array("cust_fk" => $id, "image" => $filename, "description" => $desc, "mobile" => $mobile, "created_date" => $date, "order_id" => $order_id, "city" => $city));
+                    $insert = $this->user_master_model->master_fun_insert("prescription_upload", array("cust_fk" => $id, "image" => $filename, "description" => $desc,"name" => $user_name1 ,"mobile" => $mobile, "created_date" => $date, "order_id" => $order_id, "city" => $city));
                     $insert12 = $this->user_master_model->master_fun_insert("notification_master", array("title" => "Prescription Upload Successfully.", "url" => "user_master", "user_fk" => $id, "status" => '1'));
                     $sms_message = $this->job_model->master_fun_get_tbl_val("sms_master", array('status' => 1, "title" => "upload_presc"), array("id", "asc"));
                     $sms_message = $sms_message[0]["message"];
@@ -473,7 +477,7 @@ WHERE `customer_family_master`.`status` = '1'
                     $configmobile = $this->config->item('admin_alert_phone');
                     foreach ($configmobile as $p_key) {
                         //$notification::send($configmobile, $sms_message);
-                        $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => $p_key, "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
+                        $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => $p_key, "message" =>    $sms_message, "created_date" => date("Y-m-d H:i:s")));
                     }
 
                     //vishal
@@ -1983,7 +1987,8 @@ WHERE `customer_family_master`.`status` = '1'
 
     function save_inquiry() {
         $phone = $this->input->post("phone");
-        $insert = $this->user_master_model->master_fun_insert("health_advisor", array("phone" => $phone, "created_date" => date("Y-m-d H:i:s")));
+        $name = $this->input->post("name");
+        $insert = $this->user_master_model->master_fun_insert("health_advisor", array("name" => $name,"phone" => $phone, "created_date" => date("Y-m-d H:i:s")));
         echo 1;
     }
 

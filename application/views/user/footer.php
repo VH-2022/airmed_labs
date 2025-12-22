@@ -10,7 +10,11 @@
                         <li><a href="<?php echo base_url(); ?>founders">Management Team</a></li>
                         <li><a href="<?php echo base_url(); ?>user_master/pathologist">Team Pathology</a></li>
                         <li><a href="<?php echo base_url(); ?>user_master/all_packages">Packages</a></li>
-                        <li><a href="<?php echo base_url(); ?>user_track_report">Track Report</a></li>
+                        <?php if (isset($login_data['id'])) { ?>
+
+                        <?php } else { ?>
+                            <li><a href="<?php echo base_url(); ?>user_track_report">Track Report</a></li>
+                        <?php } ?>
                         <!-- <li><a href="<?php echo base_url(); ?>user_master/commercial">Media</a></li> -->
                         <!-- <li><a href="<?php echo base_url(); ?>advertisement">Advertisement</a></li> -->
                         <li><a href="<?php echo base_url(); ?>user_master/partner_with_us">Partner with us</a></li>

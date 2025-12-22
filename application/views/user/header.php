@@ -233,7 +233,11 @@
                                                                 <a onclick="signOut()" href="<?php echo base_url(); ?>user_login/logout"><li><i class="fa fa-sign-out" style="margin-right: 5px;"></i>Logout</li></a>
                                                             <?php } ?>
                                                             <a href="<?php echo base_url(); ?>user_master/feedback"><li><i class="fa fa-envelope-open"></i>Feedback</li></a>
-                                                            <a href="<?php echo base_url(); ?>user_track_report"><li><i class="fa fa-file-o"></i>View Report</li></a>
+                                                            <?php if (isset($login_data['id'])) { ?>
+
+                                                            <?php } else { ?>
+                                                                <a href="<?php echo base_url(); ?>user_track_report"><li><i class="fa fa-file-o"></i>View Report</li></a>
+                                                            <?php } ?>
 															<!-- <a href="<?php //echo base_url(); ?>user_track_report/track_all_reports"><li><i class="fa fa-file-o"></i>View All Report</li></a> -->
                                                             <a href="<?php echo base_url(); ?>user_master/contact_us"><li><i class="fa fa-map-marker" style="margin-right:13px;"></i>Contact Us</li></a>
                                                             <?php if (!isset($login_data['id'])) { ?>

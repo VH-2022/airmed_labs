@@ -9,7 +9,7 @@
         width: 100%;
         background: rgba(0, 0, 0, .5) url('<?php echo base_url(); ?>user_assets/images/loader12.gif') 50% 50% no-repeat;
     }
-    .select2.select2-container.select2-container--default { 
+    .select2.select2-container.select2-container--default {
         left: 15px;
         position: absolute;
         top: 10px;
@@ -68,9 +68,9 @@
     .full_bg .loader img{width:70px; height:70px;}
     .border-search{ background-color: #fff; border: 1px solid #000; border-radius: 0; -- border-top: 1px solid #d01130; box-shadow: 1px 1px rgba(0, 0, 0, 0.4); clear: left;}
     .carousel-indicators{z-index:2;}
-    #myCarousel	{height:680px;}	
+    #myCarousel	{height:680px;}
     #myCarousel .carousel-inner{height:100%;}
-    #myCarousel img	{height:680px !important;width:100%;}	
+    #myCarousel img	{height:680px !important;width:100%;}
 
 </style>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -114,7 +114,7 @@
                     <button type="button" class="close" style="color: #000;margin-top:6px;margin-right:0px;" data-dismiss="modal" aria-hidden="true">x</button>
                 </div>
                 <div class="">
-                    <img src="<?php echo base_url(); ?>img/happyNewYearBnanner.jpg" style="" class="img" alt="Happy New Year"> 
+                    <img src="<?php echo base_url(); ?>img/happyNewYearBnanner.jpg" style="" class="img" alt="Happy New Year">
                 </div>
             </div>
         </div>
@@ -150,7 +150,7 @@
                 </div>
             </div>
 
-            <!-----Left and right controls 
+            <!-----Left and right controls
             <a class="left carousel-control" href="#myCarousel" data-slide="prev">
               <span class="glyphicon glyphicon-chevron-left"></span>
               <span class="sr-only">Previous</span>
@@ -170,12 +170,12 @@
                     </div>
                 <?php } ?>
                 <div class="col-sm-12 res_pdng_0">
-                    <div class="col-sm-10 col-sm-offset-1 form_div" id="wrapper1" style="display:none;"> 
+                    <div class="col-sm-10 col-sm-offset-1 form_div" id="wrapper1" style="display:none;">
                        <!-- <p class="indx_mdl_big_p">Find your Tests and Packages</p>-->
                         <div class="">
                             <h1>India's Fastest Growing Pathology Labs </h1>
                             <div class="col-sm-10 pdng_0 border-search">
-                                
+
                                 <div class="col-sm-4 col-md-3 bnr_srch_deskpdng0">
                                     <select class="form-controll" id="tst_city_list" onchange="get_packages(this.value);">
                                         <i class="fa fa-map-marker"></i>
@@ -190,7 +190,7 @@
                                                                                             <option value="3" >Vadodara</option> -->
                                                                                     </select>
                                 </div>
-                                
+
                                 <!-- <div class="col-sm-4 col-md-3 bnr_srch_deskpdng0">
                                     <select class="form-controll" id="tst_city_list" onchange="get_packages(this.value);">
                                         <i class="fa fa-map-marker"></i>
@@ -236,14 +236,15 @@
                                     <button type="button" class="btn btn-dark btn-theme-colored btn-flat helth_advisor" data-toggle="modal" data-target="#myModal1"><img src="<?php echo base_url(); ?>user_assets/images/bg/hp-call-icon.png">Call To Book Test</button>
                                 </li>
                                 <li>
-                                    <button onclick="open_browse();" type="button" class="btn btn-dark btn-theme-colored btn-flat upload_prec" data-toggle="modal" data-target="#myModal">Book Test from Prescription</button>
+                                <!-- <button onclick="open_browse();" type="button" class="btn btn-dark btn-theme-colored btn-flat upload_prec" data-toggle="modal" data-target="#myModal">Book Test from Prescription</button> -->
+                                 <button type="button" class="btn btn-dark btn-theme-colored btn-flat upload_prec" data-toggle="modal" data-target="#myModal">Book Test from Prescription</button>
                                 </li>
 
                             </ul>
                         </div>
                         <!----<div class="span-my"> <h1>OR</h1> </div>
                         <div  id="after_depertments" class="container res_dsply_none">
-                            <div class="section-content "> 
+                            <div class="section-content ">
                                 <div class="row">
                                     <center> <a href="javascript:void(0);" onclick="$('#myModal').modal('show');open_browse();">
                                             <img src="<?php echo base_url(); ?>user_assets/images/rx_img.png"></a>
@@ -301,7 +302,7 @@
                                                         </div>
                                                         <div id="error_file" style="color:red; float: left;"></div>
                                                     </div>
-                                                   
+
                                                     <div class='col-sm-12 pdng_0 full_div'>
                                                         <br>
                                                         <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -333,9 +334,14 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
+                                <label for="text">Name:</label>
+                                <input type="text" id="get_inquiry_name" class="form-control">
+                                <div id="get_inquiry_name_error" style="color:red;"></div>
+                            </div>
+                            <div class="form-group">
                                 <label for="text">Mobile No.:</label>
                                 <input type="text" id="get_inquiry_id" class="form-control">
-                                <div id="get_inquiry_id_error"></div>
+                                <div id="get_inquiry_id_error" style="color:red;"></div>
                             </div>
                             <div class="form-group">
                                 <button type="button" id="get_inquiry_id_error_btn" onclick="get_inquiry();" class="btn btn-default">Submit</button>
@@ -356,6 +362,19 @@
                     <input type="hidden" name="city" id="tst_city">
                     <div class="modal-body srch_popup_full">
                         <div class="uplod_prec_full">
+                            <div class="col-sm-12 pdng_0 full_div">
+    <label class="pull-left full_div text-left">Mobile No.<span style="color:red;">*</span></label>
+    <input class="srch_pop_inpt nobrdr_rds_tplft" type="text" name="name" <?php
+                                    if (isset($user->full_name)) {
+                                        echo "readonly='readonly'";
+                                    }
+                                    ?> id="name" placeholder="Name"  value="<?php
+                                           if (isset($user->full_name)) {
+                                               echo $user->full_name;
+                                           }
+                                           ?>" />
+    <div id="error_name" style="color:red; float: left;"></div>
+</div>
                             <div class="col-sm-12 pdng_0 full_div">
                                 <label class="pull-left full_div text-left">Mobile No.<span style="color:red;">*</span></label>
                                 <div class="input-group">
@@ -585,7 +604,7 @@
                                 <?php foreach($bp_key1["test_list"] as $bt_key1){ ?>
                                 <li>&#x2022; <?=ucfirst($bt_key1["test_name"])?></li>
 
-                               <?php } ?>                                         
+                               <?php } ?>
 
                             </ul></p>
 
@@ -645,7 +664,7 @@
 		 <div class="border-btn mt-30"><span></span></div>
     <section class="sctn_full" style="display:none;">
 <div class="container">
-                
+
 		<div class="section-content book_test">
                 <div class="row multi-row-clearfix">
                     <div class="logistic_it_pltfrm_title">
@@ -654,7 +673,7 @@
                     <div class="col-md-12 col-sm-12">
 
                         <div class="col-md-4 col-sm-4">
-                          
+
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <div class="logistic_it_pltfrm">
@@ -663,17 +682,17 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
-                           
+
                         </div>
 
                     </div>
                 </div>
             </div>
-		
+
 		</div>
     </section>
 	<section class="sctn_full">
-        <div class="container">                    
+        <div class="container">
             <div class="section-content book_test">
                 <div class="row multi-row-clearfix">
                     <div class="logistic_it_pltfrm_title">
@@ -682,7 +701,7 @@
                     <div class="col-md-12 col-sm-12">
 
                         <div class="col-md-4 col-sm-4">
-                          
+
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <div class="logistic_it_pltfrm">
@@ -691,7 +710,7 @@
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
-                          
+
                         </div>
 
                     </div>
@@ -702,7 +721,7 @@
                     </div>
                 </div>
             </div>
-		
+
 		</div>
     </section>
     <script>
@@ -798,15 +817,15 @@
                           - */ ?>
                         <div class="col-sm-4  col-xs-4">
                             <center><h2 ><strong  style="color:#bf2d37; font-weight:bold">BOOK</strong> <span style="color:#000">TEST</span></h2></center>
-                            <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/> 
+                            <img src="<?php echo base_url(); ?>user_assets/images/home/img1.png"/>
                         </div>
                         <div class="col-sm-4 col-xs-4">
                             <center><h2><strong  style="color:#bf2d37; font-weight:bold">MANAGE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                            <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/> 
+                            <img src="<?php echo base_url(); ?>user_assets/images/home/img2.png"/>
                         </div>
                         <div class="col-sm-4 col-xs-4">
                             <center><h2><strong  style="color:#bf2d37; font-weight:bold">SHARE</strong> <span style="color:#000">REPORTS</span></h2></center>
-                            <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/> 
+                            <img src="<?php echo base_url(); ?>user_assets/images/home/img3.png"/>
                         </div>
 
 
@@ -821,7 +840,7 @@
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
                     <div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/>
                      <!-- & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  -->
@@ -848,9 +867,9 @@
             <div class="">
                 <h1 class="subtitle text-center " style="margin-bottom: 25px;"><span style="color:#bf2d37;">AIRMED EXPERIENCE</span></h1>
                 <div class="row">
-                    <div class="container" id="" style="style="background: #f1f2f3"">    
+                    <div class="container" id="" style="style="background: #f1f2f3"">
                          <div class="row">
-                            <div class="col-md-12 column">    
+                            <div class="col-md-12 column">
                                 <div class="carousel slide" id="testimonials-rotate">
                                     <ol class="carousel-indicators tstml_indictr">
                                         <li class="active" data-slide-to="0" data-target="#testimonials-rotate">
@@ -861,7 +880,7 @@
                                         </li>
                                     </ol>
                                     <div class="carousel-inner">
-                                                                                    <div class="item active">    
+                                                                                    <div class="item active">
                                                 <div class="col-md-3 col-sm-3 txt-center">
                                                     <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
                                                     <h3>Suresh Jaiswal</h3>
@@ -881,7 +900,7 @@
 
                                                 <div class="clearfix"></div>
                                             </div>
-                                                                                        <div class="item">    
+                                                                                        <div class="item">
                                                 <div class="col-md-3 col-sm-3 txt-center">
                                                     <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
                                                     <h3>Jitu Chandnani</h3>
@@ -901,7 +920,7 @@
 
                                                 <div class="clearfix"></div>
                                             </div>
-                                            <div class="item">    
+                                            <div class="item">
                                                 <div class="col-md-3 col-sm-3 txt-center">
                                                     <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
                                                     <h3>Jigar Chauhan</h3>
@@ -921,7 +940,7 @@
 
                                                 <div class="clearfix"></div>
                                             </div>
-                                                                                        <div class="item">    
+                                                                                        <div class="item">
                                                 <div class="col-md-3 col-sm-3 txt-center">
                                                     <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
                                                     <h3>Krishna Patel</h3>
@@ -941,7 +960,7 @@
 
                                                 <div class="clearfix"></div>
                                             </div>
-                                                                                        <div class="item">    
+                                                                                        <div class="item">
                                                 <div class="col-md-3 col-sm-3 txt-center">
                                                     <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
                                                     <h3>Soniya Sharma</h3>
@@ -965,16 +984,16 @@
                                 </div>
                                 <div class="testi-nav">
                                     <a class="left" href="#testimonials-rotate" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                                    <a class="right" href="#testimonials-rotate" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a><div class="clearfix"></div>  
+                                    <a class="right" href="#testimonials-rotate" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a><div class="clearfix"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--
-                    <div class="container" id="" style="style="background: #f1f2f3"">    
+                    <div class="container" id="" style="style="background: #f1f2f3"">
                          <div class="row">
-                            <div class="col-md-12 column">    
+                            <div class="col-md-12 column">
                                 <div class="carousel slide" id="testimonials-rotate">
                                     <ol class="carousel-indicators tstml_indictr">
                                         <li class="active" data-slide-to="0" data-target="#testimonials-rotate">
@@ -993,7 +1012,7 @@
                                             if ($cnt == 0) {
                                                 echo " active";
                                             }
-                                            ?>">    
+                                            ?>">
                                                 <div class="col-md-3 col-sm-3 txt-center">
                                                     <img alt="" src="<?php echo base_url(); ?>thumb_helper.php?h=200&w=200&src=upload/<?php echo $key['image']; ?>" class="img-circle img-responsive"/>
                                                     <h3><?php echo $key['name']; ?>, <?php echo $key['address']; ?></h3>
@@ -1020,13 +1039,13 @@
                                 </div>
                                 <div class="testi-nav">
                                     <a class="left" href="#testimonials-rotate" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                                    <a class="right" href="#testimonials-rotate" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a><div class="clearfix"></div>  
+                                    <a class="right" href="#testimonials-rotate" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a><div class="clearfix"></div>
                                 </div>
                             </div>
                         </div>
                     </div> -->
-                    
-                    
+
+
                     <!--end of container-->
                     <style>
                         #testimonials-row{background:url(<?php echo base_url(); ?>user_assets/images/new/testi-back.png); background-position:center; background-size:contain; padding:80px 0;background-repeat:no-repeat}
@@ -1174,7 +1193,7 @@
     </section>
 </div>
 <!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
+<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>-->
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
 <script type="text/javascript">
@@ -1274,6 +1293,16 @@
         $("#captch_error").html("");
 
         if (emial_type == 0) {
+            $('#name').each(function () {
+                var name = $(this).val();
+                $('#error_name').html("");
+                if (name == '') {
+                    all = 1;
+                    $('#error_name').html('Please Enter Name');
+                }else{
+                    $('#error_name').html('');
+                }
+            });
             $('#mobile').each(function () {
                 var mobile = $(this).val();
                 $('#error_mobile').html("");
@@ -1313,6 +1342,16 @@
             });
         }
         if (emial_type == 'login') {
+            $('#name').each(function () {
+                var name = $(this).val();
+                $('#error_name').html("");
+                if (name == '') {
+                    all = 1;
+                    $('#error_name').html('Please Enter Name');
+                }else{
+                    $('#error_name').html('');
+                }
+            });
             $('#mobile').each(function () {
                 var mobile = $(this).val();
                 $('#error_mobile').html("");
@@ -1355,6 +1394,16 @@
             });
         }
         if (emial_type == 'register') {
+            $('#name').each(function () {
+                var name = $(this).val();
+                $('#error_name').html("");
+                if (name == '') {
+                    all = 1;
+                    $('#error_name').html('Please Enter Name');
+                }else{
+                    $('#error_name').html('');
+                }
+            });
             $('#mobile').each(function () {
                 var mobile = $(this).val();
                 $('#error_mobile').html("");
@@ -1498,7 +1547,7 @@
          // if (jQuery("#searchbar").hasClass('home_inpt_radus')) {
          //jQuery("#searchbar").removeClass("home_inpt_radus");
          //} else {
-         // 
+         //
          //jQuery("#searchbar").addClass("home_inpt_radus");
          //}*/
 
@@ -1523,11 +1572,21 @@
     /*Nishit code start*/
     function get_inquiry() {
         var get_phone_no = $("#get_inquiry_id").val();
+        var get_name = $('#get_inquiry_name').val();
         $("#get_inquiry_id_error").html("");
+        $("#get_inquiry_name_error").html("");
+        if(get_name == ""){
+            $("#get_inquiry_name_error").html("Please Enter Name");
+            return false;
+        }
+        if(get_phone_no == ""){
+            $("#get_inquiry_id_error").html("Please Enter Phone No");
+            return false;
+        }
         if (checkmobile(get_phone_no) == true) {
             $.ajax({
                 url: "<?php echo base_url(); ?>user_master/save_inquiry",
-                data: {phone: get_phone_no},
+                data: {phone: get_phone_no,name:get_name},
                 type: "POST",
                 beforeSend: function () {
                     $("#loader_div").attr("style", "");
