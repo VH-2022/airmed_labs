@@ -14,9 +14,9 @@
         <!-- Page Title -->
         <title>Book your blood tests, health checkups in one step. | India's fastest growing pathology services with high quality of diagnostic labs - Airmedlabs.com</title>
 
-        <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
 
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> 
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
         <!-- Stylesheet -->
@@ -45,7 +45,7 @@
         <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url(); ?>user_assets/css/auto_input/styles.css">
         <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url(); ?>user_assets/css/auto_input/token-input.css">
         <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url(); ?>user_assets/css/auto_input/token-input-facebook.css">
-        <link href="<?php echo base_url(); ?>user_assets/css/colors/theme-skin-sky-blue.css" rel="stylesheet" type="text/css"> 
+        <link href="<?php echo base_url(); ?>user_assets/css/colors/theme-skin-sky-blue.css" rel="stylesheet" type="text/css">
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -142,7 +142,7 @@
     </head>
     <body>
         <div id="wrapper" class="clearfix">
-            <!-- Header --> 
+            <!-- Header -->
             <header id="header" class="header">
                 <div class="header-nav navbar-fixed-top header-dark navbar-white navbar-transparent bg-transparent-0 navbar-sticky-animated animated-active" >
                     <div class="header-nav-wrapper navbar-scrolltofixed scroll-to-fixed-fixed">
@@ -221,32 +221,32 @@
                                                                 <a href="<?php echo base_url(); ?>user_master/my_job"><li><i class="fa fa-check-square-o" style="margin-right: 5px;"></i>Booking</li></a>
                                                                 <a href="<?php echo base_url(); ?>user_master/upload_prescription"><li><i class="fa fa-plus-square" style="margin-right: 5px;"></i>Prescription</li></a>
                                                                 <a href="<?php echo base_url(); ?>active_packages"><li><i class="fa fa-dot-circle-o" style="margin-right: 5px;"></i>My Active Packages</li></a>
-                                                                <a href="<?php echo base_url(); ?>user_master/payment_history"><li><i class="fa fa-credit-card" style="margin-right: 5px;"></i>Payment History</li></a>
+                                                                <!-- <a href="<?php //echo base_url(); ?>user_master/payment_history"><li><i class="fa fa-credit-card" style="margin-right: 5px;"></i>Payment History</li></a> -->
                                                                 <a href="<?php echo base_url(); ?>user_master/my_family"><li><i class="fa fa-users" style="margin-right: 5px;"></i>Family</li></a>
-                                                                <a href="<?php echo base_url(); ?>add_wallet_master/wallet_history"><li><i class="fa fa-google-wallet" style="margin-right: 5px;"></i>My Wallet (Rs <?php
-                                                                        if (isset($login_data['id'])) {
-                                                                            echo number_format($this->data['wallet_amount'], 2);
-                                                                        } else {
-                                                                            echo "0.00";  
-                                                                        }
-                                                                        ?>)</li></a>
+                                                                <!-- <a href="<?php //echo base_url(); ?>add_wallet_master/wallet_history"><li><i class="fa fa-google-wallet" style="margin-right: 5px;"></i>My Wallet (Rs <?php
+                                                                        // if (isset($login_data['id'])) {
+                                                                        //     echo number_format($this->data['wallet_amount'], 2);
+                                                                        // } else {
+                                                                        //     echo "0.00";
+                                                                        // }
+                                                                        ?>)</li></a> -->
                                                                 <a onclick="signOut()" href="<?php echo base_url(); ?>user_login/logout"><li><i class="fa fa-sign-out" style="margin-right: 5px;"></i>Logout</li></a>
                                                             <?php } ?>
                                                             <a href="<?php echo base_url(); ?>user_master/feedback"><li><i class="fa fa-envelope-open"></i>Feedback</li></a>
                                                             <a href="<?php echo base_url(); ?>user_track_report"><li><i class="fa fa-file-o"></i>View Report</li></a>
-															<a href="<?php echo base_url(); ?>user_track_report/track_all_reports"><li><i class="fa fa-file-o"></i>View All Report</li></a>
+															<!-- <a href="<?php //echo base_url(); ?>user_track_report/track_all_reports"><li><i class="fa fa-file-o"></i>View All Report</li></a> -->
                                                             <a href="<?php echo base_url(); ?>user_master/contact_us"><li><i class="fa fa-map-marker" style="margin-right:13px;"></i>Contact Us</li></a>
                                                             <?php if (!isset($login_data['id'])) { ?>
                                                             <a href="<?php echo base_url(); ?>user_login" class="up_lgn_regi desk_none"><li><i class="fa fa-lock" style="margin-right:13px;"></i>Login</li></a>
 
-                                                            <?php } ?> 
+                                                            <?php } ?>
                                                         </ul>
                                                     </div>
                                                 </li>
 
 
                                             </ul>
-                                        </div>  
+                                        </div>
                                         <script>
                                             function myFunction(x) {
                                                 x.classList.toggle("change");
@@ -273,7 +273,7 @@
                                             $(document).click(function () {
                                                 $('#toggledivblock').slideUp();
                                             });
-                                        </script> 
+                                        </script>
                                         <div class="clearfix"></div>
 
                                         <!---<div class="widget no-border m-0">
@@ -326,7 +326,7 @@
                 $('.header-nav-wrapper').css('padding', '20px 0');
                 $('#open-div').fadeIn();
             }
-                        
+
         });
     </script>---->
     <script>
@@ -427,7 +427,7 @@
 
     </script>
     <script>
-        //new counter for 2.00min                                                           
+        //new counter for 2.00min
         function countdown(elementName, minutes, seconds) {
             var element, endTime, hours, mins, msLeft, time;
 

@@ -27,14 +27,14 @@ class User_forget extends CI_Controller {
     public function send_test_mail()
     {
         $this->load->library('email');
-        
+
         $config = array(
             'protocol'  => 'mail',
             'smtp_host' => 'smtp.gmail.com',
             'smtp_port' => 587,
-            'smtp_user' => 'meetbhavsar.vhits@gmail.com', 
-            'smtp_pass' => 'iebwttlkwzwwvryu',         
-          
+            'smtp_user' => 'meetbhavsar.vhits@gmail.com',
+            'smtp_pass' => 'iebwttlkwzwwvryu',
+
         );
         $this->email->initialize($config);
 
@@ -53,7 +53,7 @@ class User_forget extends CI_Controller {
         }
     }
 
-    
+
     // function index() {
     //     $this->load->helper("Email");
     //     $email_cnt = new Email;
@@ -84,7 +84,7 @@ class User_forget extends CI_Controller {
     //         );
     //         $this->db->where('email', $email);
     //         $this->db->where('status', '1');
-    //         // $this->db->where('type', '1');   
+    //         // $this->db->where('type', '1');
     //         $this->db->update('customer_master', $data);
     //         $config['mailtype'] = 'html';
     //         $this->email->initialize($config);
@@ -142,10 +142,10 @@ class User_forget extends CI_Controller {
 
             // send OTP on WhatsApp
             $response = $this->send_whatsapp_otp($phone_no, $OTP);
-           
+
             if ($response['status'] == true) {
-                 
-                $this->session->set_flashdata('success', 'OTP has been sent to your WhatsApp number.');            
+
+                $this->session->set_flashdata('success', 'OTP has been sent to your WhatsApp number.');
                 redirect('user_forget/verify_otp/'.$phone_no);
             } else {
                 $this->session->set_flashdata('error', "Failed to send OTP. Please try again.");
@@ -155,8 +155,8 @@ class User_forget extends CI_Controller {
     }
 
     function send_whatsapp_otp($phone_no, $otp) {
-        $patient_mob  = "91" . $phone_no; 
-                
+        $patient_mob  = "91" . $phone_no;
+
         // make sure it has country code 91xxxxxxxxxx
         $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
 
@@ -190,7 +190,7 @@ class User_forget extends CI_Controller {
         $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE); // ✅ HTTP status code
         $error     = curl_error($curl);
         curl_close($curl);
-        
+
         // Parse Response
         if ($error) {
             return ['status' => false, 'response' => $error];
@@ -208,12 +208,12 @@ class User_forget extends CI_Controller {
     public function verify_otp($phone_no = null)
     {
         if ($phone_no == null) {
-            redirect('user_forget'); 
+            redirect('user_forget');
         }
 
         $data['phone_no'] = $phone_no;
         $data['red_header_active'] = "2";
-        
+
         $this->load->view('user/header');
         $this->load->view('user/varify_otp', $data);
         $this->load->view('user/footer');
@@ -222,7 +222,7 @@ class User_forget extends CI_Controller {
     // ✅ AJAX Verify OTP
     public function verify_otp_ajax()
     {
-        
+
         $phone_no   = $this->input->post('phone_no');
         $enteredOtp = $this->input->post('otp');
 
@@ -231,7 +231,7 @@ class User_forget extends CI_Controller {
             'otp'    => $enteredOtp,
             'status' => '1'
         ])->row();
-       
+
         if ($check) {
             echo json_encode([
                 'status' => 1,

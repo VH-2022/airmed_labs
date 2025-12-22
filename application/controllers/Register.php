@@ -275,9 +275,6 @@ class Register extends CI_Controller
                 $error    = curl_error($curl);
                 curl_close($curl);
                 curl_close($curl);
-                // echo $response;  // debug
-
-                /* ===== END ===== */
 
                 $this->session->set_flashdata("success", ["Registration Successfully. OTP sent on WhatsApp."]);
                 redirect("Register/varify_phone/" . $insert, "refresh");

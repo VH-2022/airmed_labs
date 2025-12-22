@@ -35,7 +35,6 @@ class User_login extends CI_Controller {
     }
 
     function index() {
-        phpinfo();
         $this->session->set_userdata('getmsg', 'Your message here');
 
         $data = '';
@@ -53,7 +52,7 @@ class User_login extends CI_Controller {
 
         $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
-        $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
+        // $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
         $captcha = $this->varify_captcha();
         $captcha = 1;
         if ($this->form_validation->run() == FALSE || $captcha != 1) {
