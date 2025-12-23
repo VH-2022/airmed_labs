@@ -84,7 +84,7 @@
             ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="main_wallet" style="background:#F5F8F9
+                    <div class="main_wallet" style="background:#F5F8F9">
                          <div class="main_wallet_div">
                         <div class="col-sm-12 pdng_0">
                             <div class="col-md-3 col-sm-5">
@@ -182,12 +182,12 @@
                             </script>
                             <sapn style="color:red;" id="error_source_by"></sapn>
                         </div>
-                         <div class="col-sm-9 use_wallet_img" id="use_wallet_hide_div">
-								<img src="<?= base_url(); ?>user_assets/images/select_wallet_amount.png">
+                         <!-- <div class="col-sm-9 use_wallet_img" id="use_wallet_hide_div">
+								<img src="<? //base_url(); ?>user_assets/images/select_wallet_amount.png">
 								<div class="col-md-offset-4 col-md-6 use_wallet_text">
 									<h3>Select Wallet Amount</h3>
 								</div>
-						</div>
+						</div> -->
                          </div>
                         <input type="hidden" id="prc2" value="<?php echo $payamount + $package_price; ?>"/>
                         <div class="col-sm-12 pdng_0">
@@ -209,8 +209,8 @@
                                             echo "style='display:none;'";
                                         }
                                         ?>>
-                                            <button type="button" onclick="check_user_details('1');" class="cnfrm_btn_noback pay_blood_clctn pull-left"><i class="fa fa-credit-card"></i> <span>Online Payment</span></button>
-                                            <span class="cnfrm_amnt_spn col-xs-1">OR</span>
+                                            <!-- <button type="button" onclick="check_user_details('1');" class="cnfrm_btn_noback pay_blood_clctn pull-left"><i class="fa fa-credit-card"></i> <span>Online Payment</span></button>
+                                            <span class="cnfrm_amnt_spn col-xs-1">OR</span> -->
                                         </div>
                                         <button type="button" onclick="check_user_details('2');" class="cnfrm_btn_noback pay_blood_clctn pull-left"><i class="fa fa-handshake-o"></i> <span id="pay_during_blood_c_btn"><?php
                                                 $tttl_prc = $price + $package_price;
@@ -603,6 +603,6 @@
                             }
                         }
 <?php if ($wallet != 0) { ?>
-                            wallet_show();
+    wallet_show();
 <?php } ?>
     </script>

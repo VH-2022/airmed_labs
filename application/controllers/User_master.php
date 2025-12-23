@@ -2003,6 +2003,8 @@ WHERE `customer_family_master`.`status` = '1'
     function feedback() {
         $data['red_header_active'] = "2";
         $data["login_data"] = loginuser();
+        $data["user"] = $this->user_master_model->getUser($data["login_data"]["id"]);
+        // echo "<pre>";print_r($data['user']);die();
         $this->load->view('user/header', $data);
         $this->load->view("user/feedback", $data);
         $this->load->view('user/footer', $data);
@@ -2017,6 +2019,7 @@ function feedback_ins() {
         $this->form_validation->set_rules('message', 'Message', 'trim|required');
         if ($this->form_validation->run() != FALSE) {
             $captch = $this->varify_captcha();
+            $captch = 1;
             if ($captch == 1) {
                 $name = $this->input->post('name');
                 $email = $this->input->post('email');

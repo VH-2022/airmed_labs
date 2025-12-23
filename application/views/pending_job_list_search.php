@@ -59,7 +59,7 @@
                     if ($row['views'] == '0') {
                         echo '<span class="round round-sm blue"> </span>';
                     }
-                    ?> 
+                    ?>
                 </td>
                 <td><?= $row["id"]; ?><br>Barcode - <?= $row["barcode"] ?></td>
                 <td style="color:#d73925;">
@@ -114,7 +114,7 @@
 
                             if($branch["allow_whatsapp"] == "1")
                                 $allow_whatsapp = 1;
-                                
+
                             if($branch["whatsapp_report_send"] == "1")
                                 $allowwhatsappwithoutpayment = true;
                         }
@@ -134,7 +134,8 @@
                         } else if (!empty($row["added_by"])) {
                             echo ucfirst($row["added_by"]);
                         } else {
-                            echo "Online Booking";
+                            // echo "Online Booking";
+                            echo "Website Booking";
                         }
                         ?>
                     </small>
@@ -145,13 +146,13 @@
                     }
                     ?>
                 <br>
-                PRO - <?php if(!empty($row['pro_name'])) {echo $row['pro_name']; } else{ echo '-';}  ?>    
+                PRO - <?php if(!empty($row['pro_name'])) {echo $row['pro_name']; } else{ echo '-';}  ?>
                 </td>
                 <td><?php
                     //$testname = explode(",", $row['testname']);
                     //print_R($row["job_test_list"]); die();
                     $test_id_1 = "";
-                   
+
                     foreach ($row["job_test_list"] as $test) {
                         $test_id_1 .= $test['test_fk'] . ',';
                         $is_panel = '';
@@ -160,7 +161,7 @@
                         }
                         echo "<span id='test_" . $row["id"] . "_" . $test['test_fk'] . "' class='test_" . $row["id"] . "'>" . ucwords($test['test_name']) . " <b>" . $is_panel . "</b></span>" . "<br>";
                         foreach ($test["sub_test"] as $kt_key) {
-                           
+
                             $kt_key["test_name"];
                             if (!in_array($kt_key["sub_test"], $test_list)) {
                                 ?>
@@ -173,7 +174,7 @@
                     $test_list = array();
                     $package_id_1 = "";
                     foreach ($row["package"] as $key3) {
-                        
+
                         ?>
                         <?php echo ucfirst($key3["name"]); ?><br><?php
                         foreach ($key3["test"] as $kt_key) {
@@ -263,13 +264,13 @@
                         echo "<span class='label label-success '>Dispatched</span>";
                     }
                     ?>
-                    <?php /* if($row['status']=="1" && $row['sample_collection']=="0" ){ echo "<span class='label label-danger'>Pending</span>"; }else if($row['status']=="2"){ echo "<span class='label label-success'>Completed</span>"; }else if($row['status']=="3"){ echo "<span class='label label-danger'>Spam</span>"; }else if($row['sample_collection']==1){ echo "<span class='label label-warning'>Processing</span>";} 
+                    <?php /* if($row['status']=="1" && $row['sample_collection']=="0" ){ echo "<span class='label label-danger'>Pending</span>"; }else if($row['status']=="2"){ echo "<span class='label label-success'>Completed</span>"; }else if($row['status']=="3"){ echo "<span class='label label-danger'>Spam</span>"; }else if($row['sample_collection']==1){ echo "<span class='label label-warning'>Processing</span>";}
                      */
-                    ?> 
+                    ?>
 
                 </td>
                 <td>
-                    <!--<a  href='<?php echo base_url(); ?>job_master/job_mark_spam/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Mark as Spam" ><span class="label label-danger">Mark as Spam</span></a>                                                                                                                                                                                                                                                                                                                                                                      <a  href='<?php echo base_url(); ?>job_master/job_mark_completed/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Mark as completed" ><span class="label label-success">Mark as completed</span> </a>  --> 
+                    <!--<a  href='<?php echo base_url(); ?>job_master/job_mark_spam/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Mark as Spam" ><span class="label label-danger">Mark as Spam</span></a>                                                                                                                                                                                                                                                                                                                                                                      <a  href='<?php echo base_url(); ?>job_master/job_mark_completed/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Mark as completed" ><span class="label label-success">Mark as completed</span> </a>  -->
                     <?php if ($login_data['type'] == 10 ) { ?>
                         <a  href='<?php echo base_url(); ?>job-master/job-details/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="View Job Details" target="_blank"> <span class=""><i class="fa fa-eye"> </i></span> </a>
                         <?php }else {?>
@@ -278,7 +279,7 @@
                     <?php if ($login_data['type'] == 1 || $login_data['type'] == 2) { ?>
 
                         <a  onclick="return confirm('Are you sure you want to spam this job?');" href='<?php echo base_url(); ?>job_master/changing_spam/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Spam Job" > <span class=""><i class="fa fa-trash"> </i></span> </a>
-                    <?php } ?>                                                 
+                    <?php } ?>
         <!--                <a  href='<?php echo base_url(); ?>job_master/job_dispatch/<?php echo $row['id']; ?>/<?php
                     if ($row["dispatch"] == 1) {
                         echo "0";
@@ -318,8 +319,8 @@
                                         if ($row['prientreport'] == '0') {
                                             echo "style='color:green'";
                                         }
-                                        ?> class="fa fa-print"></i></span></a>    
-                                                                                                                                                                                    <?php if ($smsalert == 1 && in_array($login_data["type"], array(1, 2))) { ?>								
+                                        ?> class="fa fa-print"></i></span></a>
+                                                                                                                                                                                    <?php if ($smsalert == 1 && in_array($login_data["type"], array(1, 2))) { ?>
                                     <a href='javascript:void(0);' onclick="<?php if ($payable_amount <= 0 || $login_data['type'] == 5) { ?>sms_popup('<?= $row["id"] ?>');<?php } else { ?>alert('Please collect due amount.');<?php } ?>" data-toggle="tooltip" data-original-title="Send Report Via SMS" <?php if (!empty($row["send_repor_sms"])) { ?> style="background:green;color:white;width:auto;padding:0px 5px 3px 5px;border-radius:3px;" <?php } ?>><span class=""><i class="<?php
                                             if ($row['send_sms'] == 1) {
                                                 echo "fa fa-comment";
@@ -357,8 +358,8 @@
                                         echo "style='color:green'";
                                     }
                                     ?> class="fa fa-print"></i></span></a>
-                                                                                                                                                                                <?php //}	
-                                                        }                                                                                                                        ?>				
+                                                                                                                                                                                <?php //}
+                                                        }                                                                                                                        ?>
                                                                                                                                                                                 <?php if ($smsalert == 1 && in_array($login_data["type"], array(1, 2))) { ?>
                                 <a href='javascript:void(0);' onclick="<?php if ($payable_amount <= 0 || $login_data['type'] == 5) { ?>sms_popup('<?= $row["id"] ?>');<?php } else { ?>alert('Please collect due amount.');<?php } ?>" data-toggle="tooltip" data-original-title="Send Report Via SMS" <?php if (!empty($row["send_repor_sms"])) { ?> style="background:green;color:white;width:auto;padding:0px 5px 3px 5px;border-radius:3px;" <?php } ?>><span class=""><i class="<?php
                                         if ($row['send_sms'] == 1) {
@@ -417,22 +418,22 @@
                         <?php
                     }
                     ?>
-                    
-                    <?php 
+
+                    <?php
                     if($allow_whatsapp == 1)
-                        if ($row['status'] == 8 || $row['status'] == 2) 
-                            if ($login_data['type'] != 7) 
+                        if ($row['status'] == 8 || $row['status'] == 2)
+                            if ($login_data['type'] != 7)
                                 if ($payable_amount <= 0 || $allowwhatsappwithoutpayment == true)
-                                { 
-                                    if ($row['whatsappsent'] == 1) 
-                                        echo "<img src='" . base_url() . "double tick4.png' style='width:16px;height:16px;margin-left:10px;' tooltip='Whatsapp Already Sent' title='Whatsapp Already Sent'  data-toggle='tooltip' data-original-title='Whatsapp Already Sent'>";                                    
+                                {
+                                    if ($row['whatsappsent'] == 1)
+                                        echo "<img src='" . base_url() . "double tick4.png' style='width:16px;height:16px;margin-left:10px;' tooltip='Whatsapp Already Sent' title='Whatsapp Already Sent'  data-toggle='tooltip' data-original-title='Whatsapp Already Sent'>";
                                     else
                                         echo "<a href='javascript:void(0);' onclick=\"approved('" . $row["id"] . "');\" data-toggle='tooltip' data-original-title='Send Whatsapp Report' ><img src='" . base_url() . "whatsapp_icon.png' style='width:15px;height:15px;'></a>";
-                                }                       
-                                else if($login_data['id'] == 50) 
+                                }
+                                else if($login_data['id'] == 50)
                                 {
-                                    if ($row['whatsappsent'] == 1) 
-                                        echo "<img src='" . base_url() . "double tick4.png' style='width:16px;height:16px;margin-left:10px;' tooltip='Whatsapp Already Sent' title='Whatsapp Already Sent'  data-toggle='tooltip' data-original-title='Whatsapp Already Sent'>";                                    
+                                    if ($row['whatsappsent'] == 1)
+                                        echo "<img src='" . base_url() . "double tick4.png' style='width:16px;height:16px;margin-left:10px;' tooltip='Whatsapp Already Sent' title='Whatsapp Already Sent'  data-toggle='tooltip' data-original-title='Whatsapp Already Sent'>";
                                     else
                                         echo "<a href='javascript:void(0);' onclick=\"approved('" . $row["id"] . "');\" data-toggle='tooltip' data-original-title='Send Whatsapp Report' ><img src='" . base_url() . "whatsapp_icon.png' style='width:15px;height:15px;'></a>";
                                 }
@@ -453,7 +454,3 @@
         <td colspan="10" id="search_test_ids"><?php echo implode(",", $test_ids); ?></td>
     </tr>
 </tbody>
-
-    
-
-

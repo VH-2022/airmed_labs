@@ -23,11 +23,23 @@
                                             <?php echo "Mail Send Successfully"; ?>
                                         </div>
                                     </div>---->
+                                    <?php
+                                        $readonly = "";
+                                        $name = "";
+                                        $email = "";
+                                        $mobile = "";
+                                        if(isset($user)){
+                                            $readonly = "readonly";
+                                            $name = $user->full_name;
+                                            $email = $user->email;
+                                            $mobile = $user->mobile;
+                                        }
+                                    ?>
                                     <div class="col-sm-12">
 
                                         <div class="form-group">
                                             <label>NAME <small style="color:red;">*</small></label>
-                                            <input name="name" class="form-control" type="text" placeholder="Enter Name" id="cname">
+                                            <input name="name" class="form-control" value="<?= $name ?>" <?= $readonly ?>   type="text" placeholder="Enter Name" id="cname">
                                             <span id="error_name" style="color:red"></span>
                                         </div>
 
@@ -35,7 +47,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <label>EMAIL <small style="color:red;">*</small></label>
-                                            <input name="email" class="form-control required email" type="email" placeholder="Enter Email" id="cemail">
+                                            <input name="email" class="form-control required email" value="<?= $email ?>" <?= $readonly ?> type="email" placeholder="Enter Email" id="cemail">
                                             <span id="error_email" style="color:red"></span>
                                         </div>
 
@@ -45,7 +57,7 @@
                                             <label>PHONE <small style="color:red;">*</small></label>
                                             <div class="input-group">
                                                 <span class="input-group-addon" style="">+91</span>
-                                                <input id="cphone" name="phone" class="form-control" type="text" placeholder="Enter Phone"></div>
+                                                <input id="cphone" name="phone" class="form-control" value="<?= $mobile ?>" <?= $readonly ?> type="text" placeholder="Enter Phone"></div>
                                             <span id="error_phone" style="color:red"></span>
                                         </div>
 
@@ -59,7 +71,7 @@
                                         </div>
 
                                     </div>
-                                    
+
                                 </div>
                                 <div class="form-group">
                                     <label>Comment <small style="color:red;">*</small></label>
@@ -68,18 +80,18 @@
                                 </div>
                                 <script src='https://www.google.com/recaptcha/api.js'></script>
                                 <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
-                                <spam id="captch_error" style="color:red;"></spam> 
+                                <spam id="captch_error" style="color:red;"></spam>
                                 <div class="form-group">
                                     <input name="form_botcheck" class="form-control" type="hidden" value="" />
                                     <button type="button" id="send_btn" disabled="disbled" onclick="feedback();" class="btn btn-dark btn-theme-colored btn-flat pull-right mb_15">SEND</button>
-                                    
+
                                 </div>
                             </form>
                         </div>
 
                     </div>
                 </div>
-                
+
 
             </div>
 
@@ -90,13 +102,13 @@
                             <!--  <h1 class="mbl_title center">App Communication Space</h1>--
 
                             <div class="col-sm-4  col-xs-4">
-                                <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> 
+                                <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/>
                             </div>
                             <div class="col-sm-4 col-xs-4">
-                                <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/> 
+                                <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/>
                             </div>
                             <div class="col-sm-4 col-xs-4">
-                                <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/> 
+                                <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/>
                             </div>
 
 
@@ -111,7 +123,7 @@
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
                     <div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> </h1>
 
@@ -197,7 +209,7 @@
                     $("#loader_div").attr("style", "");
                     $("#send_btn").attr("disabled", "disabled");
                 },
-                success: function (data) { 
+                success: function (data) {
                     if(data.trim()==1){
                     $("#cron_success").show();
                     $("#cname").val("");

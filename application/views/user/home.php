@@ -1233,7 +1233,7 @@
         document.getElementById('id_browse').click();
     }
 <?php if ($payment_success[0] != '') { ?>
-        $("#myModal_payment").modal('show');
+        // $("#myModal_payment").modal('show');
         //setTimeout(function () {
         //   $("#myModal_payment").modal('show');
         //}, 3000);
