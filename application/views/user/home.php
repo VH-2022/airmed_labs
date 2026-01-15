@@ -363,18 +363,18 @@
                     <div class="modal-body srch_popup_full">
                         <div class="uplod_prec_full">
                             <div class="col-sm-12 pdng_0 full_div">
-    <label class="pull-left full_div text-left">Mobile No.<span style="color:red;">*</span></label>
-    <input class="srch_pop_inpt nobrdr_rds_tplft" type="text" name="name" <?php
-                                    if (isset($user->full_name)) {
-                                        echo "readonly='readonly'";
-                                    }
-                                    ?> id="name" placeholder="Name"  value="<?php
-                                           if (isset($user->full_name)) {
-                                               echo $user->full_name;
-                                           }
-                                           ?>" />
-    <div id="error_name" style="color:red; float: left;"></div>
-</div>
+                                <label class="pull-left full_div text-left">Name.<span style="color:red;">*</span></label>
+                                <input class="srch_pop_inpt nobrdr_rds_tplft" type="text" name="name" <?php
+                                                                if (isset($user->full_name)) {
+                                                                    echo "readonly='readonly'";
+                                                                }
+                                                                ?> id="name" placeholder="Name"  value="<?php
+                                                                    if (isset($user->full_name)) {
+                                                                        echo $user->full_name;
+                                                                    }
+                                                                    ?>" />
+                                <div id="error_name" style="color:red; float: left;"></div>
+                            </div>
                             <div class="col-sm-12 pdng_0 full_div">
                                 <label class="pull-left full_div text-left">Mobile No.<span style="color:red;">*</span></label>
                                 <div class="input-group">

@@ -231,6 +231,7 @@
                                                                         // }
                                                                         ?>)</li></a> -->
                                                                 <a onclick="signOut()" href="<?php echo base_url(); ?>user_login/logout"><li><i class="fa fa-sign-out" style="margin-right: 5px;"></i>Logout</li></a>
+                                                                <a href="<?php echo base_url(); ?>user_master/investor"><li><i class="fa fa-briefcase" style="margin-right: 5px;"></i>Investor</li></a>
                                                             <?php } ?>
                                                             <a href="<?php echo base_url(); ?>user_master/feedback"><li><i class="fa fa-envelope-open"></i>Feedback</li></a>
                                                             <?php if (isset($login_data['id'])) { ?>

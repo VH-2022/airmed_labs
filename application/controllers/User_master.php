@@ -2042,6 +2042,25 @@ function feedback_ins() {
             }
         }
     }
+
+    function investor(){
+        if (!is_userloggedin()) {
+            redirect('user_login');
+        }
+        $this->load->helper("Email");
+        $email_cnt = new Email;
+        $data["login_data"] = loginuser();
+        $uid = $data["login_data"]['id'];
+
+
+        $data['success'] = $this->session->flashdata("success");
+        $data['error'] = $this->session->flashdata("error");
+        $this->load->view('user/header', $data);
+
+        $this->load->view('user/investor', $data);
+        $this->load->view('user/footer');
+
+    }
 }
 
 ?>
