@@ -1995,6 +1995,8 @@ WHERE `customer_family_master`.`status` = '1'
     function pathologist() {
         $data['red_header_active'] = "2";
         $data["login_data"] = loginuser();
+        $data['team_list'] = $this->user_master_model->master_fun_get_tbl_val("team_master", array("status" => 1), array("id", "desc"));
+
         $this->load->view('user/header', $data);
         $this->load->view("user/pathologist", $data);
         $this->load->view('user/footer', $data);

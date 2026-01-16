@@ -1,4 +1,4 @@
-<header class="main-header">   
+<header class="main-header">
     <div style="
          background: white;
          text-align: center;
@@ -65,7 +65,7 @@
             min-height: auto;
             max-height: 580px;
             overflow-y: auto;
-        }   
+        }
 
     </style>
     <?php
@@ -120,7 +120,7 @@
                                 <li ><a href="<?php echo base_url(); ?>customer_master/Package_inquiry_list"> Package Inquiry  <span id="package_inquiry" class="label label-danger"> </span><span class="sr-only">(current)</span></a></li>
 
                             </ul>
-                        </li> 
+                        </li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Master <span class="caret"></span></a>
@@ -160,6 +160,7 @@
                                 <li><a href="<?php echo base_url(); ?>parameter_master/parameter_list"> Test Parameter </a></li>
                                 <li><a href="<?php echo base_url(); ?>test_department_master"> Test Department </a></li>
                                 <li><a href="<?php echo base_url(); ?>testimonials_master/index"> Testimonials </a></li>
+                                <li><a href="<?php echo base_url(); ?>TeamMaster/index">Team Master</a></li>
                                 <li><a href="<?php echo base_url(); ?>unit_master"> Unit Master </a></li>
                                 <li><a href="<?php echo base_url(); ?>outsource_master/outsource_list"> Outsource Master </a></li>
                                 <li><a href="<?php echo base_url() . "LabGroup_List/labgroup_list"; ?>">Lab map</a></li>
@@ -177,7 +178,7 @@
     <li><a href="<?php echo base_url(); ?>slider/slider_list">Banner</a></li>-->
     <!--<li><a href="<?php echo base_url(); ?>creative_master/creative_list"> Creative </a></li>-->
                             </ul>
-                        </li> 
+                        </li>
 
                                                                         <!--                        <li><a href="<?php echo base_url(); ?>Btob_job_master/pending_list">B2B Bookings</a></li>-->
                         <li class="dropdown">
@@ -218,7 +219,7 @@
                               <li><a href="<?php echo base_url(); ?>Phlebo_punchin_punchout"> Phlebotomy Punch In/Out Report </a></li>
                               <li><a href="<?php echo base_url(); ?>Just_dial_master/index"> Just Dial Data </a></li>
                               </ul> */ ?>
-                            <ul class="dropdown-menu" role="menu"> 
+                            <ul class="dropdown-menu" role="menu">
                                 <li ><a href="<?php echo base_url(); ?>contact_us_master"> Contact Us <span id="contact_us" class="label label-danger"></span><span class="sr-only">(current)</span></a></li>
                                 <li><a href="<?= base_url(); ?>doctor_req/request_list">Doctor Request</a></li>
                                 <li><a href="<?php echo base_url(); ?>Just_dial_master/index"> Just Dial Data </a></li>
@@ -335,7 +336,7 @@
                                 <li ><a href="<?php echo base_url() . "inventory/stock_master"; ?>">Stock</a></li>
                                 <li><a href="<?php echo base_url(); ?>inventory/indent_usereagent/">Use Reagent</a></li>
                                 <li ><a href="<?php echo base_url() . "inventory/Handover_item"; ?>">Handover Item</a></li>
-                                <li><a href="<?php echo base_url(); ?>inventory/stock_itemmaster">Stock Master</a></li> 
+                                <li><a href="<?php echo base_url(); ?>inventory/stock_itemmaster">Stock Master</a></li>
 
                             </ul>
 
@@ -364,7 +365,7 @@
                                 <li ><a href="<?php echo base_url(); ?>customer_master/Package_inquiry_list"> Package Inquiry  <span id="package_inquiry" class="label label-danger"> </span><span class="sr-only">(current)</span></a></li>
 
                             </ul>
-                        </li> 
+                        </li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Master <span class="caret"></span></a>
@@ -376,7 +377,7 @@
                                 <li><a href="<?php echo base_url(); ?>test-master/test-list"> Test Master </a></li>
                                 <li><a href="<?php echo base_url(); ?>package_master/package_list"> Packages </a></li>
                             </ul>
-                        </li> 
+                        </li>
                         <!-- <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">B2B<span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -391,7 +392,7 @@
                                 <li><a href="<?php echo base_url(); ?>b2b/Dailyreport_master/job_received">B2B Daily Collection Report(BETA)</a></li>
                                 <li><a href="<?php echo base_url(); ?>receive_payment/b2bcollection_report">B2B Daily Collection Report</a></li>
                                 <li><a href="<?php echo base_url() . "Branch_Package_Discount"; ?>"> Branch Package Discount </a></li>
-                               
+
                             </ul>
                         </li> -->
 
@@ -500,7 +501,7 @@
                                 <li><a href="<?php echo base_url(); ?>Business_Report/business_list">Business Report</a></li>
                                 <li><a href="<?php echo base_url(); ?>Airmed_tech_report">Airmed Tech report</a></li>
                             </ul>
-                        </li>   
+                        </li>
                         <li class="dropdown">
 
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Inventory <span id="maininventry" > </span><span class="caret"></span></a>
@@ -516,7 +517,7 @@
                                 <li ><a href="<?php echo base_url() . "inventory/stock_master"; ?>">Stock</a></li>
                                 <li><a href="<?php echo base_url(); ?>inventory/indent_usereagent/">Use Reagent</a></li>
                                 <li ><a href="<?php echo base_url() . "inventory/Handover_item"; ?>">Handover Item</a></li>
-                                <li><a href="<?php echo base_url(); ?>inventory/stock_itemmaster">Stock Master</a></li> 
+                                <li><a href="<?php echo base_url(); ?>inventory/stock_itemmaster">Stock Master</a></li>
 
                             </ul>
 
@@ -550,7 +551,7 @@
                                 <li><a href="<?php echo base_url(); ?>job_report/branchpaymentnew2"> Daily Collection <span class="sr-only">(current)</span></a></li>
                                 <li><a href="<?php echo base_url(); ?>Dailyreport_master/job_received">Daily Collection Report (Beta)</a></li>
                                 <li><a href="<?php echo base_url(); ?>receive_payment/b2bcollection_report">B2B Daily Collection Report</a></li>
-                                <?php if (in_array($login_data["id"], array(38))) { ?> 
+                                <?php if (in_array($login_data["id"], array(38))) { ?>
                                     <li class="dropdown-submenu">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pathoplus Reports</a>
                                         <ul class="dropdown-menu">
@@ -576,12 +577,12 @@
     <li><a href="<?php echo base_url(); ?>report_master/test_report"> Test Report</a></li>
     <li><a href="<?php echo base_url(); ?>report_master/doctor_test_report">Doctor Test Report</a></li>
     </li>
-                                --> 
-                                <li><a href="<?php echo base_url(); ?>report_master/branchcreditors_all"> Creditor Report</a>	
+                                -->
+                                <li><a href="<?php echo base_url(); ?>report_master/branchcreditors_all"> Creditor Report</a>
                                     <?php if (in_array($login_data["id"], array(123, 85, 12, 45))) { ?>
                                     <li><a href="<?php echo base_url(); ?>Dailyreport_master/job_received">Daily Collection Report (Beta)</a></li>
                                 <?php } ?>
-                            </ul> 
+                            </ul>
                         </li>
                         <li><a href="<?= base_url(); ?>job_master/job_report">Report</a></li>
                         <li><a href="<?php echo base_url(); ?>Data_autorisation_scnd/index">Data Capture</a></li>
@@ -601,7 +602,7 @@
                                 <li ><a href="<?php echo base_url(); ?>inventory/Stationary_master/stationary_list">Stationary Master</a></li>
                                 <li><a href="<?php echo base_url(); ?>inventory/indent_usereagent/">Use Reagent</a></li>
                                 <li><a href="<?php echo base_url(); ?>inventory/Handover_item">Handover Item</a></li>
-                                <li><a href="<?php echo base_url(); ?>inventory/stock_itemmaster">Stock Master</a></li> 
+                                <li><a href="<?php echo base_url(); ?>inventory/stock_itemmaster">Stock Master</a></li>
                                 <li><a href="<?php echo base_url() . "inventory/stock_master"; ?>">Stock</a></li>
                             </ul>
                         </li>
@@ -680,7 +681,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="<?php echo base_url(); ?>job-master/pending-list"> Reporting </a></li>
                             </ul>
-                        </li> 
+                        </li>
                         <?php /* <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">B2B<span class="caret"></span></a>
                           <ul class="dropdown-menu">
@@ -707,15 +708,15 @@
                     <?php } ?>
 
                     <?php if ($login_data["type"] == 10) { ?>
-                       
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Reporting Master<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="<?php echo base_url(); ?>job-master/pending-list"> Reporting </a></li>
                             </ul>
-                        </li> 
-                      
-                   
+                        </li>
+
+
                     <?php } ?>
 <!--					<li><a href="<?php echo base_url(); ?>job-master/pending-list"> All Jobs <span id="pending_count" class="label label-warning"> </span> -->
                     <?php if ($login_data["type"] != 10) { if (!in_array($sub, $btype)) { ?>  <li><a href="<?php echo base_url(); ?>bill_master/bill_list">Bill Manage </a></li><?php } } ?>
@@ -747,7 +748,7 @@
                                 ?></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <!-- The user image in the menu -->  
+                            <!-- The user image in the menu -->
                             <li class="user-header">
                                 <!----<img src="<?php echo base_url(); ?>user_assets/images/logo1.png" class="" style="  width: 100%;" alt="User Image" />---->
                                 <p>
