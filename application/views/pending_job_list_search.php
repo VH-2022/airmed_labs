@@ -256,6 +256,11 @@
                         echo "<span class='label label-danger '>User Deleted</span>";
                     }
                     ?>
+                    <?php
+                    if ($row['status'] == 10) {
+                        echo "<span class='label label-danger '>Cancel Entry</span>";
+                    }
+                    ?>
                     <br><?php
                     if ($row['emergency'] == '1') {
                         echo "<span class='label label-danger '>Emergency</span><br>";

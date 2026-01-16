@@ -5,7 +5,7 @@
     .pending_job_list_tbl table {width: 100%; border-collapse: collapse; float: left;}
     .pending_job_list_tbl th {background-color: #e5e5e5; color: #3e3e3e; font-size: 16px; font-weight: 600; text-align: center; vertical-align: middle; border: 1px solid #b1b1b1;}
     .pending_job_list_tbl td, th {padding:2px 6px; border: 1px solid #ccc; text-align: left;}
-    .pending_job_list_tbl td {padding: 4px 4px; font-size: 13px; color: #505050;} 
+    .pending_job_list_tbl td {padding: 4px 4px; font-size: 13px; color: #505050;}
     @media (max-width: 980px) {
         .pending_job_list_tbl table, .pending_job_list_tbl thead, .pending_job_list_tbl tbody, .pending_job_list_tbl th, .pending_job_list_tbl td, .pending_job_list_tbl tr {display: block;}
         .pending_job_list_tbl thead tr {position: absolute; top: -9999px; left: -9999px;}
@@ -63,7 +63,7 @@
     .chosen-container {
         display: inline-block;
         font-size: 14px;
-        position: relative; 
+        position: relative;
         vertical-align: middle;
         width: 100%;
     }
@@ -104,10 +104,12 @@
                             <?php
                         }
                         ?>
-                        <button class="btn btn-default btn-sm" onclick="<?php if (in_array($query[0]['status'], array("2", "0"))) { ?>alert('Booking is completeted. Please add new booking.')<?php } else { ?>test_manage('<?= $cid ?>');<?php } ?>" data-toggle="tooltip" title="Manage Test"><i class="fa fa-tag"></i>&nbsp;Manage Test</button>
+
+                        <button class="btn btn-default btn-sm" onclick="<?php if ($query[0]['status'] == '10') { ?> alert('Booking is cancelled. You cannot manage tests for this booking.'); <?php } elseif (in_array($query[0]['status'], array('2','0'))) { ?> alert('Booking is completed. Please add a new booking.');
+                        <?php } else { ?> test_manage('<?= $cid ?>'); <?php } ?>" data-toggle="tooltip" title="Manage Test"><i class="fa fa-tag"></i>&nbsp;Manage Test</button>
 
                         <?php if ($query[0]['status'] == 8 || $query[0]['status'] == 2) { ?>
-                            <?php //if ($login_data['type'] != 7) { ?>    
+                            <?php //if ($login_data['type'] != 7) { ?>
                                 <button class="btn btn-default btn-sm" data-toggle="tooltip" title="Manage Result" onclick="add_Result('<?= $cid ?>');"><i class="fa fa-list-alt"></i>&nbsp;Manage Result</button>
                             <?php //} ?>
                             <?php if ($login_data['type'] != 7) { ?>
@@ -185,7 +187,7 @@
                     }
                 </script>
                 <div class="box-body">
-				
+
 				<?php
                     if ($query[0]['status'] == 8 || $query[0]['status'] == 2 || $query[0]['status'] == 7) {
                         $test_id_1 = "";
@@ -205,7 +207,7 @@
                          <?php if ($login_data['type'] != 10) { ?>
                         <button class="btn-sm btn-primary" href='javascript:voic();' onclick="open_barcode_popup('<?= $cid ?>', '<?= $test_id_1 ?>', '<?= $package_id_1 ?>', '<?= $branch_id ?>', '<?= $status ?>');">Add Sample Collected</button>
                         <?php } ?>
-						
+
 						<div class="modal fade"  id="barcode_modal" role="dialog"  data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog">
                             <!-- Modal content-->
@@ -230,7 +232,7 @@
                                                 <div class="col-md-3">
                                                     <button type="button" id="add_barcode" name="add_barcode" class="btn btn-default" onclick="get_test_price()">Add</button>
                                                 </div><br/><br/>
-                                            <?php /* } */ ?>	
+                                            <?php /* } */ ?>
 
                                             <div class="tableclass">
 
@@ -273,7 +275,7 @@
                             </div>
                         </div>
                     </div>
-					
+
 					<script>
                         function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
                         $("#b_error").html("");
@@ -323,8 +325,8 @@
                                 if (response != null) {
 									/* $("#city_wiae_price").empty(); */
                                 $("#city_wiae_price").append(response);
-								
-								checksample_collect(); 
+
+								checksample_collect();
                                 }
 
                                 }, complete: function () {
@@ -332,7 +334,7 @@
                         }
                         });
                         $('#barcode_modal').modal('show');
-						
+
                         } else {
                         $("#b_error").html("Sample Id is null Try again.");
                         }
@@ -374,9 +376,9 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                         if (getsampletype == "" || getsampletype == null){ var getsampletype = "N/A"; }
 
                         $("#city_wiae_price").append('<tr id="' + test_val + '"><td>' + selectedText + '</td><td>' + getsampletype + '</td><td>' + barcode + '<input type="hidden" value = "' + barcode + '" class="price" id="price_' + barcode + '"">   <td>'+printbarcode+'</td><td><input class="change_sample" checked type="checkbox" testde="' + test_val1 + '" job_fk = "' + val + '" href = "javascript:void(0);" onclick="sample_collection(' + test_val1 + ',' + val + ');"></td><td><a class="deletecityprice" testtype="'+getsampletype+'" testde="' + test_val + '" testdename="' + selectedText + '"  job_fk = "' + val + '"href="javascript:void(0);" ><span class="glyphicon glyphicon-trash"></span></a></td></tr>');
-						
-						checksample_collect();	
-						
+
+						checksample_collect();
+
                         $("#test_data option[value='" + test_val1 + "']").remove();
                         if (barcode1 == "") {
                         barcode = "";
@@ -395,7 +397,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                 }, complete: function () {
 							$("#rejectiontest_" + test_val).show();
                         $("#loader_div").attr("style", "display:none;");
-						
+
                         }
                         });
                         } else{
@@ -458,10 +460,10 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                         });
                         });
 						</script>
-						
+
                     <?php } ?>
-				
-				
+
+
                     <div class="col-sm-12 res_pdng_0">
                         <label>Booked Test/Package</label><br>
                         <?php
@@ -478,22 +480,22 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                     echo "(" . $cnt . ") <span id='test_" . $cid . "_" . $key["test_fk"]  . "' class='test_" . $cid . "'>" . $key["test_name"] . "</span>";
                                     ?>&nbsp;&nbsp;&nbsp;
 									<b class="testtime_<?= $key["test_fk"] ?>"></b>
-									
+
 									<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
                                         <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $key["test_fk"] ?>" class="rejectiontest" testname="<?= $key["test_name"]; ?>" test="<?= $key["test_fk"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $key["test_fk"] ?>"></i></b></a>
                                     <?php } ?>
-									
-									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $key["test_fk"] ?>');"><i class="fa fa-check"></i></a> <a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $key["test_fk"] ?>" id='dbtn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" onclick="return confirm('Are you sure?');" title="Disapprove Test"><b>X</b></a> <br>	
+
+									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $key["test_fk"] ?>');"><i class="fa fa-check"></i></a> <a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $key["test_fk"] ?>" id='dbtn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" onclick="return confirm('Are you sure?');" title="Disapprove Test"><b>X</b></a> <br>
                                     <?php
                                     foreach ($key["sub_test"] as $kt_key) {
                                         if (!in_array($kt_key["sub_test"], $test_list)) {
                                             ?>
                                             <i style="margin-left:20px">-</i><span id='test_<?= $cid; ?>_<?= $kt_key["sub_test"] ?>' class="test_<?= $cid; ?>"><?= $kt_key["test_name"] ?></span>&nbsp;&nbsp;&nbsp;
-											
+
 											<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
                                         <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["sub_test"] ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["sub_test"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["sub_test"] ?>"></i></b></a>
                                     <?php } ?>
-											
+
 											<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["sub_test"] ?>');"><i class="fa fa-check"></i></a><a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["sub_test"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a><br>
                                             <?php
                                             $test_list[] = $kt_key["sub_test"];
@@ -518,11 +520,11 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                     if (!in_array($kt_key["test_fk"], $test_list)) {
                                         ?>
                                     <i style="margin-left:20px">-</i><span id='test_<?= $cid; ?>_<?= $kt_key["test_fk"] ?>' class="test_<?= $cid; ?>"><?= $kt_key["test_name"] ?></span>&nbsp;&nbsp;&nbsp;
-									
+
 									<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
                                         <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["test_fk"]; ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["test_fk"]; ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["test_fk"] ?>"></i></b></a>
                                     <?php } ?>
-									
+
 									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["test_fk"] ?>');"><i class="fa fa-check"></i></a><a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["test_fk"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a><br>
                                     <?php
                                     $test_list[] = $kt_key["test_fk"];
@@ -563,7 +565,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                             });
                             });
                         </script>
-						
+
 						<div id="rejectionmodal" data-dismiss="modal" class="modal fade" role="dialog">
                             <div class="modal-dialog">
                                 <!-- Modal content-->
@@ -587,13 +589,13 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                                         <option value="<?= $resons["id"]; ?>"><?= $resons["reason"]; ?></option>
                                                     <?php } ?>
                                                 </select>
-                                                <span style="color:red;" id="reasonerror"></span>					
+                                                <span style="color:red;" id="reasonerror"></span>
                                             </div>
                                             <div class="form-group">
                                                 <input type="hidden" name="jobid" value="<?= $cid; ?>" />
                                                 <input type="hidden" name="testid" id="rejectiontestid" />
                                                 <label for="exampleInputEmail1">Remark</label>
-                                                <textarea id="ressonremark" name="ressonremark" class="form-control" ></textarea>	
+                                                <textarea id="ressonremark" name="ressonremark" class="form-control" ></textarea>
                                             </div>
                                             <?php /* <label class="checkbox-inline">
                                               <input type="checkbox" name="resonpatient" value="1">Patient
@@ -612,7 +614,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                 </div>
 
                             </div>
-                        </div>	
+                        </div>
                         <script>
                             $("#sampleresonform").submit(function(e){
                             var resonid = $("#resonid").val();
@@ -687,7 +689,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                                             }
                                                             ?>><?= ucfirst($phlebo["name"]); ?> (<?= $phlebo["mobile"] ?>)</option>
                                                                 <?php } ?>
-                                                    </select> 
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12  pdng_0">
@@ -722,7 +724,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                                 <span style="color:red;" id="email_error1"></span>
                                             </div>
                                             <div class="form-group col-sm-12  pdng_0">
-                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Address <i style="color:red">*</i>:</label> 
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Address <i style="color:red">*</i>:</label>
                                                 <div class="col-sm-9 pdng_0">
                                                     <textarea id="address1" name="address" class="form-control"><?php
                                                         if ($phlebo_assign_job[0]["address"]) {
@@ -734,7 +736,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12  pdng_0">
-                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Note :</label> 
+                                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Note :</label>
                                                 <div class="col-sm-9 pdng_0">
                                                     <textarea id="p_note1" name="note" class="form-control"></textarea>
                                                     <span style="color:red;" id="p_note_error1"></span>
@@ -755,11 +757,11 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
 
                             </div>
                         </div>
-						
+
                         <form role="form" action="<?php echo base_url(); ?>job_master/upload_report/<?= $cid ?>" method="post" enctype="multipart/form-data" id="submit_report">
                             <?= validation_errors('<div class="alert alert-danger alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>', '</div>'); ?>
                             <div class="box-body">
-                                <?php if (!empty($error)) { ?> 
+                                <?php if (!empty($error)) { ?>
                                     <div class="alert alert-danger alert-dismissable">
                                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
                                         <?php echo $error['0']; ?>
@@ -798,7 +800,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Upload Reports </label><span style="color:red">*</span><br>	
+                                    <label for="exampleInputFile">Upload Reports </label><span style="color:red">*</span><br>
                                     <input type="file" id="common_report" name="common_report" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(with letterhead)</small>
                                     <input type="file" id="common_report1" name="common_report1" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(without letterhead)</small>
                                     <small>(Allow only .pdf file)</small><br>
@@ -807,7 +809,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                         ?>
                                         <?php
 										if ($query[0]["model_type"] == 1) {
-                                            
+
                                             if (($query[0]['payable_amount'] <= 0 || $query[0]['payable_amount'] == '') || $query[0]["is_print"] == 1 || $query[0]["panel_test_count"] > 0  || $query[0]['branch_fk'] == 164) {
 													/*if($query[0]['payable_amount']>0 && $login_data["type"] != 1){
 														echo "<span style='color:green'>Report Has Been Generated Successfully.</span></br>";
@@ -815,7 +817,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
 													}else{*/
                                                 ?>
 													<a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['report'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['original']; ?> </a>,<a href="<?php echo base_url(); ?>upload/report/<?php echo$common_report[0]['without_laterpad'] . "?" . rand(00000, 99999); ?>" target="_blank"> <?php echo $common_report[0]['without_laterpad_original']; ?> </a> &nbsp; <?php if ($query[0]['status'] != "2") { ?><a href="<?php echo base_url(); ?>job_master/remove_report/<?php echo $common_report[0]['id']; ?>/<?php echo $common_report[0]['job_fk']; ?>" onclick="return confirm('Are you sure you want to remove this data?');" style="color:red;"> X </a> <?php } ?><br>
-											<?php	//}		
+											<?php	//}
                                                     if ($smsalert == '1' && in_array($login_data["type"], array(1, 2))) {
                                                         if ($query[0]['notify_cust'] == 1) {
                                                         ?>
@@ -965,7 +967,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                     </div>
                 </div>
             </div>
-<?php if ($login_data['type'] != 7) { ?> 
+<?php if ($login_data['type'] != 7) { ?>
                 <div class="box box-primary">
                     <div class="box-header">
                         <!-- form start -->
@@ -993,7 +995,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                             }
                                             ?>><?= ucfirst($phlebo["name"]); ?> (<?= $phlebo["mobile"] ?>)</option>
     <?php } ?>
-                                    </select> 
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group col-sm-12  pdng_0">
@@ -1027,7 +1029,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                 <span style="color:red;" id="email_error"></span>
                             </div>
                             <div class="form-group col-sm-12  pdng_0">
-                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Address <i style="color:red">*</i>:</label> 
+                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Address <i style="color:red">*</i>:</label>
                                 <div class="col-sm-9 pdng_0">
                                     <textarea id="address" name="address" class="form-control"><?php
                                         if ($phlebo_assign_job[0]["address"]) {
@@ -1039,7 +1041,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                 </div>
                             </div>
                             <div class="form-group col-sm-12  pdng_0">
-                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Note :</label> 
+                                <label for="exampleInputFile" class="col-sm-3 pdng_0">Note :</label>
                                 <div class="col-sm-9 pdng_0">
                                     <textarea id="p_note" name="note" class="form-control"></textarea>
                                     <span style="color:red;" id="p_note_error"></span>
@@ -1171,7 +1173,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                     <?php
                     if ($query[0]['sample_collection'] == "0") {
                         if ($query[0]['status'] == "1" || $query[0]['status'] == "2") {
-                            ?>			 
+                            ?>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <!--<a onclick="return confirm('Are you sure?');" style="float:right; margin-top:10px; margin-right:10px;" href='<?php echo base_url(); ?>job_master/job_mark_spam/<?php echo $query[0]['id']; ?>' data-toggle="tooltip" data-original-title="Mark as Spam" ><span class="label label-danger">Mark as Spam</span></a>   -->
                             <?php
                         }
@@ -1180,7 +1182,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                     <?php
                     if ($query[0]['sample_collection'] == "1") {
                         if ($query[0]['status'] == "1" || $query[0]['status'] == "3") {
-                            ?>		
+                            ?>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <!--<a onclick="return confirm('Are you sure?');"  style="float:right; margin-right:10px; margin-top:10px;" href='<?php echo base_url(); ?>job_master/job_mark_completed/<?php echo $query[0]['id']; ?>' data-toggle="tooltip" data-original-title="Mark as completed" ><span class="label label-success">Mark as completed</span> </a>   -->
                             <?php
                         }
@@ -1524,11 +1526,11 @@ if ($query[0]["model_type"] == 1) {
                                 <?php if ($login_data['type'] == '1' || $login_data['type'] == '2') { ?>
                                     <a href="javascript:void(0);" onclick="$('#sample_collet_date_model').modal('show');"><i class="fa fa-edit"></i></a>
                                 <?php } ?>
-                                    
+
                                 <?php //echo $booking_info[0]['date']; ?>
                                 <div class="modal fade" id="sample_collet_date_model" role="dialog">
                                     <div class="modal-dialog">
-                                        
+
                                         <!-- Modal content-->
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -1695,8 +1697,8 @@ if ($query[0]["model_type"] == 1) {
                         </script>
                         <div class="col-md-6 res_pdng_0">
                             <div class="form-group">
-                                <select class="form-control chosen-select" data-placeholder="Select Status" tabindex="-1" name="status" id="status" <?php
-                                if ($query[0]['status'] == 2) {
+                                <select class="form-control chosen-select" onchange="statusChanged()" data-placeholder="Select Status" tabindex="-1" name="status" id="status" <?php
+                                if ($query[0]['status'] == 10) {
                                     echo "disabled";
                                 }
                                 ?>>
@@ -1744,11 +1746,16 @@ if ($query[0]["model_type"] == 1) {
                                             echo "disabled";
                                         }
                                         ?>> Completed </option>
+                                        <option value="10" <?php
+                                        if ($query[0]['status'] == 10) {
+                                            echo "selected";
+                                        }
+                                        ?>> Cancel Entry </option>
     <?php } ?>
                                 </select>
                                 <?php if ($login_data['type'] != 10) { ?>
                                 <button class="btn-sm btn-primary res_mrgn_top_15px" type="button" id="change" onclick="change_status();" <?php
-                                if ($query[0]['status'] == 2) {
+                                if ($query[0]['status'] == 2 || $query[0]['status'] == 10) {
                                     echo "disabled";
                                 }
                                 ?>>Save</button>
@@ -1774,11 +1781,11 @@ if ($query[0]["model_type"] == 1) {
                                 </div>
     <?php } ?>
                             <div class="form-group">
-                                <label for="exampleInputFile">Total Amount:</label> <?php echo "Rs." . $query[0]['price']; ?>  
+                                <label for="exampleInputFile">Total Amount:</label> <?php echo "Rs." . $query[0]['price']; ?>
                             </div>
     <?php if ($cut_from_wallet != 0) { ?>
-                                <div class="form-group">  
-                                    <label for="exampleInputFile">Debited From Wallet:</label> <?php echo "Rs." . $cut_from_wallet; ?>  
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Debited From Wallet:</label> <?php echo "Rs." . $cut_from_wallet; ?>
                                 </div>
                                 <?php } ?>
                             <div class="form-group">
@@ -1790,7 +1797,7 @@ if ($query[0]["model_type"] == 1) {
                                     $j_payable_price = $query[0]['payable_amount'];
                                     echo "Rs." . $query[0]['payable_amount'];
                                 }
-                                ?> 
+                                ?>
                                  <?php if ($login_data['type'] != 10) { ?>
                                 <a href="javascript:void(0)" onclick="$('#payment_model').modal('show');"> <i class="fa fa-edit"></i></a>
                                 <?php } ?>
@@ -1799,12 +1806,12 @@ if ($query[0]["model_type"] == 1) {
 
                             <div class="form-group">
                                 <label for="exampleInputFile">Discount:</label> <?php $bcnt=0;
-                                echo $query[0]['discount'] . "%"; 
+                                echo $query[0]['discount'] . "%";
                                 ?>  <?php if (!in_array($branchdis, array(8, 23, 66, 70,72)) || $login_data['type'] == 1 || $login_data['type'] == 2) { $bcnt=1; ?>  <?php if ($login_data['type'] != 10) { ?><a id="disc_edit" href="javascript:void(0)" onclick="$('#discount_model').modal('show');"> <i class="fa fa-edit"></i></a> <?php } } ?>
                                 <?php if($bcnt==0 && $login_data['id']==192&&$query[0]['branch_fk']==72){ ?> <a id="disc_edit" href="javascript:void(0)" onclick="$('#discount_model').modal('show');"> <i class="fa fa-edit"></i></a> <?php } ?>
                             </div>
-                            <div class="form-group"> 
-                                <label for="exampleInputFile">Payment Type :</label> <?php echo $query[0]['payment_type']; ?>  
+                            <div class="form-group">
+                                <label for="exampleInputFile">Payment Type :</label> <?php echo $query[0]['payment_type']; ?>
                             </div>
                             <!--                        <div class="form-group">
                                                         <label for="exampleInputFile">Payment Via :</label> <?php
@@ -1813,7 +1820,7 @@ if ($query[0]["model_type"] == 1) {
                                     echo $key["name"];
                                 }
                             }
-                            ?>  
+                            ?>
                                                         <a href="javascript:void(0)" onclick="$('#payment_model1').modal('show');"> <i class="fa fa-edit"></i></a>
                                                     </div>-->
 
@@ -1824,7 +1831,7 @@ if ($query[0]["model_type"] == 1) {
                                 } else {
                                     echo "No";
                                 }
-                                ?>  
+                                ?>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputFile">Collection Charge :</label> <?php
@@ -1865,6 +1872,11 @@ if ($query[0]["model_type"] == 1) {
                                 }
                                 ?>
                                 <?php
+                                if ($query[0]['status'] == 10) {
+                                    echo "<span class='label label-danger'>Cancel Entry</span>";
+                                }
+                                ?>
+                                <?php
                                 if ($query[0]['status'] == 0) {
                                     echo "<span class='label label-danger'>Spam</span>";
                                 }
@@ -1900,13 +1912,13 @@ if ($query[0]["model_type"] == 1) {
                                 <div class="form-group">
                                     <label for="exampleInputFile">Book Portal :</label> <?php
                                     echo $query[0]['portal'];
-                                    ?>  
+                                    ?>
                                 </div>
                                 <?php } ?>
                             <div class="form-group">
                                 <label for="exampleInputFile">Reference :</label> <?php
                                 echo $query[0]['other_reference'];
-                                ?>  
+                                ?>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputFile">Sample From :</label> <?php
@@ -1915,13 +1927,13 @@ if ($query[0]["model_type"] == 1) {
                                 } else {
                                     echo "NA";
                                 }
-                                ?>  
+                                ?>
                             </div>
                                 <?php if ($query[0]['payment_type'] == 'PayUMoney') { ?>
                                 <div class="form-group">
                                     <label for="exampleInputFile">Transaction ID :</label> <?php
                                     echo $payumoney_details[0]['payomonyid'];
-                                    ?>  
+                                    ?>
                                 </div>
 
     <?php } ?>
@@ -1935,7 +1947,7 @@ if ($query[0]["model_type"] == 1) {
                                     } else {
                                         echo "No";
                                     }
-                                    ?></label> 
+                                    ?></label>
                             </div>
     <?php if ($query[0]["clinical_history"] == 1) { ?>
                                 <div class="form-group">
@@ -1960,7 +1972,7 @@ if ($query[0]["model_type"] == 1) {
         <?php } ?>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Name :</label> 
+                                    <label for="exampleInputFile">Name :</label>
                                     <?php if ($login_data['type'] != 10) { ?>
                                     <a href="<?php echo base_url(); ?>customer-master/customer-all-details/<?php echo $query[0]['custid']; ?>"> <?php echo ucfirst($query[0]['full_name']); ?></a>&nbsp;<a href="javascript:void(0)" onclick="$('#family_model12').modal('show');"> <i class="fa fa-edit"></i></a>
                                     <?php } else{ ?>
@@ -2016,7 +2028,7 @@ if ($query[0]["model_type"] == 1) {
     <?php if ($relation == 'Self') { ?>
 
                             <div class="form-group">
-                                <label for="exampleInputFile">Patient Name :</label> <?php echo ucfirst($query[0]['full_name']); ?> 
+                                <label for="exampleInputFile">Patient Name :</label> <?php echo ucfirst($query[0]['full_name']); ?>
                             </div>
 
                             <div class="form-group">
@@ -2084,7 +2096,7 @@ if ($query[0]["model_type"] == 1) {
                         }
                     }
                    print_r($createdUser);
-                    ?> 
+                    ?>
                     <p>Created By <?= $createdUser['name'] ?>  <?=  $query[0]['phlebo_added_by'] ?> </p>
                     <div class="col-sm-12 res_pdng_0"><div id="job_tracking"></div></div>
                 </div>
@@ -2326,8 +2338,8 @@ if ($query[0]["model_type"] == 1) {
                                     var payment_type_option = document.getElementById('pay_mode').selectedIndex;
                                     if(payment_type_option == 0)
                                     {
-                                        $("#amount_error1").html("Please select payment mode for received amount");  
-                                        // $('.amount_submit_btn-rvd').prop('disabled', false);                                      
+                                        $("#amount_error1").html("Please select payment mode for received amount");
+                                        // $('.amount_submit_btn-rvd').prop('disabled', false);
                                         return false;
                                     }
                                 }
@@ -2335,7 +2347,7 @@ if ($query[0]["model_type"] == 1) {
                                 $('#payment_receiv_form_id').submit(function(){
                                     $('.amount_submit_btn-rvd').attr('disabled', 'disabled');
                                 });
-                                
+
                                 function send_receiv_amount() {
                                 $("#amount_submit_btn").attr('disabled', 'disabled');
                                 //$("#payment_receiv_form_id").submit();
@@ -2970,10 +2982,10 @@ if ($query[0]["model_type"] == 1) {
                                     $("#collectionchargeamount_error").html("Invalid amount.");
                             }
                    });
-             </script> 
+             </script>
             </div>
         </div>
-<?php /* Nishit doctor model end */ ?> 
+<?php /* Nishit doctor model end */ ?>
 <?php /* Hiten Branch model start */ ?>
         <div class="modal fade" id="branch_model" role="dialog">
             <div class="modal-dialog">
@@ -3081,7 +3093,7 @@ if ($query[0]["model_type"] == 1) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="col-xs-8">    
+                        <div class="col-xs-8">
                             <span id="loader_creditor_div" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
                             <a href="javascript:void(0);" id="resend_opt" style="display:none;" onclick="credit_resend();">Resend OTP</a>
                             <a href="javascript:void(0);" id="mycounter" style=""></a>
@@ -3574,91 +3586,67 @@ if ($query[0]["model_type"] == 1) {
 
         </div>
     </div>
-   
-    <?php /* Nishit change payment status end */ ?>
-    <?php /* <div class="col-md-12">
-      <div class="box box-primary">
-      <div class="box-header">
-      <!-- form start -->
-      <h3 class="box-title">Add Result</h3>
-      </div>
-      <div class="box-body">
-      <div class="alert alert-danger alert-dismissable" id="msg_cancel" style="display:none;">
-      <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
-      Results Not Add
-      </div>
-      <div class="alert alert-success alert-dismissable" id="msg_success" style="display:none;">
-      <button aria-hidden="true" data-dismiss="alert" class="close" type="button">?</button>
-      Results Add Successfully
-      </div>
-      <div class="col-sm-12">
-      <?php
-      $ts = explode('#', $query[0]['testname']);
-      $tid = explode(",", $query[0]['testid']);
-      $cnt=0;
-      foreach ($tid as $testidp) {
-      if($parameter_list[$cnt][0]['test_fk'] == $testidp) {
-      ?>
-      <h3>Add Result For <?php echo ucfirst($ts[$cnt]); ?></h3>
-      <table id="example4" class="table table-bordered table-striped">
-      <thead>
-      <tr>
-      <th>Parameter Name</th>
-      <th>Subparameter Name</th>
-      <th>Value</th>
-      <th>Parameter Value</th>
-      <th>Parameter Unit</th>
-      <input type="hidden" id="para_job_id" value="<?php echo $cid; ?>">
-      </tr>
-      </thead>
-      <?php } $cn=1;
-      foreach($parameter_list[$cnt] as $parameter) {
-      if($parameter['test_fk'] == $testidp) {
-      if($parameter['pid'] == $parameter['parameter_fk']) {
-      ?>
-      <tbody>
-      <td><?php echo $parameter['parameter_name']; ?></td>
-      <td><?php echo $parameter['subparameter_name']; ?></td>
-      <td>
-      <input type="text" id="value_add_<?php echo $cnt; ?>_<?php echo $cn; ?>" class="form-control">
-      <input type="hidden" id="para_id_<?php echo $cnt; ?>_<?php echo $cn; ?>" value="<?php echo $parameter['pid']; ?>">
-      <input type="hidden" id="subpara_id_<?php echo $cnt; ?>_<?php echo $cn; ?>" value="<?php echo $parameter['gid']; ?>">
-      </td>
-      <td><?php echo $parameter['subparameter_range']; ?></td>
-      <td><?php echo $parameter['subparameter_unit']; ?></td>
-      <?php } else { ?>
-      <tbody>
-      <td><?php echo $parameter['parameter_name']; ?></td>
-      <td> - </td>
-      <td>
-      <input type="text" id="value_add_<?php echo $cnt; ?>_<?php echo $cn; ?>" class="form-control">
-      <input type="hidden" id="para_id_<?php echo $cnt; ?>_<?php echo $cn; ?>" value="<?php echo $parameter['pid']; ?>">
-      </td>
-      <td><?php echo $parameter['parameter_range']; ?></td>
-      <td><?php echo $parameter['parameter_unit']; ?></td>
-      <?php
-      }
-      }
-      $cn++;
-      ?>
-      <input type="hidden" id="para_count_<?php echo $cnt; ?>" value="<?php echo $cn; ?>">
-      <input type="hidden" id="test_count" value="<?php echo $cnt; ?>">
-      <input type="hidden" id="test_id_<?php echo $cnt; ?>" value="<?php echo $testidp; ?>">
-      <?php
-      }$cnt++; ?>
-      </tbody>
-      </table>
-      <?php
-      }
-      ?>
-      </div>
-      </div>
-      <div class="box-footer">
-      <span id="loader_div" style="display:none;"><img src="<?= base_url(); ?>upload/opc-ajax-loader.gif" style="height:28px;margin-left:10px"></span>
-      <input onclick="add_results();" id="add_result" style="float:right;" class="btn btn-primary" value="Add" type="button">
-      </div>
-      </div>
-      </div> */ ?>
+
+    <div class="modal fade" id="otpModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-md">
+
+            <div class="modal-content" style="border-radius:10px;">
+                <div class="modal-header" style="background:#f5f5f5;">
+                    <h4 class="modal-title">Cancel Entry</h4>
+                    <button type="button" id="close-otp-modal" class="close" style="color:black !important;margin-top: -27px;" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" style="padding:25px;">
+                    <div id="userStep">
+                        <div class="form-group">
+                            <label><b>Select User</b> <span style="color:red;">*</span></label>
+                            <select id="userDropdown" class="form-control" style="height:40px;">
+                                <option value="">-- Select User --</option>
+                                <?php foreach($cancel_entry_user as $u){ ?>
+                                    <option value="<?= $u['id'] ?>" data-phone="<?= $u['phone'] ?>">
+                                        <?= $u['name'] ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                            <small id="cancel_user_error" style="color:red;"></small>
+                        </div>
+
+                        <div class="text-right" style="margin-top:20px;">
+                            <button class="btn btn-primary px-4" id="sendOtpBtn">Send OTP</button>
+                        </div>
+                    </div>
+
+                    <!-- OTP STEP -->
+                    <div id="otpStep" style="display:none;">
+
+                        <div id="userInfo" style="background:#e8f4ff;padding:10px;border-radius:6px;margin-bottom:15px;font-weight:600;">
+                        </div>
+
+                        <div class="form-group">
+                            <label><b>Enter OTP</b> <span style="color:red;">*</span></label>
+                            <input type="text" id="otpInput" class="form-control" placeholder="Enter 6 digit OTP" style="height:40px; letter-spacing:3px;">
+                            <small id="cancel_otp_error" style="color:red;"></small>
+                        </div>
+
+
+                        <div class="d-flex justify-content-between align-items-center" style="margin-top:20px;">
+
+                            <div id="resendTimer" style="color:#ff6b00; font-weight:600;"></div>
+
+                            <div id="resendSection" style="display:none;">
+                                <button class="btn btn-primary mr-2" id="resendOtpBtn">Resend OTP</button>
+                                <button class="btn btn-success px-4" id="verifyOtpBtn">Verify OTP</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
 </section>
 <script src="<?php echo base_url(); ?>plugins/timepick/js/timepicki.js"></script>
 <script>
@@ -3673,10 +3661,10 @@ if ($query[0]["model_type"] == 1) {
                             $(function () {
                             $('.chosen').chosen();
                             });
-							
-							</script> 
+
+							</script>
 <script>
-        
+
 
 <?php if (in_array($query[0]['status'], array(7, 8))) { ?>
         function getrjectsamlestatus(){
@@ -3992,7 +3980,7 @@ if ($query[0]["model_type"] == 1) {
             $("#send_btn").attr("disabled", "disabled");
             },
             success: function (data) {
-				
+
             if (data == 1) {
             $("#msg_success").show();
             } else {
@@ -4048,7 +4036,7 @@ if ($query[0]["model_type"] == 1) {
             } else {
             $("#msg_cancel1").show();
             }
-			
+
             setTimeout(function(){ window.location.reload(); }, 3000);
             }, complete: function () {
 
@@ -4075,9 +4063,9 @@ if ($query[0]["model_type"] == 1) {
         document.getElementById('payable').value = amt;
         document.getElementById('rcv_tm').value = document.getElementById('rcv_tim').innerHTML;
         if(r == 1) {
-            document.getElementById('div_time').style.display = 'block';        
+            document.getElementById('div_time').style.display = 'block';
         }
-        document.getElementById('j_amount').focus();        
+        document.getElementById('j_amount').focus();
     }
     function delete_received_payment(val, d_amount) {
     var cnfg = confirm('Are you sure?');
@@ -4134,74 +4122,217 @@ if ($query[0]["model_type"] == 1) {
     $("#submit_report").submit();
     }
     }
-    function change_status() {
-    var status = $("#status").val();
-    var job_id = $("#job_id").val();
-    if (status == "") {
-    alert("Please Select Status!");
-    } else {
-    if (status == "2") {
-    // if (parseInt($approved_test_length) != parseInt($approved_test_cnt)) {
-    //     alert("Please complete all tests.");
-    //     return false;
-    //}
-    var completed_tst = $("#upload_report").val();
-    if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
-    alert("Please upload report.");
-    return false;
+    var resendTime = 120; // 2 minutes
+    var timerInterval;
+
+    function statusChanged() {
+        var status = $('#status').val();
+        $('#change').prop('disabled', true);
+
+        if (status == 10) {
+            $('#otpModal').modal('show');
+            $('#change').prop('disabled', false);
+        }else{
+            $('#change').prop('disabled', true);
+        }
     }
-    var txt;
-    var r = confirm("Are you sure want to complete job!");
-    if (r == true) {
 
-    /*  var completed_tst = $("#upload_report").val();
-     if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
-     $("#descerror_1").html("<br>Please upload report.");
-     return false;
-     }*/
-    $.ajax({
-    url: "<?php echo base_url(); ?>job_master/changing_status_job",
-            type: 'post',
-            data: {status: status, jobid: job_id},
-            beforeSend: function () {
-            $("#change").attr("disabled", "disabled");
-            $("#loader_div1").attr("style", "");
+    // $('#sendOtpBtn').click(function () {
+    //     $('#cancel_user_error').html('');
+    //     var user = $('#userDropdown').val();
+
+    //     if (user == "") {
+    //         $('#cancel_user_error').html('Please Select User');
+    //         return;
+    //     }
+
+    //     $.ajax({
+    //         url: "<?= base_url('Job_master/send_otp_user') ?>",
+    //         type: "POST",
+    //         dataType: "json",
+    //         data: {
+    //             job_id: "<?= $cid ?>",
+    //             user_id: user
+    //         },
+    //         success: function (response) {
+    //             if (response.status == "success") {
+    //                 alert("OTP sent on WhatsApp!");
+    //                 $('#userStep').hide();
+    //                 $('#otpStep').show();
+    //             } else {
+    //                 alert(response.message);
+    //             }
+    //         }
+    //     });
+    // });
+
+    $('#sendOtpBtn').click(function () {
+        $('#cancel_user_error').html('');
+        var user = $('#userDropdown').val();
+
+        if (user == "") {
+            $('#cancel_user_error').html('Please Select User');
+            return;
+        }
+
+        $.ajax({
+            url: "<?= base_url('Job_master/send_otp_user') ?>",
+            type: "POST",
+            dataType: "json",
+            data: {
+                job_id: "<?= $cid ?>",
+                user_id: user
             },
-            success: function (data) {
-            if (data == 1) {
-            //     console.log("data"+data);
-            window.location = "<?php echo base_url(); ?>job-master/job-details/<?php echo $cid; ?>";
-                        }
-                        }, complete: function () {
-                //$("#change").removeAttr("disabled");
-                $("#loader_div1").attr("style", "display:none;");
-                }
-                });
-                } else {
+            success: function (response) {
+                if (response.status == "success") {
+                    alert("OTP sent on WhatsApp!");
+                    var userName = $('#userDropdown option:selected').text();
+                    var userPhone = $('#userDropdown option:selected').data('phone');
 
-                }
+                    $('#userInfo').html(
+                        "OTP sent to <b>" + userName + "</b> (" + userPhone + ")"
+                    );
+                    $('#userStep').hide();
+                    $('#otpStep').show();
+                    startResendTimer(); // start timer
                 } else {
-                $.ajax({
-                url: "<?php echo base_url(); ?>job_master/changing_status_job",
+                    alert(response.message);
+                }
+            }
+        });
+    });
+
+
+    $('#verifyOtpBtn').click(function () {
+        $('#cancel_otp_error').html("");
+        var otp = $('#otpInput').val();
+
+        if (otp == "") {
+            $('#cancel_otp_error').html('Please Enter OTP');
+            return;
+        }
+
+        $.ajax({
+            url: "<?= base_url('Job_master/verify_otp_user') ?>",
+            type: "POST",
+            dataType: "json",
+            data: {
+                job_id: "<?= $cid ?>",
+                otp: otp
+            },
+            success: function (response) {
+                if (response.status == "success") {
+                    alert("OTP verified!");
+                    $('#otpModal').modal('hide');
+                    setTimeout(function(){
+                        location.reload();
+                    }, 500);
+                } else {
+                    $('#cancel_otp_error').html('Invalid OTP');
+                }
+            }
+        });
+    });
+
+    $('#resendOtpBtn').click(function () {
+        $('#sendOtpBtn').click();
+    });
+
+    function startResendTimer() {
+        resendTime = 120;
+        $('#resendSection').show();
+        $('#resendOtpBtn').hide();
+
+        timerInterval = setInterval(function () {
+            resendTime--;
+
+            let minutes = Math.floor(resendTime / 60);
+            let seconds = resendTime % 60;
+
+            $('#resendTimer').text(
+                "Resend OTP in " + minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+            );
+
+            if (resendTime <= 0) {
+                clearInterval(timerInterval);
+                $('#resendTimer').text("");
+                $('#resendOtpBtn').show();
+            }
+        }, 1000);
+    }
+
+    // $('#otpModal').on('hidden.bs.modal', function () {
+    $('#close-otp-modal').click(function () {
+        $('#userStep').show();
+        $('#otpStep').hide();
+        $('#userDropdown').val("");
+        $('#otpInput').val("");
+        $('#cancel_user_error').html("");
+        $('#cancel_otp_error').html("");
+        $('#resendSection').hide();
+        $('#userInfo').html("");
+        clearInterval(timerInterval);
+    });
+
+
+    function change_status() {
+        var status = $("#status").val();
+        var job_id = $("#job_id").val();
+        if (status == "") {
+            alert("Please Select Status!");
+        } else {
+            if (status == "10") {
+                $('#otpModal').modal('show');
+                return;
+            }
+            if (status == "2") {
+                var completed_tst = $("#upload_report").val();
+                if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
+                    alert("Please upload report.");
+                    return false;
+                }
+                var txt;
+                var r = confirm("Are you sure want to complete job!");
+                if (r == true) {
+                    $.ajax({
+                    url: "<?php echo base_url(); ?>job_master/changing_status_job",
                         type: 'post',
                         data: {status: status, jobid: job_id},
                         beforeSend: function () {
-                        $("#change").attr("disabled", "disabled");
-                        $("#loader_div1").attr("style", "");
+                            $("#change").attr("disabled", "disabled");
+                            $("#loader_div1").attr("style", "");
                         },
                         success: function (data) {
+                            if (data == 1) {
+                                window.location = "<?php echo base_url(); ?>job-master/job-details/<?php echo $cid; ?>";
+                            }
+                        }, complete: function () {
+                                $("#loader_div1").attr("style", "display:none;");
+                        }
+                    });
+                } else {
+
+                }
+            } else {
+                $.ajax({
+                    url: "<?php echo base_url(); ?>job_master/changing_status_job",
+                    type: 'post',
+                    data: {status: status, jobid: job_id},
+                    beforeSend: function () {
+                        $("#change").attr("disabled", "disabled");
+                        $("#loader_div1").attr("style", "");
+                    },
+                    success: function (data) {
                         if (data == 1) {
-                        //     console.log("data"+data);
-                        window.location = "<?php echo base_url(); ?>job-master/job-details/<?php echo $cid; ?>";
-                                    }
-                                    }, complete: function () {
-                            //$("#change").removeAttr("disabled");
-                            $("#loader_div1").attr("style", "display:none;");
-                            }
-                            });
-                            }
-                            }
-                            }
+                            window.location = "<?php echo base_url(); ?>job-master/job-details/<?php echo $cid; ?>";
+                        }
+                    }, complete: function () {
+                        $("#loader_div1").attr("style", "display:none;");
+                    }
+                });
+            }
+        }
+    }
 </script>
 <script type="text/javascript" src="<?php echo base_url(); ?>user_assets/chosen/chosen.jquery.js"></script>
 <script  type="text/javascript">
@@ -4209,8 +4340,7 @@ if ($query[0]["model_type"] == 1) {
                             jQuery(".chosen-select").chosen({
                             search_contains: true
                             });
-                            //  $(".chosen-select-deselect").chosen({ allow_single_deselect: true });
-                            // $("#cid").chosen('refresh');
+
 
 </script>
 <script>
@@ -4313,7 +4443,7 @@ if ($query[0]["model_type"] == 1) {
             autoclose: true,
     })
     })
-    
+
 <?php if (!empty($amount_history_success) || !empty($amount_history_error)) { ?>
         setTimeout(function () {
         $('#payment_model').modal('show');
@@ -4444,16 +4574,16 @@ if ($query[0]["model_type"] == 1) {
             $(".test_" + job_fk).each(function() {
                 var vl = this.id;
                 var v2 = vl.split("_");
-                /*var vl = this.title;*/ 
+                /*var vl = this.title;*/
             $(this).attr("onclick", "approveTest1('" + job_fk + "','" + v2[2] + "')");
             $(this).attr("style", "cursor:pointer;");
             $(this).attr("class", "text_highlight");
             });
             <?php } ?>
             if (value.details) {
-			
+
             $.each(value.details, function (index1, value1) {
-				
+
             var tst_fk = value1.test_fk;
             var tst_status = value1.test_status;
             tst_status = parseInt(tst_status);
@@ -4505,12 +4635,12 @@ if ($query[0]["model_type"] == 1) {
             var tst_approve_result = value1.approve;
             if (tst_status == 2) {
             if ($("#test_" + job_fk + "_" + tst_fk)) {
-				
+
 				$("#rejectiontest_"+tst_fk).hide();
 				<?php if ($query[0]['status'] == 8) { ?>
 				$("#testjobstatus").html("<span class='label label-warning'>Partial Complete</span>");
 							<?php } ?>
-				
+
             $("#test_" + job_fk + "_" + tst_fk).attr("style", "background:green;color:white;cursor:pointer;");
             $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest('" + job_fk + "','" + tst_fk + "')");
 <?php if ($login_data['type'] == 1 || $login_data['type'] == 2 || $login_data['type'] == 5 || $login_data['type'] == 6) { ?>
@@ -4522,13 +4652,13 @@ if ($query[0]["model_type"] == 1) {
             $approved_test_cnt++;
             }
             }
-			
-			
-			
+
+
+
             });
-			
-			
-			
+
+
+
             }
             });
             var selected_ids = JSON.parse(JSON.stringify(add_result_array));
@@ -4548,7 +4678,7 @@ if ($query[0]["model_type"] == 1) {
     });
     }
 function checkreporttime(testid,jobid,aprovedate){
-	
+
 	$.ajax({
     url: '<?php echo base_url(); ?>sample_booking/check_testhourse',
             type: 'get',
@@ -4560,12 +4690,12 @@ function checkreporttime(testid,jobid,aprovedate){
 
             },
             error: function (jqXhr) {
-         
+
             },
             complete: function () {
             },
     });
-}	
+}
     function removeA(arr) {
     var what, a = arguments, L = a.length, ax;
     while (L > 1 && arr.length) {
@@ -4714,5 +4844,5 @@ jq(document).ready(function () {
         }
 });
 
-</script> 
+</script>
 <!--Vishal Code End-->
