@@ -43,16 +43,18 @@
                   </a>
 
                   <!-- File Input -->
-                  <input type="file" name="sliderfile" class="form-control"  style="width:600px;max-width:600px;">
+                  <input id="imageUpload" type="file" name="sliderfile" class="form-control"  style="width:600px;max-width:600px;">
 
                 </div>
               </div>
 
                 <div class="form-group">
                   <label>Name <span class="text-danger">*</span></label>
+                  <span style="color:red"><b>Note:</b> Please upload an image with a size of 650 × 863 pixels only.
+</span>
                   <input type="text" name="title" class="form-control"
                          value="<?php echo set_value('title', $row['title']); ?>">
-                  <span class="text-danger"><?php echo form_error('title'); ?></span>
+                  <span class="text-danger" id="imgError"><?php echo form_error('title'); ?></span>
                 </div>
 
               </div>
@@ -93,3 +95,30 @@
     </div>
   </div>
 </section>
+<script>
+$('#imageUpload').on('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    var img = new Image();
+    var objectUrl = URL.createObjectURL(file);
+
+    img.onload = function () {
+        var width = this.naturalWidth;
+        var height = this.naturalHeight;
+        if (width === 650 && height === 863) {
+            $('#imgError').text('');   // valid image
+        } else {
+            $('#imgError').text(
+                'Invalid image size. Please upload an image of 650 × 863 pixels only.'
+            ).show();
+
+            $('#imageUpload').val(''); // clear file
+        }
+
+        URL.revokeObjectURL(objectUrl);
+    };
+
+    img.src = objectUrl;
+});
+</script>

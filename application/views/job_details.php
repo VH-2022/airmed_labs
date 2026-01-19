@@ -3646,7 +3646,7 @@ if ($query[0]["model_type"] == 1) {
         </div>
     </div>
 
-    
+
 </section>
 <script src="<?php echo base_url(); ?>plugins/timepick/js/timepicki.js"></script>
 <script>
@@ -4127,13 +4127,8 @@ if ($query[0]["model_type"] == 1) {
 
     function statusChanged() {
         var status = $('#status').val();
-        $('#change').prop('disabled', true);
-
         if (status == 10) {
             $('#otpModal').modal('show');
-            $('#change').prop('disabled', false);
-        }else{
-            $('#change').prop('disabled', true);
         }
     }
 

@@ -38,8 +38,10 @@
 
                 <div class="form-group">
                   <label>Image</label>
-                  <input type="file" name="sliderfile" class="form-control">
-                  <span class="text-danger"><?php echo form_error('sliderfile'); ?></span>
+                  <span style="color:red"><b>Note:</b> Please upload an image with a size of 650 × 863 pixels only.
+</span>
+                  <input id="imageUpload" type="file" name="sliderfile" class="form-control">
+                  <span class="text-danger" id="imgError"><?php echo form_error('sliderfile'); ?></span>
                 </div>
 
                 <div class="form-group">
@@ -86,3 +88,30 @@
     </div>
   </div>
 </section>
+<script>
+$('#imageUpload').on('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    var img = new Image();
+    var objectUrl = URL.createObjectURL(file);
+
+    img.onload = function () {
+        var width = this.naturalWidth;
+        var height = this.naturalHeight;
+        if (width === 650 && height === 863) {
+            $('#imgError').text('');   // valid image
+        } else {
+            $('#imgError').text(
+                'Invalid image size. Please upload an image of 650 × 863 pixels only.'
+            ).show();
+
+            $('#imageUpload').val(''); // clear file
+        }
+
+        URL.revokeObjectURL(objectUrl);
+    };
+
+    img.src = objectUrl;
+});
+</script>
