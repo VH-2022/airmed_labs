@@ -4271,6 +4271,10 @@ if ($query[0]["model_type"] == 1) {
 
 
     function change_status() {
+        var phlebo_added_by = <?= json_encode($query[0]['phlebo_added']) ?>;
+        var added_by = <?= json_encode($query[0]['added_by']) ?>;
+        var payable_amount = <?= json_encode($query[0]['payable_amount']) ?>;
+
         var status = $("#status").val();
         var job_id = $("#job_id").val();
         if (status == "") {
@@ -4281,6 +4285,16 @@ if ($query[0]["model_type"] == 1) {
                 return;
             }
             if (status == "2") {
+                //added by rohit 23-01-2026
+                if((phlebo_added_by  == null || phlebo_added_by == "") && (added_by == null || added_by == "")){
+                     if (payable_amount != 0) {
+                        alert("Payment is pending. You cannot complete the status.");
+                        return false;
+                     }
+
+
+                }
+                //ended by rohit 23-01-2026
                 var completed_tst = $("#upload_report").val();
                 if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
                     alert("Please upload report.");
