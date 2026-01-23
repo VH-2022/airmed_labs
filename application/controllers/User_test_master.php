@@ -113,7 +113,7 @@ class User_test_master extends CI_Controller {
         if ($package_exist != 1) {
             //echo $wallet_amount."-".$price; die();
             if ($wallet_amount >= $price) {
-                /* $insert = $this->user_test_master_model->master_fun_insert("job_master", array("cust_fk" => $uid,"date"=>$date,"order_id"=>$order_id));	
+                /* $insert = $this->user_test_master_model->master_fun_insert("job_master", array("cust_fk" => $uid,"date"=>$date,"order_id"=>$order_id));
                   $price = 0 ;
                   for($i=0 ; $i < count($test) ; $i++){
                   $insert_code = $this->user_test_master_model->master_fun_insert("job_test_list_master", array("job_fk" => $insert,"test_fk"=>$test[$i]));
@@ -190,7 +190,7 @@ class User_test_master extends CI_Controller {
             if ($first_pos == "p") {
                 $data["package_exist"] = 1;
                 //$price1 = $this->user_master_model->master_fun_get_tbl_val("package_master_city_price", array("status" => 1, "package_fk" => $id, "city_fk" => $data["test_city_session"]), array("id", "asc"));
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -275,7 +275,7 @@ class User_test_master extends CI_Controller {
             if ($first_pos == "p") {
                 $data["package_exist"] = 1;
                 //$price1 = $this->user_master_model->master_fun_get_tbl_val("package_master_city_price", array("status" => 1, "package_fk" => $id, "city_fk" => $data["test_city_session"]), array("id", "asc"));
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -438,7 +438,7 @@ class User_test_master extends CI_Controller {
                     }
                     if ($first_pos == "p") {
                         //$price1 = $this->user_test_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "id" => $id), array("title", "asc"));
-                        $price1 = $this->user_test_master_model->get_val("SELECT 
+                        $price1 = $this->user_test_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -543,7 +543,7 @@ class User_test_master extends CI_Controller {
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Test has been book successfully. </p>
-                       <p style="color:#7e7e7e;font-size:13px;"> Sample Collection time :  ' . $datebb . ' ' . $s_time . '-' . $e_time . '  </p>  
+                       <p style="color:#7e7e7e;font-size:13px;"> Sample Collection time :  ' . $datebb . ' ' . $s_time . '-' . $e_time . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Rs. ' . $pay_from_wallet_amount . ' Debited From your account. </p>
 <p style="color:#7e7e7e;font-size:13px;"> Rs. ' . $response['amount'] . ' Paid using PayUMoney. </p>
 		<p style="color:#7e7e7e;font-size:13px;">Your Current Wallet balance is Rs. ' . $Current_wallet . '</p>
@@ -636,12 +636,12 @@ class User_test_master extends CI_Controller {
                     $sms_message = preg_replace("/{{TESTPACK}}/", 'Test', $sms_message);
                 }
                 $sms_message = preg_replace("/{{TESTPACKLIST}}/", $test_package, $sms_message);
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
 //                $test_tat = [];
 //                $package_tat = [];
 //                foreach ($package_list as $key) {
@@ -682,12 +682,12 @@ class User_test_master extends CI_Controller {
 //
 //                $total = $max_tat + 2;
 //                $sms_message = preg_replace("/{{TOTAL}}/", $total, $sms_message);
-                
-                
-                
-                
-                
-                
+
+
+
+
+
+
                 //$sms_message = preg_replace("/{{TOTALPRICE}}/", $amount, $sms_message);
                 $notification::send($cmobile, $sms_message);
                 $configmobile = $this->config->item('admin_alert_phone');
@@ -723,8 +723,8 @@ class User_test_master extends CI_Controller {
                 }
                 /* Delhi and gurgaon booking alert sms end */
                 // Case Back Email end
-                
-                
+
+
                 $sms_message ='';
                 $sms_message = '{{NAME}} has made online booking for home collection. Please assign phlebo for Order Id: {{ORDER_ID}}, Registration No: {{REGISTRATION_ID}}';
                 $sms_message = preg_replace("/{{NAME}}/",  ucfirst($c_name) , $sms_message);
@@ -732,12 +732,12 @@ class User_test_master extends CI_Controller {
                 $sms_message = preg_replace("/{{REGISTRATION_ID}}/", $insert, $sms_message);
                 //$notification::send('8320306763', $sms_message);
                 $notification::send('8511153892', $sms_message); //Namarata SMS Message to Assign Phelbo
-                
+
                 //$this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => '8320306763', "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
                 $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => '8511153892', "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
-                
-                
-                
+
+
+
                 $this->book_phlebo($j_id);
                 $this->session->set_flashdata('payment_success', array("Thank You..! Your Test has been Booked Successfully."));
                 $url = "/";
@@ -812,7 +812,7 @@ class User_test_master extends CI_Controller {
                 $price += $price1[0]['price'];
             }
             if ($first_pos == "p") {
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -880,7 +880,7 @@ class User_test_master extends CI_Controller {
             $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Test has been book successfully. </p>
-                        
+
 		<p style="color:#7e7e7e;font-size:13px;"> Rs. ' . $price . ' Debited From your account. </p>
 		<p style="color:#7e7e7e;font-size:13px;">Your Current balance is Rs. ' . $total . '</p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
@@ -968,7 +968,7 @@ class User_test_master extends CI_Controller {
         if (!is_userloggedin()) {
             redirect('user_login');
         }
-        
+
         $this->load->helper("Email");
         $email_cnt = new Email;
         $data["login_data"] = loginuser();
@@ -987,7 +987,7 @@ class User_test_master extends CI_Controller {
         $order_id = $this->get_job_id($test_city);
         $booking_info = $this->uri->segment(3);
         $date = date('Y-m-d H:i:s');
-        
+
         //print_r(array("mobile" => $mobile,"gender"=>$gender,"dob"=>$dob)); die();
         $this->service_model->master_fun_update1("customer_master", array("id" => $uid), array("gender" => $gender, "dob" => $dob));
         if ($uid != NULL && $select_tests != Null && $total != Null) {
@@ -1056,10 +1056,10 @@ class User_test_master extends CI_Controller {
                 //$sms_message = preg_replace("/{{TOTALPRICE}}/", $tl_sms_price, $sms_message);
                 $this->load->helper("sms");
                 $notification = new Sms();
-                
-                
-                
-                
+
+
+
+
 //                $test_tat = [];
 //                $package_tat = [];
 //                foreach ($testid as $key3) {
@@ -1098,10 +1098,10 @@ class User_test_master extends CI_Controller {
 //
 //                $total = $max_tat + 2;
 //                $sms_message = preg_replace("/{{TOTAL}}/", $total, $sms_message);
-                
-                
-                
-                
+
+
+
+
                 if ($cmobile != NULL) {
                     $notification->send($cmobile, $sms_message);
                 }
@@ -1169,7 +1169,7 @@ class User_test_master extends CI_Controller {
                     }
                     if ($first_pos == "p") {
                         //$price1 = $this->user_test_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "id" => $id), array("title", "asc"));
-                        $price1 = $this->job_model->get_val("SELECT 
+                        $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -1210,7 +1210,7 @@ class User_test_master extends CI_Controller {
 
                             $payable = 0;
                             $payfrom_wallet = '<p style="color:#7e7e7e;font-size:13px;"> You paid From Your Wallet Rs. ' . $wallet_price . '  </p>
-						<p style="color:#7e7e7e;font-size:13px;"> Your Payable Amount Rs. ' . $total . '  </p> 
+						<p style="color:#7e7e7e;font-size:13px;"> Your Payable Amount Rs. ' . $total . '  </p>
 						';
                             $payemnttype = "Paid From Wallet";
                         } else {
@@ -1224,7 +1224,7 @@ class User_test_master extends CI_Controller {
                             );
                             $payable = $total - $wallettotal;
                             $payfrom_wallet = '<p style="color:#7e7e7e;font-size:13px;"> You paid From Your Wallet Rs. ' . $wallettotal . '  </p>
-						<p style="color:#7e7e7e;font-size:13px;"> Your Payable Amount Rs. ' . $total . '  </p> 
+						<p style="color:#7e7e7e;font-size:13px;"> Your Payable Amount Rs. ' . $total . '  </p>
 						';
                             $payemnttype = "Cash on blood Collection";
                         }
@@ -1242,7 +1242,7 @@ class User_test_master extends CI_Controller {
                     $update = $this->service_model->master_fun_update1("job_master", array("id" => $insert), array("payable_amount" => $total + $wallet_price, "collection_charge" => $collection_charge, "collectioncharge_amount" => $collectioncharge_amount));
                 }
 
-                
+
                 $package_list = explode(",", $select_tests);
                 foreach ($package_list as $key) {
                     $testid = explode("-", $key);
@@ -1258,8 +1258,8 @@ class User_test_master extends CI_Controller {
                         $this->check_active_package($testid[1], $insert);
                     }
                 }
-                
-                
+
+
                 $destail = $this->user_test_master_model->master_fun_get_tbl_val("customer_master", array("status" => 1, "id" => $uid), array("id", "asc"));
                 $ttl_prc = $total + $wallet_price;
                 $config['mailtype'] = 'html';
@@ -1280,10 +1280,10 @@ class User_test_master extends CI_Controller {
                 $message = '<div style="padding:0 4%;">
                     <h4><b>Dear </b>' . $destail[0]['full_name'] . '</h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Booking has been successfully. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> You Booked :  ' . implode($test_package_name, ', ') . '  </p>  
-                         <p style="color:#7e7e7e;font-size:13px;"> Sample Collection time :  ' . $datebb . ' ' . $s_time . '-' . $e_time . '  </p>  
-<p style="color:#7e7e7e;font-size:13px;"> Your Total Amount is Rs.' . $payable_amt . '  </p> ' . $payfrom_wallet . ' 
-        <p style="color:#7e7e7e;font-size:13px;"> Payment Type : ' . $payemnttype . '</p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> You Booked :  ' . implode($test_package_name, ', ') . '  </p>
+                         <p style="color:#7e7e7e;font-size:13px;"> Sample Collection time :  ' . $datebb . ' ' . $s_time . '-' . $e_time . '  </p>
+<p style="color:#7e7e7e;font-size:13px;"> Your Total Amount is Rs.' . $payable_amt . '  </p> ' . $payfrom_wallet . '
+        <p style="color:#7e7e7e;font-size:13px;"> Payment Type : ' . $payemnttype . '</p>
 		<p style="color:#7e7e7e;font-size:13px;"> Mobile : ' . $destail[0]['mobile'] . '</p>
                         <p style="color:#7e7e7e;font-size:13px;">Thank You.</p>
                 </div>';
@@ -1352,12 +1352,12 @@ class User_test_master extends CI_Controller {
                     }
                 }
                 //$file = $this->pdf_invoice($insert);
-                
+
                 //$this->service_model->master_fun_update1("job_master", array("id" => $insert), array("invoice" => $file));
                 /* Delhi and gurgaon booking alert sms end */
-                
-                
-                
+
+
+
                 $sms_message ='';
                 $sms_message = '{{NAME}} has made online booking for home collection. Please assign phlebo for Order Id: {{ORDER_ID}}, Registration No: {{REGISTRATION_ID}}';
                 $sms_message = preg_replace("/{{NAME}}/",  ucfirst($c_name) , $sms_message);
@@ -1365,11 +1365,11 @@ class User_test_master extends CI_Controller {
                 $sms_message = preg_replace("/{{REGISTRATION_ID}}/", $insert, $sms_message);
                 //$notification::send('8320306763', $sms_message);
                 $notification::send('8511153892', $sms_message);  //Namarata SMS Message to Assign Phelbo
-                
+
                 //$this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => '8320306763', "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
                 $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => '8511153892', "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
-                
-                
+
+
                 $this->book_phlebo($insert);
                 $this->session->set_flashdata("payment_success", array("Cash on delivery request successfully received."));
                 //redirect("user_master");
@@ -1395,7 +1395,7 @@ class User_test_master extends CI_Controller {
                 $price += $price1[0]['price'];
             }
             if ($first_pos == "p") {
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -1571,7 +1571,7 @@ class User_test_master extends CI_Controller {
             $package_name = array();
             foreach ($book_package as $key) {
 
-                $price1 = $this->job_model->get_val("SELECT 
+                $price1 = $this->job_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`

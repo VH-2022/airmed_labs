@@ -321,7 +321,7 @@
                                                     $p_prc = $p_prc + $result[0]->d_price;
                                                 }
                                                 ?>
-                                                <li id="li_id_<?php echo $test_ids[$loop_cnt]; ?>">  
+                                                <li id="li_id_<?php echo $test_ids[$loop_cnt]; ?>">
                                                     <div class="col-md-8 col-sm-6 pdng_0">
                                                         <h2> <?php echo $key; ?></h2>
                                                     </div>
@@ -330,9 +330,9 @@
                                                     </div>
 
                                                     <div class="col-md-1 col-sm-1 res_pdng_0">
-                                                        <a href="javascript:void(0);" class="myAvailableTest" id="remove_<?php echo $test_ids[$loop_cnt]; ?>" title="<?php echo $key; ?>" onclick="remove_test('<?php echo $test_ids[$loop_cnt]; ?>');"><i class="fa fa-trash" style="color:red;"> </i></a> 
+                                                        <a href="javascript:void(0);" class="myAvailableTest" id="remove_<?php echo $test_ids[$loop_cnt]; ?>" title="<?php echo $key; ?>" onclick="remove_test('<?php echo $test_ids[$loop_cnt]; ?>');"><i class="fa fa-trash" style="color:red;"> </i></a>
                                                     </div>
-                                                </li> 
+                                                </li>
                                                 <?php
                                                 $loop_cnt++;
                                             }
@@ -452,8 +452,8 @@
                                                             <div class="srch_popup_full srch_popup_acco">
 
                                                                 <div id="searchbar" style="" class="srch_sftr_popup_inpt menuBtn">
-                                                                    <input type="text" id="vidyagames1" /> 
-                                                                </div>								
+                                                                    <input type="text" id="vidyagames1" />
+                                                                </div>
                                                                 <div class="col-sm-2 pull-right pdng_0">
                                                                     <a href="#" style="margin-top: 10px;" class="btn btn-dark btn-theme-colored btn-flat pull-right" onclick="add_new_test();">Add</a>
                                                                 </div>
@@ -685,7 +685,7 @@
                                                                         <input type="text"  placeholder="Email" id="login_email" class="form-control" name="email">
                                                                     </div>
                                                                     <br>
-                                                                </div> 
+                                                                </div>
                                                                 <div class="col-sm-12 pdng_0" id="check_otp_div">
                                                                     <div class="input-group">
                                                                         <span id="keyid" class="input-group-addon" style=""><i class="fa fa-key"></i></span>
@@ -791,7 +791,7 @@
                                                                                 <span style="color:red;" id="f_error"></span>
                                                                                 <center><a href="javascript:void(0);" class=" set_book_btnpopup pull-right" id="add_family_member"><i class="fa fa-plus-circle"></i>
                                                                                         Add New </a></center>
-                                                                            </div> 
+                                                                            </div>
                                                                         </div>
                                                                         <span id="contener_1_error" style="color:red; width:100%; float:left;"></span>
                                                                     </div>
@@ -1049,9 +1049,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -1243,7 +1243,7 @@ foreach ($test as $ts) {
         }
     </script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
-    <script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>        
+    <script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>
     <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
     <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
     <script> function base_url(){ return '<?= base_url(); ?>'; } book_test_id = '<?php echo $ids; ?>'; uid = '<?= $uid; ?>'; t_date = '<?= date("m/d/Y"); ?>'; b_city = '<?= $test_city_session ?>';</script>

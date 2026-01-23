@@ -64,7 +64,7 @@
                                 </select>
                                 <span style="color: red;"><?=form_error('type');?></span>
                             </div>
-							
+
 							<div class="form-group">
                                 <label for="exampleInputFile">City</label>
                                 <select name="cityname" class="form-control" id="">
@@ -75,7 +75,7 @@
                                 </select>
                                 <span style="color: red;"><?= form_error('cityname'); ?></span>
                             </div>
-							
+
                             <div class="form-group">
                                 <label for="exampleInputFile">Assign Pine Labs Terminal</label>
                                 <select name="pinelab" class="form-control" id="">
@@ -93,14 +93,25 @@
 
                             <div class="form-group">
                             <label for="payment_due" class="col-sm-4 pdng_0">
-                                            <input type="checkbox" <?php 
+                                            <input type="checkbox" <?php
                                             if($query[0]["payment_due"]=="yes"){
 echo "checked";
                                             }
-                                            ?>  value="yes" name="payment_due" class="payment_due" 
+                                            ?>  value="yes" name="payment_due" class="payment_due"
                                             id="payment_due">&nbsp;Payment Due
                                         </label>
                                 <span style="color: red;"><?= form_error('payment_due'); ?></span>
+                            </div>
+                            <div class="form-group">
+                            <label for="cancel_entery_whatsapp" class="col-sm-4 pdng_0">
+                                            <input type="checkbox" <?php
+                                            if($query[0]["cancel_entery_whatsapp"]=="1"){
+echo "checked";
+                                            }
+                                            ?>  value="1" name="cancel_entery_whatsapp" class="cancel_entery_whatsapp"
+                                            id="cancel_entery_whatsapp">&nbsp;Cancel Entry Whatsapp
+                                        </label>
+                                <span style="color: red;"><?= form_error('cancel_entery_whatsapp'); ?></span>
                             </div>
                         </div>
                     </div><!-- /.box-body -->

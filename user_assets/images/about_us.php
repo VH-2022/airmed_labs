@@ -23,7 +23,7 @@
 
 
     <section id="about" >
-       
+
 		<div class="indx_big_img" style="background-image: url(<?php echo base_url(); ?>user_assets/images/new/about-banner.jpg);">
             <div class="container">
                <div class="row">
@@ -36,7 +36,7 @@
                </div>
           </div>
         </div>
-                   
+
     </section>
 
     <!-- Section: Departments  -->
@@ -44,7 +44,7 @@
         <div class="container indx_4_img">
             <div class="section-content "> <!--col-md-10 col-md-offset-1-->
                 <div class="row indx_round_div">
-				
+
 				<div class="full-width">
                     <div class="col-md-2 col-sm-6 col-xs-6">
                         <div class="icon-box text-center">
@@ -135,13 +135,13 @@
 		<div class="row">
 			<div class="col-sm-12">
 				 <h1 class="subtitle text-center txt_blue_clr" style="margin-bottom: 25px;color:#333;font-weight:bold">LAB AT YOUR DOORSTEP</h1>
-				
+
 				<p>With the focus on providing quality care to our patients, best in class diagnostic support to our doctors, we are a team of dedicated pathologists supported by a highly professional team of business and clinical experts.</p>
 				<p>We strive to attain highest levels of service quality to strongly influence patient satisfaction.</p>
 
 				<p>Non-clinical attributes, be it hygiene, waiting areas and level of communication with patients, play a vital role in ensuring patient satisfaction. Unfortunately, the non-clinical aspects are often ignored by most of healthcare providers. At Airmed, we strive to achieve highest levels of patient satisfaction, and at the same time, maintaining foremost levels of clinical standards.
 				</p>
-			</div>	
+			</div>
 		</div>
 	</div>
   </section>
@@ -150,7 +150,7 @@
 	<div class="container mbl_containr" style="padding-bottom:0">
 		<div class="row">
 			 <h1 class="subtitle text-center txt_blue_clr" style="margin-bottom: 25px;color:#333;">OUR STRENGTHS</h1>
-			
+
 			<ul class="strength-ul">
 				<li><a href="">CLINICAL QUALITY</a></li>
 				<li><a href="">TRUST & TRANSPARENCY</a></li>
@@ -162,13 +162,13 @@
 				<li><a href="">PATIENT EXPERIENCE</a></li>
 				<li><a href="">SPEED</a></li>
 			</ul>
-			
+
 		</div>
 	</div>
   </section>
    <div class="border-btn mt-30 bg-white"><span  style="background:#333;"></span></div>
-   
-   
+
+
     <section class="bg-white">
 	<div class="container mbl_containr" style="padding-bottom:30px">
 		<div class="row">
@@ -184,7 +184,7 @@
 				<li><a href="">Histopathology</a></li>
 				<li><a href="">Microbiology</a></li>
 				<li><a href="">Genetic studies</a></li>
-				
+
 			</ul>
 		</div>
 	</div>
@@ -195,54 +195,53 @@
                 <div class="col-sm-12 pdng_0">
                     <div class="indx_mbl_mdl">
                         <!--  <h1 class="mbl_title center">App Communication Space</h1>-->
-						   
+
                             <div class="col-sm-4  col-xs-4">
-                                <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> 
+                                <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/>
                             </div>
 							 <div class="col-sm-4 col-xs-4">
-                                <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/> 
+                                <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/>
                             </div>
 							 <div class="col-sm-4 col-xs-4">
-                                <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/> 
+                                <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/>
                             </div>
-							
-                           
+
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-	
+
 	<section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
 			<div class="col-sm-12" style="text-align:center;">
 			<div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-				 <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
+				 <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/>
 			</div>
                            <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/> & GET <b style="font-family: 'Montserrat', sans-serif;">30% CASH BACK</B> </h1>
-							  
+
 							 </div>
 							 <div class="clearfix"></div><br/>
                               <div class="col-sm-6  pdng_0 col-sm-offset-4">
-							  <div class="col-sm-4  col-xs-6">
+							        <!-- <div class="col-sm-4  col-xs-6">
                                         <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
-                                    </div>
+                                    </div> -->
                                     <div class="col-sm-4  col-xs-6">
                                         <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=54&w=173&src=user_assets/images/google_play.png"/></a>
                                     </div>
-                                    
+
                                 </div>
                             </div>
-								
+
 			</div>
         </div>
     </section>
-				
-                
+
+
 </div>
 <!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
+<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>-->
 <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
 <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
-

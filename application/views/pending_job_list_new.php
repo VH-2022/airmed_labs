@@ -29,7 +29,7 @@
                             <td>Patient Delivery Date Time</td>
                             <td><label id="pat_del_timestamp"></label></td>
                         </tr>
-                        
+
                         <tr>
                             <td>Job Status</td>
                             <td><label id="hrd_cpy_status"></label></label></td>
@@ -156,7 +156,7 @@
                                                     autoclose: true
                                                 });
                                             });
-                                            
+
                                             function hard_report_status(id, order_id, cus_name, status) {
                                                 $('#report_hrd_cpy_jobid').val(id);
 
@@ -243,26 +243,26 @@
                                                             $("#doctor_time").val('');
                                                             $("#tr_doc_status").html('<span class="label label-danger">Pending</span>');
                                                             $("#doctor_action").css("display", "none");
-                                                            
+
                                                             $('input[name="patient_status"]')[0].checked = false;
                                                             $("#patient_phlebo").val('');
                                                             $("#patient_date").val('');
                                                             $("#patient_time").val('');
                                                             $("#tr_pat_status").html('<span class="label label-danger">Pending</span>');
                                                             $("#patient_action").css("display", "none");
-                                                            
+
                                                             $('input[name="patient_status"]').removeAttr('disabled');
                                                             $("#patient_phlebo").removeAttr('disabled');
                                                             $("#patient_date").removeAttr('disabled');
                                                             $("#patient_time").removeAttr('disabled');
-                                                            
+
                                                             $('input[name="doctor_status"]').removeAttr('disabled');
                                                             $("#doctor_phlebo").removeAttr('disabled');
                                                             $("#doctor_date").removeAttr('disabled');
                                                             $("#doctor_time").removeAttr('disabled');
                                                             $("#hrd_cpy_update").removeAttr('disabled');
                                                         }
-                                                        
+
                                                         $('#hard_report_modal').modal('show');
                                                         $('#hrd_cpy_order_id').html(order_id);
                                                         $('#hrd_cpy_cus_name').html(cus_name);
@@ -279,7 +279,7 @@
                                                     location.href = "<?php echo base_url() ?>job_master/mark_as_report_delivered/" + id + "/2";
                                                 }
                                             });
-                                            
+
                                             $("#doctor_action").click(function () {
                                                 var alert = confirm('Are you sure?');
                                                 if (alert == '1') {
@@ -287,9 +287,9 @@
                                                     location.href = "<?php echo base_url() ?>job_master/mark_as_report_delivered/" + id + "/1";
                                                 }
                                             });
-                                            
+
                                             $("#hrd_cpy_update").click(function () {
-                                            
+
                                                 $(".errorclass").html('');
                                                 var error = 0;
                                                 var doctor_status = $("#doctor_status").prop("checked");
@@ -301,7 +301,7 @@
                                                 var patient_phlebo = $("#patient_phlebo").val();
                                                 var patient_date = $("#patient_date").val();
                                                 var patient_time = $("#patient_time").val();
-                                                
+
                                                 if (doctor_status != "" && patient_status == "") {
                                                     if (doctor_status == "") {
                                                         $("#doctor_statuserror").html('Required');
@@ -409,9 +409,9 @@
         line-height: 30px;
         -moz-border-radius: 15px;
         border-radius: 15px;
-        background-color: #222;    
+        background-color: #222;
         color: #FFF;
-        text-align: center;  
+        text-align: center;
     }
     .round.round-sm {
         height: 10px;
@@ -497,7 +497,7 @@
     .pending_job_list_tbl table {width: 100%; border-collapse: collapse; float: left;}
     .pending_job_list_tbl th {background-color: #e5e5e5; color: #3e3e3e; font-size: 16px; font-weight: 600; text-align: center; vertical-align: middle; border: 1px solid #b1b1b1;}
     .pending_job_list_tbl td, th {padding:2px 6px; border: 1px solid #ccc; text-align: left;}
-    .pending_job_list_tbl td {padding: 4px 4px; font-size: 13px; color: #505050;} 
+    .pending_job_list_tbl td {padding: 4px 4px; font-size: 13px; color: #505050;}
     @media (max-width: 980px) {
         .pending_job_list_tbl table, .pending_job_list_tbl thead, .pending_job_list_tbl tbody, .pending_job_list_tbl th, .pending_job_list_tbl td, .pending_job_list_tbl tr {display: block;}
         .pending_job_list_tbl thead tr {position: absolute; top: -9999px; left: -9999px;}
@@ -533,11 +533,11 @@
         width: 100%;
     }
     .multiselect{width:100%;text-align: left;}
-    .wordwrap { 
-        white-space: pre-wrap;      /* CSS3 */   
-        white-space: -moz-pre-wrap; /* Firefox */    
-        white-space: -pre-wrap;     /* Opera <7 */   
-        white-space: -o-pre-wrap;   /* Opera 7 */    
+    .wordwrap {
+        white-space: pre-wrap;      /* CSS3 */
+        white-space: -moz-pre-wrap; /* Firefox */
+        white-space: -pre-wrap;     /* Opera <7 */
+        white-space: -o-pre-wrap;   /* Opera 7 */
         word-wrap: break-word;      /* IE */
     }
     .multiselect-container.dropdown-menu {
@@ -553,7 +553,7 @@
     }
     ul .active-result {
         white-space: pre-line;
-        word-wrap: break-word; 
+        word-wrap: break-word;
         width:100% !important;
     }
     .text_highlight:hover{
@@ -567,7 +567,7 @@
         width: 100%;
         float: left;
         white-space:pre-line;
-    }   
+    }
 </style>
 <style>
     .chosen-container {
@@ -668,20 +668,20 @@ foreach ($login_data['branch_fk'] as $val) {
                                 <td class="centertext"><a id="received_count_4_to_8_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=4to8&status=8" target="_blank"><?= $count[0]['received_count_4_to_8_hours']?></a></td>
 
                                 <td class="centertext"><a id="received_count_8_to_16_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=8to16&status=8" target="_blank"><?= $count[0]['received_count_8_to_16_hours']?></a></td>
-                                
+
                                 <td class="centertext"><a id="received_count_16_to_20_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=16to20&status=8" target="_blank"><?= $count[0]['received_count_16_to_20_hours']?></a></td>
-                                
+
                                 <td class="centertext"><a id="received_count_20_to_24_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=20to24&status=8" target="_blank"><?= $count[0]['received_count_20_to_24_hours']?></a></td>
-                                
+
                                 <td class="centertext"><a id="received_count_24_to_36_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=24to36&status=8" target="_blank"><?= $count[0]['received_count_24_to_36_hours']?></a></td>
-                                
+
                                 <td class="centertext"><a id="received_count_36_to_72_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=36to72&status=8" target="_blank"><?= $count[0]['received_count_36_to_72_hours']?></a></td>
-                                
+
                                 <td class="centertext"><a id="received_count_72_to_168_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=72to1080&status=8" target="_blank"><?= $count[0]['received_count_72_to_168_hours']?></a></td>
                                 </tr>
                                 <!-- <tr>
                                 <td><b> Completed</b></td>
-                                
+
                                 <td class="centertext"><a href="<?php echo base_url(); ?>job_master/hours_list?hours=4to8&status=2" target="_blank"><?= $count[0]['completed_count_4_to_8_hours']?></a></td>
                                 <td class="centertext"><a href="<?php echo base_url(); ?>job_master/hours_list?hours=8to16&status=2" target="_blank"><?= $count[0]['completed_count_8_to_16_hours']?></a></td>
                                 <td class="centertext"><a href="<?php echo base_url(); ?>job_master/hours_list?hours=16to20&status=2" target="_blank"><?= $count[0]['completed_count_16_to_20_hours']?></a></td>
@@ -689,7 +689,7 @@ foreach ($login_data['branch_fk'] as $val) {
                                 <td class="centertext"><a href="<?php echo base_url(); ?>job_master/hours_list?hours=24to36&status=2" target="_blank"><?= $count[0]['completed_count_24_to_36_hours']?></a></td>
                                 <td class="centertext"><a href="<?php echo base_url(); ?>job_master/hours_list?hours=36to72&status=2" target="_blank"><?= $count[0]['completed_count_36_to_72_hours']?></a></td>
                                 <td class="centertext"><a href="<?php echo base_url(); ?>job_master/hours_list?hours=72to1080&status=2" target="_blank"><?= $count[0]['completed_count_72_to_168_hours']?></a></td>
-                              
+
                                 </tr> -->
                                 <tr>
 
@@ -701,8 +701,8 @@ foreach ($login_data['branch_fk'] as $val) {
                                 <td class="centertext"><a id="whatsapp_count_24_to_36_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=24to36&ws=1" target="_blank"><?= $count[0]['whatsapp_count_24_to_36_hours']?></a></td>
                                 <td class="centertext"><a id="whatsapp_count_36_to_72_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=36to72&ws=1" target="_blank"><?= $count[0]['whatsapp_count_36_to_72_hours']?></a></td>
                                 <td class="centertext"><a id="whatsapp_count_72_to_168_hours" href="<?php echo base_url(); ?>job_master/hours_list?hours=72to1080&ws=1" target="_blank"><?= $count[0]['whatsapp_count_72_to_168_hours']?></a></td>
-                               
-                               
+
+
                                 </tr>
                                 </tbody>
 
@@ -712,7 +712,7 @@ foreach ($login_data['branch_fk'] as $val) {
                   </div>
                </div>
             </div>
- <?php } ?>       
+ <?php } ?>
             <div class="col-xs-12">
                 <div class="box box-primary" style="min-height: 500px;">
                     <?php if ($login_data['type'] != 7 && !in_array($sub, $btype)) { ?>
@@ -724,15 +724,15 @@ foreach ($login_data['branch_fk'] as $val) {
                                 <li class="nav-item">
                                     <a class="nav-link" href="<?= base_url(); ?>Btob_job_master/pending_list" role="tab">Lab Booking</a>
                                 </li>
-                            </ul> 
+                            </ul>
                         </div>
-                    <?php } ?> 
+                    <?php } ?>
                     <!------ <div class="box-header">
                          <div class="col-xs-12">
                              <div class="col-xs-2 pull-right">
                                  <div class="form-group">
                     <?php if ($login_data['type'] != 5) { ?>
-                                                                                                                                                                                                            
+
                                                                                                                                                                                                                                                                                                                                                                                      <a style="float:right; display:none;" href='<?php echo base_url(); ?>job_master/export_csv/1' class="btn btn-primary btn-sm" ><i class="fa fa-download" ></i><strong > Export To CSV</strong></a>
                     <?php } ?>
                                  </div>
@@ -913,7 +913,7 @@ foreach ($login_data['branch_fk'] as $val) {
                                             <option value="">--Select Referral By--</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="col-sm-3" style="margin-bottom:10px;">
                                         <select name="sample_not_processed" id="sample_not_processed" class="chosen">
                                             <option value="">--All --</option>
@@ -921,7 +921,7 @@ foreach ($login_data['branch_fk'] as $val) {
                                             <option value="2" style="background-color: #B8D5D5;">Sample Not Processed</option>
                                         </select>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="widget">
@@ -931,7 +931,7 @@ foreach ($login_data['branch_fk'] as $val) {
                                             <label>Payment</label>
                                             <label class="radio-inline"><input type="radio" value="due" name="payment">Due</label>
                                             <label class="radio-inline"><input type="radio" value="paid" name="payment">Paid</label>
-                                            <label class="radio-inline"><input type="radio" value="all" name="payment" checked="checked">All</label> 
+                                            <label class="radio-inline"><input type="radio" value="all" name="payment" checked="checked">All</label>
                                         </div>
                                         <div class="col-md-3 col-sm-5 pdng_0" style="margin-bottom:10px;">
                                             <label> Search with  sample collection date</label>
@@ -1227,7 +1227,7 @@ foreach ($login_data['branch_fk'] as $val) {
                                     <?= form_close(); ?>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="modal fade" id="print_model1" role="dialog">
                             <div class="modal-dialog">
                                 <input type="hidden" id="getjobsid" >
@@ -1279,7 +1279,7 @@ foreach ($login_data['branch_fk'] as $val) {
                 <h4 class="modal-title">Clinical History</h4>
             </div>
             <div class="modal-body">
-                
+
                 <div class="form-group">
                     <div class="form-group">
                         <label for="exampleInputFile">Message :</label> <span id="prescription_msg"></span>
@@ -1290,7 +1290,7 @@ foreach ($login_data['branch_fk'] as $val) {
                         <img id="prescription_file1" height="200px" width="200px"/>
                     </div>
                 </div>
-                
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -1417,7 +1417,7 @@ function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
 
         var test_val = idsplit[0];
         var barcode = $("#b_barcode").val();
-		
+
 		if(barcode=="" || test_val==""){
 			$("#b_error").html("Please Select Test & provide barcode value to add!!!");
 			return false;
@@ -1493,7 +1493,7 @@ function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
             }
         });
 
-    });	
+    });
     function b_update() {
         $("#b_error").html("");
         $("#b_success").html("");
@@ -1631,94 +1631,94 @@ function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
             }else{
                 branch="";
             }
-            
+
             // Access the specific field
             $('#approve_count_4_to_8_hours').html(data[0].approve_count_4_to_8_hours??0);
-            $('#approve_count_8_to_16_hours').html(data[0].approve_count_8_to_16_hours??0);   
+            $('#approve_count_8_to_16_hours').html(data[0].approve_count_8_to_16_hours??0);
             $('#approve_count_16_to_20_hours').html(data[0].approve_count_16_to_20_hours??0);
-            $('#approve_count_20_to_24_hours').html(data[0].approve_count_20_to_24_hours??0); 
+            $('#approve_count_20_to_24_hours').html(data[0].approve_count_20_to_24_hours??0);
             $('#approve_count_24_to_36_hours').html(data[0].approve_count_24_to_36_hours??0);
-            $('#approve_count_36_to_72_hours').html(data[0].approve_count_36_to_72_hours??0); 
+            $('#approve_count_36_to_72_hours').html(data[0].approve_count_36_to_72_hours??0);
             $('#approve_count_72_to_168_hours').html(data[0].approve_count_72_to_168_hours??0);
 
-           
+
 
              $('#approve_count_4_to_8_hours').attr('href',countURL+'hours=4to8&status=6&branch='+branch);
-            $('#approve_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=6&branch='+branch);   
+            $('#approve_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=6&branch='+branch);
             $('#approve_count_16_to_20_hours').attr('href',countURL+'hours=16to20&status=6&branch='+branch);
-            $('#approve_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=6&branch='+branch); 
+            $('#approve_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=6&branch='+branch);
             $('#approve_count_24_to_36_hours').attr('href',countURL+'hours=24to36&status=6&branch='+branch);
-            $('#approve_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=6&branch='+branch); 
+            $('#approve_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=6&branch='+branch);
             $('#approve_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=6&branch='+branch);
 
             $('#completed_count_4_to_8_hours').html(data[0].completed_count_4_to_8_hours??0);
-            $('#completed_count_8_to_16_hours').html(data[0].completed_count_8_to_16_hours??0);   
+            $('#completed_count_8_to_16_hours').html(data[0].completed_count_8_to_16_hours??0);
             $('#completed_count_16_to_20_hours').html(data[0].completed_count_16_to_20_hours??0);
-            $('#completed_count_20_to_24_hours').html(data[0].completed_count_20_to_24_hours??0); 
+            $('#completed_count_20_to_24_hours').html(data[0].completed_count_20_to_24_hours??0);
             $('#completed_count_24_to_36_hours').html(data[0].completed_count_24_to_36_hours??0);
-            $('#completed_count_36_to_72_hours').html(data[0].completed_count_36_to_72_hours??0); 
-            $('#completed_count_72_to_168_hours').html(data[0].completed_count_72_to_168_hours??0); 
+            $('#completed_count_36_to_72_hours').html(data[0].completed_count_36_to_72_hours??0);
+            $('#completed_count_72_to_168_hours').html(data[0].completed_count_72_to_168_hours??0);
 
             $('#completed_count_4_to_8_hours').attr('href',countURL+'hours=4to8&status=2&branch='+branch);
-            $('#completed_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=2&branch='+branch);   
+            $('#completed_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=2&branch='+branch);
             $('#completed_count_16_to_20_hours').attr('href',countURL+'hours=16to20&status=2&branch='+branch);
-            $('#completed_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=2&branch='+branch); 
+            $('#completed_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=2&branch='+branch);
             $('#completed_count_24_to_36_hours').attr('href',countURL+'hours=24to36&status=2&branch='+branch);
-            $('#completed_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=2&branch='+branch); 
-            $('#completed_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=2&branch='+branch); 
+            $('#completed_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=2&branch='+branch);
+            $('#completed_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=2&branch='+branch);
 
             $('#received_count_4_to_8_hours').html(data[0].received_count_4_to_8_hours??0);
-            $('#received_count_8_to_16_hours').html(data[0].received_count_8_to_16_hours??0);   
+            $('#received_count_8_to_16_hours').html(data[0].received_count_8_to_16_hours??0);
             $('#received_count_16_to_20_hours').html(data[0].received_count_16_to_20_hours??0);
-            $('#received_count_20_to_24_hours').html(data[0].received_count_20_to_24_hours??0); 
+            $('#received_count_20_to_24_hours').html(data[0].received_count_20_to_24_hours??0);
             $('#received_count_24_to_36_hours').html(data[0].received_count_24_to_36_hours??0);
-            $('#received_count_36_to_72_hours').html(data[0].received_count_36_to_72_hours??0); 
-            $('#received_count_72_to_168_hours').html(data[0].received_count_72_to_168_hours??0); 
+            $('#received_count_36_to_72_hours').html(data[0].received_count_36_to_72_hours??0);
+            $('#received_count_72_to_168_hours').html(data[0].received_count_72_to_168_hours??0);
 
             $('#received_count_4_to_8_hours').attr('href',countURL+'hours=4to8&status=8&branch='+branch);
-            $('#received_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=8&branch='+branch);   
+            $('#received_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=8&branch='+branch);
             $('#received_count_16_to_20_hours').attr('href',countURL+'hours=16to20&status=8&branch='+branch);
-            $('#received_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=8&branch='+branch); 
+            $('#received_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=8&branch='+branch);
             $('#received_count_24_to_36_hours').attr('href',countURL+'hours=24to36&status=8&branch='+branch);
-            $('#received_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=8&branch='+branch); 
-            $('#received_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=8&branch='+branch); 
+            $('#received_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=8&branch='+branch);
+            $('#received_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=8&branch='+branch);
 
             $('#sample_count_4_to_8_hours').html(data[0].sample_count_4_to_8_hours??0);
-            $('#sample_count_8_to_16_hours').html(data[0].sample_count_8_to_16_hours??0);   
+            $('#sample_count_8_to_16_hours').html(data[0].sample_count_8_to_16_hours??0);
             $('#sample_count_16_to_20_hours').html(data[0].sample_count_16_to_20_hours??0);
-            $('#sample_count_20_to_24_hours').html(data[0].sample_count_20_to_24_hours??0); 
+            $('#sample_count_20_to_24_hours').html(data[0].sample_count_20_to_24_hours??0);
             $('#sample_count_24_to_36_hours').html(data[0].sample_count_24_to_36_hours??0);
-            $('#sample_count_36_to_72_hours').html(data[0].sample_count_36_to_72_hours??0); 
-            $('#sample_count_72_to_168_hours').html(data[0].sample_count_72_to_168_hours??0); 
+            $('#sample_count_36_to_72_hours').html(data[0].sample_count_36_to_72_hours??0);
+            $('#sample_count_72_to_168_hours').html(data[0].sample_count_72_to_168_hours??0);
 
             $('#sample_count_4_to_8_hours').attr('href',countURL+'hours=4to8&status=7&branch='+branch);
-            $('#sample_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=7&branch='+branch);   
+            $('#sample_count_8_to_16_hours').attr('href',countURL+'hours=8to16&status=7&branch='+branch);
             $('#sample_count_16_to_20_hours').attr('href',countURL+'hours=16to20&status=7&branch='+branch);
-            $('#sample_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=7&branch='+branch); 
+            $('#sample_count_20_to_24_hours').attr('href',countURL+'hours=20to24&status=7&branch='+branch);
             $('#sample_count_24_to_36_hours').attr('href',countURL+'hours=24to36&status=7&branch='+branch);
-            $('#sample_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=7&branch='+branch); 
-            $('#sample_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=7&branch='+branch); 
+            $('#sample_count_36_to_72_hours').attr('href',countURL+'hours=36to72&status=7&branch='+branch);
+            $('#sample_count_72_to_168_hours').attr('href',countURL+'hours=72to168&status=7&branch='+branch);
 
-            
-            
+
+
             $('#whatsapp_count_4_to_8_hours').html(data[0].whatsapp_count_4_to_8_hours??0);
-            $('#whatsapp_count_8_to_16_hours').html(data[0].whatsapp_count_8_to_16_hours??0);   
+            $('#whatsapp_count_8_to_16_hours').html(data[0].whatsapp_count_8_to_16_hours??0);
             $('#whatsapp_count_16_to_20_hours').html(data[0].whatsapp_count_16_to_20_hours??0);
-            $('#whatsapp_count_20_to_24_hours').html(data[0].whatsapp_count_20_to_24_hours??0); 
+            $('#whatsapp_count_20_to_24_hours').html(data[0].whatsapp_count_20_to_24_hours??0);
             $('#whatsapp_count_24_to_36_hours').html(data[0].whatsapp_count_24_to_36_hours??0);
-            $('#whatsapp_count_36_to_72_hours').html(data[0].whatsapp_count_36_to_72_hours??0); 
+            $('#whatsapp_count_36_to_72_hours').html(data[0].whatsapp_count_36_to_72_hours??0);
             $('#whatsapp_count_72_to_168_hours').html(data[0].whatsapp_count_72_to_168_hours??0);
 
             $('#whatsapp_count_4_to_8_hours').attr('href',countURL+'hours=4to8&ws=1&branch='+branch);
-            $('#whatsapp_count_8_to_16_hours').attr('href',countURL+'hours=8to16&ws=1&branch='+branch);   
+            $('#whatsapp_count_8_to_16_hours').attr('href',countURL+'hours=8to16&ws=1&branch='+branch);
             $('#whatsapp_count_16_to_20_hours').attr('href',countURL+'hours=16to20&ws=1&branch='+branch);
-            $('#whatsapp_count_20_to_24_hours').attr('href',countURL+'hours=20to24&ws=1&branch='+branch); 
+            $('#whatsapp_count_20_to_24_hours').attr('href',countURL+'hours=20to24&ws=1&branch='+branch);
             $('#whatsapp_count_24_to_36_hours').attr('href',countURL+'hours=24to36&ws=1&branch='+branch);
-            $('#whatsapp_count_36_to_72_hours').attr('href',countURL+'hours=36to72&ws=1&branch='+branch); 
+            $('#whatsapp_count_36_to_72_hours').attr('href',countURL+'hours=36to72&ws=1&branch='+branch);
             $('#whatsapp_count_72_to_168_hours').attr('href',countURL+'hours=72to168&ws=1&branch='+branch);
 
-        
-                
+
+
             }, complete: function () {
                 $("#loader_div").attr("style", "display:none;");
             }
@@ -2093,7 +2093,7 @@ function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
         $("#branch").html("");
         $('.multiselect-ui').multiselect("rebuild");
     }
-</script> 
+</script>
 <script type="text/javascript">
     $(function () {
 
@@ -2234,7 +2234,7 @@ function open_barcode_popup(val, test_ids, package_ids, branch_fk, status) {
 
     });
     /*End*/
-    
+
      setTimeout(function () {
             get_test_rslt();
         }, 10000);
@@ -2360,8 +2360,8 @@ function get_test_rslt() {
     }
     //pinkesh code start
     function dispatched_job_test(jid, status) {
-        
-        
+
+
         $("#prescription_file").attr("style", "");
         $("#prescription_file1").attr("style", "");
         $.ajax({
@@ -2370,7 +2370,7 @@ function get_test_rslt() {
             dataType: 'json',
             data: {job_id: jid},
             success: function (data) {
-                
+
                 if (data[0].prescription_file != null) {
                     //$("#prescription_file").attr("href", "<?php echo base_url(); ?>upload/doctor_description/"+data[0].prescription_file);
                     $("#prescription_file1").attr("src", "<?php echo base_url(); ?>upload/doctor_description/" + data[0].prescription_file);
@@ -2382,10 +2382,10 @@ function get_test_rslt() {
                 $("#clinical_history").modal();
             }
         });
-        
-        
-        
-        
+
+
+
+
 //        var test = confirm('Are you sure?');
 //        if (test == true) {
 //            $.ajax({
@@ -2438,11 +2438,11 @@ function get_test_rslt() {
     var test_city = $("#citiess").val();
     get_plm(test_city);
     get_branch("1");
-    
+
     //setInterval(function(){ sub_form(); },300000);
 
     function approved(jid) {
-        
+
         document.getElementById('report_whatsapp').action = "<?php echo base_url() ?>add_result/approve_reporttest_whatsapp/" + jid;
 
 //$('#reportcontain').html('<div style="height:50px"><span id="searching_spinner_center" style="position: absolute;left: 50%;"><img src="<?= base_url() . "img/ajax-loader.gif" ?>" /></span></div>');
@@ -2463,7 +2463,7 @@ $.ajax({url: "<?php echo base_url() . "job_master/getjobs_bookedpack"; ?>",
                     row.insertAfter(row.next());
                 }
             });
-        
+
             $(".newadd").click(function () {
                 var checkid = this.id;
                 var splitchack = checkid.split("_")
@@ -2492,14 +2492,14 @@ function generate_send_click()
             $("#loader_div1").attr("style", "");
             $("#genbutton").attr("disabled", "disabled");
         },
-        success: function (data) {							
+        success: function (data) {
             if(data.msg == "success")
-			{				
-                alert("Whatsapp sent successfully");				
+			{
+                alert("Whatsapp sent successfully");
 				window.open(data.file, '_blank');
 			}
             else
-                alert("Whatsapp sent failed");                    
+                alert("Whatsapp sent failed");
         },
 		error: function (jqXHR, exception) {
             if (jqXHR.status === 0) {

@@ -8,15 +8,14 @@ class User_master extends CI_Controller {
     var $cash_back;
 
     function __construct() {
-       
-       // session_write_close(); 
+
+       // session_write_close();
         parent::__construct();
-        
+
         $this->load->library('session');
         $user_id = $this->session->userdata('user_id');
-$username = $this->session->userdata('username');
-        print_r($this->session->userdata());
-        die();
+        $username = $this->session->userdata('username');
+
         $this->load->model('home_model');
         $this->load->model('user_master_model');
         $this->load->model('user_wallet_model');
@@ -28,15 +27,15 @@ $username = $this->session->userdata('username');
         $this->load->library('pagination');
         $this->load->library('email');
        $this->load->helper('login_helper');
-        
-     
+
+
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST');
         header("Access-Control-Allow-Headers: X-Requested-With");
-      
+
          $data["login_data"] = loginuser();
-        
-        
+
+
         $uid = $data["login_data"]['id'];
         if ($uid != 0) {
             $maxid = $this->user_wallet_model->total_wallet($uid);
@@ -72,7 +71,7 @@ $username = $this->session->userdata('username');
         }
 
         $data["login_data"] = loginuser();
-        
+
         $data["user"] = $this->user_master_model->getUser($data["login_data"]["id"]);
         $data['success'] = $this->session->flashdata("success");
         $data['payment_success'] = $this->session->flashdata("payment_success");
@@ -136,7 +135,7 @@ $username = $this->session->userdata('username');
         }
         $data["suggest_package"] = $suggest_package;
         $data["body_suggest_package"] = $body_suggest_package;
-        
+
         $this->load->view('user/header', $data);
         $this->load->view('user/home', $data);
         $this->load->view('user/footer');
@@ -182,7 +181,7 @@ $username = $this->session->userdata('username');
                                     <div class="img-box">
                                         <img src="' . base_url() . 'upload/package/' . $key['image'] . '">
                                     </div>
-                                    <div class="txt-box"> 
+                                    <div class="txt-box">
                                         <h2 style="text-transform:uppercase;">' . ucfirst($key['title']) . '</h2>
                                         <!--<p>Your text here </p>-->
                                     </div>
@@ -207,7 +206,7 @@ $username = $this->session->userdata('username');
         $data["data"] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1","is_active" => "1"), array("title", "asc"));
         $data['test'] = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND test_master.is_view='1' AND `test_master_city_price`.`city_fk`='" . $city . "'");
         /* $data['package'] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1"), array("title", "asc")); */
-        $data['package'] = $this->user_master_model->get_val("SELECT 
+        $data['package'] = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -234,7 +233,7 @@ $username = $this->session->userdata('username');
         $data["data"] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1","is_active" => "1"), array("title", "asc"));
         $data['test'] = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND test_master.is_view='1' AND `test_master_city_price`.`city_fk`='" . $city . "'");
         /* $data['package'] = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1"), array("title", "asc")); */
-        $data['package'] = $this->user_master_model->get_val("SELECT 
+        $data['package'] = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -311,25 +310,25 @@ $username = $this->session->userdata('username');
             $cnt++;
         }
         $data['all_search'] = $this->session->userdata('all');
-        $data["package"] = $this->user_master_model->get_val("SELECT 
+        $data["package"] = $this->user_master_model->get_val("SELECT
     `package_master`.*,
     `package_master_city_price`.`a_price` AS `a_price1`,
     `package_master_city_price`.`d_price` AS `d_price1`
   FROM
-    `package_master` 
-    INNER JOIN `package_master_city_price` 
-      ON `package_master`.`id` = `package_master_city_price`.`package_fk` 
-  WHERE `package_master`.`status` = '1' 
+    `package_master`
+    INNER JOIN `package_master_city_price`
+      ON `package_master`.`id` = `package_master_city_price`.`package_fk`
+  WHERE `package_master`.`status` = '1'
     AND `package_master_city_price`.`status` = '1' AND `package_master`.is_view='1' AND `package_master`.`is_active`='1' AND `package_master_city_price`.`city_fk` = '" . $data["test_city_session"] . "' ");
-        $data['relation_list'] = $this->user_master_model->get_val("SELECT 
+        $data['relation_list'] = $this->user_master_model->get_val("SELECT
   `customer_family_master`.*,
-  `relation_master`.`name` AS relation_name 
+  `relation_master`.`name` AS relation_name
 FROM
-  `customer_family_master` 
-  INNER JOIN `relation_master` 
-    ON `customer_family_master`.`relation_fk` = `relation_master`.`id` 
-WHERE `customer_family_master`.`status` = '1' 
-  AND `relation_master`.`status` = '1' 
+  `customer_family_master`
+  INNER JOIN `relation_master`
+    ON `customer_family_master`.`relation_fk` = `relation_master`.`id`
+WHERE `customer_family_master`.`status` = '1'
+  AND `relation_master`.`status` = '1'
   AND `customer_family_master`.`user_fk` = '" . $data['uid'] . "'");
         $data['job_address_list'] = $this->user_master_model->master_fun_get_tbl_val("user_address", array("status" => 1, "address !=" => "", "user_fk" => $data['uid']), array("address", "asc"));
         $data['customer_info'] = $this->user_master_model->master_fun_get_tbl_val("customer_master", array("id" => $data['uid']), array("address", "asc"));
@@ -396,11 +395,14 @@ WHERE `customer_family_master`.`status` = '1'
 
     function home_upload_prescription() {
         /* pinkesh code start */
+
         $this->load->helper("Email");
         $email_cnt = new Email;
         $this->load->model('user_login_model');
         $this->load->model('register_model');
         $mobile = $this->input->post('mobile');
+        $name = $this->input->post('name');
+
         $city = $this->input->post('city');
         $city = $this->session->userdata("test_city");
         if ($city == '') {
@@ -414,6 +416,7 @@ WHERE `customer_family_master`.`status` = '1'
         $reg_pass = $this->input->post('reg_pass');
         $reg_gender = $this->input->post('reg_gender');
         $captcha = $this->varify_captcha();
+        $user_name1 = $name;
         if ($mobile != '' && $desc != '' && $captcha == 1) {
             $count = $this->user_master_model->num_row('customer_master', array("email" => $email, "status" => '1'));
             $check = $this->user_master_model->num_row('customer_master', array("mobile" => $mobile, "status" => '1', "active" => '1'));
@@ -450,7 +453,7 @@ WHERE `customer_family_master`.`status` = '1'
                     $filename = $doc_data['file_name'];
                     $order_id = random_string('numeric', 13);
                     $date = date('Y-m-d H:i:s');
-                    $insert = $this->user_master_model->master_fun_insert("prescription_upload", array("cust_fk" => $id, "image" => $filename, "description" => $desc, "mobile" => $mobile, "created_date" => $date, "order_id" => $order_id, "city" => $city));
+                    $insert = $this->user_master_model->master_fun_insert("prescription_upload", array("cust_fk" => $id, "image" => $filename, "description" => $desc,"name" => $user_name1 ,"mobile" => $mobile, "created_date" => $date, "order_id" => $order_id, "city" => $city));
                     $insert12 = $this->user_master_model->master_fun_insert("notification_master", array("title" => "Prescription Upload Successfully.", "url" => "user_master", "user_fk" => $id, "status" => '1'));
                     $sms_message = $this->job_model->master_fun_get_tbl_val("sms_master", array('status' => 1, "title" => "upload_presc"), array("id", "asc"));
                     $sms_message = $sms_message[0]["message"];
@@ -474,7 +477,7 @@ WHERE `customer_family_master`.`status` = '1'
                     $configmobile = $this->config->item('admin_alert_phone');
                     foreach ($configmobile as $p_key) {
                         //$notification::send($configmobile, $sms_message);
-                        $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => $p_key, "message" => $sms_message, "created_date" => date("Y-m-d H:i:s")));
+                        $this->job_model->master_fun_insert("admin_alert_sms", array("mobile_no" => $p_key, "message" =>    $sms_message, "created_date" => date("Y-m-d H:i:s")));
                     }
 
                     //vishal
@@ -941,7 +944,7 @@ WHERE `customer_family_master`.`status` = '1'
             $message = '<div style="padding:0 4%;">
                     <h4 style="color:#67B1A3;text-decoration: underline;">Confirm Your Email</h4>
                         <p style="color:#7e7e7e;font-size:13px;font-weight: bold;">>Hello ,' . $message1 . ',</p>
-                   
+
                 </div>';
             $message = $email_cnt->get_design($message);
             $this->email->to($this->config->item('admin_booking_email'));
@@ -1147,7 +1150,7 @@ WHERE `customer_family_master`.`status` = '1'
                 $this->email->send();
 
                 $message = '<div style="padding:0 4%;">
-<p style="font-weight: bold;">Thank you for contact us.we will contact you as soon as possible. </p>                        
+<p style="font-weight: bold;">Thank you for contact us.we will contact you as soon as possible. </p>
 <p style="font-weight: bold;">Your details</p>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Name : </b> ' . ucfirst($name) . '</p>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Email : </b> ' . $email . '</p>
@@ -1465,7 +1468,7 @@ WHERE `customer_family_master`.`status` = '1'
             $message = '<div style="padding:0 4%;">
                     <h4 style="color:#67B1A3;text-decoration: underline;">Inquiry Detail</h4>
                         <p style="color:#7e7e7e;font-size:13px;"><b>Mobile : </b> ' . $mobile . '</p>
-                        <p style="color:#7e7e7e;font-size:13px;"><b>Package Name : </b> ' . $packagename . '</p> 
+                        <p style="color:#7e7e7e;font-size:13px;"><b>Package Name : </b> ' . $packagename . '</p>
                 </div>';
             $message = $email_cnt->get_design($message);
             $this->email->to($this->config->item('admin_booking_email'));
@@ -1790,7 +1793,7 @@ WHERE `customer_family_master`.`status` = '1'
             $package_name = array();
             foreach ($book_package as $key) {
 
-                $price1 = $this->user_master_model->get_val("SELECT 
+                $price1 = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -1835,7 +1838,7 @@ WHERE `customer_family_master`.`status` = '1'
         }
         if ($new_tid[0] == 'p') {
             $delete = $this->user_master_model->master_fun_update("book_package_master", array("id", $new_tid[1]), array("status" => "0"));
-            $price1 = $this->user_master_model->get_val("SELECT 
+            $price1 = $this->user_master_model->get_val("SELECT
           `package_master`.*,
           `package_master_city_price`.`a_price` AS `a_price`,
           `package_master_city_price`.`d_price` AS `d_price`
@@ -1851,7 +1854,7 @@ WHERE `customer_family_master`.`status` = '1'
         if ($job_details[0]["payable_amount"] > $price) {
             $j_payable_price = $job_details[0]["payable_amount"] - $price;
         } else {
-            
+
         }
         $this->user_master_model->master_fun_update("job_master", array("id", $jid), array("price" => "0"));
     }
@@ -1984,13 +1987,16 @@ WHERE `customer_family_master`.`status` = '1'
 
     function save_inquiry() {
         $phone = $this->input->post("phone");
-        $insert = $this->user_master_model->master_fun_insert("health_advisor", array("phone" => $phone, "created_date" => date("Y-m-d H:i:s")));
+        $name = $this->input->post("name");
+        $insert = $this->user_master_model->master_fun_insert("health_advisor", array("name" => $name,"phone" => $phone, "created_date" => date("Y-m-d H:i:s")));
         echo 1;
     }
 
     function pathologist() {
         $data['red_header_active'] = "2";
         $data["login_data"] = loginuser();
+        $data['team_list'] = $this->user_master_model->master_fun_get_tbl_val("team_master", array("status" => 1), array("id", "desc"));
+
         $this->load->view('user/header', $data);
         $this->load->view("user/pathologist", $data);
         $this->load->view('user/footer', $data);
@@ -1999,12 +2005,14 @@ WHERE `customer_family_master`.`status` = '1'
     function feedback() {
         $data['red_header_active'] = "2";
         $data["login_data"] = loginuser();
+        $data["user"] = $this->user_master_model->getUser($data["login_data"]["id"]);
+        // echo "<pre>";print_r($data['user']);die();
         $this->load->view('user/header', $data);
         $this->load->view("user/feedback", $data);
         $this->load->view('user/footer', $data);
     }
 function feedback_ins() {
-       
+
         $this->load->library('form_validation');
         $this->form_validation->set_rules('name', 'Name', 'trim|required');
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
@@ -2013,6 +2021,7 @@ function feedback_ins() {
         $this->form_validation->set_rules('message', 'Message', 'trim|required');
         if ($this->form_validation->run() != FALSE) {
             $captch = $this->varify_captcha();
+            $captch = 1;
             if ($captch == 1) {
                 $name = $this->input->post('name');
                 $email = $this->input->post('email');
@@ -2034,7 +2043,130 @@ function feedback_ins() {
                 echo 0;
             }
         }
-    } 
+    }
+
+    function investor(){
+        if (!is_userloggedin()) {
+            redirect('user_login');
+        }
+        $this->load->helper("Email");
+        $email_cnt = new Email;
+        $data["login_data"] = loginuser();
+        $uid = $data["login_data"]['id'];
+
+        $data['directors'] = $this->user_wallet_model->master_fun_get_tbl_val("board_of_directors",array("status" => 1),array("display_order", "asc"));
+        $data['category'] = $this->user_wallet_model->master_fun_get_tbl_val("financial_category",array("status" => 1),array("name", "asc"));
+        $data['success'] = $this->session->flashdata("success");
+        $data['error'] = $this->session->flashdata("error");
+        $this->load->view('user/header', $data);
+        $this->load->view('user/investor', $data);
+        $this->load->view('user/footer', $data);
+
+    }
+
+    public function getCorporateData()
+    {
+        $type = $this->input->post('type');
+
+        if($type == 'directors'){
+            $data['directors'] = $this->db->order_by('display_order', 'ASC')->get('board_of_directors')->result_array();
+            $this->load->view('user/corporate/directors', $data);
+        }
+
+        if($type == 'committees'){
+            $data['committees'] = $this->db->get('committees')->result_array();
+            $this->load->view('user/corporate/committees', $data);
+        }
+
+        if($type == 'tc_id'){
+            $data['tc'] = $this->db->get('tc_appointment_id')->result_array();
+            $this->load->view('user/corporate/tc_id',$data);
+        }
+
+        if($type == 'policies'){
+            $data['policies'] = $this->db->get('policies_programs')->result_array();
+            $this->load->view('user/corporate/policies',$data);
+        }
+    }
+
+    public function getFinancialData()
+    {
+        $type = $this->input->post('report_type');
+        $year = $this->input->post('report_year');
+
+        $data['files'] = $this->db->where(['category_id' => $type,'report_year' => $year,'status' => 1])->order_by('id','desc')->get('financial')->result_array();
+
+        $this->load->view('user/financial/financial_ajax', $data);
+    }
+
+    public function getInvestorData()
+    {
+        $type = $this->input->post('type');
+        if($type == 'corporate_presentation'){
+            $data['docs'] = $this->db->where('status', 1)->get('corporate_presentation')->result_array();
+            $this->load->view('user/investor/corporate_presentation', $data);
+        }
+
+        if($type == 'investor_contact'){
+            $data['contacts'] = $this->db->where('status', 1)->get('investor_contact')->result_array();
+            $this->load->view('user/investor/investor_contact', $data);
+        }
+
+        if($type == 'postal_ballot'){
+            $categories = $this->db->where('status', 1)->get('postal_ballot_category')->result_array();
+            foreach($categories as $key => $cat){
+                $files = $this->db->where('category_id', $cat['id'])->where('status', 1)->get('postal_ballot_files')->result_array();
+                $categories[$key]['files'] = $files;
+            }
+            $data['ballots'] = $categories;
+            $this->load->view('user/investor/postal_ballot', $data);
+        }
+        if($type == 'rhp'){
+            $data['rhp'] = $this->db->get('rhp_master')->row_array();
+            $this->load->view('user/investor/rhp', $data);
+        }
+        if($type == 'stock_exchange'){
+            $categories = $this->db->where('status', 1)->get('stock_exchange_category')->result_array();
+            foreach($categories as $key => $cat){
+                $files = $this->db->where('category_id', $cat['id'])->where('status', 1)->get('stock_exchange_files')->result_array();
+                $categories[$key]['files'] = $files;
+            }
+
+            $data['disclosures'] = $categories;
+            $this->load->view('user/investor/stock_exchange', $data);
+        }
+        if($type == 'unclaimed'){
+            $categories = $this->db->where('status', 1)->get('unclaimed_category')->result_array();
+            foreach($categories as $key => $cat){
+                $files = $this->db->where('category_id', $cat['id'])->where('status', 1)->get('unclaimed_files')->result_array();
+                $categories[$key]['files'] = $files;
+            }
+
+            $data['ballots'] = $categories;
+            $this->load->view('user/investor/unclaimed', $data);
+        }
+        if($type == 'others'){
+            $data['files'] = $this->db->where('status',1)->get('others_disclosures')->result_array();
+            $this->load->view('user/investor/others', $data);
+        }
+        if($type == 'listing_on_stock_exchanges'){
+            $data['stock'] = $this->db->where('status',1)->get('stock_exchanges')->result_array();
+            $this->load->view('user/investor/stock', $data);
+        }
+        if($type == 'dividend'){
+            $data['communications'] = $this->db->where('status',1)->get('dividend_communications')->result_array();
+            $data['history'] = $this->db->where('status',1)->order_by('year','asc')->get('dividend_history')->result_array();
+            $this->load->view('user/investor/dividend', $data);
+        }
+        if($type == "shareholder_information"){
+            $data['agm'] = $this->db->get('agm')->result_array();
+            $data['shareholder_info'] = $this->db->where('status',1)->get('shareholder_info_comman')->result_array();
+            $data['credit_rating'] = $this->db->where('status',1)->get('credit_rating')->result_array();
+            $data['egm'] = $this->db->where('status',1)->get('egm')->result_array();
+            $data['newspaper_advertisment'] = $this->db->where('status',1)->get('newspaper_advertisment')->result_array();
+            $this->load->view('user/investor/shareholder_information', $data);
+        }
+    }
 }
 
 ?>

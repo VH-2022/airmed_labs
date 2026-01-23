@@ -31,7 +31,7 @@
 								<input type="password"  placeholder="Old Password" class="form-control" name="password">
 							<span style="color:red;"><?php echo form_error('password'); ?></span>
 						 </div>
-							
+
 						</div>
 						<div class="col-sm-12 pdng_0">
 							<div class="input-group">
@@ -39,7 +39,7 @@
 								<input type="password"  placeholder="New Password" class="form-control" name="newpassword">
 							<span style="color:red;"><?php echo form_error('newpassword'); ?></span>
 							</div>
-							
+
 						</div>
 						<div class="col-sm-12 pdng_0">
 							<div class="input-group">
@@ -47,11 +47,11 @@
 								<input type="password"  placeholder="Confirm Password" class="form-control" name="cpassword">
 							<span style="color:red;"><?php echo form_error('cpassword'); ?></span>
 							</div>
-							
+
 						</div>
-						
-						
-						
+
+
+
 						<div class="col-sm-12 pdng_0">
 							<div class="input-group">
 								<button type="submit" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
@@ -76,8 +76,8 @@
 							<div class="col-sm-6">
 								<a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
 							</div>
-							<div class="col-sm-6">
-								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
+							<!-- <div class="col-sm-6">
+								<a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php //echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a> -->
 							</div>
 						</div>
 					</div>

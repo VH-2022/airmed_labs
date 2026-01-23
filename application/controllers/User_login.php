@@ -35,7 +35,6 @@ class User_login extends CI_Controller {
     }
 
     function index() {
-        phpinfo();
         $this->session->set_userdata('getmsg', 'Your message here');
 
         $data = '';
@@ -53,7 +52,7 @@ class User_login extends CI_Controller {
 
         $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|callback_check_database');
-        $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
+        // $this->form_validation->set_rules('g-recaptcha-response', 'Captcha', 'required|trim');
         $captcha = $this->varify_captcha();
         $captcha = 1;
         if ($this->form_validation->run() == FALSE || $captcha != 1) {
@@ -249,7 +248,7 @@ class User_login extends CI_Controller {
 
 
 $all_session_data = $this->session->all_userdata();
-print_r($all_session_data); die;
+
         $name = $this->input->post('name');
         $id = $this->input->post('id');
         $email = $this->input->post('email');
@@ -279,11 +278,9 @@ print_r($all_session_data); die;
                 'email' => $val[0]["email"],
                 'name' => $val[0]['full_name'],
             );
-//print_r($sess_array); die();
             $this->session->set_userdata('logged_in_user', $sess_array);
             $session_data = $this->session->userdata('logged_in_user');
-            //print_r($session_data); die();
-            //redirect('user_master', "refresh");
+
         } else {
 
             $data1 = array(

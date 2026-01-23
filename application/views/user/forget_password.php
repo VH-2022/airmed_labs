@@ -35,7 +35,7 @@
                                             </span>
                                             <input class="form-control" maxlength="10" pattern="[0-9]{10}" title="Enter 10 digit mobile number"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text" name="phone_no" placeholder="Enter Phone No" ></br>
                                             <spam id="captch_error" style="color:red;"><?php echo form_error('email'); ?></spam>
-                                        </div> 
+                                        </div>
 
                                     </div>
 
@@ -55,7 +55,7 @@
                                 <?php
                                 $captcha = $this->session->userdata('captcha2');
                                 echo $captcha;
-                                ?> 
+                                ?>
                             </form>
                             <div class="login_face_gplus">
                                 <div class="col-sm-4 col-xs-6 pdng_lft_0">

@@ -44,7 +44,7 @@ class User_get_password extends CI_Controller {
                         'rs' => ''
                     );
                     $where = $this->db->where('status', '1');
-                    //$where=$this->db->where('type','1');	
+                    //$where=$this->db->where('type','1');
                     $where = $this->db->where('rs', $code);
                     $where->update('customer_master', $data);
 
@@ -78,7 +78,7 @@ class User_get_password extends CI_Controller {
         } else {
             return 0;
         }
-    } 
+    }
 
     public function check_captcha($str) {
         $word = $this->session->userdata('captchaWord');

@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-sm-12 pdng_0">
                     <div class="col-sm-7 pdng_0">
-                        <div class="edt_prfl_main"> 
+                        <div class="edt_prfl_main">
                             <form role="form" action="<?php echo base_url(); ?>user_master/edit_profile" method="post" enctype="multipart/form-data">
                                 <div class="login_light_back edt_prfl_set_icon">
                                     <div class="col-sm-12 pdng_0 mrgn_btm_25px">
@@ -117,23 +117,6 @@
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="col-sm-12 pdng_0">
-                                            <?php /* <div class="col-xs-12 pdng_0 mrgn_btm_25px">
-                                              <div class="input-group edt_full">
-                                              <div class="edt_slct">
-                                              <select class="select_style" name="country" onchange="get_state(this.value);">
-                                              <option value="">Select Country</option>
-                                              <?php foreach ($country as $key) { ?>
-                                              <option value="<?php echo $key['id']; ?>" <?php
-                                              if ($key['id'] == $user->country) {
-                                              echo "selected";
-                                              }
-                                              ?>><?php echo ucfirst($key['country_name']); ?></option>
-                                              <?php } ?>
-                                              </select>
-                                              </div>
-                                              <span style="color:red;"><?php echo form_error('country'); ?></span>
-                                              </div>
-                                              </div> */ ?>
                                             <div class="col-sm-6 mrgn_btm_25px">
                                                 <div class="input-group edt_full">
                                                     <div class="edt_slct" id="get_state">
@@ -199,9 +182,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -282,7 +265,7 @@
     </div>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <script>
-//new counter for 2.00min															
+//new counter for 2.00min
                         function countdown(elementName, minutes, seconds)
                         {
                             var element, endTime, hours, mins, msLeft, time;
@@ -315,7 +298,7 @@
                             updateTimer();
                         }
 
-//end new counter	
+//end new counter
 
                         i = 120;
                         function onTimer() {

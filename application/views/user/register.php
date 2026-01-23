@@ -42,7 +42,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                             <input type="text"  placeholder="Enter Full Name" class="form-control" name="name" value="<?php echo set_value('name'); ?>" tabindex="1">
                                         <span style="color:red;"> <?php echo form_error('name'); ?> </span>
 										</div>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
@@ -60,17 +60,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
 											<span style="color:red;"> <?php echo form_error('birth_date'); ?> </span>
                                         </div>
                                         <input type="text" style="display:none;"/>
-                                        <?php /* <div class="col-sm-2">
-                                          <div class="rgstr_or_txt_cntr">
-                                          OR
-                                          </div>
-                                          </div>
-                                          <div class="col-sm-5 pdng_0">
-                                          <div class="input-group rgstr_bod_age_wdth">
-                                          <input type="text"  placeholder="Age" id="age" onchange="birth_date.value = '';" class="form-control" name="age" value="">
-                                          </div>
-                                          </div> */ ?>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
@@ -78,7 +68,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                             <input type="password"  placeholder="Enter Password" class="form-control" name="password" tabindex="4">
                                         <span style="color:red;"> <?php echo form_error('password'); ?> </span>
 										</div>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
@@ -86,7 +76,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                             <input type="password"  placeholder="Enter Confirm Password" class="form-control" name="cpassword" tabindex="5">
                                         <span style="color:red;"> <?php echo form_error('cpassword'); ?> </span>
 										</div>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
@@ -94,7 +84,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                             <input id="form_phone" name="mobile" class="form-control" type="text" placeholder="mobile" value="<?php echo set_value('mobile'); ?>" tabindex="6">
                                         <span style="color:red;"> <?php echo form_error('mobile'); ?> </span>
 										</div>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group rgstr_slct">
@@ -102,11 +92,11 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                                 <option value="">--Select Test City--</option>
                                                 <?php foreach ($test_city as $key) { ?>
                                                     <option value="<?= $key["id"] ?>" <?php echo set_select('test_city', $key['id']); ?> ><?= ucfirst($key["name"]); ?></option>
-                                                <?php } ?>      
+                                                <?php } ?>
                                             </select>
                                         <span class="spn_red"> <?php echo form_error('test_city'); ?> </span>
 										</div>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0" style="display:none;">
                                         <div class="input-group">
@@ -126,13 +116,13 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                             </div>
 											<span style="color:red;"> <?php echo form_error('gender'); ?> </span>
                                         </div>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <script src='https://www.google.com/recaptcha/api.js'></script>
                                         <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
                                         <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
-                                        
+
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="aply_terms_cndtn">
@@ -146,7 +136,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                             <button type="submit" disabled="disbled" id="rg_btn" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait..." tabindex="13">Register</button>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -155,23 +145,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                     </div>
                 </div>
             </div>
-        <!--    <div class="row">
-                <div class="full_div pdng_top_35px">
-                    <div class="col-sm-6">
-                        <h1 class="all_pg_lst_btns">An App for simplified pathology experience.</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="col-sm-12 pdng_0">
-                            <div class="col-sm-6">
-                                <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
-                            </div>
-                            <div class="col-sm-6">
-                                <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+
         </div>
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>

@@ -84,7 +84,7 @@
             ?>
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="main_wallet" style="background:#F5F8F9
+                    <div class="main_wallet" style="background:#F5F8F9">
                          <div class="main_wallet_div">
                         <div class="col-sm-12 pdng_0">
                             <div class="col-md-3 col-sm-5">
@@ -123,7 +123,7 @@
                                 } else {
                                     echo 'style="display:none;"';
                                 }
-                                ?> >  
+                                ?> >
                                     <p style="font-weight:bold;">Total Rs.<?php echo $price + $package_price; ?></p>
                                 </div>
                             </div>
@@ -139,9 +139,9 @@
                                 <div class="col-sm-5">
                                     <b class="cnfrm_amnt_title_mrgn_btm">Your Wallet Balance</b>
                                     <?php if ($price != 0) { ?>
-                                        <div class="wbalance">  
+                                        <div class="wbalance">
                                             <p>Rs <?php echo $wallet; ?></p>
-                                        </div> 
+                                        </div>
                                     <?php } ?>
                                 </div>
                                 <div class="col-sm-1">
@@ -150,16 +150,16 @@
                                 <div class="col-sm-5">
                                     <b class="cnfrm_amnt_title_mrgn_btm">Payable Amount</b>
                                     <?php if ($test_exist != 0) { ?>
-                                        <div class="wbalance">  
+                                        <div class="wbalance">
                                             <p style="font-weight:bold;">Rs <?php echo $payamount; ?> (for test)</p>
                                         </div>
                                     <?php } ?>
                                     <?php if ($package_exist != 0) { ?>
-                                        <div class="wbalance">  
+                                        <div class="wbalance">
                                             <p style="font-weight:bold;">Rs.<?php echo $package_price; ?> (for package)</p>
                                         </div>
                                     <?php } ?>
-                                    <div class="wbalance">  
+                                    <div class="wbalance">
                                         <p style="font-weight:bold;">Total Rs.<?php echo $payamount + $package_price; ?></p>
                                     </div>
                                 </div>
@@ -182,12 +182,12 @@
                             </script>
                             <sapn style="color:red;" id="error_source_by"></sapn>
                         </div>
-                         <div class="col-sm-9 use_wallet_img" id="use_wallet_hide_div">
-								<img src="<?= base_url(); ?>user_assets/images/select_wallet_amount.png">
+                         <!-- <div class="col-sm-9 use_wallet_img" id="use_wallet_hide_div">
+								<img src="<? //base_url(); ?>user_assets/images/select_wallet_amount.png">
 								<div class="col-md-offset-4 col-md-6 use_wallet_text">
 									<h3>Select Wallet Amount</h3>
 								</div>
-						</div>
+						</div> -->
                          </div>
                         <input type="hidden" id="prc2" value="<?php echo $payamount + $package_price; ?>"/>
                         <div class="col-sm-12 pdng_0">
@@ -209,8 +209,8 @@
                                             echo "style='display:none;'";
                                         }
                                         ?>>
-                                            <button type="button" onclick="check_user_details('1');" class="cnfrm_btn_noback pay_blood_clctn pull-left"><i class="fa fa-credit-card"></i> <span>Online Payment</span></button>
-                                            <span class="cnfrm_amnt_spn col-xs-1">OR</span>
+                                            <!-- <button type="button" onclick="check_user_details('1');" class="cnfrm_btn_noback pay_blood_clctn pull-left"><i class="fa fa-credit-card"></i> <span>Online Payment</span></button>
+                                            <span class="cnfrm_amnt_spn col-xs-1">OR</span> -->
                                         </div>
                                         <button type="button" onclick="check_user_details('2');" class="cnfrm_btn_noback pay_blood_clctn pull-left"><i class="fa fa-handshake-o"></i> <span id="pay_during_blood_c_btn"><?php
                                                 $tttl_prc = $price + $package_price;
@@ -223,7 +223,7 @@
 <!--<span class="cnfrm_amnt_spn col-xs-1">OR</span>-->
 <!--<button class="cnfrm_btn_noback col-xs-5 col-sm-4 pdng_0" id="crop_model" data-target="#myModal1" data-keyboard="false" data-backdrop="static" data-toggle="modal" type="button"><img class="cnfrm_two_img" src="<?php echo base_url(); ?>user_assets/images/new/cash_on_dlvry.png"/></button>-->
                                     </div>
-                                    <!--<div class="col-sm-6 pdng_0" style="margin-top:20px; float: left;">                              
+                                    <!--<div class="col-sm-6 pdng_0" style="margin-top:20px; float: left;">
                                     </div>-->
                                     <div role="dialog" id="myModal2" class="modal fade">
                                         <div class="modal-dialog">
@@ -448,9 +448,9 @@
                             <div class="col-sm-6">
                                 <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
                             </div>
-                            <div class="col-sm-6">
+                            <!-- <div class="col-sm-6">
                                 <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -603,6 +603,6 @@
                             }
                         }
 <?php if ($wallet != 0) { ?>
-                            wallet_show();
+    wallet_show();
 <?php } ?>
     </script>

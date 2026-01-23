@@ -91,6 +91,7 @@ class Admin_manage extends CI_Controller
             $branch = $this->input->post('branch');
             $pinelab = $this->input->post('pinelab');
             $payment_due = $this->input->post('payment_due');
+            $cancel_entery_whatsapp = $this->input->post('cancel_entery_whatsapp');
             if($payment_due !="yes"){
                 $payment_due='no';
             }
@@ -100,7 +101,10 @@ class Admin_manage extends CI_Controller
             if ($type == '2') {
                 $type_name = 'Telecaller user';
             }
-            $data['query'] = $this->Admin_manage_model->master_fun_insert("admin_master", array("name" => $name, "phone" => $phone, "email" => $email, "password" => $password, "city_fk" => $cityname, "type" => $type, "pinelab_fk" => $pinelab, "payment_due" => $payment_due));
+            if($cancel_entery_whatsapp != 1){
+                $cancel_entery_whatsapp = 0;
+            }
+            $data['query'] = $this->Admin_manage_model->master_fun_insert("admin_master", array("name" => $name, "phone" => $phone, "email" => $email, "password" => $password, "city_fk" => $cityname, "type" => $type, "pinelab_fk" => $pinelab, "payment_due" => $payment_due,'cancel_entery_whatsapp' => $cancel_entery_whatsapp));
             if ($type == 5 || $type == 6 || $type == 7 || $type == 10) {
                 foreach ($branch as $b_key) {
                     $this->Admin_manage_model->master_fun_insert("user_branch", array("user_fk" => $data['query'], "branch_fk" => $b_key, "status" => "1"));
@@ -113,7 +117,7 @@ class Admin_manage extends CI_Controller
             $message = '<div style="padding:0 4%;">
                     <h4><b>Create Account</b></h4>
                         <p style="color:#7e7e7e;font-size:13px;">Your Admin account successfully created. </p>
-                     <p style="color:#7e7e7e;font-size:13px;"> Username/Email : . ' . $email . '  </p>  
+                     <p style="color:#7e7e7e;font-size:13px;"> Username/Email : . ' . $email . '  </p>
 <p style="color:#7e7e7e;font-size:13px;"> Password : ' . $password . '  </p>
     <p style="color:#7e7e7e;font-size:13px;"> Account Type : ' . $type_name . '  </p>
     <p style="color:#7e7e7e;font-size:13px;"> Login Link : <a href="' . base_url() . '/login">' . base_url() . '/login</a></p>
@@ -221,11 +225,15 @@ class Admin_manage extends CI_Controller
             $cityname = $this->input->post('cityname');
             $pinelab = $this->input->post('pinelab');
             $payment_due = $this->input->post('payment_due');
+            $cancel_entery_whatsapp = $this->input->post('cancel_entery_whatsapp');
             if($payment_due !="yes"){
                 $payment_due='no';
             }
-        
-            $data['query'] = $this->Admin_manage_model->master_fun_update("admin_master", array("id", $this->uri->segment('3')), array("name" => $name, "phone" => $phone, "email" => $email, "password" => $password, "type" => $type, "city_fk" => $cityname, "pinelab_fk" => $pinelab, "payment_due" => $payment_due));
+            if($cancel_entery_whatsapp != 1){
+                $cancel_entery_whatsapp = 0;
+            }
+
+            $data['query'] = $this->Admin_manage_model->master_fun_update("admin_master", array("id", $this->uri->segment('3')), array("name" => $name, "phone" => $phone, "email" => $email, "password" => $password, "type" => $type, "city_fk" => $cityname, "pinelab_fk" => $pinelab, "payment_due" => $payment_due,'cancel_entery_whatsapp' => $cancel_entery_whatsapp));
             $this->session->set_flashdata("success", array("User successfully updated."));
             redirect("Admin_manage/user_list", "refresh");
         } else {
@@ -277,7 +285,7 @@ class Admin_manage extends CI_Controller
         $data["cid"] = $id;
         $data["permissions"] = $this->permissions_model->permissions();
         $data['query'] = $this->Admin_manage_model->master_fun_get_tbl_val("admin_master", array("id" => $id), array("id", "desc"));
-        
+
         $permissions = [];
         foreach ($data["permissions"] as $permission) {
 
@@ -305,7 +313,7 @@ class Admin_manage extends CI_Controller
         }
 
         $data["permissions"] = $newArray;
-       
+
         $data["day_permission"] = $this->user_model->master_fun_get_tbl_val("admin_master", array('id'=> $data["cid"],'status' => 1), array("name", "asc"));
 
         $this->load->view('header');
@@ -363,7 +371,7 @@ class Admin_manage extends CI_Controller
     //     if(!empty($getUser)){
     //         foreach($getUser as $user){
 
-                
+
     //             $userId = $user['id'];
     //             if($userId != 10 && $userId != 11 && $userId != 50){
     //                 $permissionIds = [1,14,15,16,17,19,20,22,24,25,26,27,28,29,30,31,32,33,353];
@@ -376,7 +384,7 @@ class Admin_manage extends CI_Controller
     //                     $update = $this->user_permissions_model->insert_master("user_permissions", $insertData);
     //                 }
     //             }
-                
+
     //         }
     //     }
     // }
