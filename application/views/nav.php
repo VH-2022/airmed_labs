@@ -282,6 +282,62 @@
                                 <li><a href="<?php echo base_url(); ?>phlebo/visit-request"> Visit Request <span class="sr-only">(current)</span></a></li>
                             </ul>
                         </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Investors<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <!-- <li><a href="<?php //echo base_url(); ?>phlebo_master_page">Financials</a></li> -->
+                                <li class="dropdown-submenu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Financials</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/financial_category_list">Category</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/financial_list">Financial Report</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Investor Information</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/corporate_presentation_list">Corporate Presentation</a></li>
+                                        <li class="dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dividend</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/dividend_comm_list">Dividend Communications</a></li>
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/dividend_history_list">Dividend History</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/investor_contact_list">Investor Contact</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/stock_list">Listing on Stock Exchange</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/postal_ballot_list">Postal Ballot</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/rhp">RHP</a></li>
+                                        <li class="dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Shareholder Information</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/agm_list">AGM</a></li>
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/credit_rating_list">Credit Rating</a></li>
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/egm_list">EGM/CCM Notices</a></li>
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/newspaper_advertisment_list">Newspaper Advertisement</a></li>
+                                                <li><a href="<?php echo base_url(); ?>Investor_master/shareholder_info_comman_list">Shareholder Info Comman</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/stock_exchange_list">Stock Exchange Disclosures</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/unclaimed_list">Unclaimed-Unpaid Amount</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/others_list">Others</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Corporate Governance</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/board_of_directors_list">Board of Directors</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/committees_list">Committees</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/tc_id_list">T & C of Appointment of ID</a></li>
+                                        <li><a href="<?php echo base_url(); ?>Investor_master/policies_list">Policies and Programs</a></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
+
+
             <!--<li class="active"><a href="<?php echo base_url(); ?>issue_master"> Queries and Issues <span class="sr-only">(current)</span></a></li> -->
                         <li ><a href="<?php echo base_url(); ?>Admin/TelecallerCallBooking"> Tele Caller</a></li>
                         <li ><a href="<?php echo base_url(); ?>test-master/price-list"> Price List</a></li>

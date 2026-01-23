@@ -2054,14 +2054,118 @@ function feedback_ins() {
         $data["login_data"] = loginuser();
         $uid = $data["login_data"]['id'];
 
-
+        $data['directors'] = $this->user_wallet_model->master_fun_get_tbl_val("board_of_directors",array("status" => 1),array("display_order", "asc"));
+        $data['category'] = $this->user_wallet_model->master_fun_get_tbl_val("financial_category",array("status" => 1),array("name", "asc"));
         $data['success'] = $this->session->flashdata("success");
         $data['error'] = $this->session->flashdata("error");
         $this->load->view('user/header', $data);
-
         $this->load->view('user/investor', $data);
-        $this->load->view('user/footer');
+        $this->load->view('user/footer', $data);
 
+    }
+
+    public function getCorporateData()
+    {
+        $type = $this->input->post('type');
+
+        if($type == 'directors'){
+            $data['directors'] = $this->db->order_by('display_order', 'ASC')->get('board_of_directors')->result_array();
+            $this->load->view('user/corporate/directors', $data);
+        }
+
+        if($type == 'committees'){
+            $data['committees'] = $this->db->get('committees')->result_array();
+            $this->load->view('user/corporate/committees', $data);
+        }
+
+        if($type == 'tc_id'){
+            $data['tc'] = $this->db->get('tc_appointment_id')->result_array();
+            $this->load->view('user/corporate/tc_id',$data);
+        }
+
+        if($type == 'policies'){
+            $data['policies'] = $this->db->get('policies_programs')->result_array();
+            $this->load->view('user/corporate/policies',$data);
+        }
+    }
+
+    public function getFinancialData()
+    {
+        $type = $this->input->post('report_type');
+        $year = $this->input->post('report_year');
+
+        $data['files'] = $this->db->where(['category_id' => $type,'report_year' => $year,'status' => 1])->order_by('id','desc')->get('financial')->result_array();
+
+        $this->load->view('user/financial/financial_ajax', $data);
+    }
+
+    public function getInvestorData()
+    {
+        $type = $this->input->post('type');
+        if($type == 'corporate_presentation'){
+            $data['docs'] = $this->db->where('status', 1)->get('corporate_presentation')->result_array();
+            $this->load->view('user/investor/corporate_presentation', $data);
+        }
+
+        if($type == 'investor_contact'){
+            $data['contacts'] = $this->db->where('status', 1)->get('investor_contact')->result_array();
+            $this->load->view('user/investor/investor_contact', $data);
+        }
+
+        if($type == 'postal_ballot'){
+            $categories = $this->db->where('status', 1)->get('postal_ballot_category')->result_array();
+            foreach($categories as $key => $cat){
+                $files = $this->db->where('category_id', $cat['id'])->where('status', 1)->get('postal_ballot_files')->result_array();
+                $categories[$key]['files'] = $files;
+            }
+            $data['ballots'] = $categories;
+            $this->load->view('user/investor/postal_ballot', $data);
+        }
+        if($type == 'rhp'){
+            $data['rhp'] = $this->db->get('rhp_master')->row_array();
+            $this->load->view('user/investor/rhp', $data);
+        }
+        if($type == 'stock_exchange'){
+            $categories = $this->db->where('status', 1)->get('stock_exchange_category')->result_array();
+            foreach($categories as $key => $cat){
+                $files = $this->db->where('category_id', $cat['id'])->where('status', 1)->get('stock_exchange_files')->result_array();
+                $categories[$key]['files'] = $files;
+            }
+
+            $data['disclosures'] = $categories;
+            $this->load->view('user/investor/stock_exchange', $data);
+        }
+        if($type == 'unclaimed'){
+            $categories = $this->db->where('status', 1)->get('unclaimed_category')->result_array();
+            foreach($categories as $key => $cat){
+                $files = $this->db->where('category_id', $cat['id'])->where('status', 1)->get('unclaimed_files')->result_array();
+                $categories[$key]['files'] = $files;
+            }
+
+            $data['ballots'] = $categories;
+            $this->load->view('user/investor/unclaimed', $data);
+        }
+        if($type == 'others'){
+            $data['files'] = $this->db->where('status',1)->get('others_disclosures')->result_array();
+            $this->load->view('user/investor/others', $data);
+        }
+        if($type == 'listing_on_stock_exchanges'){
+            $data['stock'] = $this->db->where('status',1)->get('stock_exchanges')->result_array();
+            $this->load->view('user/investor/stock', $data);
+        }
+        if($type == 'dividend'){
+            $data['communications'] = $this->db->where('status',1)->get('dividend_communications')->result_array();
+            $data['history'] = $this->db->where('status',1)->order_by('year','asc')->get('dividend_history')->result_array();
+            $this->load->view('user/investor/dividend', $data);
+        }
+        if($type == "shareholder_information"){
+            $data['agm'] = $this->db->get('agm')->result_array();
+            $data['shareholder_info'] = $this->db->where('status',1)->get('shareholder_info_comman')->result_array();
+            $data['credit_rating'] = $this->db->where('status',1)->get('credit_rating')->result_array();
+            $data['egm'] = $this->db->where('status',1)->get('egm')->result_array();
+            $data['newspaper_advertisment'] = $this->db->where('status',1)->get('newspaper_advertisment')->result_array();
+            $this->load->view('user/investor/shareholder_information', $data);
+        }
     }
 }
 
