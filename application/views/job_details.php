@@ -4286,19 +4286,18 @@ if ($query[0]["model_type"] == 1) {
             }
             if (status == "2") {
                 //added by rohit 23-01-2026
-                if((phlebo_added_by  == null || phlebo_added_by == "") && (added_by == null || added_by == "")){
-                     if (payable_amount != 0) {
-                        alert("Payment is pending. You cannot complete the status.");
-                        return false;
-                     }
 
-
-                }
                 //ended by rohit 23-01-2026
                 var completed_tst = $("#upload_report").val();
                 if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
                     alert("Please upload report.");
                     return false;
+                }
+                if((phlebo_added_by  == null || phlebo_added_by == "") && (added_by == null || added_by == "")){
+                     if (payable_amount != 0) {
+                        alert("Payment is pending. You cannot complete the status.");
+                        return false;
+                     }
                 }
                 var txt;
                 var r = confirm("Are you sure want to complete job!");
@@ -4322,6 +4321,7 @@ if ($query[0]["model_type"] == 1) {
                 } else {
 
                 }
+
             } else {
                 $.ajax({
                     url: "<?php echo base_url(); ?>job_master/changing_status_job",
