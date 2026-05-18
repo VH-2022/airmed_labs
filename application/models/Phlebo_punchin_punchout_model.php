@@ -11,13 +11,14 @@ class Phlebo_punchin_punchout_model extends CI_Model {
         if ($fullname != "") {
             $qry .= " AND name LIKE '%" . $fullname . "%' ";
         }
-        if ($date != "") {
-            $qry .= " AND start_date>='" . $date . "' ";
+        if ($date) {
+            $qry .= " AND start_date>='" . date('Y-m-d', strtotime($date)) . "' ";
         }
-        if ($end_date != "") {
-            $qry .= " AND start_date<='" . $end_date . "' ";
+        if ($end_date) {
+            $qry .= " AND start_date<='" . date('Y-m-d', strtotime($end_date)) . "' ";
         }
         $qry .= " AND `phlabo_timer`.status='1' ORDER BY `phlabo_timer`.id DESC";
+      
         $query = $this->db->query($qry);
         $data['user'] = $query->result_array();
         return $data['user'];
@@ -72,17 +73,19 @@ Total_working_hour
         if ($fullname != "") {
             $qry .= " AND `phlebo_master`.`name` LIKE '%" . $fullname . "%' ";
         }
-        if ($date != "") {
-            $qry .= " AND `phlabo_timer`.start_date>='" . $date . "' ";
+        if ($date) {
+            
+            $qry .= " AND `phlabo_timer`.start_date>='" . date('Y-m-d', strtotime($date)) . "' ";
         }
-        if ($end_date != "") {
-            $qry .= " AND `phlabo_timer`.start_date<='" . $end_date . "' ";
+        if ($end_date) {
+            $qry .= " AND `phlabo_timer`.start_date<='" . date('Y-m-d', strtotime($end_date)) . "' ";
         }
 
 
-        $qry .= " AND `phlabo_timer`.status='1' AND `phlabo_timer`.in_riding!=''  
+        $qry .= " AND `phlabo_timer`.status='1'
 				ORDER BY `phlabo_timer`.id DESC LIMIT $two,$one";
 		//GROUP BY phlebo_master.id,phlabo_timer.start_date
+       
         $query = $this->db->query($qry);
         $data['user'] = $query->result_array();
         return $data['user'];

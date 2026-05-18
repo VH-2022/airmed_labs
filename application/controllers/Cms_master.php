@@ -58,7 +58,6 @@ class Cms_master extends CI_Controller {
             $gmail_link = $this->input->post("gmail_link");
             $insta_link = $this->input->post("insta_link");
             $linkedin_link = $this->input->post("linkedin_link");
-            $phlebo_km_wise_rs = $this->input->post("phlebo_km_wise_rs");
             $first_file_name = array();
             if ($_FILES["file"]["name"]) {
                 $config['upload_path'] = './upload/';
@@ -85,7 +84,6 @@ class Cms_master extends CI_Controller {
                 "gmail_link" => $gmail_link,
                 "tw_link" => $tw_link,
                 "fb_link" => $fb_link,
-                "phlebo_km_wise_rs" => $phlebo_km_wise_rs,
                 "status" => '1'
             );
             $data2 = $data1 + $first_file_name;

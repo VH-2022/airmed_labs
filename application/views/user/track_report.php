@@ -45,7 +45,7 @@
                                             <spam id="mobile_error" style="color:red;"><?php echo form_error('mobile'); ?></spam>
                                         </div>
                                             <div class="input-group">
-                                                <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
+                                                <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr" style="width:300px;float:left;"></div>
                                         <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
                                             </div>
                                     </div>
@@ -107,7 +107,7 @@
 
                 </div>
             </div>
-          <!--  <div class="row">
+            <div class="row">
                 <div class="full_div pdng_top_35px">
                     <div class="col-sm-6">
                         <h1 class="all_pg_lst_btns">An App for simplified pathology experience.</h1>
@@ -123,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </section>
 

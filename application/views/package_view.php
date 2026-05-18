@@ -146,17 +146,14 @@
                                                         <?php } ?>
                                                     </td> 
                                                     <td>
-                                                    <?php if($login_data["type"] != 2) {?>
                                                         <?php if ($row["is_active"] == '2') { ?>
                                                             <a href='<?php echo base_url(); ?>package_master/isdeactive/2/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Active" onclick="return confirm('Are You Sure ?')"><i class="fa fa-toggle-off"></i></a>
                                                         <?php } else { ?>
                                                             <a href='<?php echo base_url(); ?>package_master/isdeactive/1/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Deactive" onclick="return confirm('Are You Sure ?')"><i class="fa fa-toggle-on" style="font-size:12px"></i></a>
-                                                        <?php } } ?>
+                                                        <?php } ?>
                                                         <a href='<?php echo base_url(); ?>package_master/package_edit/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-edit"></i></a>
                                                         <a href='<?php echo base_url(); ?>package_master/package_test_add/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Add Test"><i class="fa fa-plus"></i></a>
-                                                        <?php if($login_data["type"] != 2) {?>
-                                                        <a  href='<?php echo base_url(); ?>package_master/package_delete/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Remove" onclick="return confirm('Are you sure you want to remove this data?');"><i class="fa fa-trash-o"></i></a>  
-                                                        <?php } ?>      
+                                                        <a  href='<?php echo base_url(); ?>package_master/package_delete/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Remove" onclick="return confirm('Are you sure you want to remove this data?');"><i class="fa fa-trash-o"></i></a>        
                                                     </td>
                                                 </tr>
                                                 <?php

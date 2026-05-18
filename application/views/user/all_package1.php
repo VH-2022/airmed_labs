@@ -30,7 +30,6 @@
     .hover-over:hover{opacity:0.8;}
     section, footer{width:100%;float:left;}
 </style>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <!-- Start main-content -->
 <div class="main-content">
     <section id="about" class="package-div">
@@ -59,13 +58,13 @@
 
 
     </section>
-    <!-- <section id="team_back_none" class="sctn_full">
+    <section id="team_back_none" class="sctn_full">
         <div class="diff_box_containr">
             <div class="section-content">
                 <div class="container">
                     <div class="col-sm-12 pdng_0">
                         <div class="col-md-9 col-sm-7">
-                            <h3 class="text-3xl font-semibold mb-8 text-center">ALL PACKAGES</h3>
+                            <h1 class="subtitle txt_blue_clr" style="margin-bottom: 25px;COLOR:#000"><span class="brdr_btm_clr">ALL PACKAGES</span></h1>
                             <div id="packages">
 
                             </div>
@@ -83,7 +82,7 @@
                                                     </div>
                                                     <div class="txt-box">
                                                         <h3><?= $key1[0]["title"] ?></h3>
-           
+            <!--                                            <p>Your text here </p>-->
 
                                                     </div>
                                                 </div>
@@ -113,7 +112,7 @@
                                         <div class="panel-body">
                                             <ul class="inner-line">
                                                 <?php foreach($p_key1["test_list"] as $t_key1){ ?>
-                                                <li>- <?=ucfirst($t_key1["test_name"])?>  </li>
+                                                <li>- <?=ucfirst($t_key1["test_name"])?> <!--<span>Rs.<?=$t_key1["price"]?></span>--> </li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -134,103 +133,13 @@
                 </div>
             </div>
         </div>
-    </section> -->
-    <section id="popular-tests" class="py-12 bg-white px-4">
-
-        <div class="max-w-6xl mx-auto">
-
-        <h3 class="text-3xl font-semibold mb-8 text-center">All Packages</h3>
-
-        <div class="grid md:grid-cols-3 gap-6">
-
-            <!-- Test Card Example -->
-            <?php foreach ($suggest_package as $key1) {     foreach($key1["package"] as $p_key1){  ?>
-            <div class="bg-gray-100 p-4 rounded shadow">
-
-            <img src="<?php echo base_url(); ?>upload/package/<?= $p_key1["image"] ?>" alt="<?= $p_key1["title"] ?>" class="w-full h-auto mb-4" style="width:325px; height:245px; object-fit:cover;" />
-
-            <h4 class="text-xl font-bold mb-2"><?= $p_key1["title"] ?></h4>
-
-            <p class="mb-4"><ul>
-            <li>Test Include:</li>
-                                             <?php foreach($p_key1["test_list"] as $t_key1){ ?>
-                                                <li><?=ucfirst($t_key1["test_name"])?></li>
-
-                                                <?php } ?>
-                                                <font color="#9900FF"><li>
-
-                                                    <b>Price: <?=$p_key1["d_price"]?>/- <s><?=$p_key1["a_price"]?>/-</s></b>
-
-                                                </li></font>
-
-                                            </ul></p>
-
-            <!-- <button onclick="bookNow(`<?=ucfirst($p_key1['title'])?>`)" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">WhatsApp Inquiry</button> -->
-
-            <a href="<?= base_url(); ?>user_master/package_details/<?= $p_key1["id"] ?>" class="hover-over"><button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Book Now</button></a>
-
-            </div>
-            <?php } } ?>
-            <!-- Repeat above block for more tests -->
-
-        </div>
-
-        </div>
-
     </section>
-
-      <!-- All Test Packages Page -->
-<!--
-<section id="all-tests" class="py-12 px-4 bg-gray-50">
-
-<div class="max-w-6xl mx-auto">
-
-  <h3 class="text-3xl font-semibold mb-8 text-center">Body Checkup Packages</h3>
-
-  <div class="grid md:grid-cols-2 gap-6">
-
-    -- Individual Test Package --
-    <?php  $bcount=0; foreach ($body_suggest_package as $bkey1) {   foreach($bkey1["body_package"] as $bp_key1){  $bcount++ ?>
-    <div class="bg-white p-4 rounded shadow">
-
-      <img src="<?php echo base_url(); ?>upload/package/<?= $bp_key1["image"] ?>" alt="<?= $bp_key1["title"] ?>" class="w-full h-auto mb-4" style="width:525px; height:245px; object-fit:cover;" />
-
-      <h4 class="text-xl font-bold mb-2"><?= $bp_key1["title"] ?></h4>
-
-      <p class="mb-4"><ul>
-
-                                        <li>Test Include:</li>
-                                        <?php foreach($bp_key1["test_list"] as $bt_key1){ ?>
-                                        <li>&#x2022; <?=ucfirst($bt_key1["test_name"])?></li>
-
-                                       <?php } ?>                                         
-
-                                    </ul></p>
-
-      -- <button onclick="bookNow(`<?=ucfirst($bt_key1['test_name'])?>`)" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">WhatsApp Inquiry</button> --
-
-      <a href="<?= base_url(); ?>user_master/package_details/<?= $bp_key1["id"] ?>" class="hover-over"><button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Book Now</button></a>
-
-    </div>
-<?php } }  if(count($bcount) == "0") { echo "bhargav";?>
-    <div class="col-span-2 text-center">
-      <p class="text-gray-500">No body checkup packages available at the moment.</p>
-</div>
-<?php } ?>
-    -- More packages... --
-
-  </div>
-
-</div>
-
-</section>
--->
-   <!-- <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
+    <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
         <div class="container mbl_containr" style="padding-bottom:0">
             <div class="row">
                 <div class="col-sm-12 pdng_0">
                     <div class="indx_mbl_mdl">
-                   
+                        <!--  <h1 class="mbl_title center">App Communication Space</h1>-->
 
                         <div class="col-sm-4  col-xs-4">
                             <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> 
@@ -247,9 +156,9 @@
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
 
-   <!-- <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
+    <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
@@ -257,7 +166,7 @@
                         <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP
-                        -- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  --
+                        <!-- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  -->
                     </h1>
 
                     </div>
@@ -275,7 +184,7 @@
 
             </div>
         </div>
-    </section> -->
+    </section>
 
 
 </div>
@@ -293,19 +202,4 @@
     }
     $('.panel-group').on('hidden.bs.collapse', toggleIcon);
     $('.panel-group').on('shown.bs.collapse', toggleIcon);
-
-    
-
-        function bookNow(testName) {
-
-        const phoneNumber = +919227184434;
-
-        const message = `Hi, I'm interested in booking the test package: ${testName}`;
-
-        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-        window.open(url, '_blank');
-
-        }
-
 </script>

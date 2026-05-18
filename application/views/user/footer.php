@@ -11,10 +11,10 @@
                         <li><a href="<?php echo base_url(); ?>user_master/pathologist">Team Pathology</a></li>
                         <li><a href="<?php echo base_url(); ?>user_master/all_packages">Packages</a></li>
                         <li><a href="<?php echo base_url(); ?>user_track_report">Track Report</a></li>
-                        <!-- <li><a href="<?php echo base_url(); ?>user_master/commercial">Media</a></li> -->
-                        <!-- <li><a href="<?php echo base_url(); ?>advertisement">Advertisement</a></li> -->
+                        <li><a href="<?php echo base_url(); ?>user_master/commercial">Media</a></li>
+                        <li><a href="<?php echo base_url(); ?>advertisement">Advertisement</a></li>
                         <li><a href="<?php echo base_url(); ?>user_master/partner_with_us">Partner with us</a></li>
-                        <!-- <li><a href="#">Investors</a></li> -->
+                        <li><a href="#">Investors</a></li>
                         <?php if (isset($login_data['id'])) { ?>
                             <li><a href="<?php echo base_url(); ?>user_master/support_system">Support/Help</a></li>
                         <?php } ?>
@@ -44,7 +44,7 @@
                                 <button type="button" onclick="subscribe_news();" class="btn btn-dark btn-theme-colored btn-flat mt_mns_15" >Subscribe</button>
                             </div>
                         </div>
-                        <p class="font-13 text-black-777 m-0 text-center foot_copy">Copyright @ 2025 AirmedLabs. All rights reserved</p>
+                        <p class="font-13 text-black-777 m-0 text-center foot_copy">Copyright @ 2016 AirmedLabs. All rights reserved</p>
                         <?php /* <div class="widget no-border m-0">
                           <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-center flip sm-pull-none sm-text-center mt-sm-15 set_mrgn_res fb_tw_ul"style="width:160px">
                           <li><a href="<?php echo $this->data['all_links'][0]['fb_link']; ?>" target="_blank"><i class="fa fa-facebook"></i></a></li>

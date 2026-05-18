@@ -304,6 +304,8 @@ class Branch_Test_Price extends CI_Controller {
                    $name = strtolower($test_name);
                    $name= str_replace("'","", $name );
                    $qTemp ='LOWER(REPLACE(tm.test_name,'."'".',""))';
+                    $testid = trim($row['Test ID']);
+                   
                     
                     if ($branch_id !="" && is_numeric($price) && $price > 0) {
                     
@@ -312,12 +314,16 @@ class Branch_Test_Price extends CI_Controller {
                                FROM package_master tm INNER JOIN test_branch_price tp ON tp.test_fk = tm.id   
                                 WHERE tp.branch_fk='$branch_id' AND tm.status ='1' AND tp.`type`='2'  and tp.status='1'  and LOWER(REPLACE(tm.title,'`','')) LIKE '%$name%'";
                         }else{
-                          
+                        //    $q = "SELECT tp.id,tp.price,tp.test_fk,tp.branch_fk,tp.status,tm.test_name,LOWER(REPLACE(tm.test_name,'''','')) AS test_name_name 
+                        //     FROM test_master tm INNER JOIN test_branch_price tp
+                        //     on tp.test_fk = tm.id 
+                        //     WHERE tp.branch_fk='$branch_id'  AND tm.status = 1 and tp.type='1' and tp.status='1' and LOWER(REPLACE(tm.id,'''','')) ='$testid '
+                        //     ";
 
-                            $q = "SELECT tp.id,tp.price,tp.test_fk,tp.branch_fk,tp.status,tm.test_name,LOWER(REPLACE(tm.test_name,'''','')) AS test_name_name 
+                            $q = "SELECT tp.id,tp.price,tp.test_fk,tp.branch_fk,tp.status
                             FROM test_master tm INNER JOIN test_branch_price tp
                             on tp.test_fk = tm.id 
-                            WHERE tp.branch_fk='$branch_id'  AND tm.status = 1 and tp.type='1' and tp.status='1' and LOWER(REPLACE(tm.test_name,'''','')) ='$name'
+                            WHERE tp.branch_fk='$branch_id'  AND tm.status = 1 and tp.type='1' and tp.status='1' and tm.id =$testid
                             ";
                         }
 
@@ -327,9 +333,13 @@ class Branch_Test_Price extends CI_Controller {
                         if(isset($branch_wise_test[0]->id)){
                             $update = $this->Branch_Model->master_tbl_update("test_branch_price", $branch_wise_test[0]->id, array("price" => $price));
                         }else{
-                            $q = "SELECT tm.id,tm.test_name, REPLACE(tm.test_name,', '') AS test_name_name 
+                            // $q = "SELECT tm.id,tm.test_name, REPLACE(tm.test_name,', '') AS test_name_name 
+                            //  FROM test_master tm 
+                            //    WHERE tm.status='1' and LOWER(REPLACE(tm.test_name,','')) ='$name'
+                            //    ";
+                                 $q = "SELECT tm.id
                              FROM test_master tm 
-                               WHERE tm.status='1' and LOWER(REPLACE(tm.test_name,','')) ='$name'
+                               WHERE tm.status='1' and tm.id = $testid
                                ";
                              $branch_wise_test = $this->Branch_Model->get_val($q);
                                   if(isset($branch_wise_test[0]->id)){
@@ -740,79 +750,7 @@ function update_code() {
             redirect("Branch_Test_Price/edit_test_price/$branch_id", "refresh");
         }
     }
-
-    // function price_update(){
-    //     $usmanpura_branch_id = 2;
-    //     $juhapura_branch_id = 165;
-
-    //     $usmanpura = "SELECT * FROM test_branch_price WHERE branch_fk = $usmanpura_branch_id AND type = '1' AND status = '1'";
-
-    //     $juhapura = "SELECT * FROM test_branch_price WHERE branch_fk = $juhapura_branch_id AND type = '1' AND status = '1'";
-        
-        
-    //     $usmanpura_branch_data = $this->Branch_Model->get_val($usmanpura);
-        
-    //     if(!empty($usmanpura_branch_data)){
-    //         foreach($usmanpura_branch_data as $row ){
-    //             $test_fk = $row->test_fk;
-    //             $price = $row->price;
-
-               
-    //             $juhapuraDataById = $this->Branch_Model->get_val("SELECT * FROM test_branch_price WHERE branch_fk = $juhapura_branch_id AND test_fk = $test_fk AND type = '1' AND status = '1'");
-                 
-                
-    //             if(empty($juhapuraDataById)){
-    //                 $juhapuraDataById = $juhapuraRow;
-
-    //                 $this->Branch_Model->master_get_insert("test_branch_price", array(
-    //                     "test_fk" => $test_fk, "branch_fk" => $juhapura_branch_id,
-    //                     "price" => $price, "type" => '1', "status" => '1'
-    //                 ));
-                    
-    //             }else{
-    //                 foreach($juhapuraDataById as $juhapuraRow){
-    //                     $juhapuraDataById = $juhapuraRow;
-    //                     $this->Branch_Model->master_tbl_update_new("test_branch_price",array("test_fk"=>$juhapuraRow->test_fk,"branch_fk"=>$juhapura_branch_id,"status"=>'1',"type"=>'1'), array("price" => $price));
-    //                 }
-    //             }
-                
-    //         }
-
-    //     }
-
-    //     return true;
-    // }
-
-    // function duplicate_data(){
-    //     $juhapura_branch_id = 165;
-    //     $juhapura = "SELECT * FROM test_branch_price WHERE branch_fk = $juhapura_branch_id AND type = '1' AND status = '1'";
-        
-    //     $juhapura_branch_data = $this->Branch_Model->get_val($juhapura);
-        
-    //     if(!empty($juhapura_branch_data)){
-    //         foreach($juhapura_branch_data as $row){
-    //             $test_fk = $row->test_fk;
-    //             $price = $row->price;
-
-    //             $juhapuraDataById = $this->Branch_Model->get_val("SELECT * FROM test_branch_price WHERE branch_fk = $juhapura_branch_id AND test_fk = $test_fk AND type = '1' AND status = '1'");
-               
-    //             if(count($juhapuraDataById) > 1){
-    //                 $skip = true;
-    //                 foreach($juhapuraDataById as $juhapuraRow){
-    //                     if($skip){
-    //                         $skip = false;
-    //                         continue; 
-    //                     }
-
-    //                     $id = $juhapuraRow->id; 
-
-    //                     $update = $this->Branch_Model->master_tbl_update("test_branch_price", $id , array("status" => '0'));
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
+	  
 }
 
 ?>

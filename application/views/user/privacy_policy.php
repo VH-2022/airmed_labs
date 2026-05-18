@@ -70,7 +70,7 @@
                     </p>
  				</div>	
 			</div>
-			<!-- <div class="row">
+			<div class="row">
 				<div class="full_div pdng_top_35px">
 					<div class="col-sm-6">
 						<h1 class="all_pg_lst_btns">An App for simplified pathology experience.</h1>
@@ -86,7 +86,7 @@
 						</div>
 					</div>
 				</div>
-			</div> -->
+			</div>
 		</div>
     </section>
   

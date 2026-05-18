@@ -694,7 +694,7 @@
         </div>
     </section>
 
-   <!-- <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
+    <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
@@ -718,7 +718,7 @@
 
             </div>
         </div>
-    </section> -->
+    </section>
 
 
 </div>

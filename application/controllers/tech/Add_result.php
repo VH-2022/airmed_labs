@@ -65,7 +65,7 @@ class Add_result extends CI_Controller {
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -363,7 +363,7 @@ class Add_result extends CI_Controller {
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -565,7 +565,7 @@ class Add_result extends CI_Controller {
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -1438,7 +1438,7 @@ class Add_result extends CI_Controller {
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -2266,7 +2266,7 @@ class Add_result extends CI_Controller {
 //            $data['user_data'][0]["dob"] = '1992-09-30';
 //        }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         if ($data['user_data'][0]["dob"] != '') {
             $this->load->library("util");
@@ -2623,7 +2623,7 @@ class Add_result extends CI_Controller {
         }
 
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $var = 0;
         if ($data['user_data'][0]["dob"] != '') {
@@ -2896,7 +2896,7 @@ class Add_result extends CI_Controller {
             $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
         }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -3356,7 +3356,7 @@ class Add_result extends CI_Controller {
             $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
         }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -4387,7 +4387,7 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
             /* Check bitrth date start */
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
             $pdate = $processing_date[0]["date"];
             $this->load->library("util");
             $util = new Util;
@@ -4680,7 +4680,7 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
             /* Check bitrth date start */
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
             $pdate = $processing_date[0]["date"];
             $this->load->library("util");
             $util = new Util;
@@ -4965,7 +4965,7 @@ WHERE tm.id = '" . $tst_id . "'");
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -4992,7 +4992,7 @@ WHERE tm.id = '" . $tst_id . "'");
             $data['user_data'][0]["dob"] = '1992-09-30';
         }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -5492,7 +5492,7 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data['user_data'][0]["phone"] = $data['user_family_info'][0]["phone"];
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
             $pdate = $processing_date[0]["date"];
             /* Check bitrth date start */
             $this->load->library("util");
@@ -5929,7 +5929,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $data['user_data'][0]["phone"] = $data['user_family_info'][0]["phone"];
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
             $pdate = $processing_date[0]["date"];
             /* Check bitrth date start */
             $this->load->library("util");

@@ -153,7 +153,7 @@
                                         <a  href='<?php echo base_url(); ?>Branch_Master/Branch_delete/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Remove" onclick="return confirm('Are you sure you want to remove this data?');"><i class="fa fa-trash-o"></i></a>
                                         <?php  } ?>
                                         <?php if ($row['id'] != 1) { ?>
-                                            <a href='<?php echo base_url(); ?>Branch_Test_Price/edit_test_price/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Test Manage "><i class="fa fa-list"></i></a> 
+                                            <a href='<?php echo base_url(); ?>Branch_Test_Price/edit_test_price/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Test Manage"><i class="fa fa-list"></i></a> 
                                         <?php } ?>
 
                                         <?php if ($row['status'] == 1) { ?>

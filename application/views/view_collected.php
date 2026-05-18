@@ -226,7 +226,7 @@
                                                 <td>
                                                     <?php /* <a href='javascript:void(0);' onclick="add_reference('<?php echo $parameter['pid']; ?>');" data-toggle="tooltip" data-original-title="Add Reference Range" > <span class="label label-primary"><i class="fa fa-plus"> </i></span> </a>
                                                       <a  href='#' onclick="update_parameter('<?php echo $parameter['pid']; ?>');" data-toggle="modal" data-target="#update_par" data-original-title="Edit"> <span class="label label-primary"><i class="fa fa-edit"> </i></span> </a> */ ?>
-                                                    <?php if ($login_data['type'] == 1) { ?>
+                                                    <?php if ($login_data['type'] == 1  || $login_data['email'] == "laukeshkaushal73@gmail.com") { ?>
                                                         <a href='javascript:void(0);' onclick="edit_parameter('<?php echo $testidp["test_fk"]; ?>', '<?php echo $parameter['id']; ?>', '<?= $query[0]['branch_fk']; ?>');" data-toggle="tooltip" data-original-title="Edit Parameter" > <span class="label label-primary"><i class="fa fa-edit"> </i></span> </a>
                                                         <a  onclick="return confirm('Are you sure you want to spam this parameter?');" href='<?php echo base_url(); ?>add_result/delete_parameter/<?php echo $parameter['id']; ?>/<?php echo $cid; ?>/<?php echo $testidp["test_fk"]; ?>' data-toggle="tooltip" data-original-title="Spam Parameter" > <span class="label label-danger"><i class="fa fa-trash"> </i></span> </a>
                                                     <?php } ?>
@@ -293,7 +293,7 @@
                                                     <?php } ?>
                                                     <td>
                                                         <?php /*                        <a  href='#' onclick="update_parameter('<?php echo $parameter['pid']; ?>');" data-toggle="modal" data-target="#update_par"> <span class="label label-primary"><i class="fa fa-edit"> </i></span> </a> */ ?>
-                                                        <?php if ($login_data['type'] == 1) { ?>
+                                                        <?php if ($login_data['type'] == 1 || $login_data['email'] == "laukeshkaushal73@gmail.com") { ?>
                                                             <a href='javascript:void(0);' onclick="edit_parameter('<?php echo $testidp["test_fk"]; ?>', '<?php echo $parameter['id']; ?>', '<?= $query[0]['branch_fk']; ?>');" data-toggle="tooltip" data-original-title="Edit Parameter" > <span class="label label-primary"><i class="fa fa-edit"> </i></span> </a>
                                                             <a  onclick="return confirm('Are you sure you want to spam this parameter?');" href='<?php echo base_url(); ?>add_result/delete_parameter/<?php echo $parameter['id']; ?>/<?php echo $cid; ?>/<?php echo $testidp["test_fk"]; ?>' data-toggle="tooltip" data-original-title="Spam Parameter" > <span class="label label-danger"><i class="fa fa-trash"> </i></span> </a>
                                                         <?php } ?>

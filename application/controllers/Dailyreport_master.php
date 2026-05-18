@@ -415,8 +415,8 @@ LEFT JOIN `job_master_receiv_amount` jmr
         $data['wise'] = $this->input->get("wise");
         $data["payment"] = $this->input->get("payment");
         $data["report"] = $this->input->get("report");
-        $start_date = null;
-        $end_date = null;
+        $start_date = date('d/m/Y');
+        $end_date = date('d/m/Y');
         if ($data['start_date'] != "") {
             $start_date = $data['start_date'];
         }

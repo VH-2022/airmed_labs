@@ -39,7 +39,7 @@
                                 /* Nishit code start */
                                 $booking_date = explode(" ", $job_details[0]["date"]);
                                 /* End */
-                                if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10") {
+                                if ($booking_date[0] == date("Y-m-d")) {
                                     ?>
                                     <div class="col-sm-12" style="padding-left:0">
                                         <div class="col-sm-4">
@@ -103,7 +103,7 @@
                                                     Rs.<?= ucfirst($value["price"]); ?>
                                                 </td>
                                                 <td>
-                                                  <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10") { ?>  <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["price"]); ?>', `<?= ucfirst($value["test_name"]); ?>`, '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
+                                                  <?php if ($booking_date[0] == date("Y-m-d")) { ?>  <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["price"]); ?>', '<?= ucfirst($value["test_name"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -123,7 +123,7 @@
                                                     Rs.<?= ucfirst($value["d_price"]); ?>
                                                 </td>
                                                 <td>
-                                                 <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id']=="1" || $login_data['id']=="10") { ?>   <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["d_price"]); ?>', '<?= ucfirst($value["title"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
+                                                 <?php if ($booking_date[0] == date("Y-m-d")) { ?>   <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["d_price"]); ?>', '<?= ucfirst($value["title"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php if ($booking_date[0] == date("Y-m-d") || $login_data['id'] == "1" || $login_data['id'] == "10") { ?>
+                    <?php if ($booking_date[0] == date("Y-m-d")) { ?>
                     <div class="box-footer">
                         <input style="float:right;" class="btn btn-primary" value="Update" id="add_sub_parameter" type="button" onclick="UpdateJobTest();">
                     </div>
@@ -295,27 +295,9 @@
                      var clic = "'" + explode[1] + "'";
                      $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td><a href="#" data-toggle="modal" data-target="#myModal_view" onclick="show_details(' + clic + ');">' + prc[0] + '</a></td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
                      */
-                    // $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
-                    $("#city_wiae_price").append(`
-                        <tr id="tr_${$city_cnt}">
-                            <td>"${prc[0]}"</td>
-                            <td>Rs.${prc1[0]}</td>
-                            <td>
-                                <a href="javascript:void(0);" onclick="delete_city_price('${$city_cnt}', '${prc1[0]}', '${prc[0]}', '${skillsSelect.value}')">Delete</a>
-                            </td>
-                        </tr>
-                    `);
+                    $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
                 } else {
-                    // $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
-                    $("#city_wiae_price").append(`
-                        <tr id="tr_${$city_cnt}">
-                            <td>"${prc[0]}"</td>
-                            <td>Rs.${prc1[0]}</td>
-                            <td>
-                                <a href="javascript:void(0);" onclick="delete_city_price('${$city_cnt}', '${prc1[0]}', '${prc[0]}', '${skillsSelect.value}')">Delete</a>
-                            </td>
-                        </tr>
-                    `);
+                    $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
                 }
                 $("#add_test option[value='1']").remove();
                 var old_dv_txt = $("#hidden_test").html();
@@ -355,28 +337,9 @@
                      var clic = "'" + explode[1] + "'";
                      $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td><a href="#" data-toggle="modal" data-target="#myModal_view" onclick="show_details(' + clic + ');">' + prc[0] + '</a></td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
                      */
-                    // $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
-                    $("#city_wiae_price").append(`
-                        <tr id="tr_${$city_cnt}">
-                            <td>"${prc[0]}"</td>
-                            <td>Rs.${prc1[0]}</td>
-                            <td>
-                                <a href="javascript:void(0);" onclick="delete_city_price('${$city_cnt}', '${prc1[0]}', '${prc[0]}', '${skillsSelect.value}')">Delete</a>
-                            </td>
-                        </tr>
-                    `);
-
+                    $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
                 } else {
-                    // $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
-                    $("#city_wiae_price").append(`
-                        <tr id="tr_${$city_cnt}">
-                            <td>"${prc[0]}"</td>
-                            <td>Rs.${prc1[0]}</td>
-                            <td>
-                                <a href="javascript:void(0);" onclick="delete_city_price('${$city_cnt}', '${prc1[0]}', '${prc[0]}', '${skillsSelect.value}')">Delete</a>
-                            </td>
-                        </tr>
-                    `);
+                    $("#city_wiae_price").append('<tr id="tr_' + $city_cnt + '"><td>' + prc[0] + '</td><td>Rs.' + prc1[0] + '</td><td><a href="javascript:void(0);" onclick="delete_city_price(\'' + $city_cnt + '\',\'' + prc1[0] + '\',\'' + prc[0] + '\',\'' + skillsSelect.value + '\')">Delete</a></td></tr>');
                 }
                 $("#test_panel option[value='1']").remove();
                 var old_dv_txt = $("#hidden_test").html();
@@ -441,7 +404,7 @@
                                 }
                                 $new_price = parseInt($new_price) - parseInt(prc);
                                 setTimeout(function () {
-                                    //get_price();
+                                    get_price();
                                 }, 1000);
                             }
                             function show_details(val) {

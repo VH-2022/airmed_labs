@@ -38,7 +38,7 @@
         width: 100%;
     }
     #referral_by_chosen {
-        width: 100% !important;
+        width: 89% !important;
     }
     .full_bg{background: rgba(0,0,0,0.3); width:100%; height:100%; float:left; padding:350px; position:fixed; z-index:9; top:0; bottom:0;}
     .full_bg .loader img{width:70px; height:70px;}
@@ -659,8 +659,7 @@ foreach ($login_data['branch_fk'] as $val) {
                                                 <select name="referral_by" id="referral_by" onchange="get_doctor_test(this.value);" class="chosen">
 
                                                 </select>
-                                                <button style="display:none" class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#doctor_add" >ADD</button>
-                                                <br>
+                                                <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#doctor_add" >ADD</button>
                                                 <small>(if referral by is not exist then select <b>--SELF--</b>)</small>
                                                 <span style="color:red;" id="referral_by_error"></span>
                                             </div>

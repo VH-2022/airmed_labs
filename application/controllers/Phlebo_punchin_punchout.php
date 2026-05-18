@@ -19,6 +19,7 @@ class Phlebo_punchin_punchout extends CI_Controller {
         }
     }
     public function index() {
+        
         $data["login_data"] = logindata();
         $cfname = $this->input->get('cfname');
         $date = $this->input->get('date');
@@ -26,7 +27,9 @@ class Phlebo_punchin_punchout extends CI_Controller {
         $data['cfname'] = $cfname;
         $data['date'] = $date;
         $data['end_date'] = $end_date;
-        if ($cfname != "" || $date != '' || $end_date != '') {
+       
+        if (($cfname != "" || $date != '' || $end_date != '') && (!empty($date) || !empty($end_date))) {
+           
             $new_date = explode("/", $date);
             $new_date = $new_date["2"] . "-" . $new_date["1"] . "-" . $new_date["0"];
 
@@ -53,6 +56,7 @@ class Phlebo_punchin_punchout extends CI_Controller {
             $data["links"] = $this->pagination->create_links();
             $data["pages"] = $page;
         } else {
+            
             $totalRows = $this->Phlebo_punchin_punchout_model->num_row($cfname, $date, "");
             $config = array();
             $get = $_GET;

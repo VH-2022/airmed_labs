@@ -2629,7 +2629,8 @@ FROM
 
         $files = $_FILES;
 
-        if ($userid != '' AND $start_time != '' AND $start_date != '') {
+        if ($userid != '' AND $start_time != '' AND $start_date != '' AND $riding != '') {
+                                    date_default_timezone_set('Asia/Kolkata');			$start_date1 = date('Y-m-d', time());			$start_time1 = date('H:i:s', time());
 
 
             $data = array(
@@ -2643,6 +2644,32 @@ FROM
                 "in_riding" => $riding
             );
 
+                if ($riding != '' && $files['ridingimg']['name'] != "") {
+
+                $this->load->library('upload');
+                $config['allowed_types'] = 'png|jpg|jpeg';
+                $config['overwrite'] = false;
+
+                $config['upload_path'] = './upload/ridingimg/';
+                $config['file_name'] = $files['ridingimg']['name'];
+                $this->upload->initialize($config);
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0755, TRUE);
+                }
+                if (!$this->upload->do_upload('ridingimg')) {
+                    $error = $this->upload->display_errors();
+                    $error = str_replace("<p>", "", $error);
+                    $error = str_replace("</p>", "", $error);
+                     echo $this->json_data("0", $error, "");
+                      die(); 
+                } else {
+                    $doc_data = $this->upload->data();
+                    $filename = $doc_data['file_name'];
+
+                    $data["in_riding"] = $riding;
+                    $data["in_riding_img"] = $filename;
+                }
+            }
 
             $insert = $this->service_model->master_fun_insert("phlabo_timer", $data);
 
@@ -2706,8 +2733,8 @@ FROM
         $address = $this->getaddress($lat, $lng);
 
         $files = $_FILES;
-
-        if ($userid != '' AND $start_time != '' AND $start_date != '') {
+        
+        if ($userid != '' AND $start_time != '' AND $start_date != '' AND $riding != '') {
 						            date_default_timezone_set('Asia/Kolkata');			$start_date1 = date('Y-m-d', time());			$start_time1 = date('H:i:s', time());
             $data = array(
                 "user_fk" => $userid,
@@ -2715,14 +2742,15 @@ FROM
                 "longitude" => $longitude,
                 "latitude" => $latitude,
                 "ip" => $ip,
-                "address" => $address
+                "address" => $address,
+                "in_riding" => $riding
             );
 
 
             if ($riding != '' && $files['ridingimg']['name'] != "") {
 
                 $this->load->library('upload');
-                $config['allowed_types'] = 'png|jpg|jpeg';
+               $config['allowed_types'] = '*';
                 $config['overwrite'] = false;
 
                 $config['upload_path'] = './upload/ridingimg/';
@@ -2735,8 +2763,12 @@ FROM
                     $error = $this->upload->display_errors();
                     $error = str_replace("<p>", "", $error);
                     $error = str_replace("</p>", "", $error);
-                    /*  echo $this->json_data("0", $error, "");
-                      die(); */
+                    $sess_array = array('clock_in_id' => 0);
+                      log_message('error', $error);   
+                   $retVal = "{\"status\":\"" . $status . "\",";
+                        $retVal1 = "}";
+                    echo $retVal . "\"data\":" . json_encode($arr_json) . $retVal1;
+                    die;
                 } else {
                     $doc_data = $this->upload->data();
                     $filename = $doc_data['file_name'];

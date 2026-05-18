@@ -312,7 +312,7 @@
                            <?php
                             //  ($user->payment_due=="yes" && in_array('173',$userBranch))
                            if (($row["is_print"] == 0 && $row["panel_test_count"] == 0)) {
-                               if (($payable_amount <= 0 && $user->payment_due !="yes") || ($user->payment_due=="yes" &&  $row["branch_fk"] == 173) || ($user->payment_due !="yes" && $login_data['id']== 593) ) {
+                               if (($payable_amount <= 0 && $user->payment_due !="yes") || ($user->payment_due=="yes" &&  $row["branch_fk"] == 173)  ) {
                                    ?>
                                 <a href='javascript:void(0);' data-toggle="tooltip" data-original-title="Print Report" onclick="printreport('<?= $row["id"] ?>')"><span class=""><i id="printicon" <?php
                                         if ($row['prientreport'] == '0') {
@@ -350,7 +350,7 @@
                                 <?php
                             } else {
                                 //if($payable_amount<=0 || $login_data["type"] == 1){
-                                if($user->payment_due !="yes" || ($user->payment_due=="yes" &&  $row["branch_fk"] == 173) || ($user->payment_due !="yes" && $login_data['id']== 593)){
+                                if($user->payment_due !="yes" || ($user->payment_due=="yes" &&  $row["branch_fk"] == 173)){
                                 ?>
                             <a href='javascript:void(0);' data-toggle="tooltip" data-original-title="Print Report" onclick="printreport('<?= $row["id"] ?>')"><span class=""><i id="printicon" <?php
                                     if ($row['prientreport'] == '0') {

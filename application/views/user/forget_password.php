@@ -8,19 +8,15 @@
                 <div class="col-sm-12 pdng_0">
                     <div class="col-sm-6">
                         <div class="login_main">
-                            <?php if ($this->session->flashdata('success')): ?>
-                                <div class="alert alert-success fade in">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-                                    <?= $this->session->flashdata('success'); ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if ($this->session->flashdata('error')): ?>
+                            <?php if (isset($getmsg1) != NULL) { ?>
                                 <div class="alert alert-danger fade in">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
-                                    <?= $this->session->flashdata('error'); ?>
+                                    <?php echo $getmsg1['0']; ?>
                                 </div>
-                            <?php endif; ?>
+                                <!-- <div class="alert alert-danger">
+                                <?php echo $getmsg1['0']; ?>
+                                 </div> -->
+                            <?php } ?>
 
 
                             <form action="<?php echo base_url(); ?>user_forget/index" method="post">
@@ -33,7 +29,7 @@
                                             <span class="input-group-addon" style="">
                                                 <i class="fa fa-envelope"></i>
                                             </span>
-                                            <input class="form-control" maxlength="10" pattern="[0-9]{10}" title="Enter 10 digit mobile number"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" type="text" name="phone_no" placeholder="Enter Phone No" ></br>
+                                            <input class="form-control" type="text" name="email" placeholder="Enter Email" ></br>
                                             <spam id="captch_error" style="color:red;"><?php echo form_error('email'); ?></spam>
                                         </div> 
 
@@ -47,7 +43,7 @@
                                             <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Submit</button>
                                         </div>
                                     </div>
-                                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
+                                    <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr"></div>
                                     <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
 
 

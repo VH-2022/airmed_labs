@@ -135,9 +135,7 @@
                                             <td>
                                                 <a href='<?php echo base_url(); ?>test_master/sub_test_add/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Add test"><i class="fa fa-plus"></i></a> 
                                                 <a href='<?php echo base_url(); ?>test-master/test-edit/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-edit"></i></a> 
-                                                <?php if($login_data["type"] != 2) {?>
-                                                <a  href='<?php echo base_url(); ?>test_master/test_delete/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Remove" onclick="return confirm('Are you sure you want to remove this data?');"><i class="fa fa-trash-o"></i></a>   
-                                                <?php } ?>   
+                                                <a  href='<?php echo base_url(); ?>test_master/test_delete/<?php echo $row['id']; ?>' data-toggle="tooltip" data-original-title="Remove" onclick="return confirm('Are you sure you want to remove this data?');"><i class="fa fa-trash-o"></i></a>      
                                             </td>
                                         </tr>
                                     <?php }if (empty($query)) {

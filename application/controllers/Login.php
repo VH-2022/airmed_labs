@@ -9,11 +9,9 @@ class Login extends CI_Controller {
         parent::__construct();
         $this->load->library('email');
         $this->load->model('login_model');
-        $this->load->model('User_permissions_model');
-        $this->load->model('Permissions_model');
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST');
-        header("Access-Control-Allow-Headers: X-Requested-With");
+        // header('Access-Control-Allow-Origin: *');
+        // header('Access-Control-Allow-Methods: GET, POST');
+        // header("Access-Control-Allow-Headers: X-Requested-With");
         //  $this->app_track();
     }
 
@@ -24,7 +22,6 @@ class Login extends CI_Controller {
     }
 
     function index() {
-
         $data = '';
         if ($this->session->userdata('getmsg') != null) {
             $data['getmsg'] = $this->session->userdata("getmsg");
@@ -47,7 +44,12 @@ class Login extends CI_Controller {
     }
 
     function verify_login() {
+        $this->session->set_userdata('AdmnOtpChk', '12345');
 
+// echo "SET<br>";
+// echo session_id();
+// print_r($_SESSION);
+// exit;
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
@@ -60,12 +62,14 @@ class Login extends CI_Controller {
             $password = $this->input->post('password');
             $type = $this->input->post('type');
             $result = $this->login_model->checklogin($email, $password);
+           
             if (!empty($result)) {
+               
 
-                $techbranch = $this->login_model->get_val("select ub.*,br.branch_type_fk
-                        from user_branch as ub
-                        LEFT JOIN branch_master as br on br.id = ub.branch_fk  and br.status='1'
-                        where ub.user_fk='" . $result[0]->id . "' and ub.status='1'
+                $techbranch = $this->login_model->get_val("select ub.*,br.branch_type_fk 
+                        from user_branch as ub 
+                        LEFT JOIN branch_master as br on br.id = ub.branch_fk  and br.status='1' 
+                        where ub.user_fk='" . $result[0]->id . "' and ub.status='1' 
                         AND br.branch_type_fk='6'");
                 $log = array(
                     'user_id' => $result[0]->id,
@@ -80,27 +84,15 @@ class Login extends CI_Controller {
 
                 if ($type != 'reset') {
                     $check_master_otp = $this->login_model->master_fun_get_tbl_val("admin_master", array('id' => $result[0]->id), array("id", "asc"));
-                    $userPermissions = $this->User_permissions_model->userPermissionIds($check_master_otp[0]["id"]);
-                    $permissions = [];
-                    if (isset($userPermissions) && count($userPermissions) > 0) {
-                        $permissionIds = array_column($userPermissions, 'permission_id');
-                        $permissionIds = implode(",", $permissionIds);
-                        $userPermissionsData =  $this->Permissions_model->permissionsByIds($permissionIds);
-                        $permissions = array_column($userPermissionsData, 'permission');
-                        $permissions = array_combine($permissions, $permissions);
-                    }
                     /* NISHIT CODEING START */
                     if ($check_master_otp[0]["login_type"] == 0) {
-                        $check_master_otp = $this->login_model->master_fun_get_tbl_val("admin_master", array('id' => $result[0]->id), array("id", "asc"));
-
                         $branch_data = $this->login_model->get_val("select ub.*,br.branch_type_fk from user_branch as ub LEFT JOIN branch_master as br on br.id = ub.branch_fk  and br.status='1' where ub.user_fk='" . $check_master_otp[0]["id"] . "' and ub.status='1'");
                         $sess_array = array(
                             'id' => $check_master_otp[0]["id"],
                             'name' => $check_master_otp[0]["name"],
                             'email' => $check_master_otp[0]["email"],
                             'branch_fk' => ($check_master_otp[0]["type"] == 5 || $check_master_otp[0]["type"] == 6 || $check_master_otp[0]["type"] == 7 || $check_master_otp[0]["type"] == 10) ? $branch_data : array(),
-                            'type' => $check_master_otp[0]["type"],
-                            'permissions' => $permissions,
+                            'type' => $check_master_otp[0]["type"]
                         );
 
                         $this->session->set_userdata('logged_in', $sess_array);
@@ -110,7 +102,7 @@ class Login extends CI_Controller {
                     /* END */
                     if ($check_master_otp[0]["otp_date"] == date("Y-m-d") && $check_master_otp[0]["otp"] > 0) {
                         $this->session->set_userdata('AdmnOtpChk', array($result[0]->id));
-                        echo json_encode(array("status" => "1", "msg" => ""));
+                        echo json_encode(array("status" => "1", "msg" => "dsflsdjfldsjfdsjf","session"=>$this->session->userdata()));
                         die();
                     }
                 }
@@ -156,7 +148,7 @@ class Login extends CI_Controller {
                 /* Nishit otp mail end */
                 $this->session->unset_userdata('AdmnOtpChk');
                 $this->session->set_userdata('AdmnOtpChk', array($result[0]->id));
-                echo json_encode(array("status" => "1", "msg" => ""));
+                echo json_encode(array("status" => "1", "msg" => "werewre","sdfsfsf"=>$this->session->userdata()));
             } else {
                 echo json_encode(array("status" => "0", "msg" => "Email or password is invalid"));
             }
@@ -166,6 +158,7 @@ class Login extends CI_Controller {
     function check_otp() {
 
         $AdmnOtpChk = $this->session->userdata('AdmnOtpChk');
+       
         $id = $AdmnOtpChk[0];
         $otp = $this->input->get_post('otp');
         if ($id != NULL && $otp != NULL) {
@@ -204,7 +197,7 @@ class Login extends CI_Controller {
                 echo json_encode(array("status" => "0", "msg" => "Invalid OTP."));
             }
         } else {
-            echo json_encode(array("status" => "0", "msg" => "Invalid parameter."));
+            echo json_encode(array("status" => "0", "msg" => "Invalid parameter.","sdfsfsf"=>$this->session->userdata()));
         }
     }
 

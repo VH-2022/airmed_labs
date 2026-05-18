@@ -1,4 +1,4 @@
- <style>
+<style>
     .admin_job_dtl_img {border: 4px solid #8d8d8d; height: 160px; max-width: 160px; min-width: 80px; width: 180px;}
 	/* pending_job_detail responsive table */
     .pending_job_list_tbl {width: 100%; float: left;}
@@ -798,7 +798,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Upload Reports </label><span style="color:red">*</span><br>	
+                                    <label for="exampleInputFile">Upload Reports</label><span style="color:red">*</span><br>	
                                     <input type="file" id="common_report" name="common_report" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(with letterhead)</small>
                                     <input type="file" id="common_report1" name="common_report1" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(without letterhead)</small>
                                     <small>(Allow only .pdf file)</small><br>
@@ -807,7 +807,7 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                         ?>
                                         <?php
 										if ($query[0]["model_type"] == 1) {
-                                            
+
                                             if (($query[0]['payable_amount'] <= 0 || $query[0]['payable_amount'] == '') || $query[0]["is_print"] == 1 || $query[0]["panel_test_count"] > 0  || $query[0]['branch_fk'] == 164) {
 													/*if($query[0]['payable_amount']>0 && $login_data["type"] != 1){
 														echo "<span style='color:green'>Report Has Been Generated Successfully.</span></br>";

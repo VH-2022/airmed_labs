@@ -6264,6 +6264,69 @@ WHERE `package_test`.`status` = '1'
         }
     }
 
+    // function payment_received()
+    // {
+    //     if (!is_loggedin()) {
+    //         redirect('login');
+    //     }
+    //     $data["login_data"] = logindata();
+    //     $jid = $this->uri->segment(3);
+    //     $amount = trim($this->input->post("amount"));
+    //     $remark = $this->input->post("remark");
+    //     $ttl_amount = $this->input->post("ttl_amount");
+    //     $p_type = $this->input->post("p_type");
+
+    //     $receivid = $this->input->post("hdn_tid");
+    //     $rcv_time = $this->input->post("rcv_time");
+        
+    //     $job_details = $this->job_model->master_fun_get_tbl_val("job_master", array("id" => $jid), array("id", "asc"));
+
+    //     if($job_details[0]["payable_amount"] < $amount){
+    //         $this->session->set_flashdata("amount_history_error", array("Given amount is more than payable amount."));
+    //         redirect("job-master/job-details/" . $jid);
+    //     }
+        
+    //     if (!empty($receivid)) {
+    //         //echo $receivid . " ";
+    //         //echo $rcv_time;
+    //         $this->job_model->master_fun_update("job_master_receiv_amount", array("id", $receivid), array("status" => 0));
+    //     }
+
+
+    //     /* if (!empty($jid) && $ttl_amount >= $amount && $amount != 0 && $amount != '') {
+    //       $this->job_model->master_fun_insert("job_master_receiv_amount", array("payment_type" => $p_type, "remark" => $remark, "job_fk" => $jid, "added_by" => $data["login_data"]["id"], "amount" => $amount, "createddate" => date("Y-m-d H:i:s")));
+    //       $remaining_amount = $ttl_amount - $amount;
+    //       $this->job_model->master_fun_update("job_master", array("id", $jid), array("payable_amount" => $remaining_amount));
+    //       $ttl_amount = $remaining_amount;
+    //       } */
+        
+    //     $sms_alert = $this->job_model->get_val("select smsalert from branch_master where id='" . $job_details[0]['branch_fk'] . "'")[0]['smsalert'];
+    //     $payable_price = $job_details[0]["payable_amount"];
+    //     $remaining_amount = $payable_price - $amount;
+    //     $entrytime = date("Y-m-d H:i:s");
+    //     if (!empty($rcv_time))
+    //         $entrytime  = $rcv_time;
+    //     $this->job_model->master_fun_insert("job_master_receiv_amount", array("payment_type" => $p_type, "remark" => $remark, "job_fk" => $jid, "added_by" => $data["login_data"]["id"], "amount" => $amount, "createddate" => $entrytime));
+
+    //     $discount = 0;
+    //     if ($job_details[0]["discount"] > 0) {
+    //         $discount = round($job_details[0]["price"] * $job_details[0]["discount"] / 100);
+    //     }
+
+    //     $price_disc = $job_details[0]["price"] - $discount;
+    //     $total_rcvd = $this->job_model->get_val("select sum(amount) rcvd from job_master_receiv_amount where status = '1' and job_fk='" . $jid . "'");
+    //     $tot_rcvd = 0;
+    //     if (count($total_rcvd) > 0)
+    //         $tot_rcvd = $total_rcvd[0]["rcvd"];
+    //     $remaining_amount = $price_disc - $tot_rcvd;
+
+    //     $this->job_model->master_fun_update("job_master", array("id", $jid), array("payable_amount" => $remaining_amount));
+    //     $this->job_model->master_fun_insert("job_log", array("job_fk" => $jid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "22", "date_time" => date("Y-m-d H:i:s")));
+    //     $this->session->set_flashdata("amount_history_success", array("Payment Successfully added."));
+    //     $this->check_send_report($jid, $sms_alert);
+    //     redirect("job-master/job-details/" . $jid);
+    // }
+
     function payment_received()
     {
         if (!is_loggedin()) {
@@ -6278,28 +6341,20 @@ WHERE `package_test`.`status` = '1'
 
         $receivid = $this->input->post("hdn_tid");
         $rcv_time = $this->input->post("rcv_time");
-        
+
         $job_details = $this->job_model->master_fun_get_tbl_val("job_master", array("id" => $jid), array("id", "asc"));
+        $customer_details = $this->job_model->master_fun_get_tbl_val("customer_master", array("id" => $job_details[0]['cust_fk']), array("id", "asc"));
+        $branch_details = $this->job_model->master_fun_get_tbl_val("branch_master", array("id" => $job_details[0]['branch_fk']), array("id", "asc"));
 
         if($job_details[0]["payable_amount"] < $amount){
             $this->session->set_flashdata("amount_history_error", array("Given amount is more than payable amount."));
             redirect("job-master/job-details/" . $jid);
         }
-        
+
         if (!empty($receivid)) {
-            //echo $receivid . " ";
-            //echo $rcv_time;
             $this->job_model->master_fun_update("job_master_receiv_amount", array("id", $receivid), array("status" => 0));
         }
 
-
-        /* if (!empty($jid) && $ttl_amount >= $amount && $amount != 0 && $amount != '') {
-          $this->job_model->master_fun_insert("job_master_receiv_amount", array("payment_type" => $p_type, "remark" => $remark, "job_fk" => $jid, "added_by" => $data["login_data"]["id"], "amount" => $amount, "createddate" => date("Y-m-d H:i:s")));
-          $remaining_amount = $ttl_amount - $amount;
-          $this->job_model->master_fun_update("job_master", array("id", $jid), array("payable_amount" => $remaining_amount));
-          $ttl_amount = $remaining_amount;
-          } */
-        
         $sms_alert = $this->job_model->get_val("select smsalert from branch_master where id='" . $job_details[0]['branch_fk'] . "'")[0]['smsalert'];
         $payable_price = $job_details[0]["payable_amount"];
         $remaining_amount = $payable_price - $amount;
@@ -6319,6 +6374,58 @@ WHERE `package_test`.`status` = '1'
         if (count($total_rcvd) > 0)
             $tot_rcvd = $total_rcvd[0]["rcvd"];
         $remaining_amount = $price_disc - $tot_rcvd;
+
+        $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00ODI0LTRkNjgtYjkzZS1jMGE2MDI1ZTRlYzMiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMDYvMDMvMjAyNCAwOTo1Nzo0NiIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJ0ZW5hbnRfaWQiOiIxMTEwIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.Bkx_yIos2CDH9r3jp6YfWRk4MbFFPWQwX1V0GxudQlo";
+
+        $patientName = $customer_details[0]['full_name'];
+        $patientNumber = $customer_details[0]['mobile'];
+        $whatsappSentTotalAmount = $amount;
+        $branchName = $branch_details[0]['branch_name'];
+        $receiptNo = $job_details[0]['order_id'];
+        $paymentType = $p_type;
+        $patientNumber = '91' . $patientNumber;
+        $date = date("d-m-Y H:i:s", strtotime($job_details[0]['date']));
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://live-server-1110.wati.io/api/v1/sendTemplateMessage?whatsappNumber=' . $patientNumber,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_POSTFIELDS => json_encode(array(
+                "template_name" => "payment_done",
+                "broadcast_name" => "Payment Send Whatsapp send test details - " . $patientNumber,
+                "parameters" => array(
+                    array("name" => "name", "value" => $patientName),
+                    array("name" => "amount", "value" => $whatsappSentTotalAmount),
+                    array("name" => "centername", "value" => $branchName),
+                    array("name" => "receiptno", "value" => $receiptNo),
+                    array("name" => "date", "value" => $date),
+                    array("name" => "paymentmode", "value" => $paymentType),
+                )
+            )),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $bearer_token,
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        
+        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        // if ($http_code != 200) {
+        //     echo "Error: " . $response;
+        // } else {
+        //     echo $response;
+        // }
+
+        curl_close($curl);
 
         $this->job_model->master_fun_update("job_master", array("id", $jid), array("payable_amount" => $remaining_amount));
         $this->job_model->master_fun_insert("job_log", array("job_fk" => $jid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "22", "date_time" => date("Y-m-d H:i:s")));
@@ -7180,7 +7287,7 @@ Sonepat Tel: 0130-2242938, 2242939 </b><div>
         if ($jid != null) {
             $data["jid"] = $jid;
             $data["job_details"] = $this->getbranch_job_details($jid);
-            $data["login_data"] = logindata();
+
             /* echo "<pre>"; print_R($data["job_details"]); die(); */
 
             $bookingid = $data["job_details"][0]["booking_info"];
@@ -7912,7 +8019,9 @@ WHERE job_master.id = '" . $jid . "'
                 }
             }
             /* END */
-            $this->check_send_report($jid);
+
+            /****Vishal D Patel Comment code 01-05-2026 Rohit  */
+            //$this->check_send_report($jid);
             redirect("job-master/job-details/" . $jid, "refresh");
         } else {
             redirect("job-master/pending-list");
@@ -11363,27 +11472,6 @@ GROUP BY `test_master`.`id`");
                     fclose($handle);
                     exit;
                   
-                }
-
-                function report_update(){
-                    $get_job_data = $this->job_model->get_val("SELECT id,order_id FROM job_master WHERE id IN (473348,473349,473350,473351,473352,473354,473355,473356,473357,473358,473359,473360,473361,473362,473363,473365,473366,473367,473368,473399,473398,473400,473401,473402,473403,473404,473405,473406,473407,473408,473409,473410,473411,473412,473413,473414,473416,473415,473417,473418,473419,473420,473421,473422,473423,473424,473425,473426,473431,473432,473433,473434,473435,473436,473437,473438,473439,473440,473441,473442,473443,473444,473445,473446,473447,473448,473449,473450,473451,473452,473453,473454,473455,473456,473457,473458,473459,473460,473461,473462,473463,473464,473465,473466,473467,473468,473469)");
-
-                    if(!empty($get_job_data)){
-                        foreach($get_job_data as $job_data){
-                            $jobId = $job_data['id'];
-                            $orderId = $job_data['order_id']; 
-
-                            $pdf_name_withlh =  $orderId . "_printresult_wlpd.pdf";
-                            $pdf_name_withoutlh =  $orderId . "_printresult.pdf";
-
-                            $this->job_model->master_fun_update_multi("report_master", array("job_fk" => $jobId, "status" => 1), array("report" => $pdf_name_withlh,"without_laterpad" => $pdf_name_withoutlh));
-
-                            echo "Updated Job ID: " . $jobId . " | Order ID: " . $orderId . "<br>";
-                        }
-                    }else {
-                        log_message('error', 'No jobs found or get_val returned invalid data.');
-                    }
-                    
                 }
         }
 

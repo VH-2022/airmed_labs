@@ -79,7 +79,9 @@ class Add_result extends CI_Controller {
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -383,6 +385,7 @@ class Add_result extends CI_Controller {
     }
 
     function test_approve_details() {
+       
         if (!is_loggedin()) {
             redirect('login');
         }
@@ -410,13 +413,18 @@ class Add_result extends CI_Controller {
           } */
 
         $data['query'] = $this->add_result_model->job_details($data['cid']);
+        
         $data['processing_center'] = $this->add_result_model->master_fun_get_tbl_val("processing_center", array('status' => 1, 'lab_fk' => $data['query'][0]["branch_fk"]), array("id", "asc"));
         if (empty($data['processing_center'])) {
             $processing_center = '1';
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+       
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+      
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -644,7 +652,9 @@ class Add_result extends CI_Controller {
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -1957,7 +1967,9 @@ class Add_result extends CI_Controller {
 //            $data['user_data'][0]["dob"] = '1992-09-30';
 //        }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         if ($data['user_data'][0]["dob"] != '') {
             $this->load->library("util");
@@ -2211,6 +2223,7 @@ class Add_result extends CI_Controller {
                 '/{{LOCATION}}/',
                 '/{{TELENO}}/'
             );
+            date_default_timezone_set('Asia/Kolkata');
             $replace = array(
                 'pdf_barcode.png',
                 $id,
@@ -2314,7 +2327,9 @@ class Add_result extends CI_Controller {
         }
 
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $var = 0;
         if ($data['user_data'][0]["dob"] != '') {
@@ -2477,6 +2492,7 @@ class Add_result extends CI_Controller {
         $base_url = base_url();
 
         $content = $this->add_result_model->master_fun_get_tbl_val("pdf_design", array('branch_fk' => $branch_fk), array("id", "asc"));
+        date_default_timezone_set('Asia/Kolkata');
         //print_r($content); die();
         $find = array(
             '/{{BARCODE}}/',
@@ -2538,12 +2554,14 @@ class Add_result extends CI_Controller {
             $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "type" => "c", "updated_date" => date("Y-m-d H:i:s"));
             $this->add_result_model->master_fun_update('report_master', array('job_fk', $id), $data1);
         } else {
+            date_default_timezone_set('Asia/Kolkata');
             $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, "type" => "c", 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "created_date" => date("Y-m-d H:i:s"));
             $this->add_result_model->master_fun_insert("report_master", $data1);
         }
         $this->add_result_model->master_fun_update('job_master', array('id', $id), array("report_approve_by" => $data["login_data"]["id"]));
         //print_R($data1); die();
         $this->session->set_flashdata("success", array("Report successfully attached."));
+        date_default_timezone_set('Asia/Kolkata');
         $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
 
         redirect("job-master/job-details/" . $id);
@@ -2587,7 +2605,9 @@ class Add_result extends CI_Controller {
             $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
         }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -2779,6 +2799,7 @@ class Add_result extends CI_Controller {
             die();
         }
         $data["content"] = $content;
+        date_default_timezone_set('Asia/Kolkata');
         //print_r($content); die();
         $find = array(
             '/{{BARCODE}}/',
@@ -2847,12 +2868,14 @@ class Add_result extends CI_Controller {
             $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "type" => "c", "updated_date" => date("Y-m-d H:i:s"));
             $this->add_result_model->master_fun_update('report_master', array('job_fk', $id), $data1);
         } else {
+            date_default_timezone_set('Asia/Kolkata');
             $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, "type" => "c", 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "created_date" => date("Y-m-d H:i:s"));
             $this->add_result_model->master_fun_insert("report_master", $data1);
         }
         $this->add_result_model->master_fun_update('job_master', array('id', $id), array("report_approve_by" => $data["login_data"]["id"]));
         //print_R($data1); die();
         $this->session->set_flashdata("success", array("Report successfully attached."));
+        date_default_timezone_set('Asia/Kolkata');
         $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
 
         redirect("job-master/job-details/" . $id);
@@ -2886,7 +2909,7 @@ class Add_result extends CI_Controller {
         }
         $base_url = base_url();
         $branch_fk = $data["branch_fk"];
-
+date_default_timezone_set('Asia/Kolkata');
         $content = $data['content'];
         $find = array(
             '/{{BARCODE}}/',
@@ -3090,7 +3113,10 @@ class Add_result extends CI_Controller {
             $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
         }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -3321,6 +3347,7 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data["collection_date"] = date("Y-m-d H:i:s");
             }
             $data["content"] = $content;
+            date_default_timezone_set('Asia/Kolkata');
             //print_r($content); die();
             $find = array(
                 '/{{BARCODE}}/',
@@ -3390,6 +3417,7 @@ WHERE tm.id = '" . $tst_id . "'");
             if ($branch_fk == 11) {
                 $pdf_id = 16;
             }
+            date_default_timezone_set('Asia/Kolkata');
             $content = $this->add_result_model->master_fun_get_tbl_val("pdf_preview_design", array('id' => $pdf_id), array("id", "asc"));
             $find = array(
                 '/{{BARCODE}}/',
@@ -4136,7 +4164,10 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
             /* Check bitrth date start */
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
             $pdate = $processing_date[0]["date"];
             $this->load->library("util");
             $util = new Util;
@@ -4429,7 +4460,10 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
             /* Check bitrth date start */
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
             $pdate = $processing_date[0]["date"];
             $this->load->library("util");
             $util = new Util;
@@ -4714,7 +4748,9 @@ WHERE tm.id = '" . $tst_id . "'");
         } else {
             $processing_center = $data['processing_center'][0]["branch_fk"];
         }
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -4741,7 +4777,9 @@ WHERE tm.id = '" . $tst_id . "'");
             $data['user_data'][0]["dob"] = '1992-09-30';
         }
         /* Check bitrth date start */
-        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+        //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+        $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
         $pdate = $processing_date[0]["date"];
         $this->load->library("util");
         $util = new Util;
@@ -5191,7 +5229,9 @@ WHERE tm.id = '" . $tst_id . "'");
     }
 
     function approve_reporttest($id) {
+        date_default_timezone_set('Asia/Kolkata');
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+       
         if (!is_loggedin()) {
             redirect('login');
         }
@@ -5241,7 +5281,8 @@ WHERE tm.id = '" . $tst_id . "'");
                 $data['user_data'][0]["phone"] = $data['user_family_info'][0]["phone"];
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
             $pdate = $processing_date[0]["date"];
             /* Check bitrth date start */
             $this->load->library("util");
@@ -5497,7 +5538,9 @@ WHERE tm.id = '" . $tst_id . "' ");
             if (!empty($data["completed_date"])) {
                 $data["completed_date1"] = $data["completed_date"][0]["date_time"];
             } else {
-                $data["completed_date1"] = date("Y-m-d H:i:s");
+                date_default_timezone_set('Asia/Kolkata');    
+            $data["completed_date1"] = date("Y-m-d H:i:s");
+                
 //                if ($data["login_data"]['type'] == "6") {
 //                    $data["completed_date1"] = $approve_test_last_time[0]["date_time"];
 //                } else {
@@ -5516,6 +5559,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $data["collection_date"] = date("Y-m-d H:i:s");
             }
             $data["content"] = $content;
+            date_default_timezone_set('Asia/Kolkata');
             //print_r($content); die();
             $find = array(
                 '/{{BARCODE}}/',
@@ -5564,6 +5608,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                     $data["user_data"][0]['mobile']
                 );
             }
+        
             if($id=='116354'){
                   $replace = array(
                     'pdf_barcode.png',
@@ -5659,16 +5704,19 @@ WHERE tm.id = '" . $tst_id . "' ");
             $name_orgnl = $data['user_data'][0]["full_name"] . "_result_with_latterhead.pdf";
             $name_orgnl1 = $data['user_data'][0]["full_name"] . "_result.pdf";
             $count = $this->add_result_model->master_fun_get_tbl_val("report_master", array('job_fk' => $id), array("id", "asc"));
+            date_default_timezone_set('Asia/Kolkata');
             if (!empty($count)) {
                 $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "type" => "c", "updated_date" => date("Y-m-d H:i:s"));
                 $this->add_result_model->master_fun_update('report_master', array('job_fk', $id), $data1);
             } else {
+                date_default_timezone_set('Asia/Kolkata');
                 $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, "type" => "c", 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "created_date" => date("Y-m-d H:i:s"));
                 $this->add_result_model->master_fun_insert("report_master", $data1);
             }
             $this->add_result_model->master_fun_update('job_master', array('id', $id), array("report_approve_by" => $data["login_data"]["id"]));
             //print_R($data1); die();
             $this->session->set_flashdata("success", array("Report successfully attached."));
+            date_default_timezone_set('Asia/Kolkata');
             $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
             
             $auto_completejob = $this->add_result_model->get_val("select auto_completejob from branch_master where status='1' AND id='" . $data['query'][0]["branch_fk"] . "'")[0]['auto_completejob'];
@@ -5679,10 +5727,19 @@ WHERE tm.id = '" . $tst_id . "' ");
                     $count11++;
                 }
             }
-			
+			date_default_timezone_set('Asia/Kolkata');
             if ($count11 == count($tid) && $auto_completejob == 1) {
                 $this->job_mark_completed($data['cid']);
 				$this->getstock($data['cid']);
+                 
+                if($id==505695){
+
+                    // print_r(array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '8-2', "message_fk" => "3", "date_time" => date("Y-m-d H:i:s")));
+                    // die();
+                    // echo  date("Y-m-d H:i:s");
+                    // die('dsf');
+                }
+                
                 $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '8-2', "message_fk" => "3", "date_time" => date("Y-m-d H:i:s")));
             }
             
@@ -5693,6 +5750,7 @@ WHERE tm.id = '" . $tst_id . "' ");
     }
 
     function approve_reporttest_whatsapp($id) {
+        date_default_timezone_set('Asia/Kolkata');
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         if (!is_loggedin()) {
             redirect('login');
@@ -5743,7 +5801,10 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $data['user_data'][0]["phone"] = $data['user_family_info'][0]["phone"];
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
             $pdate = $processing_date[0]["date"];
             /* Check bitrth date start */
             $this->load->library("util");
@@ -6018,6 +6079,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $data["collection_date"] = date("Y-m-d H:i:s");
             }
             $data["content"] = $content;
+            date_default_timezone_set('Asia/Kolkata');
             //print_r($content); die();
             $find = array(
                 '/{{BARCODE}}/',
@@ -6161,15 +6223,18 @@ WHERE tm.id = '" . $tst_id . "' ");
             $name_orgnl1 = $data['user_data'][0]["full_name"] . "_result.pdf";
             $count = $this->add_result_model->master_fun_get_tbl_val("report_master", array('job_fk' => $id), array("id", "asc"));
             if (!empty($count)) {
+                date_default_timezone_set('Asia/Kolkata');
                 $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "type" => "c", "updated_date" => date("Y-m-d H:i:s"));
                 $this->add_result_model->master_fun_update('report_master', array('job_fk', $id), $data1);
             } else {
+                date_default_timezone_set('Asia/Kolkata');
                 $data1 = array('job_fk' => $id, 'report' => $name, 'status' => 1, "original" => $name_orgnl, "type" => "c", 'without_laterpad' => $name1, "without_laterpad_original" => $name_orgnl1, "created_date" => date("Y-m-d H:i:s"));
                 $this->add_result_model->master_fun_insert("report_master", $data1);
             }
             $this->add_result_model->master_fun_update('job_master', array('id', $id), array("report_approve_by" => $data["login_data"]["id"]));
             //print_R($data1); die();
             $this->session->set_flashdata("success", array("Report successfully attached."));
+            date_default_timezone_set('Asia/Kolkata');
             $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "17", "date_time" => date("Y-m-d H:i:s")));
 
             $this->add_result_model->master_fun_insert("job_log", array("job_fk" => $id, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "job_status" => '', "message_fk" => "33", "date_time" => date("Y-m-d H:i:s")));
@@ -6474,7 +6539,7 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
     }
 
     function reporttest_preview($id) {
-
+        
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         if (!is_loggedin()) {
             redirect('login');
@@ -6516,7 +6581,10 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
                 $data['user_data'][0]["phone"] = $data['user_family_info'][0]["phone"];
                 $data['user_data'][0]["dob"] = $data['user_family_info'][0]["dob"];
             }
-            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+            //$processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time!='',DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
+            $processing_date = $this->add_result_model->get_val("SELECT IF(job_log.date_time IS NOT NULL,DATE_FORMAT(job_log.date_time,'%Y-%m-%d'),DATE_FORMAT(`job_master`.`date`,'%Y-%m-%d')) AS `date` FROM `job_master` LEFT JOIN `job_log` ON `job_log`.`job_fk`=`job_master`.`id` AND `job_log`.`status`='1' AND `job_log`.`job_status`='6-7' WHERE `job_master`.`status`!='0' AND `job_master`.`id`='" . $data['cid'] . "'");
+
             $pdate = $processing_date[0]["date"];
             /* Check bitrth date start */
             $this->load->library("util");
@@ -6686,7 +6754,7 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data['result_list'] = $this->add_result_model->master_fun_get_tbl_val("user_test_result", array('status' => 1, 'job_id' => $data['cid']), array("id", "asc"));
             $latterhead = $this->input->post('latterhead');
             $content = $this->add_result_model->master_fun_get_tbl_val("pdf_design", array('branch_fk' => $branch_fk), array("id", "asc"));
-
+                
             $data['page_title'] = 'AirmedLabs'; // pass data to the view
             ini_set('memory_limit', '512M'); // boost the memory limit if it's low <img src="https://s.w.org/images/core/emoji/72x72/1f609.png" alt="?" draggable="false" class="emoji">
 
@@ -6712,8 +6780,10 @@ WHERE tm.id = '" . $tst_id . "' ");
             if (file_exists($pdfFilePath1)) {
                 $this->delete_downloadfile($pdfFilePath1);
             }
+            
             $this->load->library('pdf');
             $pdf = $this->pdf->load();
+  
             $pdf->autoScriptToLang = true;
             $pdf->baseScript = 1; // Use values in classes/ucdn.php  1 = LATIN
             $pdf->autoVietnamese = true;
@@ -6729,7 +6799,8 @@ WHERE tm.id = '" . $tst_id . "' ");
                 $b2b_drname = $this->add_result_model->master_fun_get_tbl_val("sample_job_master", array('barcode_fk' => $data["query"][0]["b2b_id"]), array("id", "asc"));
                 $name = ucfirst($b2b_drname[0]['doctor']);
             }
-            $base_url = base_url();
+           $base_url =FCPATH ;
+            // $base_url = base_url();
             $content = $this->add_result_model->master_fun_get_tbl_val("pdf_design", array('branch_fk' => $branch_fk), array("id", "asc"));
             $data["collection_date"] = $this->add_result_model->get_val("SELECT date_time FROM `job_log` WHERE `status`='1' AND `message_fk`='3' and `job_status` LIKE '%-7%' AND job_fk='" . $data['cid'] . "' order by id desc");
             $data["completed_date"] = $this->add_result_model->get_val("SELECT date_time FROM `job_log` WHERE `status`='1' AND `message_fk`='3' and `job_status` LIKE '%-2%' AND job_fk='" . $data['cid'] . "' order by id desc");
@@ -6749,7 +6820,8 @@ WHERE tm.id = '" . $tst_id . "' ");
                 }
                 $data["collection_date"] = date("Y-m-d H:i:s");
             }
-            $data["content"] = $content;
+
+            $data["content"] = $content;date_default_timezone_set('Asia/Kolkata');
             //print_r($content); die();
             $find = array(
                 '/{{BARCODE}}/',
@@ -6769,12 +6841,11 @@ WHERE tm.id = '" . $tst_id . "' ");
             $barecode_url = $base_url . 'user_assets/images/pdf_barcode.png';
             $sign_url = $base_url . 'user_assets/images/dr_gupta_sign.png';
             $phone_url = $base_url . 'user_assets/images/pdf_phn_btn.png';
-
+           
             $replace = array(
                 'pdf_barcode.png',
                 $id . " ( " . $data["query"][0]['order_id'] . " ) ",
-                // date("d-M-Y", strtotime($data["query"][0]['regi_date'])),
-                date("d-M-Y", strtotime($data["query"][0]['date'])),
+                date("d-M-Y", strtotime($data["query"][0]['regi_date'])),
                 date("d-M-Y g:i A", strtotime($data["collection_date"])),
                 strtoupper($data["user_data"][0]['full_name']),
                 date("d-M-Y g:i A", strtotime($data["completed_date1"])),
@@ -6811,16 +6882,17 @@ WHERE tm.id = '" . $tst_id . "' ");
             $data['header'] = $header;
 
             $data['footer'] = $contentfooter;
+
             
             $data['footer'] = str_replace("* Denotes Test not in", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $data['footer']);
             $data['footer'] = str_replace("NABL Scope ** Refered Test", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $data['footer']);
             /* echo "<pre>"; print_r($data); die(); */
 
             $data["pdfsize"] = $content[0]["withsize"];
-            
 
             $html = $this->load->view('result_pdf', $data, true); // render the view into HTML 
-
+           ;
+            
             $pdf->WriteHTML($html);
 
             $pdf->Output($pdfFilePath, 'F'); // save to file because we can
@@ -7375,6 +7447,10 @@ WHERE tm.id = '" . $tst_id . "' ");
         }
         return 1;
     }
+    function hitendate(){
+        echo date("Y-m-d H:i:s");
+
+    }
     
     
     
@@ -7669,40 +7745,6 @@ WHERE tm.id = '" . $tst_id . "' ");
                 return array("status" => "0");
             }
         }
-    }
-
-    function update_job_log(){
-        $get_job_by_id = $this->add_result_model->get_val('SELECT id,date FROM job_master WHERE id IN (473439,473440,473441,473442,473443,473444,473445,473446,
-    473447,473448,473449,473450,473451,473452,473453,473454,
-    473457,473458,473459,473460)');
-
-        if(!empty($get_job_by_id)){
-            
-             $this->db->trans_start();
-            
-            foreach($get_job_by_id as $job_value){
-                $job_id = $job_value['id'];
-                $job_date = $job_value['date'];
-
-                $this->add_result_model->master_fun_update("job_log", array("job_fk", $job_id), array("date_time" => 
-                $job_date));
-
-                echo "Updated job_log for job_fk: " . $job_id . " | New date_time: " . $job_date . "<br>";
-                
-            }
-            $this->db->trans_complete();
-
-            // ✅ Check transaction status
-            if ($this->db->trans_status() === FALSE) {
-                echo "Something went wrong! Transaction rolled back.";
-            } else {
-                echo "<br>✅ All job_log updates committed successfully!";
-            }
-        }else {
-            echo "No jobs found!";
-        }
-
-       
     }
     
     

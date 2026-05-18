@@ -11,7 +11,7 @@ class User_track_report extends CI_Controller {
         $this->load->helper(array('form', 'url'));
         $this->load->model('master_model');
         $this->load->library('form_validation');
-        $this->app_track();
+        //$this->app_track();
     }
 
     function app_track() {
@@ -21,6 +21,7 @@ class User_track_report extends CI_Controller {
     }
 
     function index() {
+        die("112233445566");
         $this->load->helper("Email");
         $email_cnt = new Email;
         $this->load->library('email');
@@ -73,6 +74,7 @@ class User_track_report extends CI_Controller {
     }
 
     function verify_data() {
+         die("112233445566");
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('mobile', 'Mobile No.', 'trim|required');
@@ -141,6 +143,7 @@ class User_track_report extends CI_Controller {
     }
 
     function varify_captcha() {
+         die("112233445566");
         $recaptchaResponse = trim($this->input->get_post('g-recaptcha-response'));
         $google_url = "https://www.google.com/recaptcha/api/siteverify";
         $secret = '6Ld5_x8UAAAAAGn_AV4406lg29xu2hpQQJMaD2BC';

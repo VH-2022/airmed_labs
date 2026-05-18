@@ -8,15 +8,7 @@ class User_master extends CI_Controller {
     var $cash_back;
 
     function __construct() {
-       
-       // session_write_close(); 
         parent::__construct();
-        
-        $this->load->library('session');
-        $user_id = $this->session->userdata('user_id');
-$username = $this->session->userdata('username');
-        print_r($this->session->userdata());
-        die();
         $this->load->model('home_model');
         $this->load->model('user_master_model');
         $this->load->model('user_wallet_model');
@@ -27,16 +19,10 @@ $username = $this->session->userdata('username');
         $this->load->library('pushserver');
         $this->load->library('pagination');
         $this->load->library('email');
-       $this->load->helper('login_helper');
-        
-     
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST');
         header("Access-Control-Allow-Headers: X-Requested-With");
-      
-         $data["login_data"] = loginuser();
-        
-        
+        $data["login_data"] = loginuser();
         $uid = $data["login_data"]['id'];
         if ($uid != 0) {
             $maxid = $this->user_wallet_model->total_wallet($uid);
@@ -54,14 +40,13 @@ $username = $this->session->userdata('username');
         $offer_master = $this->user_master_model->master_fun_get_tbl_val("offer_master", array("status" => "1"), array("id", "asc"));
         $this->cash_back = $offer_master;
 
-        // $data["test_city_session"] = $this->session->userdata("test_city");
-        // if (empty($data["test_city_session"])) {
-        //     $this->session->set_userdata("test_city", "1");
-        // }
+        $data["test_city_session"] = $this->session->userdata("test_city");
+        if (empty($data["test_city_session"])) {
+            $this->session->set_userdata("test_city", "1");
+        }
     }
 
     function index() {
-      $data["login_data"] = loginuser();
         if ($this->session->flashdata("error")) {
             $data["error"] = $this->session->flashdata("error");
         }
@@ -70,9 +55,7 @@ $username = $this->session->userdata('username');
             $data["test_city_session"] = 1;
             $this->session->set_userdata("test_city", "1");
         }
-
         $data["login_data"] = loginuser();
-        
         $data["user"] = $this->user_master_model->getUser($data["login_data"]["id"]);
         $data['success'] = $this->session->flashdata("success");
         $data['payment_success'] = $this->session->flashdata("payment_success");
@@ -84,59 +67,6 @@ $username = $this->session->userdata('username');
         $data['test_cities'] = $this->user_master_model->master_fun_get_tbl_val("test_cities", array("status" => 1, "user_view" => "1"), array("name", "asc"));
         $data['active_class'] = "home";
         $data['red_header_active'] = "0";
-        $data1 = $this->user_master_model->master_fun_get_tbl_val("package_master", array("status" => 1, "is_view" => "1","is_active" => "1"), array("order", "asc"));
-        $cnt = 0;
-        $city = $this->session->userdata("test_city");
-        if (empty($city)) {
-            $city = 1;
-        }
-        $package_array = array();
-        foreach ($data1 as $key) {
-            $pkg_price = $this->user_master_model->master_fun_get_tbl_val("package_master_city_price", array("status" => "1", "package_fk" => $key["id"], "city_fk" => $city), array("id", "asc"));
-            $package_array[] = array($key, $pkg_price);
-            $cnt++;
-        }
-        $data["package_array"] = $package_array;
-        /* Show package end */
-        /* Package category start */
-        $suggest_package = array();
-        $package_category = $this->user_master_model->master_fun_get_tbl_val("package_category", array("status" => '1'), array("name", "asc"));
-        foreach ($package_category as $key) {
-            $package_list = $this->user_master_model->get_val("SELECT p.id,p.title,pr.`d_price`,pr.`a_price`,p.image FROM package_master as p left join package_master_city_price as pr on pr.package_fk=p.id WHERE p.status='1' AND pr.status='1' AND p.home_is_view='1' AND p.is_active='1' AND p.category_fk='" . $key["id"] . "' AND pr.city_fk='" . $city . "' order by p.title ASC");
-            $cnt = 0;
-            foreach ($package_list as $p_key) {
-                $p_key["desc_web"] = '';
-                $p_key["desc_app"] = '';
-                $package_test = $this->user_master_model->get_val("SELECT GROUP_CONCAT(`package_test`.`test_fk`) AS test_fk FROM `package_test` WHERE package_fk='" . $p_key["id"] . "' AND `package_test`.`status`='1' GROUP BY `package_test`.`package_fk`");
-                if (!empty($package_test)) {
-                    $tst_prc = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $city . "' AND `test_master`.`id` in (" . $package_test[0]["test_fk"] . ")");
-                    $p_key['test_list'] = $tst_prc;
-                }
-                $package_list[$cnt] = $p_key;
-                $cnt++;
-            }
-            $key["package"] = $package_list;
-            $suggest_package[] = $key;
-
-            $body_package_list = $this->user_master_model->get_val("SELECT p.id,p.title,pr.`d_price`,pr.`a_price`,p.image FROM package_master as p left join package_master_city_price as pr on pr.package_fk=p.id WHERE p.status='1' AND pr.status='1' AND p.body_packages_is_view='1' AND p.home_is_view='1' AND p.is_active='1' AND p.category_fk='" . $key["id"] . "' AND pr.city_fk='" . $city . "' order by p.title ASC");
-            $bcnt = 0;
-            foreach ($body_package_list as $bp_key) {
-                $bp_key["desc_web"] = '';
-                $bp_key["desc_app"] = '';
-                $bpackage_test = $this->user_master_model->get_val("SELECT GROUP_CONCAT(`package_test`.`test_fk`) AS test_fk FROM `package_test` WHERE package_fk='" . $bp_key["id"] . "' AND `package_test`.`status`='1' GROUP BY `package_test`.`package_fk`");
-                if (!empty($bpackage_test)) {
-                    $btst_prc = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $city . "' AND `test_master`.`id` in (" . $bpackage_test[0]["test_fk"] . ")");
-                    $bp_key['test_list'] = $btst_prc;
-                }
-                $body_package_list[$bcnt] = $bp_key;
-                $bcnt++;
-            }
-            $key["body_package"] = $body_package_list;
-            $body_suggest_package[] = $key;
-        }
-        $data["suggest_package"] = $suggest_package;
-        $data["body_suggest_package"] = $body_suggest_package;
-        
         $this->load->view('user/header', $data);
         $this->load->view('user/home', $data);
         $this->load->view('user/footer');
@@ -1684,7 +1614,7 @@ WHERE `customer_family_master`.`status` = '1'
         $suggest_package = array();
         $package_category = $this->user_master_model->master_fun_get_tbl_val("package_category", array("status" => '1'), array("name", "asc"));
         foreach ($package_category as $key) {
-            $package_list = $this->user_master_model->get_val("SELECT p.id,p.title,pr.`d_price`,pr.`a_price`,p.image FROM package_master as p left join package_master_city_price as pr on pr.package_fk=p.id WHERE p.status='1' AND pr.status='1' AND p.is_view='1' AND p.is_active='1' AND p.category_fk='" . $key["id"] . "' AND pr.city_fk='" . $city . "' order by p.title ASC");
+            $package_list = $this->user_master_model->get_val("SELECT p.id,p.title,pr.`d_price` FROM package_master as p left join package_master_city_price as pr on pr.package_fk=p.id WHERE p.status='1' AND pr.status='1' AND p.is_view='1' AND p.is_active='1' AND p.category_fk='" . $key["id"] . "' AND pr.city_fk='" . $city . "' order by p.title ASC");
             $cnt = 0;
             foreach ($package_list as $p_key) {
                 $p_key["desc_web"] = '';
@@ -1699,25 +1629,8 @@ WHERE `customer_family_master`.`status` = '1'
             }
             $key["package"] = $package_list;
             $suggest_package[] = $key;
-
-            $body_package_list = $this->user_master_model->get_val("SELECT p.id,p.title,pr.`d_price`,pr.`a_price`,p.image FROM package_master as p left join package_master_city_price as pr on pr.package_fk=p.id WHERE p.status='1' AND pr.status='1' AND p.body_packages_is_view='1' AND p.is_active='1' AND p.category_fk='" . $key["id"] . "' AND pr.city_fk='" . $city . "' order by p.title ASC");
-            $bcnt = 0;
-            foreach ($body_package_list as $bp_key) {
-                $bp_key["desc_web"] = '';
-                $bp_key["desc_app"] = '';
-                $bpackage_test = $this->user_master_model->get_val("SELECT GROUP_CONCAT(`package_test`.`test_fk`) AS test_fk FROM `package_test` WHERE package_fk='" . $bp_key["id"] . "' AND `package_test`.`status`='1' GROUP BY `package_test`.`package_fk`");
-                if (!empty($bpackage_test)) {
-                    $btst_prc = $this->user_master_model->get_val("SELECT test_master.`id`,`test_master`.`TEST_CODE`,`test_master`.`test_name`,`test_master`.`test_name`,`test_master`.`PRINTING_NAME`,`test_master`.`description`,`test_master`.`SECTION_CODE`,`test_master`.`LAB_COST`,`test_master`.`status`,`test_master_city_price`.`price` FROM `test_master` INNER JOIN `test_master_city_price` ON `test_master`.`id`=`test_master_city_price`.`test_fk` WHERE `test_master`.`status`='1' AND `test_master_city_price`.`status`='1' AND `test_master_city_price`.`city_fk`='" . $city . "' AND `test_master`.`id` in (" . $bpackage_test[0]["test_fk"] . ")");
-                    $bp_key['test_list'] = $btst_prc;
-                }
-                $body_package_list[$bcnt] = $bp_key;
-                $bcnt++;
-            }
-            $key["body_package"] = $body_package_list;
-            $body_suggest_package[] = $key;
         }
         $data["suggest_package"] = $suggest_package;
-        $data["body_suggest_package"] = $body_suggest_package;
         /* Package category end */
         $this->load->view('user/header', $data);
         $this->load->view("user/all_package1", $data);

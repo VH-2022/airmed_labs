@@ -134,8 +134,6 @@ class Package_master extends CI_Controller {
         $desc_app = $this->input->post('desc_app');
         $is_view = $this->input->post('is_view');
         $p_type = $this->input->post('p_type');
-        $home_is_view = $this->input->post('home_is_view');
-        $body_packages_is_view = $this->input->post('body_packages_is_view');
         if ($this->session->userdata('unsuccess') != null) {
             $data['unsuccess'] = $this->session->userdata("unsuccess");
             $this->session->unset_userdata('unsuccess');
@@ -203,8 +201,6 @@ class Package_master extends CI_Controller {
                 "category_fk" => $p_type,
                 "booking_time" => $book,
                 "is_view" => $is_view,
-                "home_is_view" => $home_is_view,
-                "body_packages_is_view" => $body_packages_is_view,
             );
             $city = $this->input->post("city");
             $data2 = $data1 + $first_file_name + $second_file_name;

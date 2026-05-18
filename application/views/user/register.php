@@ -14,7 +14,7 @@
 select.form-control12.select2-hidden-accessible:focus { border-color: rgba(0, 0, 0, 0.4) !important;}
 input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outline: 5px auto -webkit-focus-ring-color !important;}
 </style>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+<link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
 
 <!-- Start main-content -->
 <div class="main-content">
@@ -130,9 +130,9 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <script src='https://www.google.com/recaptcha/api.js'></script>
-                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
-                                        <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
-                                        
+                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr" tabindex="11"></div>
+                                        <spam id="captch_error" style="color:red;"></spam><br>
+                                        <span style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></span>
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="aply_terms_cndtn">
@@ -143,7 +143,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="input-group">
-                                            <button type="submit" disabled="disbled" id="rg_btn" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait..." tabindex="13">Register</button>
+                                            <button type="submit" id="rg_btn" disabled="" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait..." tabindex="13">Register</button>
                                         </div>
                                     </div>
                                 </div> 
@@ -155,7 +155,7 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                     </div>
                 </div>
             </div>
-        <!--    <div class="row">
+            <div class="row">
                 <div class="full_div pdng_top_35px">
                     <div class="col-sm-6">
                         <h1 class="all_pg_lst_btns">An App for simplified pathology experience.</h1>
@@ -171,30 +171,22 @@ input[type=file]:focus, input[type=checkbox]:focus, input[type=radio]:focus{outl
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <script>
-        var captcha = 0;
-
-            function recaptchaCallback() {
-                captcha = 1;
-                checkRegisterEnable();
-            }
-
-            $("#term_and_condition").on("change", function () {
-                checkRegisterEnable();
-            });
-
-            function checkRegisterEnable() {
-                if (captcha == 1 && $("#term_and_condition").is(":checked")) {
-                    $("#rg_btn").removeAttr("disabled");
-                } else {
-                    $("#rg_btn").attr("disabled", true);
-                }
-            }
-
+        captcha=0;
+        function recaptchaCallback() {
+            //$('#rg_btn').removeAttr('disabled');
+//            captcha=1;
+//            if (document.getElementById("term_and_condition").checked == true) {
+//                $("#rg_btn").removeAttr("disabled", "");
+//            }
+//            if (document.getElementById("term_and_condition").checked == false) {
+//                $("#rg_btn").attr("disabled", "");
+//            }
+        }
         $('.datepicker').datepicker({
             format: 'yyyy-mm-dd'
         });

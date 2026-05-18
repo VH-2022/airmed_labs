@@ -35,10 +35,9 @@ class Doctor_master extends CI_Controller {
         $city_name = $this->input->get('city');
         $sales_person = $this->input->get('sales_person');
         $data['notifyReport']=$notifyReport = $this->input->get('notify');
-        $data['status']=$status = $this->input->get('status');
 
-        if ($name != "" || $email != "" || $mobile != "" || $city_name != "" || $sales_person != "" || $notifyReport!="" || $status!="") {
-            $srchdata = array("name" => $name, "email" => $email, "mobile" => $mobile, "city" => $city_name, "sales_person" => $sales_person,'notifyReport'=>$notifyReport,'status'=>$status);
+        if ($name != "" || $email != "" || $mobile != "" || $city_name != "" || $sales_person != "" || $notifyReport!="") {
+            $srchdata = array("name" => $name, "email" => $email, "mobile" => $mobile, "city" => $city_name, "sales_person" => $sales_person,'notifyReport'=>$notifyReport);
             $data['name'] = $name;
             $data['mobile'] = $mobile;
             $data['email'] = $email;
@@ -50,7 +49,7 @@ class Doctor_master extends CI_Controller {
 
             $totalRows = $this->doctor_model->doctorcount_list($srchdata);
             $config = array();
-            $config["base_url"] = base_url() . "doctor_master/doctor_list?name=$name&email=$email&mobile=$mobile&city=$city_name&sales_person=$sales_person&notifyReport=$notifyReport&status=$status";
+            $config["base_url"] = base_url() . "doctor_master/doctor_list?name=$name&email=$email&mobile=$mobile&city=$city_name&sales_person=$sales_person&notifyReport=$notifyReport";
             $config["total_rows"] = $totalRows;
             $config["per_page"] = 50;
             $config["uri_segment"] = 3;
@@ -103,10 +102,6 @@ class Doctor_master extends CI_Controller {
             redirect('login');
         }
         $data["login_data"] = logindata();
-        if (!array_search('doctor_add', $data["login_data"]["permissions"]))
-        {
-            return $this->load->view('permission_not');
-        }
         $data["user"] = $this->user_model->getUser($data["login_data"]["id"]);
         $data['state_list'] = $this->doctor_model->master_fun_get_tbl_val("state", array("status" => 1), array("state_name", "asc"));
         $this->load->library('form_validation');
@@ -351,7 +346,6 @@ class Doctor_master extends CI_Controller {
 		$email = trim($_GET['email']);
 		$mobile = trim($_GET['mobile']); 
 		$city = trim($_GET['city']);
-        $status = trim($_GET['status']);
 		$sales_person = trim($_GET['sales_person']);
 		$qry = null;
 		
@@ -392,19 +386,10 @@ class Doctor_master extends CI_Controller {
 		}
 		
 		if($qry==null){
-			$qry .= "WHERE dm.id NOT IN(0)";
+			$qry .= "WHERE dm.status IN(1,2)";
 		}else{
-			$qry .= " AND dm.id NOT IN(0)";
+			$qry .= " AND dm.status IN(1,2)";
 		}
-
-        if($status!=""){
-			if($qry==null){
-				$qry .= "WHERE dm.status=".$status;
-			}else{
-				$qry .= " AND dm.status=".$status;
-			}
-		}
-		
 		
 		$sql = "SELECT dm.full_name, dm.email, dm.mobile, dm.mobile1, dm.mobile2, c.city_name, s.state_name, dm.address, CONCAT(sum.first_name, ' ', sum.last_name) AS sales_person, dm.status FROM doctor_master AS dm
 				LEFT JOIN city AS c ON c.id = dm.city AND c.status = 1
@@ -517,255 +502,6 @@ class Doctor_master extends CI_Controller {
         exit;
         //$this->session->set_flashdata("success", array("Doctor Code Saved."));
         //redirect("doctor_master/doctor_list", "refresh");
-    }
-
-    public function update_pro_name() {
-        if (!is_loggedin()) {
-            redirect('login');
-        }
-        $cnt = 0;
-        $this->load->library('csvimport');
-        $file = $_FILES['id_browes']['name'];
-        if ($file != "") {
-            $file = $_FILES['id_browes']['name'];
-            $filename = $_FILES['id_browes']['name'];
-            $filename = md5(time()) . $filename;
-            $output['status'] = FALSE;
-            set_time_limit(0);
-            $config['upload_path'] = "./upload/";
-            $output['image_medium2'] = $config['upload_path'];
-            $config['allowed_types'] = '*';
-            $config['file_name'] = $filename;
-            $this->load->library('upload', $config);
-            $this->upload->initialize($config);
-            if (!$this->upload->do_upload('id_browes')) {
-                $error = array($this->upload->display_errors());
-                $this->session->set_flashdata('success', array($error));
-                if (!empty($this->session->userdata("test_master_r"))) {
-                    redirect($this->session->userdata("test_master_r"), "refresh");
-                } else {
-                    redirect("doctor_master/doctor_list", "refresh");
-                }
-            } else {
-
-                $file_data = $this->upload->data();
-                $file_path = './upload/' . $file_data['file_name'];
-                if($this->csvimport->get_array($file_path)) {
-                    $csv_array = $this->csvimport->get_array($file_path);
-                    $no = 2;
-                    foreach ($csv_array as $row) {
-                        $old_test = $this->doctor_model->master_fun_get_tbl_val("doctor_master", array("status" => 1, "mobile" => $row['doctor_mobile']), array("id", "desc"));
-
-                        $get_pro_name = $this->doctor_model->master_fun_get_tbl_val("pro_master", array("pro_status" => 1, "pro_name" => $row['pro_name']), array("id", "desc"));
-
-                        if (empty($row['pro_name'])) {
-                            $this->session->set_flashdata('error', "Row: " . $no . " pro name is required");
-                            redirect("doctor_master/doctor_list", "refresh");
-                        }
-
-                        if (empty($row['doctor_mobile'])) {
-                            $this->session->set_flashdata('error', "Row: " . $no . " doctor mobile is required");
-                            redirect("doctor_master/doctor_list", "refresh");
-                        }
-                        
-                        if (empty($old_test)) {
-                            $this->session->set_flashdata('error', "Row: " . $no . " doctor mobile is invalid");
-                            redirect("doctor_master/doctor_list", "refresh");
-                        }
-
-                        if (empty($get_pro_name)) {
-                            $this->session->set_flashdata('error', "Row: " . $no . " pro name is invalid");
-                            redirect("doctor_master/doctor_list", "refresh");
-                        }
-                        $no++;
-                        
-                    }
-                    
-                    foreach ($csv_array as $row) {
-                        $old_test = $this->doctor_model->master_fun_get_tbl_val("doctor_master", array("status" => 1, "mobile" => $row['doctor_mobile']), array("id", "desc"));
-
-                        $get_pro_name = $this->doctor_model->master_fun_get_tbl_val("pro_master", array("pro_status" => 1, "pro_name" => $row['pro_name']), array("id", "desc"));
-                        
-                        if(!empty($old_test) && !empty($get_pro_name)){
-                            $data['query'] = $this->doctor_model->master_fun_update("doctor_master", array("mobile", $row['doctor_mobile']), array("doctor_pro" => $get_pro_name[0]['pro_name'], "doctor_pro_id" => $get_pro_name[0]['id']));
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->session->set_flashdata('success', array("Pro name update Successfully"));
-        redirect("doctor_master/doctor_list", "refresh");
-    }
-
-    function test_csv()
-    {
-        if (!is_loggedin()) {
-            redirect('login');
-        }
-        $this->load->dbutil();
-        $this->load->helper('file');
-        $this->load->helper('download');
-        $name = $this->input->get('name');
-        $mobile = $this->input->get('mobile');
-        $email = $this->input->get('email');
-        $city_name = $this->input->get('city');
-        $sales_person = $this->input->get('sales_person');
-        $doc_code = $this->input->get('doc_code');
-        $delimiter = ",";
-        $newline = "\r\n";
-        $filename = "Doctor_List.csv";
-
-        $query = "SELECT DISTINCT d.id as id,d.full_name as doctor_name,d.doctor_code as doctor_code,d.mobile as doctor_mobile,p.pro_name as pro_name from doctor_master d left join city c on c.id=d.city left join state s on s.id=d.state left join sales_user_master as sales_person  on sales_person.id=d.ref_id left join pro_master p ON p.id = d.doctor_pro where d.status IN (1,2) AND d.full_name!='' AND d.mobile != ''  AND d.doctor_code != ''";
-        
-        if ($name != "") {
-            $query .= " AND d.full_name LIKE '%$name%'";
-        }
-        if ($email != "") {
-            $query .= " AND d.email LIKE '%$email%'";
-        }
-        if ($mobile != "") {
-            $query .= " AND d.mobile LIKE '%$mobile%'";
-        }
-        if ($city_name != "") {
-            $query .= " AND d.city LIKE '%$city_name%'";
-        }
-        if ($sales_person != "") {
-            $query .= " AND d.ref_id LIKE '%$sales_person%'";
-        }
-        if ($doc_code != "") {
-            $query .= " AND d.doctor_code LIKE '%$doc_code%'";
-        }
-        $query .= " AND d.doctor_code !='' ORDER BY d.id DESC";
-        $result = $this->db->query($query);
-        $data = $this->dbutil->csv_from_result($result, $delimiter, $newline);
-        force_download($filename, $data);
-    }
-
-    function test_csv_speciality()
-    {
-        if (!is_loggedin()) {
-            redirect('login');
-        }
-        $this->load->dbutil();
-        $this->load->helper('file');
-        $this->load->helper('download');
-        $name = $this->input->get('name');
-        $mobile = $this->input->get('mobile');
-        $email = $this->input->get('email');
-        $city_name = $this->input->get('city');
-        $sales_person = $this->input->get('sales_person');
-        $doc_code = $this->input->get('doc_code');
-        $delimiter = ",";
-        $newline = "\r\n";
-        $filename = "Doctor_List.csv";
-
-        $query = "SELECT DISTINCT d.id as id,d.full_name as doctor_name,d.doctor_code as doctor_code,d.mobile as doctor_mobile,dsm.doctor_speciality_title as doctor_speciality from doctor_master d left join city c on c.id=d.city left join state s on s.id=d.state left join sales_user_master as sales_person  on sales_person.id=d.ref_id left join doctor_speciality_master dsm ON dsm.id = d.doctor_speciality where d.status IN (1,2) AND d.full_name!='' AND d.mobile != ''  AND d.doctor_code != ''";
-
-        if ($name != "") {
-            $query .= " AND d.full_name LIKE '%$name%'";
-        }
-        if ($email != "") {
-            $query .= " AND d.email LIKE '%$email%'";
-        }
-        if ($mobile != "") {
-            $query .= " AND d.mobile LIKE '%$mobile%'";
-        }
-        if ($city_name != "") {
-            $query .= " AND d.city LIKE '%$city_name%'";
-        }
-        if ($sales_person != "") {
-            $query .= " AND d.ref_id LIKE '%$sales_person%'";
-        }
-        if ($doc_code != "") {
-            $query .= " AND d.doctor_code LIKE '%$doc_code%'";
-        }
-        $query .= " AND d.doctor_code !='' ORDER BY d.id DESC";
-        $result = $this->db->query($query);
-        $data = $this->dbutil->csv_from_result($result, $delimiter, $newline);
-        force_download($filename, $data);
-    }
-
-    public function import_speciality() {
-        if (!is_loggedin()) {
-            redirect('login');
-        }
-
-        $this->load->library('csvimport');
-        $this->load->library('upload');
-
-        if (!empty($_FILES['import_speciality_file']['name'])) {
-
-            $filename = md5(time()) . '_' . $_FILES['import_speciality_file']['name'];
-
-            $config['upload_path']   = './upload/';
-            $config['allowed_types'] = 'csv';
-            $config['file_name']     = $filename;
-
-            $this->upload->initialize($config);
-
-            if (!$this->upload->do_upload('import_speciality_file')) {
-                $error = $this->upload->display_errors();
-                $this->session->set_flashdata('error', $error);
-                redirect("doctor_master/doctor_list", "refresh");
-            }
-
-            $file_data = $this->upload->data();
-
-            $file_path = './upload/' . $file_data['file_name'];
-
-            if ($this->csvimport->get_array($file_path)) {
-
-                $csv_array = $this->csvimport->get_array($file_path);
-
-                $row_num = 2;
-
-                foreach ($csv_array as $row) {
-                    if (empty($row['doctor_speciality'])) {
-                        $this->session->set_flashdata('error', "Row $row_num: Doctor Speciality is required.");
-                        redirect("doctor_master/doctor_list", "refresh");
-                    }
-
-                    if (empty($row['doctor_mobile'])) {
-                        $this->session->set_flashdata('error', "Row $row_num: Doctor Mobile is required.");
-                        redirect("doctor_master/doctor_list", "refresh");
-                    }
-
-                    $doctor = $this->doctor_model->master_fun_get_tbl_val("doctor_master", ["status" => 1, "mobile" => $row['doctor_mobile']], ["id", "desc"]);
-                    if (empty($doctor)) {
-                        $this->session->set_flashdata('error', "Row $row_num: Invalid Doctor Mobile.");
-                        redirect("doctor_master/doctor_list", "refresh");
-                    }
-
-                    $speciality = $this->doctor_model->master_fun_get_tbl_val("doctor_speciality_master", ["status" => 1, "doctor_speciality_title" => $row['doctor_speciality']], ["id", "desc"]);
-                    if (empty($speciality)) {
-                        $this->session->set_flashdata('error', "Row $row_num: Invalid Doctor Speciality.");
-                        redirect("doctor_master/doctor_list", "refresh");
-                    }
-
-                    $row_num++;
-                }
-
-                // Second pass: Update
-                foreach ($csv_array as $row) {
-                    $speciality = $this->doctor_model->master_fun_get_tbl_val("doctor_speciality_master", ["status" => 1, "doctor_speciality_title" => $row['doctor_speciality']], ["id", "desc"]);
-
-                    if(!empty($speciality)){
-                        $data['query'] = $this->doctor_model->master_fun_update("doctor_master", array("mobile", $row['doctor_mobile']), array("doctor_speciality" => $speciality[0]['id']));
-                    }
-                }
-
-                $this->session->set_flashdata('success', "Doctor Speciality updated successfully.");
-
-                redirect("doctor_master/doctor_list", "refresh");
-            } else {
-                $this->session->set_flashdata('error', "CSV parsing error. Please upload a valid file.");
-            }
-
-        } else {
-            $this->session->set_flashdata('error', "No file selected.");
-        }
-        redirect("doctor_master/doctor_list", "refresh");
     }
 }
 

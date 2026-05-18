@@ -69,7 +69,7 @@
                                     <span id="error_message" style="color:red"></span>
                                 </div>
                                 <script src='https://www.google.com/recaptcha/api.js'></script>
-                                <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
+                                <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr"></div>
                                 <spam id="captch_error" style="color:red;"></spam>
                                 <div class="form-group">
                                     <input name="form_botcheck" class="form-control" type="hidden" value="" />
@@ -85,7 +85,7 @@
                     <div class="col-md-12 col-sm-12">
                         <div class="col-sm-offset-1 col-sm-10">
                             <div class="cntct_us_india_map">
-                                <img src="<?php echo base_url(); ?>user_assets/images/contact-us-img.jpg"/>
+                                <img src="<?php echo base_url(); ?>user_assets/images/Airmed-india_map.png"/>
                             </div>
                             <div class="map_rgtside_div">
                                 <div class="border-btn mt-30"><span></span></div>
@@ -99,11 +99,11 @@
 
             </div>
 
-            <!-- <div class="container mbl_containr" style="padding-bottom:0; padding-top:10%;">
+            <div class="container mbl_containr" style="padding-bottom:0; padding-top:10%;">
                 <div class="row">
                     <div class="col-sm-12 pdng_0">
                         <div class="indx_mbl_mdl">
-                            <--  <h1 class="mbl_title center">App Communication Space</h1>--
+                            <!--  <h1 class="mbl_title center">App Communication Space</h1>-->
 
                             <div class="col-sm-4  col-xs-4">
                                 <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> 
@@ -119,10 +119,10 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
     </section>
 
-   <!-- <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
+    <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
@@ -130,7 +130,7 @@
                         <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP
-                        -- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  --
+                        <!-- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  -->
                     </h1>
 
                     </div>
@@ -148,7 +148,7 @@
 
             </div>
         </div>
-    </section> -->
+    </section>
     <script>
         function recaptchaCallback() {
             $('#send_btn').removeAttr('disabled');

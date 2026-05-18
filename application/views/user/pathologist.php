@@ -50,7 +50,6 @@
                             </div>
                         </div>
                     </div>
-                     <!--
                      <div class="col-sm-12 col-md-12 mb-60 sm-text-center" style="background:#f1f2f3; box-shadow:1px 1px 10px #ccc; padding:10px 0; float:left;width:100%;">
                         <div class="col-sm-3">
                             <div class="my_team_lft_div">
@@ -92,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     
                     
                     
@@ -101,7 +100,7 @@
             </div>
         </div>
     </section>  
-   <!-- <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
+    <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
         <div class="container mbl_containr" style="padding-bottom:0">
             <div class="row">
                 <div class="col-sm-12 pdng_0">
@@ -126,9 +125,9 @@
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
 
-   <!-- <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
+    <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
                 <div class="col-sm-12" style="text-align:center;">
@@ -136,7 +135,7 @@
                         <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP
-                        -- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> --
+                        <!-- <br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> -->
                      </h1>
 
                     </div>
@@ -154,7 +153,7 @@
 
             </div>
         </div>
-    </section> -->
+    </section>
 
 
 </div>

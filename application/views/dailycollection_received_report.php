@@ -53,7 +53,7 @@
                         <div class="widget">
                             <?php if (isset($success) != NULL) { ?>
                                 <div class="alert alert-success alert-dismissable">
-                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">ï¿½</button>
                                     <?php echo $success['0']; ?>
                                 </div>
                             <?php } ?>
@@ -339,7 +339,7 @@
 											<th><?=$sum ?></th>
 										  </tr>
 										  </table>
-									<?
+									<?php
 									
 								} ?>
                             </div>

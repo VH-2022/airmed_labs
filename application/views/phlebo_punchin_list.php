@@ -114,11 +114,11 @@
                                             <td><?php if(!empty($row['stop_date'])){ echo date("d-M-Y", strtotime($row['stop_date'])); }else{ echo "-"; } ?></td>
                                             <td><?php if(!empty($row['stop_time_new'])){ echo date("g:i A", strtotime($row['stop_time_new'])); }else{ echo "-"; } ?></td>
                                           <?php  /* <td><?php if($row['time']!='00:00:00'){ echo $row['time']; }else{ echo "-"; } ?></td> */ ?>
-											<td><?php if($row['in_riding'] != "" && $row['out_riding'] != ""){ echo $row['out_riding']-$row['in_riding']; } ?></td>
+											
 
                                             <td><?php echo $row['in_riding'];?></td>
                                             <td><?php echo $row['out_riding'];?></td>                                                                                        
-                                                                                        
+                                             <td><?php if($row['in_riding'] != "" && $row['out_riding'] != ""){ echo $row['out_riding']-$row['in_riding']; } ?></td>                                           
 											<td><?php
                                                 $time = $row['Total_working_hour'];
                                                 //echo $time;

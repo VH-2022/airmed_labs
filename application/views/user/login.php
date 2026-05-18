@@ -35,9 +35,9 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12 pdng_0 ">
-                                        <!-- <script src='https://www.google.com/recaptcha/api.js'></script> -->
-                                        <!-- <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u" style="width:300px;float:left;"></div>
-                                        <spam id="captch_error" style="color:red;"><?php //echo form_error('g-recaptcha-response'); ?></spam> -->
+                                        <script src='https://www.google.com/recaptcha/api.js'></script>
+                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr" style="width:300px;float:left;"></div>
+                                        <spam id="captch_error" style="color:red;"><?php echo form_error('g-recaptcha-response'); ?></spam>
 										<div class="form-group col-sm-4 pdng_0 pull-right">
                                             <div class="">
                                                 <a class="login_forgot" href="<?php echo base_url(); ?>user_forget" style="text-align:right;display:block;">Forgot Password?</a>
@@ -47,8 +47,7 @@
                                     </div>
                                     <div class="col-sm-12 pdng_0">
                                         <div class="col-sm-3 pdng_0 pull-right">
-                                            <!-- <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button> -->
-                                             <button type="submit" id="send_btn" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button>
+                                            <button type="submit" id="send_btn" disabled="disbled" class="btn btn-dark btn-theme-colored btn-flat pull-right" data-loading-text="Please wait...">Login</button>
                                         </div>
                                     </div>
 
@@ -76,14 +75,14 @@
                     <div class="col-sm-5">
                             <!--<img class="login_img_mrgn" src="images/login.jpg"/>-->
                         <div class="login_rgt_mdl">
-                            <!-- <div class="col-sm-12 pdng_0 mrgn_btm_10per">
+                            <div class="col-sm-12 pdng_0 mrgn_btm_10per">
                                 <a class="" href="#" onclick="FBLogin();">
                                     <img src="<?php echo base_url(); ?>user_assets/images/login_with_fb.png"/>
                                 </a>
 
                                 </br><div class="g-signin2" data-onsuccess="onSignIn"></div>
 
-                            </div> -->
+                            </div>
                             <div class="col-sm-12 pdng_0">
                                 <div class="login_new_acnt">
                                     <a class="" href="<?php echo base_url(); ?>register">
@@ -95,7 +94,7 @@
                     </div>
                 </div>
             </div>
-           <!-- <div class="row">
+            <div class="row">
                 <div class="full_div pdng_top_35px">
                     <div class="col-sm-6">
                         <h1 class="all_pg_lst_btns">An App for simplified pathology experience.</h1>
@@ -111,7 +110,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </section>
 
@@ -140,8 +139,7 @@
         }
     </style>
     <script>
-        // function recaptchaCallback() {
-        //     $('#send_btn').removeAttr('disabled');
-        // }
+                                    function recaptchaCallback() {
+                                        $('#send_btn').removeAttr('disabled');
+                                    }
     </script>
-    

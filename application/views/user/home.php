@@ -73,7 +73,6 @@
     #myCarousel img	{height:680px !important;width:100%;}	
 
 </style>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <div class="full_bg" style="display:none;" id="loader_div">
     <div class="loader">
         <center><img src="http://static.heart.org/riskcalc/app/assets/img/loading.gif"></center>
@@ -175,23 +174,7 @@
                         <div class="">
                             <h1>India's Fastest Growing Pathology Labs </h1>
                             <div class="col-sm-10 pdng_0 border-search">
-                                
                                 <div class="col-sm-4 col-md-3 bnr_srch_deskpdng0">
-                                    <select class="form-controll" id="tst_city_list" onchange="get_packages(this.value);">
-                                        <i class="fa fa-map-marker"></i>
-                                                                                    <option value="1" selected>Ahmedabad</option>
-                                                                                           <!-- <option value="5" >Delhi</option> -->
-                                                                                            <option value="6" >Gandhinagar</option>
-                                                                                            <!-- <option value="4" >Gurgaon</option>
-                                                                                            <option value="9" >Guwahati</option>
-                                                                                            <option value="12" >Kolkata</option>
-                                                                                            <option value="8" >Sonepat</option>
-                                                                                            <option value="2" >Surat</option>
-                                                                                            <option value="3" >Vadodara</option> -->
-                                                                                    </select>
-                                </div>
-                                
-                                <!-- <div class="col-sm-4 col-md-3 bnr_srch_deskpdng0">
                                     <select class="form-controll" id="tst_city_list" onchange="get_packages(this.value);">
                                         <i class="fa fa-map-marker"></i>
                                         <?php foreach ($test_cities as $key) { ?>
@@ -204,7 +187,7 @@
                                             ?>><?= ucfirst($key["name"]) ?></option>
                                                 <?php } ?>
                                     </select>
-                                </div> -->
+                                </div>
                                 <div class="col-sm-8 col-md-9 bnr_srch_deskpdng0 ">
                                     <div id="searchbar" class=" menuBtn" placeholder="Enter test name" onclick="add_class();">
 
@@ -395,7 +378,7 @@
                             <div class='col-sm-12 pdng_0 full_div'>
                                 <br />
                                <script src='https://www.google.com/recaptcha/api.js'></script>
-                                <div class="g-recaptcha" id="RecaptchaField_2" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
+                                <div class="g-recaptcha" id="RecaptchaField_2" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr"></div>
                                 <spam id="captch_error" style="color:red;"></spam>
                             </div>
                         </div>
@@ -517,97 +500,6 @@
             </div>
         </div>
     </section>
-    <section id="popular-tests" class="py-12 bg-white px-4">
-
-<div class="max-w-6xl mx-auto">
-
-<h3 class="text-3xl font-semibold mb-8 text-center">All Packages</h3>
-
-<div class="grid md:grid-cols-3 gap-6">
-
-    <!-- Test Card Example -->
-    <?php foreach ($suggest_package as $key1) {     foreach($key1["package"] as $p_key1){  ?>
-    <div class="bg-gray-100 p-4 rounded shadow">
-
-    <img src="<?php echo base_url(); ?>upload/package/<?= $p_key1["image"] ?>" alt="<?= $p_key1["title"] ?>" class="w-full h-auto mb-4" style="width:325px; height:245px; object-fit:cover;" />
-
-    <h4 class="text-xl font-bold mb-2"><?= $p_key1["title"] ?></h4>
-
-    <p class="mb-4"><ul>
-    <li>Test Include:</li>
-                                     <?php foreach($p_key1["test_list"] as $t_key1){ ?>
-                                        <li><?=ucfirst($t_key1["test_name"])?></li>
-
-                                        <?php } ?>
-                                        <font color="#9900FF"><li>
-
-                                            <b>Price: <?=$p_key1["d_price"]?>/- <s><?=$p_key1["a_price"]?>/-</s></b>
-
-                                        </li></font>
-
-                                    </ul></p>
-
-    <!-- <button onclick="bookNow(`<?=ucfirst($p_key1['title'])?>`)" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">WhatsApp Inquiry</button> -->
-
-    <a href="<?= base_url(); ?>user_master/package_details/<?= $p_key1["id"] ?>" class="hover-over"><button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Book Now</button></a>
-
-    </div>
-    <?php } } ?>
-    <!-- Repeat above block for more tests -->
-
-</div>
-
-</div>
-
-</section>
-
-<!-- All Test Packages Page -->
-<!--
-<section id="all-tests" class="py-12 px-4 bg-gray-50">
-
-<div class="max-w-6xl mx-auto">
-
-<h3 class="text-3xl font-semibold mb-8 text-center">Body Checkup Packages</h3>
-
-<div class="grid md:grid-cols-2 gap-6">
-
--- Individual Test Package --
-<?php  $bcount=0; foreach ($body_suggest_package as $bkey1) {   foreach($bkey1["body_package"] as $bp_key1){  $bcount++ ?>
-<div class="bg-white p-4 rounded shadow">
-
-<img src="<?php echo base_url(); ?>upload/package/<?= $bp_key1["image"] ?>" alt="<?= $bp_key1["title"] ?>" class="w-full h-auto mb-4" style="width:400px; height:300px; object-fit:cover;" />
-
-<h4 class="text-xl font-bold mb-2"><?= $bp_key1["title"] ?></h4>
-
-<p class="mb-4"><ul>
-
-                                <li>Test Include:</li>
-                                <?php foreach($bp_key1["test_list"] as $bt_key1){ ?>
-                                <li>&#x2022; <?=ucfirst($bt_key1["test_name"])?></li>
-
-                               <?php } ?>                                         
-
-                            </ul></p>
-
--- <button onclick="bookNow(`<?=ucfirst($bt_key1['test_name'])?>`)" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">WhatsApp Inquiry</button> --
-
-<a href="<?= base_url(); ?>user_master/package_details/<?= $bp_key1["id"] ?>" class="hover-over"><button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Book Now</button></a>
-
-</div>
-<?php } }  if(count($bcount) == "0") { echo "bhargav";?>
-<div class="col-span-2 text-center">
-<p class="text-gray-500">No body checkup packages available at the moment.</p>
-</div>
-<?php } ?>
--- More packages... --
-
-</div>
-
-</div>
-
-</section>
--->
-
     <div class="border-btn mt-30"><span></span></div>
     <section class="sctn_full">
         <div class="container">
@@ -788,7 +680,6 @@
         var city_ids = $("#tst_city_list").val();
         get_packages(city_ids);
     </script>
-    <!--
     <section class="indx_mbl_ovrlay" style="padding-bottom:0;margin-bottom:0">
         <div class="container mbl_containr" style="padding-bottom:0">
             <div class="row">
@@ -814,8 +705,8 @@
                 </div>
             </div>
         </div>
-    </section> -->
-<!--
+    </section>
+
     <section class="indx_mbl_ovrlay" style="  margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
         <div class="container mbl_containr">
             <div class="row">
@@ -825,7 +716,7 @@
                     </div>
                     <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/>
                      <!-- & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  -->
-              <!--      </h1>
+                    </h1>
 
                     </div>
                     <div class="clearfix"></div><br/>
@@ -842,136 +733,12 @@
                 <div class="border-btn mt-30"><span></span></div>
             </div>
         </div>
-    </section> -->
+    </section>
     <section class="pdng_all_container ">
         <div class="container pb-30">
             <div class="">
                 <h1 class="subtitle text-center " style="margin-bottom: 25px;"><span style="color:#bf2d37;">AIRMED EXPERIENCE</span></h1>
                 <div class="row">
-                    <div class="container" id="" style="style="background: #f1f2f3"">    
-                         <div class="row">
-                            <div class="col-md-12 column">    
-                                <div class="carousel slide" id="testimonials-rotate">
-                                    <ol class="carousel-indicators tstml_indictr">
-                                        <li class="active" data-slide-to="0" data-target="#testimonials-rotate">
-                                        </li>
-                                        <li data-slide-to="1" data-target="#testimonials-rotate">
-                                        </li>
-                                        <li data-slide-to="2" data-target="#testimonials-rotate">
-                                        </li>
-                                    </ol>
-                                    <div class="carousel-inner">
-                                                                                    <div class="item active">    
-                                                <div class="col-md-3 col-sm-3 txt-center">
-                                                    <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
-                                                    <h3>Suresh Jaiswal</h3>
-
-                                                </div>
-                                                <div class="testimonials col-md-9 col-sm-9">
-                                                    <img src="https://www.airmedlabs.com/user_assets/images/new/qoute-start.png" style="width:40px">
-                                                    <h1 style="--text-align:center">  </h1>
-                                                    <h3>
-                                                        <div class="col-sm-11 pdng_0">
-                                                            <p>&quot;My son booked a test for me, and within 30 mins phlebotomist came for collection. Mr. Bipin drew the blood, after washing his hands and wearing gloves. Overwhelmed by AIRMED experience...&quot;</p>
- <!--<small><a href="#" class="bg-primary">More</a> </small>--></div>
-                                                        <div class="col-md-1 col-sm-9 tstmnl_rgt_qut"><img src="https://www.airmedlabs.com/user_assets/images/new/qoute-fisnish.png" class="pull-right"></div>
-                                                    </h3>
-
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                                                                        <div class="item">    
-                                                <div class="col-md-3 col-sm-3 txt-center">
-                                                    <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
-                                                    <h3>Jitu Chandnani</h3>
-
-                                                </div>
-                                                <div class="testimonials col-md-9 col-sm-9">
-                                                    <img src="https://www.airmedlabs.com/user_assets/images/new/qoute-start.png" style="width:40px">
-                                                    <h1 style="--text-align:center">  </h1>
-                                                    <h3>
-                                                        <div class="col-sm-11 pdng_0">
-                                                            <p>&quot;I came to ahmedabad to see a doc. My doc suggested me Airmed and i was amazed to see the offered services. It was very neat, clean and hygenic lab unlike conventional shabby labs...&quot;</p>
- <!--<small><a href="#" class="bg-primary">More</a> </small>--></div>
-                                                        <div class="col-md-1 col-sm-9 tstmnl_rgt_qut"><img src="https://www.airmedlabs.com/user_assets/images/new/qoute-fisnish.png" class="pull-right"></div>
-                                                    </h3>
-
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                            <div class="item">    
-                                                <div class="col-md-3 col-sm-3 txt-center">
-                                                    <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
-                                                    <h3>Jigar Chauhan</h3>
-
-                                                </div>
-                                                <div class="testimonials col-md-9 col-sm-9">
-                                                    <img src="https://www.airmedlabs.com/user_assets/images/new/qoute-start.png" style="width:40px">
-                                                    <h1 style="--text-align:center">  </h1>
-                                                    <h3>
-                                                        <div class="col-sm-11 pdng_0">
-                                                            <p>&quot;report timing is good and smoothly blood collection...&quot;</p>
- <!--<small><a href="#" class="bg-primary">More</a> </small>--></div>
-                                                        <div class="col-md-1 col-sm-9 tstmnl_rgt_qut"><img src="https://www.airmedlabs.com/user_assets/images/new/qoute-fisnish.png" class="pull-right"></div>
-                                                    </h3>
-
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                                                                        <div class="item">    
-                                                <div class="col-md-3 col-sm-3 txt-center">
-                                                    <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
-                                                    <h3>Krishna Patel</h3>
-
-                                                </div>
-                                                <div class="testimonials col-md-9 col-sm-9">
-                                                    <img src="https://www.airmedlabs.com/user_assets/images/new/qoute-start.png" style="width:40px">
-                                                    <h1 style="--text-align:center">  </h1>
-                                                    <h3>
-                                                        <div class="col-sm-11 pdng_0">
-                                                            <p>&quot;The service and personal attention is extraordinary. I was able to book test&nbsp;from my office&nbsp;and got report &nbsp;on my mobile app. Saved lot of my precious time...&quot;</p>
- <!--<small><a href="#" class="bg-primary">More</a> </small>--></div>
-                                                        <div class="col-md-1 col-sm-9 tstmnl_rgt_qut"><img src="https://www.airmedlabs.com/user_assets/images/new/qoute-fisnish.png" class="pull-right"></div>
-                                                    </h3>
-
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                                                                        <div class="item">    
-                                                <div class="col-md-3 col-sm-3 txt-center">
-                                                    <img alt="" src="https://www.airmedlabs.com/user_assets/images/userexp_img.png" class="img-circle img-responsive"/>
-                                                    <h3>Soniya Sharma</h3>
-
-                                                </div>
-                                                <div class="testimonials col-md-9 col-sm-9">
-                                                    <img src="https://www.airmedlabs.com/user_assets/images/new/qoute-start.png" style="width:40px">
-                                                    <h1 style="--text-align:center">  </h1>
-                                                    <h3>
-                                                        <div class="col-sm-11 pdng_0">
-                                                            <p>&quot;Excellent service all the way around from start to finish. Keep up the GREAT work!&quot;</p>
- <!--<small><a href="#" class="bg-primary">More</a> </small>--></div>
-                                                        <div class="col-md-1 col-sm-9 tstmnl_rgt_qut"><img src="https://www.airmedlabs.com/user_assets/images/new/qoute-fisnish.png" class="pull-right"></div>
-                                                    </h3>
-
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                                                                </div>
-                                </div>
-                                <div class="testi-nav">
-                                    <a class="left" href="#testimonials-rotate" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-                                    <a class="right" href="#testimonials-rotate" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a><div class="clearfix"></div>  
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!--
                     <div class="container" id="" style="style="background: #f1f2f3"">    
                          <div class="row">
                             <div class="col-md-12 column">    
@@ -1004,7 +771,7 @@
                                                     <h1 style="--text-align:center"> <?php echo $key['title']; ?> </h1>
                                                     <h3>
                                                         <div class="col-sm-11 pdng_0">
-                                                            <?php echo $key['description']; ?> <--<small><a href="#" class="bg-primary">More</a> </small>-></div>
+                                                            <?php echo $key['description']; ?> <!--<small><a href="#" class="bg-primary">More</a> </small>--></div>
                                                         <div class="col-md-1 col-sm-9 tstmnl_rgt_qut"><img src="<?php echo base_url(); ?>user_assets/images/new/qoute-fisnish.png" class="pull-right"></div>
                                                     </h3>
 
@@ -1024,10 +791,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
-                    
-                    
-                    <!--end of container-->
+                    </div><!--end of container-->
                     <style>
                         #testimonials-row{background:url(<?php echo base_url(); ?>user_assets/images/new/testi-back.png); background-position:center; background-size:contain; padding:80px 0;background-repeat:no-repeat}
                         #testimonials-rotate .txt-center{text-align:center}

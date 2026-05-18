@@ -37,12 +37,12 @@
 
 
                             <div class="form-group">
-                                <label for="">Title</label><span style="color:red">*</span>
+                                <label for="exampleInputFile">Title</label><span style="color:red">*</span>
                                 <input type="text"  name="title" class="form-control"  value="<?php echo $query[0]['title']; ?>" >
                                 <span style="color: red;"><?= form_error('title'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="">Type</label>
+                                <label for="exampleInputFile">Type</label>
                                 <select name="p_type" class="form-control">
                                     <option value="">--Select--</option>
                                     <?php foreach($type as $key){ ?>
@@ -53,11 +53,11 @@
                             </div>
                             <!--Nishit city wise price start-->
                             <!--<div class="form-group">
-                                <label for="">Actual Price</label><span style="color:red">*</span>
+                                <label for="exampleInputFile">Actual Price</label><span style="color:red">*</span>
                                 <input type="text"  name="aprice" class="form-control"  value="<?php echo $query[0]['a_price']; ?>" >
                             </div>
                             <div class="form-group">
-                                <label for="">Discount Price</label><span style="color:red">*</span>
+                                <label for="exampleInputFile">Discount Price</label><span style="color:red">*</span>
                                 <input type="text"  name="dprice" class="form-control"  value="<?php echo $query[0]['d_price']; ?>" >
                             </div>-->
                             <?php
@@ -75,14 +75,14 @@
                                 }
                                 ?>
                                 <div class="form-group">
-                                    <label for=""><?= ucfirst($key["name"]); ?> Price</label><span style="color:red">*</span>
+                                    <label for="exampleInputFile"><?= ucfirst($key["name"]); ?> Price</label><span style="color:red">*</span>
                                     <input type="text"  name="aprice[]" class="form-control"  value="<?= $a_price; ?>">
                                     <input type="hidden" name="city[]" value="<?= $key["id"] ?>"/>
                                     <input type="hidden" name="test[]" value="<?= $test ?>"/>
                                     <span style="color: red;"><?= form_error('aprice[]'); ?></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for=""><?= ucfirst($key["name"]); ?> Discount Price</label><span style="color:red">*</span>
+                                    <label for="exampleInputFile"><?= ucfirst($key["name"]); ?> Discount Price</label><span style="color:red">*</span>
                                     <input type="text"  name="dprice[]" class="form-control"  value="<?= $d_price; ?>" >
                                     <span style="color: red;"><?= form_error('dprice[]'); ?></span>
                                 </div>
@@ -97,42 +97,34 @@
                                 <span style="color: red;"><?= form_error('sliderfile'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputFile1">Back Image</label><br>
+                                <label for="exampleInputFile">Back Image</label><br>
                                 <img src="<?php echo base_url(); ?>upload/package/<?php echo $query[0]['back_image']; ?>" alt="Pic not upload" style="width:50px; height:40px;"/><br>
-                                <input type="file" id="exampleInputFile1" name="homefile">
+                                <input type="file" id="exampleInputFile" name="homefile">
                                 <span style="color: red;"><?= form_error('homefile'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="is_view">Doctor Exclusive Package</label>
-                                <input type="checkbox" value="1" id="is_view" <?php if($query[0]['is_view']==1){ echo "checked"; } ?> name="is_view"/>
+                                <label for="exampleInputFile">Doctor Exclusive Package</label>
+                                <input type="checkbox" value="1" <?php if($query[0]['is_view']==1){ echo "checked"; } ?> name="is_view"/>
                             </div>
                             <div class="form-group">
-                                <label for="home_is_view">Display in Home Page</label>
-                                <input type="checkbox" id="home_is_view" value="1" <?php if($query[0]['home_is_view']==1){ echo "checked"; } ?> name="home_is_view"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="body_packages_is_view">Display in Body Checkup Packages</label>
-                                <input type="checkbox" id="body_packages_is_view" value="1" <?php if($query[0]['body_packages_is_view']==1){ echo "checked"; } ?> name="body_packages_is_view"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="">User Validity (in days)</label>
+                                <label for="exampleInputFile">User Validity (in days)</label>
                                 <input type="text" class="form-control" id="" placeholder="Ex.365" name="validity" value="<?php echo $query[0]['validity']; ?>">
                                 <small><b>Note-</b>If package is simple then validity is 0 day</small>
                                 <span style="color: red;"><?= form_error('validity'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="">How Many Times Book?</label>
+                                <label for="exampleInputFile">How Many Times Book?</label>
                                 <input type="text" class="form-control" id="" placeholder="Ex.10" name="book" value="<?php echo $query[0]['booking_time']; ?>">
                                 <small><b>Note-</b>If package is simple then book 0 time</small>
                                 <span style="color: red;"><?= form_error('validity'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="">Description for Website</label><span style="color:red">*</span>
+                                <label for="exampleInputFile">Description for Website</label><span style="color:red">*</span>
                                 <textarea id="editor1" name="desc_web"> <?php echo $query[0]['desc_web']; ?> </textarea>
                                 <span style="color: red;"><?= form_error('desc_web'); ?></span>
                             </div>
                             <div class="form-group">
-                                <label for="">Description for Application</label><span style="color:red">*</span>
+                                <label for="exampleInputFile">Description for Application</label><span style="color:red">*</span>
                                 <textarea id="editor2"  name="desc_app"><?php echo $query[0]['desc_app']; ?> </textarea>
                                 <span style="color: red;"><?= form_error('desc_app'); ?></span>
                             </div>

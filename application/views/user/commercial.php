@@ -120,7 +120,7 @@ section, footer {
                 <div class="col-md-4 col-sm-6 res_pdng_0">
                   <div class="mediaBlock"> <a href="javascript:void(0);" class="hover-over"> </a>
                     <div class="box-package for_cmrcl_box_pckg"><a href="javascript:void(0);" class="hover-over">
-                      <div class="img-box cmrcl_three_img"> <img src="https://inc42.com/cdn-cgi/image/quality=75/https://asset.inc42.com/2016/12/Healthcare.jpg"> </div>
+                      <div class="img-box cmrcl_three_img"> <img src="http://websitedemo.co.in/phpdemoz/patholab/upload/1485597299inc42-new-logo.png"> </div>
                       </a>
                       <div class="crmrcl_add_date"><a href="javascript:void(0);" class="hover-over"> <strong> 27/01/2017</strong>
                         <h3>Healthtech Startup Airmed Path Labs Secures $1.4 Mn Funding From Brand Capital</h3>
@@ -128,7 +128,7 @@ section, footer {
                     </div>
                   </div>
                 </div>
-                <!-- <div class="col-md-4 col-sm-6 res_pdng_0">
+                <div class="col-md-4 col-sm-6 res_pdng_0">
                   <div class="mediaBlock"> <a href="javascript:void(0);" class="hover-over"> </a>
                     <div class="box-package for_cmrcl_box_pckg"><a href="javascript:void(0);" class="hover-over">
                       <div class="img-box cmrcl_three_img"> <img src="http://websitedemo.co.in/phpdemoz/patholab/upload/1485597329vccircle-logo.png"> </div>
@@ -138,11 +138,11 @@ section, footer {
                         </a><a href="http://www.vccircle.com/news/healthcare-services/2017/01/27/brand-capital-invests-147-mn-diagnostics-startup-airmed-pathlabs?logintype=premium" target="_blank">Read complete article</a> </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
                 <div class="col-md-4 col-sm-6 res_pdng_0">
                   <div class="mediaBlock"> <a href="javascript:void(0);" class="hover-over"> </a>
                     <div class="box-package for_cmrcl_box_pckg"><a href="javascript:void(0);" class="hover-over">
-                      <div class="img-box cmrcl_three_img"> <img src="https://techstory.in/wp-content/uploads/2017/01/airmed-768x382.png"> </div>
+                      <div class="img-box cmrcl_three_img"> <img src="http://websitedemo.co.in/phpdemoz/patholab/upload/1485597356TechstoryLogo-84-e1471213798345.jpg"> </div>
                       </a>
                       <div class="crmrcl_add_date"><a href="javascript:void(0);" class="hover-over"> <strong> 27/01/2017</strong>
                         <h3>Airmed Path Labs Raises Rs. 10 cr from Brand Capital</h3>
@@ -153,7 +153,7 @@ section, footer {
                 <div class="col-md-4 col-sm-6 res_pdng_0">
                   <div class="mediaBlock"> <a href="javascript:void(0);" class="hover-over"> </a>
                     <div class="box-package for_cmrcl_box_pckg"><a href="javascript:void(0);" class="hover-over">
-                      <div class="img-box cmrcl_three_img"> <img src="/user_assets/images/commercial/economictimes.png"> </div>
+                      <div class="img-box cmrcl_three_img"> <img src="http://websitedemo.co.in/phpdemoz/patholab/upload/1485597386The-Economic-Times.png"> </div>
                       </a>
                       <div class="crmrcl_add_date"><a href="javascript:void(0);" class="hover-over"> <strong> 26/01/2017</strong>
                         <h3>Airmed gets Rs 10 crore from Brand Capital</h3>
@@ -164,7 +164,7 @@ section, footer {
                 <div class="col-md-4 col-sm-6 res_pdng_0">
                   <div class="mediaBlock"> <a href="javascript:void(0);" class="hover-over"> </a>
                     <div class="box-package for_cmrcl_box_pckg"><a href="javascript:void(0);" class="hover-over">
-                      <div class="img-box cmrcl_three_img"> <img src="/user_assets/images/commercial/techcircle-news.png"> </div>
+                      <div class="img-box cmrcl_three_img"> <img src="http://websitedemo.co.in/phpdemoz/patholab/upload/Techcircle-logo.png"> </div>
                       </a>
                       <div class="crmrcl_add_date"><a href="javascript:void(0);" class="hover-over"> <strong> 27/01/2017</strong>
                         <h3>Diagnostics startup Airmed raises $1.47 mn from Brand Capital</h3>
@@ -175,7 +175,7 @@ section, footer {
                 <div class="col-md-4 col-sm-6 res_pdng_0">
                   <div class="mediaBlock"> <a href="javascript:void(0);" class="hover-over"> </a>
                     <div class="box-package for_cmrcl_box_pckg"><a href="javascript:void(0);" class="hover-over">
-                      <div class="img-box cmrcl_three_img"> <img src="/user_assets/images/commercial/yourstory-news.png"> </div>
+                      <div class="img-box cmrcl_three_img"> <img src="http://websitedemo.co.in/phpdemoz/patholab/upload/your_story_logo.png"> </div>
                       </a>
                       <div class="crmrcl_add_date"><a href="javascript:void(0);" class="hover-over"> <strong> 22/04/2017</strong>
                         <h3>This Ahmedabad startup is changing the way we approach pathology</h3>
@@ -295,17 +295,17 @@ section, footer {
               </div>
             </div>
           </div>
-          <!-- <div class="border-btn mt-30"><span style="background-color:black"></span></div>-->
+          <div class="border-btn mt-30"><span style="background-color:black"></span></div>
         </div>
       </div>
     </div>
   </section>
-  <!-- <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
+  <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
     <div class="container mbl_containr" style="padding-bottom:0">
       <div class="row">
         <div class="col-sm-12 pdng_0">
           <div class="indx_mbl_mdl"> 
-            <!--  <h1 class="mbl_title center">App Communication Space</h1>--
+            <!--  <h1 class="mbl_title center">App Communication Space</h1>-->
             
             <div class="col-sm-4  col-xs-4"> <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> </div>
             <div class="col-sm-4 col-xs-4"> <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/> </div>
@@ -314,16 +314,16 @@ section, footer {
         </div>
       </div>
     </div>
-  </section> -->
-  <!-- <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
+  </section>
+  <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
     <div class="container mbl_containr">
       <div class="row">
         <div class="col-sm-12" style="text-align:center;">
           <div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 "> <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> </div>
           <div class="col-sm-7  col-xs-9 pdng_0 ">
             <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP
-				-- <br/>
-              & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  --
+				<!-- <br/>
+              & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B>  -->
 			</h1>
           </div>
           <div class="clearfix"></div>
@@ -335,7 +335,7 @@ section, footer {
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
 </div>
 <!-- end main-content --> 
 <!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 

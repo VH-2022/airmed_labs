@@ -167,16 +167,15 @@
                         <h3 class="box-title">Doctor List</h3>
 
 
-                        <?php if (array_search('doctor_add', $login_data["permissions"])) { ?>
-                        <a style="float:right;" href='<?php echo base_url(); ?>doctor_master/doctor_add' class="btn btn-primary btn-sm" ><i class="fa fa-plus-circle" ></i><strong > Add</strong></a> <?php } ?>
-                        <?php if (array_search('doctor_import', $login_data["permissions"])) { ?>
+
+                        <a style="float:right;" href='<?php echo base_url(); ?>doctor_master/doctor_add' class="btn btn-primary btn-sm" ><i class="fa fa-plus-circle" ></i><strong > Add</strong></a>
+
                         <a style="float:right;margin-right:5px;" data-toggle="modal"  data-target="#import"  class="btn btn-primary btn-sm" ><strong > Import</strong></a>
-                        <?php } ?>
-						<a style="float:right;margin-right:5px;" href='<?php echo base_url(); ?>doctor_master/export_csv_doctor/?name=<?= $name; ?>&email=<?= $email; ?>&mobile=<?= $mobile; ?>&city=<?= $city_id; ?>&sales_person=<?= $selected_person; ?>&status=<?=$status?>&search=Search' class="btn btn-primary btn-sm"><i class="fa fa-download"></i><strong> Export To CSV</strong></a>
 
-                        <a style="float:right;margin-right:5px;" data-toggle="modal"  data-target="#import_new"  class="btn btn-primary btn-sm" ><strong > Update PRO</strong></a>
+						<a style="float:right;margin-right:5px;" href='<?php echo base_url(); ?>doctor_master/export_csv_doctor/?name=<?= $name; ?>&email=<?= $email; ?>&mobile=<?= $mobile; ?>&city=<?= $city_id; ?>&sales_person=<?= $selected_person; ?>&search=Search' class="btn btn-primary btn-sm"><i class="fa fa-download"></i><strong> Export To CSV</strong></a>
 
-                        <a style="float:right;margin-right:5px;" data-toggle="modal" data-target="#import_speciality" class="btn btn-primary btn-sm" ><strong > Update Speciality</strong></a>
+
+
                     </div><!-- /.box-header -->
 
                     <div class="box-body">
@@ -261,7 +260,7 @@
 
                                             <th>Sales Person</th>
                                             <th>Notify Report</th>
-											<th>Status</th>
+											<th></th>
 
                                             <th>Action</th>
 
@@ -373,30 +372,7 @@
                 </select>
                 </div>
                 </td>
-<td><div class="form-group">
-
-<select class="form-control" name="status">
-    <option  value="">All</option>
-<option value="1" <?php
-
-                    if ($status == 1) {
-
-                        echo "selected";
-
-                    }
-
-                    ?>>Active</option>
-                     <option value="2" <?php
-
-            if ($status == 2) {
-
-                echo "selected";
-
-            }
-
-            ?>>Deactive</option>
-</select>
-</div></td>
+<td></td>
 
                                             <td>												
 
@@ -564,79 +540,6 @@
     </section><!-- /.content -->
 
 </div><!-- /.content-wrapper -->
-        <!---new_import_model-->
-        <div class="modal fade" id="import_new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="H4">Update PRO</h4>
-                    </div>
-                    <div class="modal-body"> 
-                        <?php $attributes = array('class' => 'form-horizontal1', 'method' => 'POST'); ?>
-                        <?php
-                        echo form_open_multipart('doctor_master/update_pro_name', $attributes);
-                        ?>
-
-                        <div class="form-group">
-
-                            <label>Upload</label>
-                            <input type="file" name="id_browes" class="form-controll">
-                            <div style='color:red;' id='admin_name_add_alert'></div>
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <a href='<?php echo base_url(); ?>doctor_master/test_csv' class="btn btn-primary" > Sample CSV</a>
-                            <button type="button" id="model_close" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <input type="submit" id="add_admin_submit" name="add_menu" class="btn btn-primary" value="Upload"/>
-      
-                                <!-- <button type="button" id="add_admin_submit"  data-dismiss="modal"  onclick="sub('admin_add');" name="add_menu" class="btn btn-primary" disabled=''> Add </button> -->
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!------end new_import_model------->
-          <!---import_speciality_model-->
-          <div class="modal fade" id="import_speciality" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="H4">Update Speciality</h4>
-                    </div>
-                    <div class="modal-body"> 
-                        <?php $attributes = array('class' => 'form-horizontal1', 'method' => 'POST'); ?>
-                        <?php
-                        // echo form_open_multipart('doctor_master/import_speciality', $attributes);
-                        ?>
-            <form  action="<?php echo base_url(); ?>doctor_master/import_speciality" method="POST" class="form-horizontal1" enctype="multipart/form-data">
-                        <div class="form-group">
-
-                            <label>Upload</label>
-                            <input type="file" name="import_speciality_file" class="form-controll">
-                            <div style='color:red;' id='admin_name_add_alert'></div>
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <a href='<?php echo base_url(); ?>doctor_master/test_csv_speciality' class="btn btn-primary" > Sample CSV</a>
-                            <button type="button" id="model_close" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <input type="submit" id="add_admin_submit" name="add_menu" class="btn btn-primary" value="Upload"/>
-                            
-                        </div>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!------end new_import_model------->
-
-      
 
 <script type="text/javascript">
 

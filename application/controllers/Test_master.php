@@ -23,7 +23,6 @@ class Test_master extends CI_Controller {
     }
 
     function test_list() {
-        
         if (!is_loggedin()) {
             redirect('login');
         }
@@ -95,9 +94,8 @@ class Test_master extends CI_Controller {
         }
         $data["query"] = $new_array;
         //echo "<pre>"; print_R($data["query"]); die();
-        $url = "http://" . $_SERVER['HTTP_HOST'] . ":" . $_SERVER['REQUEST_URI'];
+        $url = "http://" . $_SERVER['HTTP_HOST'] . ":" . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
         $this->session->set_userdata("test_master_r", $url);
-        // redirect($this->session->set_userdata("test_master_r"), "refresh");
         $data['citys'] = $this->test_model->master_fun_get_tbl_val("test_cities", array("status" => '1'), array("name", "asc"));
         $data['departmnet_list'] = $this->test_model->master_fun_get_tbl_val("test_department_master", array("status" => '1'), array("name", "asc"));
         $this->load->view('header');
@@ -280,7 +278,9 @@ class Test_master extends CI_Controller {
             }
             $this->session->set_flashdata("success", array("Test successfully updated."));
             if (!empty($this->session->userdata("test_master_r"))) {
-                redirect($this->session->userdata("test_master_r"), "refresh");
+                
+                //redirect($this->session->userdata("test_master_r"), "refresh");
+                redirect("test-master/test-list", "refresh");
             } else {
                 redirect("test-master/test-list", "refresh");
             }

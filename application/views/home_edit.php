@@ -24,7 +24,6 @@
                 <!-- form start -->
                 <form role="form" action="<?php echo base_url(); ?>cms_master/index" method="post" enctype="multipart/form-data">
                     <div class="box-body">
-                        <div class="row">
                         <div class="col-md-6">
 
                             <?php if (isset($unsuccess) != NULL) { ?>
@@ -85,14 +84,6 @@
                             <a href="javascript:void(0);" onclick="$('#exampleModal').modal('show');"><i class="fa fa-plus-square" style="font-size:20px;"></i></a>
                             <!--Nishit city wise price end-->
                             <!--Nishit test city end-->
-                        </div>
-                        <div class="col-md-6">
-                             <div class="form-group">
-                                <label class="custom-label">1km = Ruppe</label>
-                                <input name="phlebo_km_wise_rs" value="<?php echo $query[0]['phlebo_km_wise_rs']; ?>" type="number" class="form-control red-border">
-
-                            </div>
-                        </div>
                         </div>
                     </div><!-- /.box-body -->
 

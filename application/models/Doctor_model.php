@@ -98,14 +98,9 @@ public function contact_master($table_name, $data) {
 		
 			$temp .= " AND notify  =$notify";
 		}
-		if($srch['status'] != "" ){
-			$status = $srch['status'];
-			$temp .= " AND status = '$status' ";
-                      
-		}
 		// echo "SELECT * from doctor_master where status IN (1,2) $temp"; die;
 		/*Vishal COde End*/
-		$query = $this->db->query("SELECT * from doctor_master where id Not IN (0) $temp");
+		$query = $this->db->query("SELECT * from doctor_master where status IN (1,2) $temp");
 		return $query->num_rows();
 	}
 	public function doctorlist_list($srch,$one, $two){
@@ -141,13 +136,8 @@ if($srch['sales_person'] != "" ){
 		
 			$temp .= " AND notify  =$notify";
 		}
-		if($srch['status'] != "" ){
-			$status = $srch['status'];
-			$temp .= " AND d.status = '$status' ";
-                      
-		}
 		/*Vishal Code End*/
-		$query = $this->db->query("SELECT d.*,c.city_name as city,s.state_name as state,sales_person.first_name,sales_person.last_name from doctor_master d left join city c on c.id=d.city left join state s on s.id=d.state left join sales_user_master as sales_person  on sales_person.id=d.ref_id where d.id Not IN (0) $temp order by d.id LIMIT $two,$one");
+		$query = $this->db->query("SELECT d.*,c.city_name as city,s.state_name as state,sales_person.first_name,sales_person.last_name from doctor_master d left join city c on c.id=d.city left join state s on s.id=d.state left join sales_user_master as sales_person  on sales_person.id=d.ref_id where d.status IN (1,2) $temp order by d.id LIMIT $two,$one");
                 
                 
 //                		$query = $this->db->query("SELECT d.*,c.city_name as city,s.state_name as state, 

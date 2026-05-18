@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             <script src='https://www.google.com/recaptcha/api.js'></script>
-                            <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6LfwKlArAAAAANFc4Yl_BFcl93i9BeF9FvZfOc9u"></div>
+                            <div class="g-recaptcha" data-callback="recaptchaCallback" data-sitekey="6Ld5_x8UAAAAAPoCzraL5sfQ8nzvvk3e5EIC1Ljr"></div>
                             <spam id="captch_error" style="color:red;"></spam><br>
                             <div class="form-group">
                                 <input name="form_botcheck" class="form-control" type="hidden" value="" />
