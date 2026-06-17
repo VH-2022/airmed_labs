@@ -612,9 +612,11 @@ $wa_number = '919725504245';
                         <div class="aap-pkg-card" data-title="<?= htmlspecialchars(strtolower($p_title)) ?>" data-cat="<?= htmlspecialchars($cat_slug) ?>">
                             <?php if ($p_price): ?>
                             <span class="aap-pkg-price-tag">₹<?= htmlspecialchars($p_price) ?></span>
-                            <?php endif; ?>                            
-                                 <img class="aap-pkg-img" src="<?= base_url() ?>upload/package/<?= htmlspecialchars($p_image) ?>"
-                                 alt="<?= htmlspecialchars($p_title) ?> blood test package Ahmedabad">
+                            <?php endif; ?>
+                            <img class="aap-pkg-img"
+                                 src="<?php echo base_url(); ?>upload/package/<?= $key1[0]["image"] ?>"
+                                 alt="<?= htmlspecialchars($p_title) ?> blood test package Ahmedabad"
+                                 onerror="this.style.visibility='hidden'">
                             <div class="aap-pkg-body">
                                 <h3 class="aap-pkg-title"><?= htmlspecialchars($p_title) ?></h3>
                                 <?php if (!empty($tags)): ?>

@@ -8,13 +8,13 @@
                     <ul class="list-inline footer_menu">
                         <li><a href="<?php echo base_url(); ?>user_master/about_us">About us</a></li>
                         <li><a href="<?php echo base_url(); ?>founders">Management Team</a></li>
-                        <li><a href="<?php echo base_url(); ?>user_master/pathologist">Team Pathology</a></li>
+                        <!--<li><a href="<?php echo base_url(); ?>user_master/pathologist">Team Pathology</a></li>-->
                         <li><a href="<?php echo base_url(); ?>user_master/all_packages">Packages</a></li>
                         <li><a href="<?php echo base_url(); ?>user_track_report">Track Report</a></li>
                         <li><a href="<?php echo base_url(); ?>user_master/commercial">Media</a></li>
                         <li><a href="<?php echo base_url(); ?>advertisement">Advertisement</a></li>
-                        <li><a href="<?php echo base_url(); ?>user_master/partner_with_us">Partner with us</a></li>
-                        <li><a href="#">Investors</a></li>
+                        <!--<li><a href="<?php echo base_url(); ?>user_master/partner_with_us">Partner with us</a></li>-->
+                        <!--<li><a href="#">Investors</a></li>-->
                         <?php if (isset($login_data['id'])) { ?>
                             <li><a href="<?php echo base_url(); ?>user_master/support_system">Support/Help</a></li>
                         <?php } ?>

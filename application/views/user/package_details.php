@@ -1,753 +1,1046 @@
-<?php /* <section id="home">
-  <div class="row">
-  <div class="col-sm-12">
-  <div class="awsth_inr_img_div" style="background-image: url('<?php echo base_url(); ?>upload/package/<?php echo $package[0]['back_image']; ?>'); background-repeat: no-repeat; background-size: 100% auto; height: 473px; background-size: cover; background-position: 100% center;">
-  <div class="container">
-  <div class="col-md-4 col-sm-6 pull-right pkg_dtl_cl4_mrgnrgt">
-  <div class="pkgdetail_full">
-  <div class="pkgdetail_full_titl">
-  <h2 class="pkgdetail_titl">Health Checkup</h2>
-  </div>
-  <div class="pkgdetail_inpt_div">
-  <div class="pkgdetail_full_in">
-  <p class="pkgdtl_txt_p">Just give your Phone Number for Home Collection</p>
-  </div>
-  <?php echo form_open("user_master/package_inquiry/", array("role" => "form", "method" => "POST", "id" => "package_id")); ?>
-  <div class="pkgdetail_full_in">
-  <div class="input-group">
-  <span class="input-group-addon pkgdtl_spn_91">+91</span>
-  <input type="text" class="form-control" placeholder="Phone Number" name="mobile" id="mobile_id">
-  <input type="hidden" class="form-control" value="<?php echo $pid; ?>" name="package">
+<?php
+/**
+ * Airmed Pathlabs — Package Details Page (Redesigned)
+ * Matches the new live design at airmedlabs.com/user_master/package_details/334
+ * Drop-in replacement for the old package_details view file.
+ * Requires: $package, $package_array, $a_price, $d_price, $pid, $success
+ */
+?>
 
-  </div>
-  <span style="color:red" id="mobile_error"><?= form_error('mobile'); ?></span>
-  <!--<input type="text" placeholder="Phone Number" class="srch_pop_inpt"/>-->
-  </div>
-  <div class="pkgdetail_full_in">
-  <div class="col-sm-3 pdng_0 set_pkgdtl_cl4_offset">
-  <!--<a class="btn btn-dark btn-theme-colored btn-flat" href="#">Get a call back</a>-->
-  <button type="button" class="btn btn-dark btn-theme-colored btn-flat" onclick="Validation();">Get a call back</button>
-  </div>
-  </div>
-  </form>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div role="dialog" id="myModal_payment" class="modal fade">
-  <div class="modal-dialog">
-
-  <!-- Modal content-->
-  <div class="modal-content">
-
-  <div class="modal-body">
-  <div class="col-sm-12">
-  <h4 style="width:-moz-max-content; float: left; text-align: center; width: 100%;" class="modal-title"><?= $success[0]; ?></h4>
-  </div>
-  <div id="model_body">
-  <div style="width:100%;text-align:center;"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTV2P4sfl7-R0VRshYncNf7dJvh-FzqpokC4jaUBP4C6afbB9r"></div>
-  </div>
-  </div>
-  <button style="display:none;" id="close_model" data-dismiss="modal" class="btn btn-primary" type="button"></button>
-  <div style="display:none;" id="save_btn" class="modal-footer">
-  <button onclick="frm_sbmt.click();" data-dismiss="modal" class="btn btn-primary" type="button">Save</button>
-  <button id="close_model" data-dismiss="modal" class="btn btn-danger" type="button">Cancel</button>
-
-  </div>
-  </div>
-
-  </div>
-  </div>
-
-
-  <script>
-  <?php if ($success[0] != '') { ?>
-  setTimeout(function () {
-  $("#myModal_payment").modal('show');
-  }, 3000);
-  setTimeout(function () {
-  $("#myModal_payment").modal('hide');
-  }, 8000);
-  <?php } ?>
-  </script>
-  <script>
-  function Validation() {
-  var cnt = 0;
-  $('#mobile_error').html('');
-
-
-  var mobile_id = $("#mobile_id").val();
-  if(mobile_id == '') {
-  $('#mobile_error').html('Please enter mobile number!');
-  } else if (checkmobile(mobile_id) == true) {
-  $("#package_id").submit();
-  } else {
-  $('#mobile_error').html('Invalid Number');
-  }
-
-  }
-  function checkmobile(mobile) {
-  var filter = /^[0-9-+]+$/;
-  var pattern = /^\d{10}$/;
-  if (filter.test(mobile)) {
-  if(pattern.test(mobile)) {
-  return true;
-  } else {
-  return false;
-  }
-  } else {
-  return false;
-  }
-  }
-  </script>
-  </section>
-  <!-- Start main-content -->
-  <div class="main-content">
-  <!-- Section: home -->
-  <section>
-  <div class="container pdng_top_20px pdng_btm_30px">
-  <div class="col-md-12 col-sm-12 mrgn_btm_13px">
-  <div class="pkg_dtl_price">
-  <div class="col-sm-9 pdng_0">
-  <span class="pkg_price_div">
-  <span class="clr_pric_spn">Price </span>
-  <i class="fa fa-play"></i>
-  </span>
-  <span class="pkg_dtl_spn_1">Rs.<?php echo $a_price; ?>/-</span>
-  <span class="pkg_dtl_spn_2">Rs.<?php echo $d_price; ?>/-</span>
-  </div>
-  <div class="col-sm-2 pull-right">
-  <a href="javascript:void(0);" onclick="get_book();" class="mrgn_top_6px pull-right" style="display:block;width:100%;">
-  <img class="pkg_bk_now_btn" src="<?php echo base_url() ?>user_assets/images/book_now.png"/>
-  </a>
-  </div>
-  </div>
-  </div>
-  <input type="hidden" id="package_name_id" value="<?php echo $package[0]['title']; ?>" />
-  <input type="hidden" id="package_id_id" value="<?php echo $package[0]['id']; ?>" />
-  <div class="col-md-12 col-sm-12 main_swas_profile">
-  <?php echo $package[0]['desc_web']; ?>
-
-  <!--<div class="row">
-
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"> <a data-parent="#accordion1" data-toggle="collapse" href="#accordion11" class="collapsed" aria-expanded="false"> <span class="open-sub"></span> <strong>
-  Cardiac Risk Markers [6]
-  </strong></a></div>
-  <div id="accordion11" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>
-  Homocysterine
-  </li>
-  <li>
-  Upoprotein-A
-  </li>
-  <li>
-  Apolipoprotein-A1
-  </li>
-  <li>
-  Apolipoprotein-B
-  </li>
-  <li>
-  C-Reactive Protein [hs-CRP]
-  </li>
-  <li>
-  Apo B/ Apo A1 Ratio
-  </li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"> <a data-parent="#accordion1" data-toggle="collapse" href="#accordion12" class="collapsed" aria-expanded="false"> <span class="open-sub"></span> <strong>
-  Pancreas Profile [2]
-  </strong></a></div>
-  <div id="accordion12" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>
-  Serum Amylase
-  </li>
-  <li>
-  Serum Lipase
-  </li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion13" class="collapsed" aria-expanded="false"> <span class="open-sub"></span> <strong>Electrolytes Profile [2]</strong></a></div>
-  <div id="accordion13" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>
-  Sodium
-  </li>
-  <li>
-  Cloride
-  </li>
-
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="row">
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion14" class="collapsed" aria-expanded="false"> <span class="open-sub"></span> <strong>
-  Vitamin Profile [2]
-  </strong></a></div>
-  <div id="accordion14" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>Vitami D Total</li>
-  <li>Vitamin B 12</li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-
-
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion15" class="collapsed" aria-expanded="false"> <span class="open-sub"></span> <strong>
-  Thyroid Profile [3]
-  </strong></a></div>
-  <div id="accordion15" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>Total Triodothyronine [T3]</li>
-  <li>Total Thyroxine [T4]</li>
-  <li>Thytoid Stimulating Hormone [T5H]</li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion16" class="collapsed" aria-expanded="false"> <span class="open-sub"></span><strong>
-  Diabetic Screen [2]</strong></a></div>
-  <div id="accordion16" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li> HbA1c </li>
-  <li> Average Blood Glucose </li>
-
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="row">
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion17" class="collapsed" aria-expanded="false"> <span class="open-sub"></span>
-  <strong>
-  Iron Deficiency Profile [3]
-  </strong></a></div>
-  <div id="accordion17" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>  Serum Iron</li>
-  <li>  total Iron Binding Capacity </li>
-  <li>  % Transferrin Saturation</li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion18" class="collapsed" aria-expanded="false"> <span class="open-sub"></span>
-  <strong>
-  Cholesterol Profile [8]
-  </strong></a></div>
-  <div id="accordion18" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>  Total Cholesterol</li>
-  <li>  HDL Cholesterol </li>
-  <li> Non - HDL Cholesterol</li>
-  <li> Triglycerides</li>
-  <li> LDL Cholesterol</li>
-  <li> VLDL Cholesterol</li>
-  <li> TC / HDL Cholesterol Ratio</li>
-  <li> LDL / HDL Cholesterol Ratio </li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-
-
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion19" class="collapsed" aria-expanded="false"> <span class="open-sub"></span>
-  <strong>
-  Liver Profile [11]
-  </strong></a></div>
-  <div id="accordion19" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>  Gamma Glutamyl Transferase</li>
-  <li>  Alkaline Phosphrase </li>
-  <li> NBilirubin - Direct</li>
-  <li> Bilirubin - Total</li>
-  <li> Bilirubin - Indirect</li>
-  <li> Protein - Total</li>
-  <li> Serum Albumin</li>
-  <li> Serum Globulin </li>
-  <li> SGOT [AST] </li>
-  <li> AGPT [ALT] </li>
-  <li> Serum Albumin/Globulin Ratio </li>
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="row">
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion20" class="collapsed" aria-expanded="false"> <span class="open-sub"></span>
-  <strong>
-  Kidney Profile [5]
-  </strong></a></div>
-  <div id="accordion20" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  <li>  Calciuym</li>
-  <li>  Uric Acid</li>
-  <li> Blood Urea Nitrogen</li>
-  <li> Seru Creatinine</li>
-  <li> BUN / Serum Creatinine Ratio</li>
-
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion21" class="collapsed" aria-expanded="false"> <span class="open-sub"></span>
-  <strong>
-  Testosterone
-  </strong></a></div>
-  <div id="accordion21" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  <div class="col-md-4 col-sm-4">
-  <div class="inner_swas_profile">
-  <div id="accordion1" class="panel-group accordion transparent">
-  <div class="panel">
-  <div class="panel-title"><a data-parent="#accordion1" data-toggle="collapse" href="#accordion22" class="collapsed" aria-expanded="false"> <span class="open-sub"></span>
-  <strong>
-  Complete Hemogram [28]
-  </strong></a></div>
-  <div id="accordion22" class="panel-collapse collapse" role="tablist" aria-expanded="false">
-  <ul class="panel-content">
-
-
-  </ul>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>-->
-  </div><br>
-  <div class="col-sm-12" style="margin-top:20px;">
-  <div class="col-sm-3 pull-right">
-  <!--<a href="<?php echo base_url(); ?>user_master"><button type="submit" class="btn btn-dark btn-theme-colored btn-flat pull-right">Book</button></a>-->
-  </div>
-  </div>
-  <div class="row">
-  <div class="full_div pdng_top_35px">
-  <div class="col-sm-6">
-  <h1 class="all_pg_lst_btns">An App for simplified pathology experience.</h1>
-  </div>
-  <div class="col-sm-6">
-  <div class="col-sm-12 pdng_0">
-  <div class="col-sm-6">
-  <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>user_assets/images/google_play.png"/></a>
-  </div>
-  <div class="col-sm-6">
-  <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>user_assets/images/apple_appstore_big.png"/></a>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </section>
-  </div>
-  <script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>
-  <script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
-  <script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
-
-  <script>
-  function get_book() {
-  var ids = [];
-
-  var names = [];
-
-  var id = 'p-' + $("#package_id_id").val();
-  var name = $("#package_name_id").val();
-
-  ids.push(id);
-  names.push(name);
-
-  $.ajax({
-  url: "<?php echo base_url(); ?>user_master/searching_test",
-  type: 'post',
-  data: {id: ids, name: names},
-  success: function (data) {
-  //     console.log("data"+data);
-  window.location = "<?php echo base_url(); ?>user_master/order_search";
-  }
-  });
-
-  }
-
-  </script>
-
-
- */ ?>
-
-
+<!-- =====================  PAGE-SCOPED STYLES  ===================== -->
 <style>
-    .border-search{ background-color: #fff;
-                    border: 1px solid #000;
-                    border-radius: 0;
-                    -- border-top: 1px solid #d01130;
-                    box-shadow: 1px 1px rgba(0, 0, 0, 0.4);
-                    clear: left;}
-    .indx_big_img {
-        width: 100%;
-        background-image: url(../images/new/home_1.png);
-        background-attachment: fixed;
-        background-size: cover;
-        height: 480px !important;
-        top: 10% !important;
-        background-position: 0 80px;
-    }
-    #team{
-        background:url(<?php echo base_url(); ?>user_assets/images/new/back-package.png); background-size:cover; padding:30px 0;background-repeat:no-repeat;
-    }
-    .box-package{width:100%;float:left;position:relative}
+/* ---------- Reset & base ---------- */
+.apd-wrap *,
+.apd-wrap *::before,
+.apd-wrap *::after { box-sizing: border-box; }
 
-    .img-box{width:96%;margin:2%;float:left;  vertical-align: middle; height:200px;background:#ddd;min-height:200px;max-height:230px;overflow:hidden; margin-bottom:5px;text-align:center}
-    .img-box img{height:100%; width:100%; max-width:inherit}
-    .txt-box{width:100%;float:left;text-align:center; margin-bottom:15px;min-height:100px;max-height:150px;overflow:hidden;}
-    .txt-box h3{font-size: 20px;}
-    .txt-box p{margin: 0; text-transform:uppercase;font-size: 18px;}
-    .pdng_lft_0{padding-left:0}
-    .pdng_rgt_0{padding-right:0}
-    .red-label{position:absolute; right:3px;top:-5px;   z-index: 1;}
-    .red-label p{background:#d01130;padding:2px;color:#fff;width:100px; text-align:center; font-size:18px;font-weight:600}
-    .hover-over:hover{opacity:0.8;}
-    section, footer{width:100%;float:left;}
+.apd-wrap {
+    font-family: 'DM Sans', 'Plus Jakarta Sans', Arial, sans-serif;
+    color: #1a1a2e;
+    background: #f8f9fb;
+}
+
+/* ---------- Breadcrumb ---------- */
+.apd-breadcrumb {
+    background: #fff;
+    padding: 10px 0;
+    border-bottom: 1px solid #e8ecf0;
+    font-size: 13px;
+    color: #6b7280;
+}
+.apd-breadcrumb a { color: #c0392b; text-decoration: none; }
+.apd-breadcrumb a:hover { text-decoration: underline; }
+.apd-breadcrumb span { margin: 0 6px; }
+
+/* ---------- Hero Section ---------- */
+.apd-hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #c0392b 100%);
+    padding: 40px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+.apd-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+}
+
+.apd-hero-inner {
+    display: flex;
+    align-items: flex-end;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.apd-hero-info { flex: 1 1 340px; padding-bottom: 30px; }
+
+.apd-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.apd-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}
+.apd-badge.green { background: rgba(16,185,129,0.25); border-color: rgba(16,185,129,0.4); }
+
+.apd-hero h1 {
+    font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 5vw, 42px);
+    color: #fff;
+    margin: 0 0 14px;
+    line-height: 1.15;
+}
+
+.apd-price-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.apd-price-main {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+}
+.apd-price-original {
+    font-size: 18px;
+    color: rgba(255,255,255,0.55);
+    text-decoration: line-through;
+}
+
+.apd-trust-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+.apd-trust-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 500;
+}
+.apd-trust-pill svg { flex-shrink: 0; }
+
+.apd-hero-cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.apd-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: #c0392b;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 13px 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.apd-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); color: #c0392b; }
+
+.apd-btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.15s, filter 0.15s;
+}
+.apd-btn-whatsapp:hover { transform: translateY(-2px); filter: brightness(1.08); color: #fff; }
+
+/* Hero image */
+.apd-hero-img {
+    flex: 0 0 auto;
+    width: clamp(200px, 35%, 380px);
+    align-self: flex-end;
+}
+.apd-hero-img img {
+    width: 100%;
+    display: block;
+    border-radius: 12px 12px 0 0;
+    object-fit: cover;
+    max-height: 320px;
+}
+
+/* ---------- Trust strip ---------- */
+.apd-trust-strip {
+    background: #1a1a2e;
+    padding: 14px 0;
+}
+.apd-trust-strip-inner {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+}
+.apd-ts-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-weight: 500;
+}
+.apd-ts-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #c0392b;
+    flex-shrink: 0;
+}
+
+/* ---------- Main layout ---------- */
+.apd-main { padding: 40px 0 60px; }
+.apd-layout {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+}
+.apd-content { flex: 1 1 0; min-width: 0; }
+.apd-sidebar { flex: 0 0 300px; position: sticky; top: 20px; }
+
+/* ---------- Section cards ---------- */
+.apd-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+.apd-card-header {
+    padding: 18px 22px 16px;
+    border-bottom: 2px solid #f3f4f6;
+}
+.apd-card-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a2e;
+}
+.apd-card-body { padding: 20px 22px; }
+
+/* Tests included */
+.apd-tests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.apd-tests-grid li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #374151;
+    padding: 8px 10px;
+    background: #f8f9fb;
+    border-radius: 7px;
+    border-left: 3px solid #c0392b;
+}
+.apd-tests-grid li::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #c0392b;
+    flex-shrink: 0;
+}
+
+/* Package desc (existing HTML from DB) */
+.apd-pkg-desc { font-size: 14px; line-height: 1.8; color: #4b5563; }
+.apd-pkg-desc h1,
+.apd-pkg-desc h2,
+.apd-pkg-desc h3 { font-size: 15px; font-weight: 700; color: #c0392b; margin: 16px 0 6px; }
+.apd-pkg-desc ul { padding-left: 18px; }
+.apd-pkg-desc li { margin-bottom: 4px; }
+
+/* How it works */
+.apd-steps { display: flex; flex-direction: column; gap: 0; }
+.apd-step {
+    display: flex;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+.apd-step:last-child { border-bottom: none; }
+.apd-step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #c0392b;
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.apd-step-text h3 { font-size: 14px; font-weight: 700; margin: 0 0 3px; }
+.apd-step-text p { font-size: 13px; color: #6b7280; margin: 0; }
+
+/* Why choose */
+.apd-why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+}
+.apd-why-item {
+    background: #f8f9fb;
+    border-radius: 10px;
+    padding: 16px;
+    border-top: 3px solid #c0392b;
+}
+.apd-why-item strong { display: block; font-size: 14px; color: #1a1a2e; margin-bottom: 5px; }
+.apd-why-item p { font-size: 13px; color: #6b7280; margin: 0; line-height: 1.6; }
+
+/* FAQ */
+.apd-faq-item {
+    border-bottom: 1px solid #f3f4f6;
+}
+.apd-faq-item:last-child { border-bottom: none; }
+.apd-faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 16px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a2e;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.apd-faq-q svg { flex-shrink: 0; transition: transform 0.25s; }
+.apd-faq-q.open svg { transform: rotate(180deg); }
+.apd-faq-a {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.75;
+    padding-bottom: 14px;
+    display: none;
+}
+.apd-faq-a.open { display: block; }
+
+/* ---------- Sidebar ---------- */
+.apd-sidebar-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+    padding: 22px;
+    margin-bottom: 20px;
+    border-top: 4px solid #c0392b;
+}
+.apd-sidebar-price {
+    font-size: 32px;
+    font-weight: 800;
+    color: #c0392b;
+    margin-bottom: 4px;
+}
+.apd-sidebar-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f3f4f6;
+}
+.apd-sidebar-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+}
+.apd-sidebar-features li {
+    font-size: 13px;
+    color: #374151;
+    padding: 7px 0;
+    border-bottom: 1px solid #f9fafb;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+.apd-sidebar-features li::before {
+    content: '✓';
+    color: #10b981;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.apd-sidebar-book {
+    display: block;
+    width: 100%;
+    background: #c0392b;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: background 0.15s;
+}
+.apd-sidebar-book:hover { background: #a93226; color: #fff; }
+.apd-sidebar-wa {
+    display: block;
+    width: 100%;
+    background: #f0fdf4;
+    color: #059669;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #bbf7d0;
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: background 0.15s;
+}
+.apd-sidebar-wa:hover { background: #dcfce7; color: #059669; }
+.apd-sidebar-call {
+    display: block;
+    text-align: center;
+    font-size: 14px;
+    color: #1a1a2e;
+    text-decoration: none;
+    font-weight: 500;
+}
+.apd-sidebar-call span { color: #c0392b; font-weight: 700; }
+
+/* Sidebar info table */
+.apd-info-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.apd-info-table tr td { padding: 9px 0; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+.apd-info-table tr:last-child td { border-bottom: none; }
+.apd-info-table td:first-child { color: #6b7280; width: 46%; }
+.apd-info-table td:last-child { color: #1a1a2e; font-weight: 600; }
+
+/* Accreditations */
+.apd-accred {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+.apd-accred h3 { font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 14px; }
+.apd-accred-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.apd-accred-item {
+    background: #f8f9fb;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+}
+.apd-accred-item strong { display: block; font-size: 12px; color: #c0392b; font-weight: 700; margin-bottom: 3px; }
+.apd-accred-item span { font-size: 11px; color: #6b7280; line-height: 1.4; }
+
+/* ---------- Similar packages ---------- */
+.apd-similar { margin-top: 10px; }
+.apd-similar h2 { font-size: 22px; font-weight: 800; margin-bottom: 20px; }
+.apd-similar h2 span { color: #c0392b; }
+.apd-packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+.apd-pkg-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s, box-shadow 0.18s;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.apd-pkg-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.apd-pkg-price-tag {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: #c0392b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 2;
+}
+.apd-pkg-card-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+.apd-pkg-card-body {
+    padding: 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.apd-pkg-card-body h3 { font-size: 15px; font-weight: 600; margin: 0 0 12px; color: #1a1a2e; }
+.apd-pkg-book-btn {
+    display: inline-block;
+    background: #c0392b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+.apd-pkg-book-btn:hover { background: #a93226; color: #fff; }
+
+.apd-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 2px solid #c0392b;
+    color: #c0392b;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+}
+.apd-view-all:hover { background: #c0392b; color: #fff; }
+
+/* ---------- App download strip ---------- */
+.apd-app-strip {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 100%);
+    border-radius: 12px;
+    padding: 30px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px 0 10px;
+}
+.apd-app-strip h2 { font-size: 20px; font-weight: 700; color: #fff; margin: 0 0 6px; }
+.apd-app-strip p { font-size: 13px; color: rgba(255,255,255,0.7); margin: 0; }
+.apd-app-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.apd-app-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+.apd-app-btn:hover { background: rgba(255,255,255,0.22); color: #fff; }
+
+/* ---------- Success Modal ---------- */
+#apd-modal-payment {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+#apd-modal-payment.show { display: flex; }
+.apd-modal-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.apd-modal-box h4 { font-size: 18px; font-weight: 700; margin: 16px 0 0; color: #1a1a2e; }
+.apd-modal-box img { width: 80px; }
+
+/* ---------- Container utility ---------- */
+.apd-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 900px) {
+    .apd-layout { flex-direction: column; }
+    .apd-sidebar { position: static; flex: none; width: 100%; }
+    .apd-hero-img { display: none; }
+}
+@media (max-width: 600px) {
+    .apd-hero { padding: 28px 0 0; }
+    .apd-hero h1 { font-size: 26px; }
+    .apd-price-main { font-size: 28px; }
+    .apd-app-strip { flex-direction: column; align-items: flex-start; }
+}
 </style>
-<!-- Start main-content -->
-<div class="main-content">
-    <!-- Section: home -->
 
+<!-- =====================  PAGE HTML  ===================== -->
 
-    <section id="about" class="package-div">
+<?php
+// Defensive defaults
+$pkg        = $package[0] ?? [];
+$pkg_title  = $pkg['title']  ?? 'Package';
+$pkg_id     = $pkg['id']     ?? '';
+$pkg_image  = $pkg['back_image'] ?? '';
+$pkg_desc   = $pkg['desc_web']   ?? '';
+$actual_price   = $a_price ?? '';
+$discount_price = $d_price ?? '';
+$success_msg    = $success[0] ?? '';
 
+// WhatsApp number — update to your actual number
+$wa_number = '919725504245';
+$wa_msg    = urlencode("Hi, I want to book {$pkg_title} ₹{$discount_price}");
+?>
 
-        <div class="gray-overlay" style="">
-            
-        </div>
-        <div class="container" style="padding:0">
-            <div class="row">
-                <div class="col-md-4 col-sm-4">
-                    <center>
-                        <h1 class="font-62 font-w" style="color:#4d4d4f;line-height:30px"> </h1> 
-                        <p class="font-28"><?php echo $package[0]['title']; ?> <!--<span class="font-20 clr-red">63 PARAMETERS</span>--></p>
-                    </center>
-                    <center>
-                        <p><span class="back-red font-24 font-w pdng_10" style="margin:0 10px 0 0;color:#fff"><img src="<?php echo base_url(); ?>user_assets/images/new/rupee.png" style="width:12px"> <?php echo $d_price; ?>/- </span>
-                            <!--<span class="font-24" style="text-decoration: line-through;text-decoration-color:red;color:#4d4d4f;"><img src="https://cdn3.iconfinder.com/data/icons/indian-rupee-symbol/800/Indian_Rupee_symbol.png" style="width:12px"><?php echo $a_price; ?>/- </span>--></p>
-                    </center>
-                </div>
-                <div class="col-md-8 col-sm-8">
-                    <img src="<?php echo base_url(); ?>upload/package/<?php echo $package[0]['back_image']; ?>">
-                </div>
+<div class="apd-wrap">
 
-            </div>
-        </div>
-
-
-    </section>
-
-    <!-- Section: Departments  -->
-    <section id="depertments" class="bg-white">
-        <div class="container indx_4_img">
-            <div class="section-content "> <!--col-md-10 col-md-offset-1-->
-                <div class="row indx_round_div border-gray" style="">
-                    <div class="col-md-8 col-sm-7 col-xs-12">
-                        <h1 class="font-32 font-w cust-mrg"><?php echo $package[0]['title']; ?> <!--<span class="font-22 clr-red">63 PARAMETERS</span>--></h1>
-                    </div>
-                    <div class="col-md-4 col-sm-5 col-xs-12 extra-div-right">
-                        <a href="javascript:void(0);" onclick="get_book();" class="btn-book mb-30 font-30 txt-transform-upp pull-xs-left">Book Test Online</a><br/>
-                        <p class="pull-xs-left">OR <img src="<?= base_url(); ?>user_assets/images/new/phone.png" style="width:32px;"> <b>+91 8101-161616</b></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <div class="border-btn mt-30 bg-white"><span></span></div>
-
-    <section class="bg-white">
-        <div class="container mbl_containr" style="padding-bottom:0">
-            <div class="row">
-                <?php echo $package[0]['desc_web']; ?>
-                <?php /*
-                  <div class="col-md-4 col-xs-12 pdng_0">
-
-                  <h1 class="title-red">Thyroid Profile (3)</h1>
-                  <ul class="inner-line">
-                  <li>Total Triiodothyronine [T3]</li>
-                  <li>Total Thyroxine [T4]</li>
-                  <li>Thyroid Stimulating Hormone [TSH]</li>
-                  </ul>
-
-                  <h1 class="title-red">Lipid Profile (8)</h1>
-                  <ul class="inner-line">
-                  <li>Total Cholesterol</li>
-                  <li>HDL Cholesterol</li>
-                  <li> Non-HDL Cholesterol</li>
-                  <li>Triglycerides</li>
-                  <li>LDL Cholesterol</li>
-                  <li>VLDL Cholesterol</li>
-                  <li>TC / HDL Cholesterol Ratio</li>
-                  <li>LDL / HDL Ratio</li>
-                  </ul>
-
-                  <h1 class="title-red">Vitamin Profile (2)</h1>
-                  <ul class="inner-line">
-                  <li>Vitamin D Total</li>
-                  <li>Vitamin B12</li>
-                  </ul>
-
-
-
-                  </div>
-
-                  <div class="col-md-4 col-xs-12 pdng_0">
-
-                  <h1 class="title-red">Liver Profile (11)</h1>
-                  <ul class="inner-line">
-                  <li>Gamma Glutamyl Transferase</li>
-                  <li>Alkaline Phosphatase</li>
-                  <li>Bilirubin - Direct</li>
-                  <li>Bilirubin - Total</li>
-                  <li>Bilirubin - Indirect</li>
-                  <li>Protein - Total</li>
-                  <li>Serum Albumin</li>
-                  <li>Serum Globulin</li>
-                  <li>SGOT [AST]</li>
-                  <li> SGPT [ALT]</li>
-                  <li>Serum Albumin/Globulin Ratio</li>
-                  </ul>
-                  <h1 class="title-red">Diabetic Screen (2)</h1>
-                  <ul class="inner-line">
-                  <li>HbA1c</li>
-                  <li>Average Blood Glucose</li>
-                  </ul>
-                  </div>
-
-                  <div class="col-md-4 col-xs-12 pdng_0">
-
-                  <h1 class="title-red">Iron Deficiency Profile (3)</h1>
-                  <ul class="inner-line">
-                  <li> Gamma Glutamyl Transferase
-                  Serum Iron</li>
-                  <li> Total Iron Binding Capacity
-                  % Transferrin Saturation</li>
-                  </ul>
-
-                  <h1 class="title-red">Kidney Profile (5)</h1>
-                  <ul class="inner-line">
-                  <li>Calcium</li>
-                  <li>Uric Acid</li>
-                  <li>Blood Urea Nitrogen</li>
-                  <li>Serum Creatinine</li>
-                  <li>BUN/ Serum Creatinine Ratio</li>
-                  </ul>
-                  <h1 class="title-red">Complete Hemogram (28)</h1>
-
-
-
-                  </div> */ ?>
-
-            </div>
-        </div>
-    </section>
-
-    <div class="border-btn mt-30"><span></span></div>
-    <input type="hidden" id="package_name_id" value="<?php echo $package[0]['title']; ?>" />
-    <input type="hidden" id="package_id_id" value="<?php echo $package[0]['id']; ?>" />
-    <section id="team" class="sctn_full">
-        <div class="diff_box_containr">
-            <div class="section-content">
-                <div class="container">
-                    <div class="col-sm-12 pdng_0">
-                        <h1 class="subtitle text-center txt_blue_clr" style="margin-bottom: 25px;COLOR:#000"><span class="brdr_btm_clr">SIMILAR PACKAGES</span></h1>
-                        <div id="packages">
-
-                        </div>
-
-                        <div class="col-md-12 pdng_0">
-
-                            <?php foreach($package_array as $key1){ ?>
-                            <div class="col-md-4 col-sm-4 pdng_0 ">
-                                <a href="<?=base_url();?>user_master/package_details/<?=$key1[0]["id"]?>" class="hover-over">
-                                    <div class="box-package ">
-                                        <div class="red-label"><p>Rs.<?=$key1[1][0]["d_price"]?></p></div>
-                                        <div class="img-box">
-                                            <img src="<?php echo base_url(); ?>upload/package/<?=$key1[0]["image"]?>">
-                                        </div>
-                                        <div class="txt-box">
-                                            <h3><?=$key1[0]["title"]?></h3>
-<!--                                            <p>Your text here </p>-->
-
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <?php } ?>
-
-                        </div>
-                        <center>
-                            <a href="<?= base_url(); ?>User_master/all_packages" class="btn btn-dark btn-theme-colored btn-flat mb-30 ">View More</a>
-                        </center>
-                    </div>
-                    <div class="border-btn mt-30"><span style="background-color:black"></span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="indx_mbl_ovrlay " style="padding-bottom:0;margin-bottom:0;">
-        <div class="container mbl_containr" style="padding-bottom:0">
-            <div class="row">
-                <div class="col-sm-12 pdng_0">
-                    <div class="indx_mbl_mdl">
-                        <!--  <h1 class="mbl_title center">App Communication Space</h1>-->
-
-                        <div class="col-sm-4  col-xs-4">
-                            <img src="<?php echo base_url(); ?>user_assets/images/new/book-test.png"/> 
-                        </div>
-                        <div class="col-sm-4 col-xs-4">
-                            <img src="<?php echo base_url(); ?>user_assets/images/new/manage-report.png"/> 
-                        </div>
-                        <div class="col-sm-4 col-xs-4">
-                            <img src="<?php echo base_url(); ?>user_assets/images/new/share-report.png"/> 
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="indx_mbl_ovrlay" style="margin-bottom:0; background:#d7d7d7; background-repeat:no-repeat; ">
-        <div class="container mbl_containr">
-            <div class="row">
-                <div class="col-sm-12" style="text-align:center;">
-                    <div class="col-sm-1 col-xs-3 pdng_0 col-sm-offset-2 ">
-                        <img src="<?php echo base_url(); ?>user_assets/images/new/icon-a.png"/> 
-                    </div>
-                    <div class="col-sm-7  col-xs-9 pdng_0 ">    <h1 class="mbl_title center" style="margin-top:0px; margin-bottom:0px;">DOWNLOAD AIRMED MOBILE APP<br/> & GET <b style="font-family: 'Montserrat', sans-serif;"><?php echo $this->cash_back[0]["caseback_per"]; ?>% CASH BACK</B> </h1>
-
-                    </div>
-                    <div class="clearfix"></div><br/>
-                    <div class="col-sm-6  pdng_0 col-sm-offset-4">
-                        <div class="col-sm-4">
-                            <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank"><img class="app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=53&w=173&src=user_assets/images/apple_appstore_big.png"/></a>
-                        </div>
-                        <div class="col-sm-4">
-                            <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank"><img class="mbl_googl_res_mrgn app_full_img" src="<?php echo base_url(); ?>thumb_helper.php?h=54&w=173&src=user_assets/images/google_play.png"/></a>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-
+<!-- -------- Success modal -------- -->
+<div id="apd-modal-payment">
+    <div class="apd-modal-box">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTV2P4sfl7-R0VRshYncNf7dJvh-FzqpokC4jaUBP4C6afbB9r" alt="success">
+        <h4><?= htmlspecialchars($success_msg) ?></h4>
+    </div>
 </div>
-<!-- end main-content -->
-<!--<script src="<?php echo base_url(); ?>user_assets/js/jquery-2.2.0.min.js"></script>--> 
-<script src="<?php echo base_url(); ?>user_assets/js/jquery-ui.min.js"></script>
-<script src="<?php echo base_url(); ?>user_assets/js/bootstrap.min.js"></script>
+
+<!-- -------- Breadcrumb -------- -->
+<div class="apd-breadcrumb">
+    <div class="apd-container">
+        <a href="<?= base_url() ?>">Home</a>
+        <span>›</span>
+        <a href="<?= base_url() ?>user_master/all_packages">All Packages</a>
+        <span>›</span>
+        <?= htmlspecialchars($pkg_title) ?>
+    </div>
+</div>
+
+<!-- -------- Hero -------- -->
+<div class="apd-hero">
+    <div class="apd-container">
+        <div class="apd-hero-inner">
+            <div class="apd-hero-info">
+                <div class="apd-badge-row">
+                    <span class="apd-badge green">Home Collection</span>
+                    <span class="apd-badge">NABL Certified</span>
+                </div>
+
+                <h1><?= htmlspecialchars($pkg_title) ?></h1>
+
+                <div class="apd-price-row">
+                    <span class="apd-price-main">₹<?= htmlspecialchars($discount_price) ?></span>
+                    <?php if ($actual_price && $actual_price != $discount_price): ?>
+                    <span class="apd-price-original">₹<?= htmlspecialchars($actual_price) ?></span>
+                    <?php endif; ?>
+                </div>
+
+                <div class="apd-trust-pills">
+                    <div class="apd-trust-pill">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        Best Price
+                    </div>
+                    <div class="apd-trust-pill">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 6v6l4 2"/></svg>
+                        Reports in 24 Hours
+                    </div>
+                    <div class="apd-trust-pill">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg>
+                        Ahmedabad-wide Collection
+                    </div>
+                    <div class="apd-trust-pill">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        Reports on App &amp; WhatsApp
+                    </div>
+                </div>
+
+                <div class="apd-hero-cta">
+                    <a href="javascript:void(0);" onclick="apdBookNow();" class="apd-btn-primary">
+                        Book Now – ₹<?= htmlspecialchars($discount_price) ?>
+                    </a>
+                    <a href="https://wa.me/<?= $wa_number ?>?text=<?= $wa_msg ?>" target="_blank" rel="noopener" class="apd-btn-whatsapp">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <?php if ($pkg_image): ?>
+            <div class="apd-hero-img">
+                <img src="<?= base_url() ?>upload/package/<?= htmlspecialchars($pkg_image) ?>"
+                     alt="<?= htmlspecialchars($pkg_title) ?> blood test package Ahmedabad">
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<!-- -------- Trust strip -------- -->
+<div class="apd-trust-strip">
+    <div class="apd-container">
+        <div class="apd-trust-strip-inner">
+            <div class="apd-ts-item"><span class="apd-ts-dot"></span>NABL Accredited Lab</div>
+            <div class="apd-ts-item"><span class="apd-ts-dot"></span>50,000+ Patients</div>
+            <div class="apd-ts-item"><span class="apd-ts-dot"></span>Home Collection</div>
+            <div class="apd-ts-item"><span class="apd-ts-dot"></span>ICMR Approved</div>
+            <div class="apd-ts-item"><span class="apd-ts-dot"></span>24-hr Reports</div>
+        </div>
+    </div>
+</div>
+
+<!-- -------- Main content + sidebar -------- -->
+<div class="apd-main">
+    <div class="apd-container">
+        <div class="apd-layout">
+
+            <!-- ===== CONTENT ===== -->
+            <div class="apd-content">
+
+                <!-- Tests Included (if desc_web has structured content, it renders inside apd-pkg-desc) -->
+                <?php if (trim($pkg_desc)): ?>
+                <div class="apd-card">
+                    <div class="apd-card-header">
+                        <h2>Tests Included</h2>
+                    </div>
+                    <div class="apd-card-body">
+                        <div class="apd-pkg-desc">
+                            <?= $pkg_desc ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- How It Works -->
+                <div class="apd-card">
+                    <div class="apd-card-header">
+                        <h2>How It Works</h2>
+                    </div>
+                    <div class="apd-card-body">
+                        <div class="apd-steps">
+                            <div class="apd-step">
+                                <div class="apd-step-num">1</div>
+                                <div class="apd-step-text">
+                                    <h3>Book Online</h3>
+                                    <p>Click Book Now or WhatsApp us to schedule your test</p>
+                                </div>
+                            </div>
+                            <div class="apd-step">
+                                <div class="apd-step-num">2</div>
+                                <div class="apd-step-text">
+                                    <h3>Home Collection</h3>
+                                    <p>Our trained phlebotomist visits your home at the chosen slot</p>
+                                </div>
+                            </div>
+                            <div class="apd-step">
+                                <div class="apd-step-num">3</div>
+                                <div class="apd-step-text">
+                                    <h3>Sample Processing</h3>
+                                    <p>Sample processed in our NABL-accredited lab with barcode tracking</p>
+                                </div>
+                            </div>
+                            <div class="apd-step">
+                                <div class="apd-step-num">4</div>
+                                <div class="apd-step-text">
+                                    <h3>Get Reports</h3>
+                                    <p>Reports delivered to your app, WhatsApp &amp; email within 24 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Why Choose -->
+                <div class="apd-card">
+                    <div class="apd-card-header">
+                        <h2>Why Choose Airmed Pathlabs?</h2>
+                    </div>
+                    <div class="apd-card-body">
+                        <div class="apd-why-grid">
+                            <div class="apd-why-item">
+                                <strong>NABL Accredited</strong>
+                                <!--<p>ISO 15189:2012 certified lab with highest quality standards</p>-->
+                            </div>
+                            <div class="apd-why-item">
+                                <strong>Home Collection</strong>
+                                <p>Doorstep blood collection across all areas of Ahmedabad</p>
+                            </div>
+                            <div class="apd-why-item">
+                                <strong>Digital Reports</strong>
+                                <p>View and share reports via WhatsApp, and email instantly</p>
+                            </div>
+                            <div class="apd-why-item">
+                                <strong>Barcode Tracking</strong>
+                                <p>Every sample is barcode-tagged to prevent mix-ups</p>
+                            </div>
+                            <div class="apd-why-item">
+                                <strong>Affordable Pricing</strong>
+                                <p>Best-in-class prices with no hidden charges</p>
+                            </div>
+                            <div class="apd-why-item">
+                                <strong>Expert Pathologists</strong>
+                                <p>Qualified and experienced doctors verify every report</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ -->
+                <div class="apd-card">
+                    <div class="apd-card-header">
+                        <h2>Frequently Asked Questions</h2>
+                    </div>
+                    <div class="apd-card-body">
+                        <div class="apd-faq-item">
+                            <button class="apd-faq-q" onclick="apdToggleFaq(this)">
+                                What is <?= htmlspecialchars($pkg_title) ?> blood test?
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="apd-faq-a">
+                                <?= htmlspecialchars($pkg_title) ?> is a comprehensive diagnostic blood test package offered by Airmed Pathlabs in Ahmedabad at ₹<?= htmlspecialchars($discount_price) ?>. It covers multiple health parameters to give a detailed picture of your overall health and detect any underlying issues early.
+                            </div>
+                        </div>
+                        <div class="apd-faq-item">
+                            <button class="apd-faq-q" onclick="apdToggleFaq(this)">
+                                Is home sample collection available for this package?
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="apd-faq-a">
+                                Yes, Airmed Pathlabs provides home blood sample collection across all major areas of Ahmedabad. Our trained phlebotomist will visit your home at your preferred time slot. Simply book by calling +91 8101-161616 or WhatsApp at +91 97255-04245.
+                            </div>
+                        </div>
+                        <div class="apd-faq-item">
+                            <button class="apd-faq-q" onclick="apdToggleFaq(this)">
+                                How long does it take to receive the report?
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="apd-faq-a">
+                                Reports are typically delivered within 24 hours of sample collection. You will receive the report digitally via the Airmed mobile app, WhatsApp, and email — so you can access and share it easily.
+                            </div>
+                        </div>
+                        <div class="apd-faq-item">
+                            <button class="apd-faq-q" onclick="apdToggleFaq(this)">
+                                Do I need to fast before the test?
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="apd-faq-a">
+                                Fasting requirements vary based on the specific tests included in the package. Our team will confirm fasting instructions when you book. For packages including blood glucose or lipid profile tests, 8–12 hours of fasting is typically recommended.
+                            </div>
+                        </div>
+                        <div class="apd-faq-item">
+                            <button class="apd-faq-q" onclick="apdToggleFaq(this)">
+                                Is Airmed Pathlabs NABL accredited?
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="apd-faq-a">
+                                Yes, Airmed Pathlabs is a NABL accredited diagnostic laboratory following ISO 15189 standards, ensuring highest quality and accuracy in all test results.
+                            </div>
+                        </div>
+                        <div class="apd-faq-item">
+                            <button class="apd-faq-q" onclick="apdToggleFaq(this)">
+                                How do I book the <?= htmlspecialchars($pkg_title) ?> package?
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="apd-faq-a">
+                                You can book by: (1) clicking "Book Now" on this page, (2) sending a WhatsApp message to +91 97255-04245, or (3) calling +91 8101-161616. Home collection is available across Ahmedabad with flexible time slots.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App download strip -->
+                <!--<div class="apd-app-strip">
+                    <div>
+                        <h2>Download the Airmed App</h2>
+                        <p>Book tests, view reports, track health history — all in one place. Get <?= $this->cash_back[0]["caseback_per"] ?? '20' ?>% cashback on your first order.</p>
+                    </div>
+                    <div class="apd-app-btns">
+                        <a href="https://play.google.com/store/apps/details?id=com.patholab&hl=en" target="_blank" rel="noopener" class="apd-app-btn">
+                            ▶ Google Play
+                        </a>
+                        <a href="https://itunes.apple.com/in/app/airmed-pathlabs/id1152367695?mt=8" target="_blank" rel="noopener" class="apd-app-btn">
+                             App Store
+                        </a>
+                    </div>
+                </div>-->
+
+            </div><!-- /.apd-content -->
+
+            <!-- ===== SIDEBAR ===== -->
+            <div class="apd-sidebar">
+
+                <!-- Booking card -->
+                <div class="apd-sidebar-card">
+                    <div class="apd-sidebar-price">₹<?= htmlspecialchars($discount_price) ?></div>
+                    <div class="apd-sidebar-name"><?= htmlspecialchars($pkg_title) ?></div>
+
+                    <ul class="apd-sidebar-features">
+                        <li>Home sample collection included</li>
+                        <li>Reports delivered in 24 hours</li>
+                        <li>Digital report on WhatsApp &amp; email</li>
+                        <li>NABL accredited lab testing</li>
+                        <li>Barcode sample tracking</li>
+                    </ul>
+
+                    <a href="javascript:void(0);" onclick="apdBookNow();" class="apd-sidebar-book">
+                        Book This Package
+                    </a>
+                    <a href="https://wa.me/<?= $wa_number ?>?text=<?= $wa_msg ?>" target="_blank" rel="noopener" class="apd-sidebar-wa">
+                        📲 Book via WhatsApp
+                    </a>
+                    <a href="tel:+918101161616" class="apd-sidebar-call">
+                        📞 <span>+91 8101-161616</span>
+                    </a>
+                </div>
+
+                <!-- Package info -->
+                <div class="apd-sidebar-card" style="border-top-color:#1a1a2e;">
+                    <h3 style="font-size:13px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 14px;">Package Information</h3>
+                    <table class="apd-info-table">
+                        <tr>
+                            <td>Report Time</td>
+                            <td>Within 24 hours of collection</td>
+                        </tr>
+                        <tr>
+                            <td>Sample Collection</td>
+                            <td>Home collection available citywide</td>
+                        </tr>
+                        <tr>
+                            <td>Fasting Required</td>
+                            <td>8–12 hrs (confirmed at booking)</td>
+                        </tr>
+                        <tr>
+                            <td>Available In</td>
+                            <td>Ahmedabad, Gujarat</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Accreditations -->
+                <div class="apd-accred">
+                    <h3>Our Accreditations</h3>
+                    <div class="apd-accred-grid">
+                        <div class="apd-accred-item">
+                            <strong>NABL Accredited</strong>
+                            <!--<span>ISO 15189 certified diagnostic lab</span>-->
+                        </div>
+                        <div class="apd-accred-item">
+                            <strong>ICMR Approved</strong>
+                            <span>Govt. approved testing protocols</span>
+                        </div>
+                        <div class="apd-accred-item">
+                            <strong>Barcode Tracked</strong>
+                            <span>Every sample uniquely identified</span>
+                        </div>
+                        <div class="apd-accred-item">
+                            <strong>Digital Reports</strong>
+                            <span>WhatsApp &amp; email delivery</span>
+                            <!--<span>App, WhatsApp &amp; email delivery</span>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.apd-sidebar -->
+
+        </div><!-- /.apd-layout -->
+
+        <!-- -------- Similar Packages -------- -->
+        <?php if (!empty($package_array)): ?>
+        <div class="apd-similar">
+            <h2>Similar <span>Packages</span></h2>
+            <div class="apd-packages-grid">
+                <?php foreach ($package_array as $key1): ?>
+                <?php
+                    $sp = $key1[0] ?? [];
+                    $sp_price = $key1[1][0]['d_price'] ?? '';
+                ?>
+                <a href="<?= base_url() ?>user_master/package_details/<?= htmlspecialchars($sp['id']) ?>" class="apd-pkg-card">
+                    <?php if ($sp_price): ?>
+                    <span class="apd-pkg-price-tag">₹<?= htmlspecialchars($sp_price) ?></span>
+                    <?php endif; ?>
+                    <img class="apd-pkg-card-img"
+                         src="<?= base_url() ?>upload/package/<?= htmlspecialchars($sp['image'] ?? '') ?>"
+                         alt="<?= htmlspecialchars($sp['title'] ?? '') ?> blood test Ahmedabad"
+                         onerror="this.style.background='#f3f4f6';this.style.visibility='hidden'">
+                    <div class="apd-pkg-card-body">
+                        <h3><?= htmlspecialchars($sp['title'] ?? '') ?></h3>
+                        <span class="apd-pkg-book-btn">Book Now</span>
+                    </div>
+                </a>
+                <?php endforeach; ?>
+            </div>
+            <a href="<?= base_url() ?>User_master/all_packages" class="apd-view-all">
+                View All Packages →
+            </a>
+        </div>
+        <?php endif; ?>
+
+    </div><!-- /.apd-container -->
+</div><!-- /.apd-main -->
+
+</div><!-- /.apd-wrap -->
+
+<!-- =====================  HIDDEN FIELDS + JS  ===================== -->
+<input type="hidden" id="package_name_id" value="<?= htmlspecialchars($pkg_title) ?>" />
+<input type="hidden" id="package_id_id"   value="<?= htmlspecialchars($pkg_id) ?>" />
+
 <script>
-                            function get_book() {
-                                var ids = [];
+/* ---- Book Now (existing AJAX logic preserved) ---- */
+function apdBookNow() {
+    var ids   = ['p-' + document.getElementById('package_id_id').value];
+    var names = [document.getElementById('package_name_id').value];
 
-                                var names = [];
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '<?= base_url() ?>user_master/searching_test', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function () {
+        window.location = '<?= base_url() ?>user_master/order_search';
+    };
+    xhr.send('id[]=' + encodeURIComponent(ids[0]) + '&name[]=' + encodeURIComponent(names[0]));
+}
 
-                                var id = 'p-' + $("#package_id_id").val();
-                                var name = $("#package_name_id").val();
+/* ---- FAQ accordion ---- */
+function apdToggleFaq(btn) {
+    var answer = btn.nextElementSibling;
+    var isOpen = answer.classList.contains('open');
 
-                                ids.push(id);
-                                names.push(name);
+    // Close all
+    document.querySelectorAll('.apd-faq-a').forEach(function(a){ a.classList.remove('open'); });
+    document.querySelectorAll('.apd-faq-q').forEach(function(q){ q.classList.remove('open'); });
 
-                                $.ajax({
-                                    url: "<?php echo base_url(); ?>user_master/searching_test",
-                                    type: 'post',
-                                    data: {id: ids, name: names},
-                                    success: function (data) {
-                                        //     console.log("data"+data);
-                                        window.location = "<?php echo base_url(); ?>user_master/order_search";
-                                    }
-                                });
+    if (!isOpen) {
+        answer.classList.add('open');
+        btn.classList.add('open');
+    }
+}
 
-                            }
-
+/* ---- Success modal ---- */
+<?php if (!empty($success_msg)): ?>
+(function() {
+    var modal = document.getElementById('apd-modal-payment');
+    setTimeout(function(){ modal.classList.add('show'); }, 3000);
+    setTimeout(function(){ modal.classList.remove('show'); }, 8000);
+})();
+<?php endif; ?>
 </script>

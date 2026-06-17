@@ -447,7 +447,7 @@ class Job_master extends CI_Controller
             $prnt_cnt = $this->job_model->get_val("SELECT id FROM `booked_job_test` WHERE job_fk='" . $key["id"] . "' AND status='1' AND `panel_fk` IS NOT NULL");
             $data['query'][$cnt]["panel_test_count"] = count($prnt_cnt);
             /* $data['query'][$cnt]["print_cnt"] = $this->job_model->get_val("SELECT COUNT(id) as cnt FROM `print_report_count` WHERE `status`='1' AND job_fk='" . $key["id"] . "'"); */
-            $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $key["id"] . "'");
+            $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $key["id"] . "' AND `job_test_list_master`.`status` = 1");
             /* Check sub test start */
             $job_tst_lst = array();
             foreach ($job_test_list as $st_key) {
@@ -6343,6 +6343,11 @@ WHERE `package_test`.`status` = '1'
         $rcv_time = $this->input->post("rcv_time");
 
         $job_details = $this->job_model->master_fun_get_tbl_val("job_master", array("id" => $jid), array("id", "asc"));
+        
+          $emergency_tests = $this->job_model->master_fun_get_tbl_val("booking_info", array('id' => $job_details[0]["booking_info"]), array("id", "asc"));
+
+        $user_family_info = $this->job_model->master_fun_get_tbl_val("customer_family_master", array('id' => $emergency_tests[0]["family_member_fk"]), array("id", "asc"));
+
         $customer_details = $this->job_model->master_fun_get_tbl_val("customer_master", array("id" => $job_details[0]['cust_fk']), array("id", "asc"));
         $branch_details = $this->job_model->master_fun_get_tbl_val("branch_master", array("id" => $job_details[0]['branch_fk']), array("id", "asc"));
 
@@ -6385,6 +6390,12 @@ WHERE `package_test`.`status` = '1'
         $paymentType = $p_type;
         $patientNumber = '91' . $patientNumber;
         $date = date("d-m-Y H:i:s", strtotime($job_details[0]['date']));
+        if(isset($user_family_info[0]["name"])){
+        $patientName = strtoupper($user_family_info[0]["name"]);
+        }
+        if(isset($user_family_info[0]["phone"]) && !empty($user_family_info[0]["phone"])){
+             $patientNumber = '91' .$user_family_info[0]["phone"];
+        }
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -6399,7 +6410,7 @@ WHERE `package_test`.`status` = '1'
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_POSTFIELDS => json_encode(array(
-                "template_name" => "payment_done",
+                "template_name" => "airmed_lab_payment_done",
                 "broadcast_name" => "Payment Send Whatsapp send test details - " . $patientNumber,
                 "parameters" => array(
                     array("name" => "name", "value" => $patientName),
@@ -6417,7 +6428,6 @@ WHERE `package_test`.`status` = '1'
         ));
 
         $response = curl_exec($curl);
-        
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         // if ($http_code != 200) {
         //     echo "Error: " . $response;

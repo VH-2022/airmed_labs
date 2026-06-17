@@ -5934,21 +5934,7 @@ WHERE tm.id = '" . $tst_id . "' ");
                                     END
                                     ) 
                                 END AS col1  FROM `parameter_referance_range` WHERE STATUS='1' AND `parameter_fk`='" . $para_key["id"] . "'";
-                            /* if ($data['user_data'][0]["age_type"] == 'D') {
-                              $final_qry .= " AND gender='N'  AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='D'";
-                              } else if ($data['user_data'][0]["age_type"] == 'M') {
-                              $final_qry .= " AND gender='C' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='M'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'MALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='M' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if (strtoupper($data['user_data'][0]["gender"]) == 'FEMALE' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='F' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } else if ($para_ref_rng[0]["gender"] == 'B' && $data['user_data'][0]["age_type"] == 'Y') {
-                              $final_qry .= " AND gender='B' AND `no_period` > " . $data['user_data'][0]["age"] . " AND `type_period`='Y'";
-                              $data["common"] = 0;
-                              } */
+                           
                             if (strtoupper($data['user_data'][0]["gender"]) == 'MALE') {
                                 $final_qry .= " AND gender='M' AND (CASE WHEN (type_period= 'Y') THEN (no_period*365) ELSE (CASE WHEN (type_period= 'M') THEN (no_period*30) ELSE no_period END) END )>=$ageinDays ";
                                 $data["common"] = 0;
@@ -6143,35 +6129,12 @@ WHERE tm.id = '" . $tst_id . "' ");
                     $data["user_data"][0]['mobile']
                 );
             }
-
-            if($id=='203181'){
-                  $replace = array(
-                    'pdf_barcode.png',
-                    "199738 ( AHM-28257 ) ",
-                    "04-Oct-2019 3:37 PM",
-                    "04-Oct-2019 3:37 PM",
-                    strtoupper($data["user_data"][0]['full_name']),
-                    "07-Oct-2019 5:03 PM",
-                    $data["user_data"][0]['age'] . " " . $data['user_data'][0]["age_type"],
-                    'FEMALE',
-                    strtoupper($name),
-                    strtoupper($data["query"][0]['test_city_name']),
-                    $data["user_data"][0]['mobile']
-                );
-                  
-            }
-
             
             $header = preg_replace($find, $replace, $content[0]["header"]);
             /* echo $header;
               echo $html;
               echo $content[0]["footer"]; die(); */
             //$pdf->SetHTMLHeader($header);
-
-
-
-
-
 
             /* $pdf->AddPage('p', // L - landscape, P - portrait
               '', '', '', '', 5, // margin_left
@@ -6264,6 +6227,14 @@ WHERE tm.id = '" . $tst_id . "' ");
             if(strlen($patient_mob) == 10)
                 $patient_mob = "91" . $patient_mob;
 
+            if(isset($data['user_family_info'][0]["name"])){
+                $patient_name = strtoupper($data['user_family_info'][0]["name"]);
+              
+            }
+            if(isset($data['user_family_info'][0]["phone"]) && !empty($data['user_family_info'][0]["phone"]) && strlen($data['user_family_info'][0]["phone"]) == 10){
+                  $patient_mob = '91' . $data['user_family_info'][0]["phone"];
+            }
+
             
             //$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0YjI1MTA3Ny1iMTRlLTQ1NTQtYWM5OC0xZTVkY2QwYWI2MTciLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.pTLNa2xcI4XxOEoaFhy3zYrzf7mH-T7DhnhTPNCy56c";
 		//	$bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3NjI2MDIyOC0yNDY5LTQ3ZjctYWUxNS0xZDI2Y2RiYmEwODIiLCJ1bmlxdWVfbmFtZSI6Im1haWx0b2RyYW1pdEBnbWFpbC5jb20iLCJuYW1laWQiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiZW1haWwiOiJtYWlsdG9kcmFtaXRAZ21haWwuY29tIiwiYXV0aF90aW1lIjoiMTIvMDgvMjAyMiAwNjoxMTowOSIsImRiX25hbWUiOiJ3YXRpTGl2ZTExMTAiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.vP9idscn5_9jG5mscsmc_p5KLAbwDiKGMF_2zfhoybs";
@@ -6311,8 +6282,15 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
                 $msg1 = "fail";
                 $this->add_result_model->master_fun_update1("report_master", array('job_fk' => $id), array("whatsapp_sent_status" => "0"));
             }
-			
-			$this->add_result_model->master_fun_insert("whatsapp_sent_detail", array("job_id" => $id, "name" => strtoupper($data["user_data"][0]['full_name']), "mobile" => $patient_mob, "reporturl" => "http://airmedlabs.com/upload/report/". $name, "labid" => $id, "regi_date" => $data["collection_date"], "senttime" => date("Y-m-d H:i:s"), "resp_status" => $msg1, "sent_by_user" => $data["login_data"]["id"]));
+            
+			if(isset($data['user_family_info'][0]["name"])){
+                $patient_name = strtoupper($data['user_family_info'][0]["name"]);
+                
+            }
+             if(isset($data['user_family_info'][0]["phone"]) && !empty($data['user_family_info'][0]["phone"]) && strlen($data['user_family_info'][0]["phone"]) == 10){
+                  $patient_mob = '91' . $data['user_family_info'][0]["phone"];
+            }
+			$this->add_result_model->master_fun_insert("whatsapp_sent_detail", array("job_id" => $id, "name" => $patient_name, "mobile" => $patient_mob, "reporturl" => "http://airmedlabs.com/upload/report/". $name, "labid" => $id, "regi_date" => $data["collection_date"], "senttime" => date("Y-m-d H:i:s"), "resp_status" => $msg1, "sent_by_user" => $data["login_data"]["id"]));
 
             $return1 = array('msg' => $msg1, "file" => "http://airmedlabs.com/upload/report/". $name,"docnumber"=>$data['query'][0]["dmobile"]);
 
@@ -6327,7 +6305,12 @@ $bearer_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3OTE5NTY3Zi00OD
 			// || 
             (isset($data['query'][0]["notify"]) && $data['query'][0]["notify"]==1)
 			) {
-
+            if(isset($data['user_family_info'][0]["name"])){
+                $patient_name = strtoupper($data['user_family_info'][0]["name"]);
+            }
+            if(isset($data['user_family_info'][0]["phone"]) && !empty($data['user_family_info'][0]["phone"]) && strlen($data['user_family_info'][0]["phone"]) == 10){
+                $patient_mob = '91' . $data['user_family_info'][0]["phone"];
+            }
                 $docname = $data['query'][0]["dname"];
                 
                 if(strlen($docmobile) == 10)

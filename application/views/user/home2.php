@@ -1,11 +1,10 @@
 <?php
 /* ============================================================
-   AIRMED LABS — HOME PAGE (UPDATED v4)
-   CHANGES from v3:
-   - Special Offers section: bg #fdf0ef (light red tint), dark text
-   - How It Works section: bg #fdf0ef (light red tint), dark text
-   - NABL Accreditation section: bg #fdf0ef (light red tint), dark text
-   - All three sections: text/cards updated for light background
+   AIRMED LABS — HOME PAGE (UPDATED v2)
+   - Popular Blood Tests: image icons + highlighted cards
+   - Special Offers section (replacing Full Body)
+   - GBM-style Google Reviews
+   All original PHP logic & modals preserved
    ============================================================ */
 ?>
 
@@ -52,8 +51,6 @@
   --red-dark: #962d22;
   --red-mid: #e74c3c;
   --red-light: #fdf0ef;
-  --red-tint: #fff0ee;
-  --green-tint: #e8f9f5;
   --red-glow: rgba(192,57,43,.12);
   --navy: #0d1b2a;
   --navy-2: #1b2b3b;
@@ -97,27 +94,6 @@ html { scroll-behavior:smooth; }
 body { font-family:var(--font-body); color:var(--gray-800); background:var(--white); line-height:1.65; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
 img { max-width:100%; height:auto; display:block; }
 
-.header-nav {
-  position: fixed !important;
-  top: 0; left: 0; width: 100%;
-  z-index: 9999;
-  background: #ffffff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-/* ============================================================
-   STICKY NAVBAR
-   ============================================================ */
-.navbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 9990 !important;
-  transition: box-shadow .25s ease, background-color .25s ease;
-}
-.navbar.scrolled {
-  box-shadow: 0 2px 16px rgba(13,27,42,.14) !important;
-}
-
 /* ===== SECTION COMMON ===== */
 .al-section { padding:76px 0; }
 .al-section-alt { padding:76px 0; background:var(--gray-50); }
@@ -147,105 +123,46 @@ img { max-width:100%; height:auto; display:block; }
 .al-view-all svg { width:14px; height:14px; stroke:var(--red); fill:none; stroke-width:2.5; }
 
 /* ============================================================
-   HERO — LIGHT GRADIENT
+   HERO — WHITE / LIGHT REDESIGN
    ============================================================ */
 .al-hero {
   position:relative; min-height:580px;
-  background: linear-gradient(135deg, var(--red-tint) 0%, var(--white) 55%, var(--green-tint) 100%);
-  overflow:hidden; display:flex; align-items:center;
+  background:var(--navy); overflow:hidden; display:flex; align-items:center;
 }
 .al-hero-bg {
   position:absolute; inset:0;
-  background: radial-gradient(ellipse at 80% 20%, rgba(26,188,156,.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 15% 80%, rgba(192,57,43,.06) 0%, transparent 45%);
-  opacity:1;
+  background:url('<?php echo base_url(); ?>user_assets/images/bg/slider02.jpg') center/cover no-repeat;
+  opacity:.1; transform:scale(1.05);
 }
 .al-hero::before {
   content:''; position:absolute; top:0; left:0; right:0; height:4px;
-  background:linear-gradient(90deg, var(--red) 0%, var(--red-mid) 50%, var(--teal) 100%); z-index:3;
+  background:linear-gradient(90deg, var(--red) 0%, var(--red-mid) 50%, var(--red) 100%); z-index:3;
 }
-.al-hero-deco {
-  position:absolute; right:-60px; top:-60px; width:460px; height:460px;
-  border-radius:50%; border:80px solid rgba(192,57,43,.05);
-  pointer-events:none; z-index:0;
-}
-.al-hero-deco-2 {
-  position:absolute; right:120px; bottom:-100px; width:280px; height:280px;
-  border-radius:50%; border:40px solid rgba(26,188,156,.07);
-  pointer-events:none; z-index:0;
-}
+.al-hero-deco { position:absolute; right:-60px; top:-60px; width:460px; height:460px; border-radius:50%; border:80px solid rgba(192,57,43,.04); pointer-events:none; z-index:0; }
+.al-hero-deco-2 { position:absolute; right:120px; bottom:-100px; width:280px; height:280px; border-radius:50%; border:40px solid rgba(192,57,43,.06); pointer-events:none; z-index:0; }
 .al-hero-inner {
   position:relative; z-index:2; max-width:1180px; margin:0 auto;
   padding:75px 24px 52px; display:grid; grid-template-columns:1fr 400px;
   gap:52px; align-items:center; width:100%;
 }
-.al-hero-nabl-strip {
-  display:inline-flex; align-items:center; gap:8px;
-  background:var(--teal-light); border:1px solid rgba(26,188,156,.25);
-  color:#0a5446; font-size:11.5px; font-weight:700;
-  padding:5px 14px; border-radius:30px; letter-spacing:.3px; margin-bottom:22px;
-}
+.al-hero-nabl-strip { display:inline-flex; align-items:center; gap:8px; background:var(--teal-light); border:1px solid rgba(26,188,156,.2); color:#0e6655; font-size:11.5px; font-weight:600; padding:2px 2px; border-radius:30px; letter-spacing:.3px; margin-bottom:22px; }
 .al-hero-nabl-dot { width:7px; height:7px; background:var(--teal); border-radius:50%; }
-.al-hero-title {
-  font-family:var(--font-display);
-  font-size:clamp(2.1rem, 4.2vw, 3.4rem);
-  color: var(--navy);
-  line-height:1.12; margin-bottom:18px;
-  animation:fadeUp .6s .1s ease both;
-}
-.al-hero-title em { color:var(--red); font-style:normal; }
-.al-hero-desc {
-  color: var(--gray-600);
-  font-size:16px; font-weight:400;
-  margin-bottom:32px; max-width:460px; line-height:1.75;
-  animation:fadeUp .6s .2s ease both;
-}
+.al-hero-title { font-family:var(--font-display); font-size:clamp(2.1rem, 4.2vw, 3.4rem); color:#fff; line-height:1.12; margin-bottom:18px; animation:fadeUp .6s .1s ease both; }
+.al-hero-title em { color:var(--red-mid); font-style:normal; }
+.al-hero-desc { color:rgba(255,255,255,.68); font-size:16px; font-weight:400; margin-bottom:32px; max-width:460px; line-height:1.75; animation:fadeUp .6s .2s ease both; }
 .al-hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:40px; }
-.btn-hero-primary {
-  display:inline-flex; align-items:center; gap:9px;
-  background:var(--red); color:#fff;
-  padding:13px 26px; border-radius:50px;
-  font-weight:700; font-size:14px;
-  text-decoration:none; border:none; cursor:pointer;
-  transition:var(--transition); box-shadow:var(--shadow-red);
-  font-family:var(--font-body);
-}
+.btn-hero-primary { display:inline-flex; align-items:center; gap:9px; background:var(--red); color:#fff; padding:13px 26px; border-radius:50px; font-weight:700; font-size:14px; text-decoration:none; border:none; cursor:pointer; transition:var(--transition); box-shadow:var(--shadow-red); font-family:var(--font-body); }
 .btn-hero-primary:hover { background:var(--red-dark); transform:translateY(-2px); box-shadow:0 10px 32px rgba(192,57,43,.35); }
-.btn-hero-secondary {
-  display:inline-flex; align-items:center; gap:9px;
-  background:var(--white); color:var(--navy);
-  padding:12px 24px; border-radius:50px;
-  font-weight:600; font-size:14px;
-  text-decoration:none; cursor:pointer;
-  border:1.5px solid var(--gray-200);
-  transition:var(--transition); font-family:var(--font-body);
-}
+.btn-hero-secondary { display:inline-flex; align-items:center; gap:9px; background:#fff; color:var(--navy); padding:12px 24px; border-radius:50px; font-weight:600; font-size:14px; text-decoration:none; cursor:pointer; border:1.5px solid var(--gray-200); transition:var(--transition); font-family:var(--font-body); }
 .btn-hero-secondary:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
-.btn-hero-wa {
-  display:inline-flex; align-items:center; gap:9px;
-  background:var(--wa); color:#fff;
-  padding:12px 24px; border-radius:50px;
-  font-weight:700; font-size:14px;
-  text-decoration:none; border:none; cursor:pointer;
-  transition:var(--transition); box-shadow:0 4px 16px rgba(37,211,102,.3);
-  font-family:var(--font-body);
-}
+.btn-hero-wa { display:inline-flex; align-items:center; gap:9px; background:var(--wa); color:#fff; padding:12px 24px; border-radius:50px; font-weight:700; font-size:14px; text-decoration:none; border:none; cursor:pointer; transition:var(--transition); box-shadow:0 4px 16px rgba(37,211,102,.3); font-family:var(--font-body); }
 .btn-hero-wa:hover { background:var(--wa-dark); transform:translateY(-2px); }
-.al-hero-stats {
-  display:flex; gap:0;
-  background:var(--white);
-  border:1.5px solid var(--gray-200);
-  border-radius:var(--radius); overflow:hidden;
-  box-shadow: var(--shadow-sm);
-}
+.al-hero-stats { display:flex; gap:0; background:var(--gray-50); border:1px solid var(--gray-100); border-radius:var(--radius); overflow:hidden; }
 .al-hero-stat { flex:1; text-align:center; padding:16px 12px; border-right:1px solid var(--gray-100); }
 .al-hero-stat:last-child { border-right:none; }
 .al-hero-stat strong { display:block; font-size:clamp(1.2rem,2vw,1.5rem); font-weight:700; color:var(--red); font-family:var(--font-display); line-height:1; }
 .al-hero-stat span { font-size:11px; color:var(--gray-400); font-weight:500; margin-top:4px; display:block; letter-spacing:.3px; text-transform:uppercase; }
-.al-search-card {
-  background:var(--navy); border-radius:var(--radius-xl);
-  padding:30px; box-shadow:var(--shadow-xl);
-}
+.al-search-card { background:var(--navy); border-radius:var(--radius-xl); padding:30px; box-shadow:var(--shadow-xl); }
 .al-search-card-label { color:#fff; font-size:15px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
 .al-search-card-sub { color:rgba(255,255,255,.5); font-size:12px; margin-bottom:18px; }
 .al-city-tabs { display:flex; gap:6px; margin-bottom:14px; }
@@ -278,29 +195,81 @@ img { max-width:100%; height:auto; display:block; }
 .al-trust-label { font-size:11.5px; font-weight:600; color:var(--gray-600); line-height:1.4; }
 
 /* ============================================================
-   SECTION 1 — POPULAR BLOOD TESTS
+   SECTION 1 — POPULAR BLOOD TESTS (UPDATED WITH IMAGES)
    ============================================================ */
 .al-popular-section { background:#fff; }
 .al-tests-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:18px; }
-.al-test-card { border:1.5px solid var(--gray-100); border-radius:var(--radius); overflow:hidden; background:#fff; transition:var(--transition); cursor:pointer; position:relative; display:flex; flex-direction:column; }
-.al-test-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform .25s ease; }
+
+/* Base test card */
+.al-test-card {
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:#fff;
+  transition:var(--transition);
+  cursor:pointer;
+  position:relative;
+  display:flex; flex-direction:column;
+}
+.al-test-card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+  background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform .25s ease;
+}
 .al-test-card:hover { border-color:rgba(192,57,43,.25); box-shadow:var(--shadow-md); transform:translateY(-3px); }
 .al-test-card:hover::after { transform:scaleX(1); }
-.al-test-img-wrap { width:100%; height:130px; overflow:hidden; background:var(--gray-50); position:relative; }
-.al-test-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .4s ease; }
+
+/* Test image area */
+.al-test-img-wrap {
+  width:100%; height:130px; overflow:hidden;
+  background:var(--gray-50); position:relative;
+}
+.al-test-img-wrap img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .4s ease;
+}
 .al-test-card:hover .al-test-img-wrap img { transform:scale(1.06); }
-.al-test-card-highlight { border-color:var(--red); background:linear-gradient(160deg, #fff 60%, var(--red-light) 100%); box-shadow:0 4px 20px rgba(192,57,43,.12); }
-.al-test-card-highlight::before { content:'Most Popular'; position:absolute; top:10px; right:10px; z-index:2; background:var(--red); color:#fff; font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; padding:3px 9px; border-radius:4px; }
-.al-test-card-highlight .al-test-img-wrap { background:linear-gradient(135deg, var(--red-light), #fff); }
-.al-test-card-urgent { border-color:#f59e0b; background:linear-gradient(160deg, #fff 60%, #fffbeb 100%); }
-.al-test-card-urgent::before { content:'Urgent'; position:absolute; top:10px; right:10px; z-index:2; background:#f59e0b; color:#7c4400; font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; padding:3px 9px; border-radius:4px; }
+
+/* Highlighted card — featured style */
+.al-test-card-highlight {
+  border-color:var(--red);
+  background:linear-gradient(160deg, #fff 60%, var(--red-light) 100%);
+  box-shadow:0 4px 20px rgba(192,57,43,.12);
+}
+.al-test-card-highlight::before {
+  content:'Most Popular';
+  position:absolute; top:10px; right:10px; z-index:2;
+  background:var(--red); color:#fff;
+  font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:4px;
+}
+.al-test-card-highlight .al-test-img-wrap {
+  background:linear-gradient(135deg, var(--red-light), #fff);
+}
+
+/* Urgent highlight */
+.al-test-card-urgent {
+  border-color:#f59e0b;
+  background:linear-gradient(160deg, #fff 60%, #fffbeb 100%);
+}
+.al-test-card-urgent::before {
+  content:'Urgent';
+  position:absolute; top:10px; right:10px; z-index:2;
+  background:#f59e0b; color:#7c4400;
+  font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:4px;
+}
+
 .al-test-body { padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; }
 .al-test-name { font-size:13.5px; font-weight:700; color:var(--navy); margin-bottom:4px; line-height:1.35; }
 .al-test-params { font-size:11.5px; color:var(--gray-400); margin-bottom:14px; flex:1; }
 .al-test-footer { display:flex; align-items:center; justify-content:space-between; }
 .al-test-tag { background:var(--teal-light); color:#0e6655; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:4px; text-transform:uppercase; letter-spacing:.4px; }
 .al-test-tag-urgent { background:#fef3c7; color:#92400e; }
-.al-test-book { background:var(--red-light); color:var(--red); border:none; border-radius:6px; padding:6px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font-body); transition:var(--transition); }
+.al-test-book {
+  background:var(--red-light); color:var(--red);
+  border:none; border-radius:6px; padding:6px 14px; font-size:12px; font-weight:700;
+  cursor:pointer; font-family:var(--font-body); transition:var(--transition);
+}
 .al-test-book:hover { background:var(--red); color:#fff; }
 
 /* ============================================================
@@ -340,161 +309,151 @@ img { max-width:100%; height:auto; display:block; }
 .al-btn-navy:hover { background:var(--navy-2); transform:translateY(-2px); }
 
 /* ============================================================
-   SECTION 3 — SPECIAL OFFERS  (v4: bg #fdf0ef, dark text)
-   ============================================================ 
+   SECTION 3 — SPECIAL OFFERS (NEW SECTION)
+   ============================================================ */
 .al-offers-section {
-  background: #fdf0ef;
+  background:var(--navy);
   position:relative; overflow:hidden;
 }
 .al-offers-section::before {
   content:''; position:absolute; inset:0;
-  background: transparent;
+  background:radial-gradient(ellipse at 70% 30%, rgba(192,57,43,.22) 0%, transparent 55%);
 }
+/* Decorative dots pattern */
 .al-offers-section::after {
-  content:''; position:absolute; top:0; right:0; width:350px; height:350px;
-  background-image: radial-gradient(rgba(192,57,43,.08) 1.5px, transparent 1.5px);
+  content:''; position:absolute; top:0; right:0;
+  width:350px; height:350px;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1.5px, transparent 1.5px);
   background-size: 20px 20px;
   pointer-events:none; z-index:0;
 }
 .al-offers-inner { position:relative; z-index:2; }
-.al-offers-section .al-section-tag {
-  background: var(--red-light);
-  color: var(--red);
-  border: 1px solid rgba(192,57,43,.2);
-}
-.al-offers-section .al-section-title { color: var(--navy); }
-.al-offers-section .al-section-sub { color: var(--gray-600); }*/
+.al-offers-section .al-section-tag { background:rgba(232,160,32,.2); color:#f5c842; }
+.al-offers-section .al-section-title { color:#fff; }
+.al-offers-section .al-section-sub { color:rgba(255,255,255,.6); }
 
-/* Offer cards — keep dark (independent dark bg, great contrast on light section) */
-.al-offers-grid { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:44px; }
-.al-offer-card { border-radius:var(--radius-xl); overflow:hidden; position:relative; display:flex; flex-direction:column; transition:var(--transition); }
+.al-offers-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:28px; margin-top:44px;
+}
+
+/* Offer Card Base */
+.al-offer-card {
+  border-radius:var(--radius-xl);
+  overflow:hidden; position:relative;
+  display:flex; flex-direction:column;
+  transition:var(--transition);
+}
 .al-offer-card:hover { transform:translateY(-6px); }
-.al-offer-card-1 { background:linear-gradient(145deg, #1a0a08, #5c1a13); border:1.5px solid rgba(192,57,43,.4); box-shadow:0 8px 40px rgba(192,57,43,.25); }
-.al-offer-card-2 { background:linear-gradient(145deg, #061929, #0d3d5c); border:1.5px solid rgba(26,188,156,.3); box-shadow:0 8px 40px rgba(26,188,156,.15); }
-.al-offer-ribbon { position:absolute; top:18px; right:-1px; background:var(--gold); color:var(--navy); font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.6px; padding:5px 16px 5px 12px; clip-path: polygon(8px 0%, 100% 0%, 100% 100%, 8px 100%, 0% 50%); z-index:2; }
+
+/* Offer Card 1 — 1+1 Full Body */
+.al-offer-card-1 {
+  background:linear-gradient(145deg, #1a0a08, #5c1a13);
+  border:1.5px solid rgba(192,57,43,.4);
+  box-shadow:0 8px 40px rgba(192,57,43,.25);
+}
+/* Offer Card 2 — Full Body + Dexa */
+.al-offer-card-2 {
+  background:linear-gradient(145deg, #061929, #0d3d5c);
+  border:1.5px solid rgba(26,188,156,.3);
+  box-shadow:0 8px 40px rgba(26,188,156,.15);
+}
+
+.al-offer-ribbon {
+  position:absolute; top:18px; right:-1px;
+  background:var(--gold); color:var(--navy);
+  font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.6px;
+  padding:5px 16px 5px 12px;
+  clip-path: polygon(8px 0%, 100% 0%, 100% 100%, 8px 100%, 0% 50%);
+  z-index:2;
+}
 .al-offer-ribbon-green { background:#4ddb88; }
-.al-offer-header { padding:28px 28px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
-.al-offer-icon-wrap { width:70px; height:70px; border-radius:16px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:36px; }
+
+.al-offer-header {
+  padding:28px 28px 0;
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:16px;
+}
+.al-offer-icon-wrap {
+  width:70px; height:70px; border-radius:16px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px;
+}
 .al-offer-icon-red { background:rgba(192,57,43,.25); border:1.5px solid rgba(192,57,43,.3); }
 .al-offer-icon-teal { background:rgba(26,188,156,.15); border:1.5px solid rgba(26,188,156,.25); }
-.al-offer-badge-big { font-family:var(--font-display); font-size:2.8rem; font-weight:700; line-height:1; letter-spacing:-1px; }
+
+.al-offer-badge-big {
+  font-family:var(--font-display);
+  font-size:2.8rem; font-weight:700; line-height:1;
+  letter-spacing:-1px;
+}
 .al-offer-badge-big-red { color:var(--red-mid); }
 .al-offer-badge-big-teal { color:var(--teal); }
 .al-offer-badge-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; margin-top:2px; }
 .al-offer-badge-label-red { color:rgba(231,76,60,.7); }
 .al-offer-badge-label-teal { color:rgba(26,188,156,.7); }
+
 .al-offer-body { padding:20px 28px; flex:1; }
-.al-offer-name { font-family:var(--font-display); font-size:1.45rem; color:#fff; line-height:1.2; margin-bottom:8px; }
+.al-offer-name {
+  font-family:var(--font-display);
+  font-size:1.45rem; color:#fff; line-height:1.2; margin-bottom:8px;
+}
 .al-offer-desc { font-size:13px; color:rgba(255,255,255,.55); line-height:1.65; margin-bottom:18px; }
-.al-offer-includes { list-style:none; padding:0; background:rgba(255,255,255,.05); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:20px; }
-.al-offer-includes li { font-size:12.5px; color:rgba(255,255,255,.8); padding:4.5px 0; display:flex; align-items:flex-start; gap:9px; border-bottom:1px solid rgba(255,255,255,.06); line-height:1.45; }
+
+.al-offer-includes {
+  list-style:none; padding:0;
+  background:rgba(255,255,255,.05);
+  border-radius:var(--radius-sm);
+  padding:14px 16px; margin-bottom:20px;
+}
+.al-offer-includes li {
+  font-size:12.5px; color:rgba(255,255,255,.8);
+  padding:4.5px 0; display:flex; align-items:flex-start; gap:9px;
+  border-bottom:1px solid rgba(255,255,255,.06); line-height:1.45;
+}
 .al-offer-includes li:last-child { border:none; }
 .al-offer-includes li::before { content:'✓'; font-weight:800; font-size:11px; flex-shrink:0; margin-top:2px; }
 .al-offer-includes-check-red li::before { color:var(--red-mid); }
 .al-offer-includes-check-teal li::before { color:var(--teal); }
-.al-offer-params-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
-.al-offer-param-pill { font-size:11px; font-weight:600; padding:4px 11px; border-radius:20px; }
+
+.al-offer-params-row {
+  display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px;
+}
+.al-offer-param-pill {
+  font-size:11px; font-weight:600; padding:4px 11px; border-radius:20px;
+}
 .al-offer-param-pill-red { background:rgba(192,57,43,.2); color:#f08080; border:1px solid rgba(192,57,43,.3); }
 .al-offer-param-pill-teal { background:rgba(26,188,156,.15); color:#4dddb8; border:1px solid rgba(26,188,156,.25); }
+
 .al-offer-footer { padding:0 28px 28px; }
-.al-btn-offer-red { width:100%; display:flex; align-items:center; justify-content:center; gap:9px; background:#1da851; color:#fff; border:none; border-radius:var(--radius-sm); padding:14px 16px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-body); transition:var(--transition); text-decoration:none; letter-spacing:.2px; }
+.al-btn-offer-red {
+  width:100%; display:flex; align-items:center; justify-content:center; gap:9px;
+  background:var(--red); color:#fff; border:none;
+  border-radius:var(--radius-sm); padding:14px 16px;
+  font-size:14px; font-weight:700;
+  cursor:pointer; font-family:var(--font-body); transition:var(--transition);
+  text-decoration:none; letter-spacing:.2px;
+}
 .al-btn-offer-red:hover { background:var(--red-dark); box-shadow:0 6px 24px rgba(192,57,43,.4); }
-.al-btn-offer-teal { width:100%; display:flex; align-items:center; justify-content:center; gap:9px; background:var(--teal); color:#0a3d30; border:none; border-radius:var(--radius-sm); padding:14px 16px; font-size:14px; font-weight:700; cursor:pointer; font-family:var(--font-body); transition:var(--transition); text-decoration:none; letter-spacing:.2px; }
+.al-btn-offer-teal {
+  width:100%; display:flex; align-items:center; justify-content:center; gap:9px;
+  background:var(--teal); color:#0a3d30; border:none;
+  border-radius:var(--radius-sm); padding:14px 16px;
+  font-size:14px; font-weight:700;
+  cursor:pointer; font-family:var(--font-body); transition:var(--transition);
+  text-decoration:none; letter-spacing:.2px;
+}
 .al-btn-offer-teal:hover { background:#16a085; color:#fff; box-shadow:0 6px 24px rgba(26,188,156,.35); }
 .al-btn-offer-red svg, .al-btn-offer-teal svg { width:18px; height:18px; fill:currentColor; flex-shrink:0; }
-.al-offer-highlight-box { background:rgba(26,188,156,.1); border:1px solid rgba(26,188,156,.2); border-radius:var(--radius-sm); padding:11px 14px; display:flex; align-items:center; gap:12px; margin-bottom:16px; font-size:12.5px; color:rgba(255,255,255,.75); }
+
+/* Offer highlight box (for DEXA card) */
+.al-offer-highlight-box {
+  background:rgba(26,188,156,.1); border:1px solid rgba(26,188,156,.2);
+  border-radius:var(--radius-sm); padding:11px 14px;
+  display:flex; align-items:center; gap:12px; margin-bottom:16px;
+  font-size:12.5px; color:rgba(255,255,255,.75);
+}
 .al-offer-highlight-icon { font-size:22px; flex-shrink:0; }
-
-```css
-/* ===== SPECIAL OFFERS SECTION ===== */
-
-.al-offers-section{
-    background:#eba8a3;
-    padding:80px 0;
-}
-
-.al-offers-section .al-section-title{
-    color:#7a1f19;
-}
-
-.al-offers-section .al-section-sub{
-    color:#4d2c2a;
-}
-
-.al-offers-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:30px;
-}
-
-.al-offer-card{
-    background:#ffffff;
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,0.08);
-    transition:.3s;
-}
-
-.al-offer-card:hover{
-    transform:translateY(-5px);
-}
-
-.al-offer-header img{
-    width:100%;
-    height:220px;
-    object-fit:cover;
-}
-
-.al-offer-content{
-    padding:25px;
-}
-
-.al-offer-title{
-    font-size:28px;
-    font-weight:700;
-    color:#7a1f19;
-    margin-bottom:10px;
-}
-
-.al-offer-price{
-    font-size:42px;
-    font-weight:700;
-    color:#c0392b;
-    margin-bottom:15px;
-}
-
-.al-offer-desc{
-    color:#4d2c2a;
-    margin-bottom:15px;
-}
-
-.al-offer-features{
-    padding-left:18px;
-}
-
-.al-offer-features li{
-    margin-bottom:8px;
-    color:#4d2c2a;
-}
-
-.al-offer-btn{
-    display:block;
-    text-align:center;
-    background:#7a1f19;
-    color:#fff;
-    text-decoration:none;
-    padding:14px;
-    border-radius:10px;
-    margin-top:20px;
-    font-weight:600;
-}
-
-.al-offer-btn:hover{
-    background:#5e1612;
-    color:#fff;
-}
-```
-
 
 /* ============================================================
    WHY CHOOSE US
@@ -521,42 +480,21 @@ img { max-width:100%; height:auto; display:block; }
 .al-why-img-stat-text { font-size:12px; color:var(--gray-600); margin-top:3px; font-weight:500; }
 
 /* ============================================================
-   HOW IT WORKS  (v4: bg #fdf0ef, dark text)
+   HOW IT WORKS
    ============================================================ */
-.al-how-section {
-  background: #fdf0ef;
-  position:relative; overflow:hidden;
-}
-.al-how-section::before {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse at 80% 40%, rgba(192,57,43,.07) 0%, transparent 55%);
-}
+.al-how-section { background:var(--navy); position:relative; overflow:hidden; }
+.al-how-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 80% 40%, rgba(192,57,43,.18) 0%, transparent 55%); }
 .al-how-inner { position:relative; z-index:2; }
-.al-how-section .al-section-tag {
-  background: var(--red-light);
-  color: var(--red);
-  border: 1px solid rgba(192,57,43,.2);
-}
-.al-how-section .al-section-title { color: var(--navy); }
-.al-how-section .al-section-sub  { color: var(--gray-600); }
-
+.al-how-section .al-section-tag { background:rgba(192,57,43,.2); color:#f5a8a2; }
+.al-how-section .al-section-title { color:#fff; }
+.al-how-section .al-section-sub { color:rgba(255,255,255,.6); }
 .al-steps { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:52px; position:relative; }
-.al-steps::before {
-  content:''; position:absolute; top:36px; left:12.5%; right:12.5%; height:1px;
-  background:linear-gradient(90deg, transparent, rgba(192,57,43,.18) 20%, rgba(192,57,43,.18) 80%, transparent);
-}
+.al-steps::before { content:''; position:absolute; top:36px; left:12.5%; right:12.5%; height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.15) 20%, rgba(255,255,255,.15) 80%, transparent); }
 .al-step { text-align:center; padding:28px 16px; }
-.al-step-num {
-  width:72px; height:72px; border-radius:50%; margin:0 auto 20px;
-  background: rgba(192,57,43,.07);
-  border:1.5px solid rgba(192,57,43,.18);
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.9rem; color:var(--red-mid); transition:var(--transition);
-}
+.al-step-num { width:72px; height:72px; border-radius:50%; margin:0 auto 20px; background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center; font-size:1.9rem; color:var(--red-mid); transition:var(--transition); }
 .al-step:hover .al-step-num { background:var(--red); border-color:var(--red); transform:scale(1.08); }
-/* Dark text for light bg */
-.al-step-title { color: var(--navy); font-weight:700; font-size:14.5px; margin-bottom:8px; }
-.al-step-desc  { color: var(--gray-600); font-size:13px; line-height:1.65; }
+.al-step-title { color:#fff; font-weight:700; font-size:14.5px; margin-bottom:8px; }
+.al-step-desc { color:rgba(255,255,255,.55); font-size:13px; line-height:1.65; }
 
 /* ============================================================
    LOGISTICS / INFRASTRUCTURE
@@ -574,63 +512,27 @@ img { max-width:100%; height:auto; display:block; }
 .al-logistic-desc { color:rgba(255,255,255,.65); font-size:12.5px; line-height:1.6; }
 
 /* ============================================================
-   NABL ACCREDITATION  (v4: bg #fdf0ef, dark text)
+   NABL ACCREDITATION
    ============================================================ */
-.al-nabl-section {
-  background: #fdf0ef;
-  position:relative; overflow:hidden;
-}
-.al-nabl-section::before {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse at 65% 50%, rgba(192,57,43,.06) 0%, transparent 55%);
-}
+.al-nabl-section { background:linear-gradient(135deg, var(--navy) 0%, #243447 100%); position:relative; overflow:hidden; }
+.al-nabl-section::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 65% 50%, rgba(192,57,43,.15) 0%, transparent 55%); }
 .al-nabl-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; position:relative; z-index:2; }
-.al-nabl-section .al-section-tag {
-  background: var(--red-light);
-  color: var(--red);
-  border: 1px solid rgba(192,57,43,.2);
-}
-.al-nabl-section .al-section-title { color: var(--navy); }
-.al-nabl-section .al-section-sub  { color: var(--gray-600); max-width:440px; }
-
-/* NABL cert box — white card on light bg */
-.al-nabl-cert {
-  display:inline-flex; align-items:center; gap:16px;
-  background: #ffffff;
-  border:1px solid rgba(192,57,43,.2);
-  border-radius:var(--radius); padding:16px 20px;
-  margin:24px 0 20px;
-  box-shadow: var(--shadow-sm);
-}
+.al-nabl-section .al-section-tag { background:rgba(192,57,43,.2); color:#f5a8a2; }
+.al-nabl-section .al-section-title { color:#fff; }
+.al-nabl-section .al-section-sub { color:rgba(255,255,255,.6); max-width:440px; }
+.al-nabl-cert { display:inline-flex; align-items:center; gap:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:var(--radius); padding:16px 20px; margin:24px 0 20px; }
 .al-nabl-cert img { height:52px; flex-shrink:0; }
-.al-nabl-cert-info strong { display:block; font-size:14.5px; font-weight:700; color: var(--navy); }
-.al-nabl-cert-info small  { font-size:12px; color: var(--gray-400); }
-
+.al-nabl-cert-info strong { display:block; font-size:14.5px; font-weight:700; color:#fff; }
+.al-nabl-cert-info small { font-size:12px; color:rgba(255,255,255,.5); }
 .al-nabl-tags { display:flex; flex-wrap:wrap; gap:8px; }
-.al-nabl-tag {
-  background: #ffffff;
-  border:1px solid rgba(192,57,43,.2);
-  color: var(--gray-600);
-  padding:5px 12px; border-radius:6px; font-size:12px; font-weight:500; transition:var(--transition);
-}
-.al-nabl-tag:hover { background:var(--red); border-color:var(--red); color:#fff; }
-
-/* Stat cards — white on light bg */
+.al-nabl-tag { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.13); color:rgba(255,255,255,.75); padding:5px 12px; border-radius:6px; font-size:12px; font-weight:500; transition:var(--transition); }
+.al-nabl-tag:hover { background:rgba(192,57,43,.3); border-color:rgba(192,57,43,.5); color:#fff; }
 .al-stat-cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.al-stat-card {
-  background: #ffffff;
-  border:1.5px solid rgba(192,57,43,.15);
-  border-radius:var(--radius); padding:22px;
-  box-shadow: var(--shadow-xs);
-  transition:var(--transition);
-}
-.al-stat-card:hover {
-  background: var(--red-light);
-  border-color:rgba(192,57,43,.35);
-}
-.al-stat-card-num   { font-family:var(--font-display); font-size:2.4rem; color: var(--red); }
-.al-stat-card-label { color: var(--navy); font-size:14px; font-weight:600; margin-top:6px; }
-.al-stat-card-sub   { color: var(--gray-400); font-size:12px; margin-top:3px; }
+.al-stat-card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius); padding:22px; transition:var(--transition); }
+.al-stat-card:hover { background:rgba(255,255,255,.1); border-color:rgba(192,57,43,.35); }
+.al-stat-card-num { font-family:var(--font-display); font-size:2.4rem; color:var(--red-mid); line-height:1; }
+.al-stat-card-label { color:rgba(255,255,255,.85); font-size:14px; font-weight:600; margin-top:6px; }
+.al-stat-card-sub { color:rgba(255,255,255,.4); font-size:12px; margin-top:3px; }
 
 /* ============================================================
    FAQ
@@ -651,35 +553,95 @@ img { max-width:100%; height:auto; display:block; }
 .al-faq-a-inner { padding:0 20px 16px; font-size:13.5px; color:var(--gray-600); line-height:1.75; border-top:1px solid var(--gray-100); padding-top:14px; }
 
 /* ============================================================
-   GOOGLE-STYLE REVIEWS
+   GOOGLE-STYLE REVIEWS (GBM SECTION — UPDATED)
    ============================================================ */
 .al-reviews-section { background:#fff; }
-.al-reviews-header-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; margin-bottom:44px; }
-.al-reviews-score-box { display:flex; align-items:center; gap:20px; background:var(--gray-50); border:1.5px solid var(--gray-100); border-radius:var(--radius-lg); padding:20px 28px; }
-.al-reviews-score-num { font-family:var(--font-display); font-size:3.2rem; color:var(--navy); line-height:1; }
+.al-reviews-header-inner {
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:20px; margin-bottom:44px;
+}
+.al-reviews-score-box {
+  display:flex; align-items:center; gap:20px;
+  background:var(--gray-50); border:1.5px solid var(--gray-100);
+  border-radius:var(--radius-lg); padding:20px 28px;
+}
+.al-reviews-score-num {
+  font-family:var(--font-display); font-size:3.2rem; color:var(--navy);
+  line-height:1;
+}
+.al-reviews-score-right {}
 .al-reviews-stars-big { color:#f59e0b; font-size:20px; letter-spacing:2px; line-height:1; margin-bottom:4px; }
 .al-reviews-score-count { font-size:12px; color:var(--gray-400); font-weight:500; }
-.al-reviews-google-badge { display:flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--gray-200); border-radius:var(--radius-sm); padding:10px 16px; font-size:13px; font-weight:600; color:var(--gray-600); text-decoration:none; transition:var(--transition); }
+.al-reviews-google-badge {
+  display:flex; align-items:center; gap:8px;
+  background:#fff; border:1px solid var(--gray-200);
+  border-radius:var(--radius-sm); padding:10px 16px;
+  font-size:13px; font-weight:600; color:var(--gray-600);
+  text-decoration:none; transition:var(--transition);
+}
 .al-reviews-google-badge:hover { border-color:var(--gray-400); color:var(--gray-800); box-shadow:var(--shadow-sm); }
 .al-google-logo { width:20px; height:20px; flex-shrink:0; }
-.al-reviews-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:18px; }
-.al-review-card { background:#fff; border:1.5px solid var(--gray-100); border-radius:var(--radius-lg); padding:20px 22px; transition:var(--transition); display:flex; flex-direction:column; position:relative; }
+
+/* Review grid */
+.al-reviews-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+  gap:18px;
+}
+.al-review-card {
+  background:#fff;
+  border:1.5px solid var(--gray-100);
+  border-radius:var(--radius-lg);
+  padding:20px 22px;
+  transition:var(--transition);
+  display:flex; flex-direction:column;
+  position:relative;
+}
 .al-review-card:hover { box-shadow:var(--shadow-md); border-color:rgba(192,57,43,.15); transform:translateY(-2px); }
-.al-review-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; gap:10px; }
+
+/* Google-style top row */
+.al-review-top {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  margin-bottom:12px; gap:10px;
+}
 .al-review-author-row { display:flex; align-items:center; gap:10px; }
-.al-review-avatar { width:42px; height:42px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:#fff; font-family:var(--font-body); }
+.al-review-avatar {
+  width:42px; height:42px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:700; color:#fff;
+  font-family:var(--font-body);
+}
+.al-review-author-info {}
 .al-review-name { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:1px; }
 .al-review-date { font-size:11.5px; color:var(--gray-400); }
-.al-review-google-g { width:24px; height:24px; flex-shrink:0; margin-top:2px; }
+/* Google G icon */
+.al-review-google-g {
+  width:24px; height:24px; flex-shrink:0; margin-top:2px;
+}
 .al-review-stars { color:#f59e0b; font-size:13px; letter-spacing:1px; margin-bottom:10px; }
 .al-review-text { font-size:13.5px; color:var(--gray-600); line-height:1.72; flex:1; }
 .al-review-text.clamped { display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
-.al-review-service-tag { margin-top:12px; display:inline-flex; align-items:center; gap:5px; background:var(--gray-50); color:var(--gray-600); border:1px solid var(--gray-100); padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+.al-review-service-tag {
+  margin-top:12px; display:inline-flex; align-items:center; gap:5px;
+  background:var(--gray-50); color:var(--gray-600);
+  border:1px solid var(--gray-100);
+  padding:4px 10px; border-radius:20px;
+  font-size:11px; font-weight:600;
+}
 .al-review-service-tag::before { content:'🔬'; font-size:10px; }
 .al-review-verified { display:flex; align-items:center; gap:4px; margin-top:10px; font-size:11px; color:#0e6655; font-weight:600; }
 .al-review-verified::before { content:'✓'; font-weight:900; }
+
+/* View on Google CTA */
 .al-reviews-cta { text-align:center; margin-top:40px; }
-.al-btn-google-review { display:inline-flex; align-items:center; gap:10px; background:#fff; color:var(--gray-800); border:1.5px solid var(--gray-200); padding:13px 28px; border-radius:50px; font-weight:700; font-size:14px; text-decoration:none; transition:var(--transition); box-shadow:var(--shadow-sm); font-family:var(--font-body); }
+.al-btn-google-review {
+  display:inline-flex; align-items:center; gap:10px;
+  background:#fff; color:var(--gray-800);
+  border:1.5px solid var(--gray-200);
+  padding:13px 28px; border-radius:50px;
+  font-weight:700; font-size:14px; text-decoration:none;
+  transition:var(--transition); box-shadow:var(--shadow-sm);
+  font-family:var(--font-body);
+}
 .al-btn-google-review:hover { border-color:var(--gray-400); box-shadow:var(--shadow-md); transform:translateY(-2px); }
 
 /* ============================================================
@@ -940,6 +902,7 @@ img { max-width:100%; height:auto; display:block; }
           <div class="al-hero-stat" role="listitem"><strong>50,000+</strong><span>Happy Patients</span></div>
           <div class="al-hero-stat" role="listitem"><strong>300+</strong><span>Tests Available</span></div>
           <div class="al-hero-stat" role="listitem"><strong>30 Min</strong><span>Home Collection</span></div>
+          <div class="al-hero-stat" role="listitem"><strong>4–6 Hrs</strong><span>Report Delivery</span></div>
         </div>
       </div>
       <div class="al-search-card" aria-label="Quick test search">
@@ -984,7 +947,10 @@ img { max-width:100%; height:auto; display:block; }
   </div>
 
   <!-- ===================================================
-       SECTION 1 — POPULAR BLOOD TESTS
+       SECTION 1 — POPULAR BLOOD TESTS (UPDATED)
+       Images path: user_assets/images/tests/
+       Add images: cbc.jpg, thyroid.jpg, hba1c.jpg, lipid.jpg,
+                   vitd.jpg, lft.jpg, kft.jpg, dengue.jpg
        =================================================== -->
   <section class="al-section al-popular-section" id="popular-tests" aria-labelledby="popular-title">
     <div class="al-container">
@@ -1001,6 +967,7 @@ img { max-width:100%; height:auto; display:block; }
       </div>
       <div class="al-tests-grid">
 
+        <!-- CBC — highlighted as most popular -->
         <div class="al-test-card al-test-card-highlight sr sr-delay-1">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1017,6 +984,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- Thyroid -->
         <div class="al-test-card sr sr-delay-2">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1033,6 +1001,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- HbA1c -->
         <div class="al-test-card sr sr-delay-3">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1049,6 +1018,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- Lipid Profile — highlighted -->
         <div class="al-test-card al-test-card-highlight sr sr-delay-4">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1065,6 +1035,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- Vitamin D3 -->
         <div class="al-test-card sr sr-delay-1">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1081,6 +1052,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- LFT -->
         <div class="al-test-card sr sr-delay-2">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1097,6 +1069,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- KFT -->
         <div class="al-test-card sr sr-delay-3">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1113,6 +1086,7 @@ img { max-width:100%; height:auto; display:block; }
           </div>
         </div>
 
+        <!-- Dengue — urgent highlight -->
         <div class="al-test-card al-test-card-urgent sr sr-delay-4">
           <div class="al-test-img-wrap">
             <img src="<?php echo base_url(); ?>upload/package/blood-test-section-airmedlabs.jpg"
@@ -1130,11 +1104,15 @@ img { max-width:100%; height:auto; display:block; }
         </div>
 
       </div>
+      <!-- Image note for developer -->
+      <!-- NOTE: Add test images at: user_assets/images/tests/
+           Files: cbc.jpg, thyroid.jpg, hba1c.jpg, lipid.jpg, vitd.jpg, lft.jpg, kft.jpg, dengue.jpg
+           Recommended size: 400x260px (3:2 ratio). Fallback emoji shown if image missing. -->
     </div>
   </section>
 
   <!-- ===================================================
-       SECTION 2 — HEALTH PACKAGES
+       SECTION 2 — HEALTH PACKAGES (PRESERVED)
        =================================================== -->
   <section class="al-section-alt al-packages-section" id="packages" aria-labelledby="pkg-title">
     <div class="al-container">
@@ -1313,145 +1291,124 @@ img { max-width:100%; height:auto; display:block; }
     </div>
   </section>
 
+  <!-- ===================================================
+       SECTION 3 — SPECIAL OFFERS (REPLACES FULL BODY)
+       =================================================== -->
+  <section class="al-section al-offers-section" id="special-offers" aria-labelledby="offers-title">
+    <div class="al-container al-offers-inner">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:0;">
+        <div>
+          <span class="al-section-tag">🎁 Limited Time</span>
+          <h2 class="al-section-title" id="offers-title" style="margin-top:14px;">Special Offers<br/>Only at Airmed Patholab</h2>
+          <p class="al-section-sub">Exclusive health checkup bundles at unbeatable value. Book now — limited slots available every day.</p>
+        </div>
+        <!-- Urgency strip -->
+        <div style="background:rgba(232,160,32,.15);border:1px solid rgba(232,160,32,.3);border-radius:var(--radius-sm);padding:12px 20px;text-align:center;flex-shrink:0;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(232,160,32,.9);margin-bottom:4px;">⏰ Limited Daily Slots</div>
+          <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8);">Book Today · Same Day Collection</div>
+        </div>
+      </div>
 
-<section class="al-offers-section">
+      <div class="al-offers-grid">
 
-    <div class="al-container">
-
-        <div class="al-section-header">
-            <div>
-                <span class="al-section-tag">Special Health Offers</span>
-                <h2 class="al-section-title">
-                    Health Packages at Best Prices
-                </h2>
-                <p class="al-section-sub">
-                    Preventive health checkups designed for complete wellness.
-                </p>
+        <!-- OFFER 1: 1+1 Full Body Checkup -->
+        <div class="al-offer-card al-offer-card-1 sr sr-delay-1">
+          <div class="al-offer-ribbon">🔥 Best Value</div>
+          <div class="al-offer-header">
+            <div class="al-offer-icon-wrap al-offer-icon-red">🧬</div>
+            <div style="text-align:right;">
+              <div class="al-offer-badge-big al-offer-badge-big-red">1+1</div>
+              <div class="al-offer-badge-label al-offer-badge-label-red">Buy One · Get One FREE</div>
             </div>
+          </div>
+          <div class="al-offer-body">
+            <div class="al-offer-name">Full Body Checkup<br/>1+1 Offer</div>
+            <div class="al-offer-desc">Book one Full Body Checkup — get a second one absolutely FREE. Perfect for couples or family pairs. Share with a loved one!</div>
+            <div class="al-offer-params-row">
+              <span class="al-offer-param-pill al-offer-param-pill-red">70+ Parameters</span>
+              <span class="al-offer-param-pill al-offer-param-pill-red">Home Collection</span>
+              <span class="al-offer-param-pill al-offer-param-pill-red">NABL Certified</span>
+              <span class="al-offer-param-pill al-offer-param-pill-red">Same Day Report</span>
+            </div>
+            <ul class="al-offer-includes al-offer-includes-check-red">
+              <li>CBC 28 Parameters + Thyroid Profile (T3, T4, TSH)</li>
+              <li>Liver Function Test (12) + Kidney Function Test (7)</li>
+              <li>Lipid Profile (10) + Diabetes Panel (HbA1c, FBS)</li>
+              <li>Vitamin D3, Vitamin B12, Iron Deficiency (4)</li>
+              <li>Cardiac Risk Panel — hsCRP, Homocysteine (5)</li>
+              <li style="font-weight:700;color:rgba(231,76,60,.9);border-top:1px solid rgba(192,57,43,.2);padding-top:8px;">🎁 Second Full Body Checkup — FREE for family/friend</li>
+            </ul>
+          </div>
+          <div class="al-offer-footer">
+            <button onclick="openBooking('Special Offer: 1+1 Full Body Checkup (Buy One Get One FREE)', 'Call for Offer Price')" class="al-btn-offer-red">
+              <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.523 5.847L0 24l6.32-1.507A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.919 0-3.718-.499-5.28-1.373l-.378-.221-3.751.894.924-3.659-.244-.388A9.951 9.951 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+              Claim This Offer on WhatsApp
+            </button>
+          </div>
         </div>
 
-        <div class="al-offers-grid">
-
-            <!-- PACKAGE 1 -->
-
-            <div class="al-offer-card">
-
-                <div class="al-offer-header">
-                    <img src="https://airmedlabs.com/upload/package/blood-test-section-airmedlabs.jpg"
-                         alt="Airmed Health Buddy Package">
-                </div>
-
-                <div class="al-offer-content">
-
-                    <h3 class="al-offer-title">
-                        Airmed Health Buddy 1+1
-                    </h3>
-
-                    <!--<div class="al-offer-price">
-                        ₹2999
-                    </div>-->
-
-                    <p class="al-offer-desc">
-                        59+ Health Parameters Included
-                    </p>
-                    <div class="al-pkg-body">
-              <ul class="al-pkg-includes">
-                 <li>CBC (28 Parameters)</li>
-                        <li>TSH Ultrasensitive</li>
-                        <li>Advanced Lipid Profile</li>
-                        <li>Liver Function Profile</li>
-                        <li>Kidney Function Profile</li>
-                        <li>HbA1c</li>
-                        <li>Vitamin D</li>
-                        <li>Vitamin B12</li>
-              </ul>
+        <!-- OFFER 2: Full Body Blood Checkup + DEXA Scan -->
+        <div class="al-offer-card al-offer-card-2 sr sr-delay-2">
+          <div class="al-offer-ribbon al-offer-ribbon-green">✨ New Offer</div>
+          <div class="al-offer-header">
+            <div class="al-offer-icon-wrap al-offer-icon-teal">🦴</div>
+            <div style="text-align:right;">
+              <div class="al-offer-badge-big al-offer-badge-big-teal">2-in-1</div>
+              <div class="al-offer-badge-label al-offer-badge-label-teal">Blood + Bone Health Bundle</div>
             </div>
-
-                  <!--  <ul class="al-offer-features">
-                        <li>CBC (28 Parameters)</li>
-                        <li>TSH Ultrasensitive</li>
-                        <li>Advanced Lipid Profile</li>
-                        <li>Liver Function Profile</li>
-                        <li>Kidney Function Profile</li>
-                        <li>HbA1c</li>
-                        <li>Vitamin D</li>
-                        <li>Vitamin B12</li>
-                    </ul>-->
-
-                  
-
-<div class="al-offer-footer">
-    <button onclick="openBooking('Airmed Health Buddy 1+1 Package')" class="al-btn-offer-red">
-        Claim This Offer on WhatsApp
-    </button>
-</div>
-
-                </div>
-
+          </div>
+          <div class="al-offer-body">
+            <div class="al-offer-name">Full Body Blood Checkup<br/>+ DEXA Scan</div>
+            <div class="al-offer-desc">The most complete health screening combo — full blood panel (70+ parameters) paired with DEXA Bone Density Scan. Know your blood and your bones.</div>
+            <div class="al-offer-highlight-box">
+              <span class="al-offer-highlight-icon">🔬</span>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#fff;">What is a DEXA Scan?</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px;">Bone mineral density test — detects early osteoporosis risk. Especially important for women 40+ and seniors.</div>
+              </div>
             </div>
-
-            <!-- PACKAGE 2 -->
-
-            <div class="al-offer-card">
-
-                <div class="al-offer-header">
-                    <img src="https://airmedlabs.com/upload/package/blood-test-section-airmedlabs.jpg"
-                         alt="Health Checkup Package">
-                </div>
-
-                <div class="al-offer-content">
-
-                    <h3 class="al-offer-title">
-                        Complete Health Checkup
-                    </h3>
-
-                    <!--<div class="al-offer-price">
-                        ₹1999
-                    </div>-->
-
-                    <p class="al-offer-desc">
-                        Ideal for Annual Health Screening
-                    </p>
-
-                    <div class="al-pkg-body">
-              <ul class="al-pkg-includes">
-                <li>Complete Blood Count</li>
-                        <li>Lipid Profile</li>
-                        <li>Liver Profile</li>
-                        <li>Kidney Profile</li>
-                        <li>Blood Sugar Tests</li>
-                        <li>Urine Routine</li>
-                        <li>Thyroid Profile</li>
-              </ul>
-                  </div>
-
-                    <!--<ul class="al-offer-features">
-                        <li>Complete Blood Count</li>
-                        <li>Lipid Profile</li>
-                        <li>Liver Profile</li>
-                        <li>Kidney Profile</li>
-                        <li>Blood Sugar Tests</li>
-                        <li>Urine Routine</li>
-                        <li>Thyroid Profile</li>
-                    </ul>-->
-
-                    
-<div class="al-offer-footer">
-    <button onclick="openBooking('Complete Health Checkup')" class="al-btn-offer-red">
-        Claim This Offer on WhatsApp
-    </button>
-</div>
-
-                </div>
-
+            <div class="al-offer-params-row">
+              <span class="al-offer-param-pill al-offer-param-pill-teal">70+ Blood Parameters</span>
+              <span class="al-offer-param-pill al-offer-param-pill-teal">DEXA Bone Scan</span>
+              <span class="al-offer-param-pill al-offer-param-pill-teal">NABL Lab</span>
+              <span class="al-offer-param-pill al-offer-param-pill-teal">Home Blood Collection</span>
             </div>
-
+            <ul class="al-offer-includes al-offer-includes-check-teal">
+              <li>Full Body Blood Test — 70+ Parameters (all systems)</li>
+              <li>DEXA Bone Mineral Density Scan (at centre)</li>
+              <li>Vitamin D3 &amp; Calcium — critical for bone health</li>
+              <li>Thyroid + Parathyroid screening included</li>
+              <li>Detailed bone density report with T-score &amp; Z-score</li>
+              <li style="font-weight:700;color:#4dddb8;border-top:1px solid rgba(26,188,156,.15);padding-top:8px;">📋 Combined health report — shareable with your doctor</li>
+            </ul>
+          </div>
+          <div class="al-offer-footer">
+            <button onclick="openBooking('Special Offer: Full Body Blood Checkup + DEXA Scan Bundle', 'Call for Offer Price')" class="al-btn-offer-teal">
+              <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.523 5.847L0 24l6.32-1.507A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.919 0-3.718-.499-5.28-1.373l-.378-.221-3.751.894.924-3.659-.244-.388A9.951 9.951 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+              Get Offer Price on WhatsApp
+            </button>
+          </div>
         </div>
 
+      </div>
+
+      <!-- Trust note under offers -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:24px;margin-top:36px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);">
+          <span style="color:#4ddb88;font-weight:700;">✓</span> NABL Accredited Lab
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);">
+          <span style="color:#4ddb88;font-weight:700;">✓</span> 30-Min Home Collection
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);">
+          <span style="color:#4ddb88;font-weight:700;">✓</span> Report in 4–6 Hours
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);">
+          <span style="color:#4ddb88;font-weight:700;">✓</span> No Hidden Charges
+        </div>
+      </div>
     </div>
-
-</section>
-
+  </section>
 
   <!-- ===================================================
        WHY CHOOSE AIRMED
@@ -1515,7 +1472,7 @@ img { max-width:100%; height:auto; display:block; }
   </section>
 
   <!-- ===================================================
-       HOW IT WORKS  (bg: #fdf0ef)
+       HOW IT WORKS
        =================================================== -->
   <section class="al-section al-how-section" id="how-it-works" aria-labelledby="how-title">
     <div class="al-container al-how-inner">
@@ -1560,7 +1517,7 @@ img { max-width:100%; height:auto; display:block; }
   </section>
 
   <!-- ===================================================
-       NABL ACCREDITATION  (bg: #fdf0ef)
+       NABL ACCREDITATION
        =================================================== -->
   <section class="al-section al-nabl-section" id="accreditation" aria-labelledby="nabl-title">
     <div class="al-container">
@@ -1573,12 +1530,18 @@ img { max-width:100%; height:auto; display:block; }
             <img src="<?php echo base_url(); ?>user_assets/images/nabl_logo.png" alt="NABL Accreditation Logo" loading="lazy" width="80" height="56"/>
             <div class="al-nabl-cert-info"><strong>NABL Certified Tests</strong><small>16+ Tests Quality Certified · ISO 15189</small></div>
           </div>
+          <div class="al-nabl-tags">
+            <?php
+            $nablTests = ['Albumin','BUN','Alkaline Phosphatase','Bilirubin','Calcium','Creatinine','Cholesterol','Glucose','HDL','SGPT','SGOT','Triglycerides','Uric Acid','Urea','Total Protein'];
+            foreach($nablTests as $t) { ?><span class="al-nabl-tag"><?= $t ?></span><?php } ?>
+          </div>
         </div>
         <div class="al-nabl-right">
           <div class="al-stat-cards">
             <div class="al-stat-card sr sr-delay-1"><div class="al-stat-card-num">50K+</div><div class="al-stat-card-label">Satisfied Patients</div><div class="al-stat-card-sub">Ahmedabad &amp; Gandhinagar</div></div>
             <div class="al-stat-card sr sr-delay-2"><div class="al-stat-card-num">300+</div><div class="al-stat-card-label">Tests Available</div><div class="al-stat-card-sub">Routine to specialized</div></div>
             <div class="al-stat-card sr sr-delay-3"><div class="al-stat-card-num">30 min</div><div class="al-stat-card-label">Home Collection</div><div class="al-stat-card-sub">Across Ahmedabad</div></div>
+            <div class="al-stat-card sr sr-delay-4"><div class="al-stat-card-num">4–6 hr</div><div class="al-stat-card-label">Report Delivery</div><div class="al-stat-card-sub">WhatsApp &amp; Email</div></div>
           </div>
         </div>
       </div>
@@ -1630,7 +1593,7 @@ img { max-width:100%; height:auto; display:block; }
   </section>
 
   <!-- ===================================================
-       PATIENT REVIEWS — GOOGLE STYLE
+       PATIENT REVIEWS — GBM / GOOGLE STYLE (UPDATED)
        =================================================== -->
   <section class="al-section al-reviews-section" id="reviews" aria-labelledby="reviews-title">
     <div class="al-container">
@@ -1641,11 +1604,13 @@ img { max-width:100%; height:auto; display:block; }
           <p class="al-section-sub">Thousands of real patient reviews from across Ahmedabad &amp; Gandhinagar on Google Maps.</p>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:14px;">
+          <!-- Aggregate rating box -->
           <div class="al-reviews-score-box">
             <div class="al-reviews-score-num">4.9</div>
             <div class="al-reviews-score-right">
               <div class="al-reviews-stars-big">★★★★★</div>
               <div class="al-reviews-score-count">Based on 1,280+ Google Reviews</div>
+              <!-- Google Maps link — replace with your actual GBM URL -->
               <a href="https://g.page/r/airmedpatholab/review" target="_blank" rel="noopener" class="al-reviews-google-badge" style="margin-top:8px;">
                 <svg class="al-google-logo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -1660,8 +1625,14 @@ img { max-width:100%; height:auto; display:block; }
         </div>
       </div>
 
+      <!-- Google-style review cards -->
+      <!-- NOTE: Replace static reviews below with your PHP $testimonial loop.
+           The static cards below are examples — map your $testimonial array to this format. -->
       <div class="al-reviews-grid">
+
+        <!-- Dynamic reviews from DB — using PHP $testimonial array -->
         <?php
+        // Avatar background colors cycle
         $avatarColors = ['#c0392b','#1abc9c','#2980b9','#8e44ad','#e67e22','#27ae60','#e74c3c','#16a085'];
         $serviceLabels = ['Full Body Checkup','CBC + Thyroid','Fever Profile','Home Collection','Lipid Profile','Diabetes Profile'];
         if (!empty($testimonial)) :
@@ -1688,6 +1659,7 @@ img { max-width:100%; height:auto; display:block; }
                 <div class="al-review-date">Ahmedabad, Gujarat</div>
               </div>
             </div>
+            <!-- Google G SVG -->
             <svg class="al-review-google-g" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="Google Review">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -1702,12 +1674,16 @@ img { max-width:100%; height:auto; display:block; }
         </article>
         <?php endforeach; endif; ?>
 
+        <!-- Fallback static reviews if $testimonial is empty — remove when DB has reviews -->
         <?php if (empty($testimonial)) : ?>
         <article class="al-review-card sr sr-delay-1">
           <div class="al-review-top">
             <div class="al-review-author-row">
               <div class="al-review-avatar" style="background:#c0392b;">P</div>
-              <div class="al-review-author-info"><div class="al-review-name">Priya Shah, Satellite</div><div class="al-review-date">1 week ago</div></div>
+              <div class="al-review-author-info">
+                <div class="al-review-name">Priya Shah, Satellite</div>
+                <div class="al-review-date">1 week ago</div>
+              </div>
             </div>
             <svg class="al-review-google-g" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           </div>
@@ -1720,7 +1696,10 @@ img { max-width:100%; height:auto; display:block; }
           <div class="al-review-top">
             <div class="al-review-author-row">
               <div class="al-review-avatar" style="background:#1abc9c;">R</div>
-              <div class="al-review-author-info"><div class="al-review-name">Rahul Mehta, Bopal</div><div class="al-review-date">2 weeks ago</div></div>
+              <div class="al-review-author-info">
+                <div class="al-review-name">Rahul Mehta, Bopal</div>
+                <div class="al-review-date">2 weeks ago</div>
+              </div>
             </div>
             <svg class="al-review-google-g" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           </div>
@@ -1733,7 +1712,10 @@ img { max-width:100%; height:auto; display:block; }
           <div class="al-review-top">
             <div class="al-review-author-row">
               <div class="al-review-avatar" style="background:#8e44ad;">S</div>
-              <div class="al-review-author-info"><div class="al-review-name">Sunita Patel, Gandhinagar</div><div class="al-review-date">3 weeks ago</div></div>
+              <div class="al-review-author-info">
+                <div class="al-review-name">Sunita Patel, Gandhinagar</div>
+                <div class="al-review-date">3 weeks ago</div>
+              </div>
             </div>
             <svg class="al-review-google-g" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           </div>
@@ -1743,8 +1725,10 @@ img { max-width:100%; height:auto; display:block; }
           <div class="al-review-verified">Verified Google Review</div>
         </article>
         <?php endif; ?>
+
       </div>
 
+      <!-- View on Google CTA -->
       <div class="al-reviews-cta sr">
         <a href="https://g.page/r/airmedpatholab/review" target="_blank" rel="noopener" class="al-btn-google-review">
           <svg style="width:20px;height:20px;flex-shrink:0;" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
@@ -1858,9 +1842,7 @@ var city_ids = $("#tst_city_list").val();
 get_packages(city_ids);
 <?php if (isset($payment_success) != NULL) { ?> $('#exampleModal').modal('show'); <?php } ?>
 
-/* ============================================================
-   BOOKING MODAL
-   ============================================================ */
+/* BOOKING MODAL */
 var _currentPkg = '', _currentPrice = '';
 function openBooking(pkg, price) {
   _currentPkg = pkg; _currentPrice = price;
@@ -1882,9 +1864,7 @@ function sendWhatsApp() {
   closeBooking();
 }
 
-/* ============================================================
-   FAQ ACCORDION
-   ============================================================ */
+/* FAQ ACCORDION */
 function toggleFaq(btn) {
   var item = btn.closest('.al-faq-item');
   var isOpen = item.classList.contains('open');
@@ -1892,28 +1872,12 @@ function toggleFaq(btn) {
   if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
 }
 
-/* ============================================================
-   SCROLL REVEAL
-   ============================================================ */
+/* SCROLL REVEAL */
 (function() {
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
   document.querySelectorAll('.sr').forEach(function(el) { observer.observe(el); });
-})();
-
-/* ============================================================
-   STICKY NAVBAR — SCROLL SHADOW
-   ============================================================ */
-(function() {
-  var navbar = document.querySelector('.navbar');
-  if (!navbar) return;
-  function handleScroll() {
-    if (window.scrollY > 10) { navbar.classList.add('scrolled'); }
-    else { navbar.classList.remove('scrolled'); }
-  }
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  handleScroll();
 })();
 
 /* Auto-close WA popup */

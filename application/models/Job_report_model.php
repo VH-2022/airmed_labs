@@ -116,8 +116,8 @@ LEFT JOIN job_master jm
         $date1 = explode("/", $to);
         $ed = $date1[2] . "-" . $date1[1] . "-" . $date1[0];
 
-        $start_date = $sd . " 00:00:00";
-        $end_date = $ed . " 23:59:59";
+       $start_date = date('Y-m-d H:i:s', strtotime($sd . " 00:00:00"));
+        $end_date = date('Y-m-d H:i:s', strtotime($ed . " 23:59:59"));
         $qry .= " AND jmr.createddate >= '" . $start_date . "' AND jmr.createddate <= '" . $end_date . "'";
         if ($branch != "") {
             $qry .= " AND b.id  = '" . $branch . "' ";
@@ -160,8 +160,8 @@ WHERE   jm.`status` != '0' and jm.added_by='" . $id . "'";
         $date1 = explode("/", $to);
         $ed = $date1[2] . "-" . $date1[1] . "-" . $date1[0];
 
-        $start_date = $sd . " 00:00:00";
-        $end_date = $ed . " 23:59:59";
+         $start_date = date('Y-m-d H:i:s', strtotime($sd . " 00:00:00"));
+        $end_date = date('Y-m-d H:i:s', strtotime($ed . " 23:59:59"));
         $qry .= " AND jm.date >= '" . $start_date . "' AND jm.date <= '" . $end_date . "'";
 
         $qry .= "  order by jm.`date`";
@@ -197,8 +197,8 @@ WHERE   jm.`status` != '0' AND jmr.added_by='" . $id . "'";
         $date1 = explode("/", $to);
         $ed = $date1[2] . "-" . $date1[1] . "-" . $date1[0];
 
-        $start_date = $sd . " 00:00:00";
-        $end_date = $ed . " 23:59:59";
+        $start_date = date('Y-m-d H:i:s', strtotime($sd . " 00:00:00"));
+        $end_date = date('Y-m-d H:i:s', strtotime($ed . " 23:59:59"));
         $qry .= " AND jmr.createddate >= '" . $start_date . "' AND jmr.createddate <= '" . $end_date . "'";
         $qry .= "  order by jm.`date`";
         if ($_REQUEST["debug"] == 1) {
@@ -248,8 +248,8 @@ LEFT JOIN job_master jm
         $date1 = explode("/", $to);
         $ed = $date1[2] . "-" . $date1[1] . "-" . $date1[0];
 
-        $start_date = $sd . " 00:00:00";
-        $end_date = $ed . " 23:59:59";
+        $start_date = date('Y-m-d H:i:s', strtotime($sd . " 00:00:00"));
+        $end_date = date('Y-m-d H:i:s', strtotime($ed . " 23:59:59"));
         $qry .= " AND jmr.createddate >= '" . $start_date . "' AND jmr.createddate <= '" . $end_date . "'";
         if ($branch != "") {
             $qry .= " AND b.id  = '" . $branch . "' ";
@@ -309,8 +309,8 @@ LEFT JOIN job_master jm
         $date1 = explode("/", $from);
         $sd = $date1[2] . "-" . $date1[1] . "-" . $date1[0];
 
-        $start_date = $sd . " 00:00:00";
-        $end_date = $sd . " 23:59:59";
+        $start_date = date('Y-m-d H:i:s', strtotime($sd . " 00:00:00"));
+        $end_date = date('Y-m-d H:i:s', strtotime($sd . " 23:59:59"));
         $qry .= " AND jmr.createddate >= '" . $start_date . "' AND jmr.createddate <= '" . $end_date . "'";
         if ($branch != "") {
             //$qry .= " AND b.id  = '" . $branch . "' ";

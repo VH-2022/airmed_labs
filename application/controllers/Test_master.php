@@ -211,7 +211,7 @@ class Test_master extends CI_Controller {
         if (!empty($this->session->userdata("test_master_r"))) {
             redirect($this->session->userdata("test_master_r"), "refresh");
         } else {
-            redirect("test-master/test-list", "refresh");
+            redirect("test_master/test-list", "refresh");
         }
     }
 
