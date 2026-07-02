@@ -220,10 +220,20 @@ class Add_result extends CI_Controller {
 
         $get_approve_test_parameter = $this->add_result_model->get_val("SELECT GROUP_CONCAT(test_fk) AS test_fk FROM `approve_job_test` WHERE `status`='1' AND test_fk>0 AND job_fk='" . $data['cid'] . "' GROUP BY job_fk");
         $approve_job_test_id = explode(",", $get_approve_test_parameter[0]["test_fk"]);
+
+        // Fetch test IDs that should skip Add Result
+        $skip_add_result_ids = array();
+        if (!empty($collecttest)) {
+            $skip_tests = $this->add_result_model->get_val("SELECT id FROM `test_master` WHERE `complete_report_without_add_result`='1' AND `id` IN (" . implode(",", $collecttest) . ")");
+            foreach ($skip_tests as $sk) {
+                $skip_add_result_ids[] = $sk["id"];
+            }
+        }
+
         $cnt = 0;
         $new_data_array = array();
         foreach ($collecttest as $tst_id) {
-            if (!in_array($tst_id, $approve_job_test_id)) {
+            if (!in_array($tst_id, $approve_job_test_id) && !in_array($tst_id, $skip_add_result_ids)) {
                 $get_test_parameter = $this->add_result_model->get_val("SELECT `test_parameter`.*,`test_master`.`test_name`,`test_master`.PRINTING_NAME,`test_master`.report_type FROM `test_parameter` INNER JOIN `test_master` ON `test_parameter`.`test_fk`=`test_master`.`id` WHERE `test_parameter`.`status`='1' AND `test_master`.`status`='1' AND `test_parameter`.`test_fk`='" . $tst_id . "' and `test_parameter`.`center`='" . $processing_center . "' order by `test_parameter`.order asc");
 
 
@@ -378,6 +388,15 @@ class Add_result extends CI_Controller {
         if($_GET["debugt"]==1){
             echo "<pre>";print_r($data);die();
         }
+
+        // If no tests to show (all skipped or already approved), show message and close modal
+        if (empty($new_data_array)) {
+            echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<br><div class="alert alert-success"><strong>All Test Are Approved</strong></div>
+<script>setTimeout(function(){ parent.close_popup1(); }, 1500);</script>';
+            die();
+        }
+
         $this->load->view('header');
         //$this->load->view('nav', $data);
         $this->load->view('view_collected', $data);

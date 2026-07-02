@@ -331,7 +331,7 @@ class Branch_Test_Price extends CI_Controller {
                         $branch_wise_test = $this->Branch_Model->get_val($q);
 
                         if(isset($branch_wise_test[0]->id)){
-                            $update = $this->Branch_Model->master_tbl_update("test_branch_price", $branch_wise_test[0]->id, array("price" => $price));
+                           $update = $this->Branch_Model->master_tbl_update("test_branch_price", $branch_wise_test[0]->id, array("price" => $price,'status' => '1'));
                         }else{
                             // $q = "SELECT tm.id,tm.test_name, REPLACE(tm.test_name,', '') AS test_name_name 
                             //  FROM test_master tm 

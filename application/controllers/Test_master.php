@@ -161,6 +161,7 @@ class Test_master extends CI_Controller {
             $thyrocare_code = $this->input->post('thyrocare_code');
             $sample = $this->input->post("sample");
 			$ra_code = $this->input->post("ra_code");
+            $complete_report_without_add_result = $this->input->post('complete_report_without_add_result');
 
             if (empty($report_type)) {
                 $report_type = 1;
@@ -168,8 +169,11 @@ class Test_master extends CI_Controller {
             if (empty($is_view)) {
                 $is_view = 0;
             }
+            if (empty($complete_report_without_add_result)) {
+                $complete_report_without_add_result = 0;
+            }
 
-            $data['query'] = $this->test_model->master_fun_insert("test_master", array("test_name" => $name, "description" => $desc, "fasting_requird" => $fasting, "is_view" => $is_view, "department_fk" => $department, "sample_for_analysis" => $sample_analysis, "container_for_primary_sampling" => $primary_sampling, "method" => $method, "temp" => $temp, "cut_off" => $cut_off, "schedule" => $schedule, "reporting" => $reporting, "special_instruction" => $special_instuction, "report_type" => $report_type, "PRINTING_NAME" => $printing_name, "thyrocare_code" => $thyrocare_code, "sample" => $sample,"loinc_code"=>$loinc_code, "ra_category" => $ra_code));
+            $data['query'] = $this->test_model->master_fun_insert("test_master", array("test_name" => $name, "description" => $desc, "fasting_requird" => $fasting, "is_view" => $is_view, "department_fk" => $department, "sample_for_analysis" => $sample_analysis, "container_for_primary_sampling" => $primary_sampling, "method" => $method, "temp" => $temp, "cut_off" => $cut_off, "schedule" => $schedule, "reporting" => $reporting, "special_instruction" => $special_instuction, "report_type" => $report_type, "PRINTING_NAME" => $printing_name, "thyrocare_code" => $thyrocare_code, "sample" => $sample,"loinc_code"=>$loinc_code, "ra_category" => $ra_code, "complete_report_without_add_result" => $complete_report_without_add_result));
             $cnt = 0;
 
             foreach ($city as $frm_price) {
@@ -252,8 +256,12 @@ class Test_master extends CI_Controller {
             $loinc_code = $this->input->post("loinc_code");
             $thyrocare_code = $this->input->post('thyrocare_code');
             $sample = $this->input->post("sample");
+            $complete_report_without_add_result = $this->input->post('complete_report_without_add_result');
             if (empty($is_view)) {
                 $is_view = 0;
+            }
+            if (empty($complete_report_without_add_result)) {
+                $complete_report_without_add_result = 0;
             }
             $report_type = $this->input->post('report_type');
             if (empty($report_type)) {
@@ -265,7 +273,7 @@ class Test_master extends CI_Controller {
 			
 			$ra_code = $this->input->post("ra_code");
 			
-            $data['query'] = $this->test_model->master_fun_update("test_master", array("id", $data["cid"]), array("test_name" => $name, "description" => $desc, "fasting_requird" => $fasting, "is_view" => $is_view, "department_fk" => $department, "sample_for_analysis" => $sample_analysis, "container_for_primary_sampling" => $primary_sampling, "method" => $method, "temp" => $temp, "cut_off" => $cut_off, "schedule" => $schedule, "reporting" => $reporting, "special_instruction" => $special_instuction, "report_type" => $report_type, "PRINTING_NAME" => $printing_name, "thyrocare_code" => $thyrocare_code, "sample" => $sample,"loinc_code"=>$loinc_code, "ra_category" => $ra_code));
+            $data['query'] = $this->test_model->master_fun_update("test_master", array("id", $data["cid"]), array("test_name" => $name, "description" => $desc, "fasting_requird" => $fasting, "is_view" => $is_view, "department_fk" => $department, "sample_for_analysis" => $sample_analysis, "container_for_primary_sampling" => $primary_sampling, "method" => $method, "temp" => $temp, "cut_off" => $cut_off, "schedule" => $schedule, "reporting" => $reporting, "special_instruction" => $special_instuction, "report_type" => $report_type, "PRINTING_NAME" => $printing_name, "thyrocare_code" => $thyrocare_code, "sample" => $sample,"loinc_code"=>$loinc_code, "ra_category" => $ra_code, "complete_report_without_add_result" => $complete_report_without_add_result));
             $delete = $this->test_model->master_fun_delete("test_master_city_price", array("test_fk", $data["cid"]));
             $cnt = 0;
             if ($delete) {
@@ -323,17 +331,18 @@ class Test_master extends CI_Controller {
   t.special_instruction AS Special_instruction,
   c.`name` AS cityname,
   tc.`price` ,
-  t.ra_category AS RCode
+  t.ra_category AS RCode,
+  t.complete_report_without_add_result AS Complete_Report_Without_Add_Result
 FROM
-  `test_master` t 
-  LEFT JOIN test_master_city_price tc 
-    ON tc.test_fk = t.id 
-  LEFT JOIN `test_cities` c 
-    ON tc.`city_fk` = c.`id` 
+  `test_master` t
+  LEFT JOIN test_master_city_price tc
+    ON tc.test_fk = t.id
+  LEFT JOIN `test_cities` c
+    ON tc.`city_fk` = c.`id`
     LEFT JOIN `test_department_master` td
     ON td.id=t.`department_fk`
 WHERE t.status = '1'
-AND tc.city_fk='" . $city . "' 
+AND tc.city_fk='" . $city . "'
 ORDER BY testname ASC ";
         } else {
             $query = "SELECT DISTINCT
@@ -349,16 +358,17 @@ ORDER BY testname ASC ";
   t.special_instruction AS Special_instruction,
   c.`name` AS cityname,
   tc.`price`,
-  t.ra_category AS RCode
+  t.ra_category AS RCode,
+  t.complete_report_without_add_result AS Complete_Report_Without_Add_Result
 FROM
-  `test_master` t 
-  LEFT JOIN test_master_city_price tc 
-    ON tc.test_fk = t.id 
-  LEFT JOIN `test_cities` c 
-    ON tc.`city_fk` = c.`id` 
+  `test_master` t
+  LEFT JOIN test_master_city_price tc
+    ON tc.test_fk = t.id
+  LEFT JOIN `test_cities` c
+    ON tc.`city_fk` = c.`id`
     LEFT JOIN `test_department_master` td
     ON td.id=t.`department_fk`
-WHERE t.status = '1' 
+WHERE t.status = '1'
 ORDER BY testname ASC ";
         }
         $result = $this->db->query($query);

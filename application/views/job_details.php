@@ -478,23 +478,29 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                     echo "(" . $cnt . ") <span id='test_" . $cid . "_" . $key["test_fk"]  . "' class='test_" . $cid . "'>" . $key["test_name"] . "</span>";
                                     ?>&nbsp;&nbsp;&nbsp;
 									<b class="testtime_<?= $key["test_fk"] ?>"></b>
-									
-									<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
-                                        <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $key["test_fk"] ?>" class="rejectiontest" testname="<?= $key["test_name"]; ?>" test="<?= $key["test_fk"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $key["test_fk"] ?>"></i></b></a>
-                                    <?php } ?>
-									
-									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $key["test_fk"] ?>');"><i class="fa fa-check"></i></a> <a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $key["test_fk"] ?>" id='dbtn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" onclick="return confirm('Are you sure?');" title="Disapprove Test"><b>X</b></a> <br>	
+
+									<?php if ($key["complete_report_without_add_result"] != 1) { ?>
+										<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+                                            <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $key["test_fk"] ?>" class="rejectiontest" testname="<?= $key["test_name"]; ?>" test="<?= $key["test_fk"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $key["test_fk"] ?>"></i></b></a>
+                                        <?php } ?>
+										<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $key["test_fk"] ?>');"><i class="fa fa-check"></i></a>
+										<a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $key["test_fk"] ?>" id='dbtn_<?= $cid ?>_<?= $key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" onclick="return confirm('Are you sure?');" title="Disapprove Test"><b>X</b></a>
+									<?php } ?>
+									<br>
                                     <?php
                                     foreach ($key["sub_test"] as $kt_key) {
                                         if (!in_array($kt_key["sub_test"], $test_list)) {
                                             ?>
                                             <i style="margin-left:20px">-</i><span id='test_<?= $cid; ?>_<?= $kt_key["sub_test"] ?>' class="test_<?= $cid; ?>"><?= $kt_key["test_name"] ?></span>&nbsp;&nbsp;&nbsp;
-											
-											<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
-                                        <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["sub_test"] ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["sub_test"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["sub_test"] ?>"></i></b></a>
-                                    <?php } ?>
-											
-											<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["sub_test"] ?>');"><i class="fa fa-check"></i></a><a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["sub_test"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a><br>
+
+											<?php if ($key["complete_report_without_add_result"] != 1) { ?>
+												<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+                                                    <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["sub_test"] ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["sub_test"] ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["sub_test"] ?>"></i></b></a>
+                                                <?php } ?>
+												<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["sub_test"] ?>');"><i class="fa fa-check"></i></a>
+												<a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["sub_test"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["sub_test"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a>
+											<?php } ?>
+											<br>
                                             <?php
                                             $test_list[] = $kt_key["sub_test"];
                                         }
@@ -514,19 +520,21 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                             ?>
                                 <?php echo "(" . $cnt . ") " . ucfirst($key["title"]); ?><br><?php
                                 foreach ($key["test_list"] as $kt_key) {
-                                    $kt_key["test_name"];
                                     if (!in_array($kt_key["test_fk"], $test_list)) {
                                         ?>
                                     <i style="margin-left:20px">-</i><span id='test_<?= $cid; ?>_<?= $kt_key["test_fk"] ?>' class="test_<?= $cid; ?>"><?= $kt_key["test_name"] ?></span>&nbsp;&nbsp;&nbsp;
-									
-									<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
-                                        <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["test_fk"]; ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["test_fk"]; ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["test_fk"] ?>"></i></b></a>
-                                    <?php } ?>
-									
-									<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["test_fk"] ?>');"><i class="fa fa-check"></i></a><a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["test_fk"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a><br>
+
+									<?php if ($kt_key["complete_report_without_add_result"] != 1) { ?>
+										<?php if (in_array($query[0]['status'], array(7, 8))) { ?>
+                                            <a href="javascript:void(0)" style="display:none" id="rejectiontest_<?= $kt_key["test_fk"]; ?>" class="rejectiontest" testname="<?= $kt_key["test_name"]; ?>" test="<?= $kt_key["test_fk"]; ?>" data-toggle="tooltip" title="sample rejection"><b><i testalert="0" class="fa fa-ban bantest_<?= $kt_key["test_fk"] ?>"></i></b></a>
+                                        <?php } ?>
+										<a href="javascript:void(0);" id='btn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Approve Test" onclick="approveTest('<?= $cid ?>', '<?= $kt_key["test_fk"] ?>');"><i class="fa fa-check"></i></a>
+										<a href="<?= base_url(); ?>job_master/delete_approved/<?= $cid ?>/<?= $kt_key["test_fk"] ?>" onclick="return confirm('Are you sure?');" id='dbtn_<?= $cid ?>_<?= $kt_key["test_fk"] ?>' style="display:none;" data-toggle="tooltip" title="Disapprove Test"><b>X</b></a>
+									<?php } ?>
+									<br>
                                     <?php
                                     $test_list[] = $kt_key["test_fk"];
-                                }
+                                    }
                             }
                             $cnt++;
                             $pkgcnt++;
@@ -536,10 +544,41 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                         <form action="<?= base_url(); ?>/job_master/approve_all_test?jid=<?php echo $cid; ?>" method="POST" id="approve_all_test_form">
                             <input type="hidden" name="id" id="result_added_test"/>
                         </form>
+                        <?php
+                        $auto_approve_ids = array();
+                        $non_auto_approve_count = 0;
+                        foreach ($query[0]["job_test_list"] as $key) {
+                            if ($key["complete_report_without_add_result"] == 1) {
+                                $auto_approve_ids[] = $key["test_fk"];
+                            } else {
+                                $non_auto_approve_count++;
+                            }
+                        }
+                        foreach ($selected_package as $pkg_key) {
+                            foreach ($pkg_key["test_list"] as $kt_key) {
+                                if ($kt_key["complete_report_without_add_result"] == 1) {
+                                    if (!in_array($kt_key["test_fk"], $auto_approve_ids)) {
+                                        $auto_approve_ids[] = $kt_key["test_fk"];
+                                    }
+                                } else {
+                                    $non_auto_approve_count++;
+                                }
+                            }
+                        }
+                        ?>
                         <script>
+                            var auto_approve_test_ids = <?= json_encode($auto_approve_ids); ?>;
                             function approve_all_test() {
                             var result_added = $("#result_added_test").val();
-                            approveAllTest('<?= $cid ?>', result_added);
+                            var result_array = result_added ? result_added.split(",") : [];
+                            $.each(auto_approve_test_ids, function(i, tid) {
+                                if ($.inArray(String(tid), result_array) === -1) {
+                                    result_array.push(String(tid));
+                                }
+                            });
+                            var merged = result_array.join(",");
+                            $("#result_added_test").val(merged);
+                            approveAllTest('<?= $cid ?>', merged);
                             }
 							$(".rejectiontest").click(function(){
                             var testid = $(this).attr("test");
@@ -797,8 +836,9 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
 
                                     </div>
                                 </div>
+                                <?php if ($non_auto_approve_count > 0) { ?>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Upload Reports</label><span style="color:red">*</span><br>	
+                                    <label for="exampleInputFile">Upload Reports</label><span style="color:red">*</span><br>
                                     <input type="file" id="common_report" name="common_report" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(with letterhead)</small>
                                     <input type="file" id="common_report1" name="common_report1" <?php if ($query[0]['status'] == "2") { ?> style="display:none;" <?php } ?>><small>(without letterhead)</small>
                                     <small>(Allow only .pdf file)</small><br>
@@ -900,6 +940,29 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
                                     ?>
                                     <input type="hidden" name="type_common_report" value="c"/>
                                 </div>
+                                <?php } ?>
+                                <?php if (!empty($auto_approve_ids)) { ?>
+                                <div class="form-group" style="border-top:1px solid #eee; padding-top:8px;">
+                                    <label><strong>Upload Outside Reports</strong> <small style="color:#888;">(external lab PDF)</small></label><br>
+                                    <div>
+                                        <input type="file" id="outside_report_file_input" accept=".pdf"> <small>(Allow only .pdf file)</small>
+                                        <button type="button" class="btn btn-xs btn-warning" style="margin-left:8px;" onclick="submitOutsideReport();">Upload</button>
+                                    </div>
+                                    <?php if (!empty($outside_report)) { ?>
+                                    <div style="margin-top:6px;">
+                                        <?php foreach ($outside_report as $or_key) { ?>
+                                        <a href="<?= base_url(); ?>upload/report/<?= $or_key['report'] . '?' . rand(00000, 99999); ?>" target="_blank">
+                                            <i class="fa fa-file-pdf-o"></i> <?= htmlspecialchars($or_key['original']); ?>
+                                        </a>
+                                        
+                                        &nbsp;<a href="<?= base_url(); ?>job_master/remove_outside_report/<?= $or_key['id']; ?>/<?= $or_key['job_fk']; ?>" onclick="return confirm('Remove this outside report?');" style="color:red;">X</a>
+                                       
+                                        <br>
+                                        <?php } ?>
+                                    </div>
+                                    <?php } ?>
+                                </div>
+                                <?php } ?>
                                 <span style="color:red;" id="reporterror_<?php echo $cnt; ?>"></span>
                                 <div class="form-group">
                                     <label for="exampleInputFile">Description </label>
@@ -945,6 +1008,26 @@ if(matches == ""){  $(".bdisable").attr('disabled','disabled'); }
 <?php } ?>
                                 </div>
                             </div><!-- /.box-body --></form>
+
+                            <?php if (!empty($auto_approve_ids)) { ?>
+                            <form id="outside_report_form" role="form" action="<?= base_url(); ?>job_master/upload_outside_report/<?= $cid ?>" method="post" enctype="multipart/form-data" style="display:none;">
+                                <input type="file" id="outside_report_file_hidden" name="outside_report_file" accept=".pdf">
+                            </form>
+                            <script>
+                            function submitOutsideReport() {
+                                var input = document.getElementById('outside_report_file_input');
+                                if (!input || !input.files || input.files.length === 0) {
+                                    alert('Please select a PDF file.');
+                                    return;
+                                }
+                                var dt = new DataTransfer();
+                                dt.items.add(input.files[0]);
+                                document.getElementById('outside_report_file_hidden').files = dt.files;
+                                document.getElementById('outside_report_form').submit();
+                            }
+                            </script>
+                            <?php } ?>
+
                             <?php if ($query[0]['sample_collection'] == "1" && $login_data['type'] != 7) { ?>
                             <div class="box-footer">
                                 <?php
@@ -4146,7 +4229,7 @@ if ($query[0]["model_type"] == 1) {
     //     return false;
     //}
     var completed_tst = $("#upload_report").val();
-    if (completed_tst.trim() == '' || completed_tst.trim() == '0') {
+    if ((completed_tst.trim() == '' || completed_tst.trim() == '0') && <?php echo ($non_auto_approve_count > 0) ? 'true' : 'false'; ?>) {
     alert("Please upload report.");
     return false;
     }
@@ -4505,16 +4588,18 @@ if ($query[0]["model_type"] == 1) {
             var tst_approve_result = value1.approve;
             if (tst_status == 2) {
             if ($("#test_" + job_fk + "_" + tst_fk)) {
-				
+
 				$("#rejectiontest_"+tst_fk).hide();
 				<?php if ($query[0]['status'] == 8) { ?>
 				$("#testjobstatus").html("<span class='label label-warning'>Partial Complete</span>");
 							<?php } ?>
-				
+
             $("#test_" + job_fk + "_" + tst_fk).attr("style", "background:green;color:white;cursor:pointer;");
             $("#test_" + job_fk + "_" + tst_fk).attr("onclick", "approveTest('" + job_fk + "','" + tst_fk + "')");
 <?php if ($login_data['type'] == 1 || $login_data['type'] == 2 || $login_data['type'] == 5 || $login_data['type'] == 6) { ?>
-                $("#dbtn_" + job_fk + "_" + tst_fk).attr("style", "");
+                if ($.inArray(String(tst_fk), auto_approve_test_ids.map(String)) === -1) {
+                    $("#dbtn_" + job_fk + "_" + tst_fk).attr("style", "");
+                }
 <?php } ?>
             $("#btn_" + job_fk + "_" + tst_fk).attr("style", "display:none;");
             check_test = 1;
@@ -4531,6 +4616,8 @@ if ($query[0]["model_type"] == 1) {
 			
             }
             });
+            // Count complete_report_without_add_result tests as already approved
+            $approved_test_cnt += auto_approve_test_ids.length;
             var selected_ids = JSON.parse(JSON.stringify(add_result_array));
             $("#result_added_test").val(selected_ids);
             if (selected_ids != '') {

@@ -1433,6 +1433,7 @@ class Job_master extends CI_Controller
         //$data['creditors'] = $this->job_model->master_fun_get_tbl_val("creditors_master", array('status' => '1', "branch_fk" => $data['query'][0]['branch_fk']), array("name", "asc"));
         $data['report'] = $this->job_model->master_fun_get_tbl_val("report_master", array('status' => 1, "job_fk" => $data['cid'], "type !=" => "c"), array("id", "asc"));
         $data['common_report'] = $this->job_model->master_fun_get_tbl_val("report_master", array('status' => 1, "job_fk" => $data['cid'], "type" => "c"), array("id", "asc"));
+        $data['outside_report'] = $this->job_model->master_fun_get_tbl_val("outside_report_master", array('status' => 1, "job_fk" => $data['cid']), array("id", "asc"));
         $data['city'] = $this->job_model->master_fun_get_tbl_val("city", array('status' => 1), array("id", "asc"));
         $data['state'] = $this->job_model->master_fun_get_tbl_val("state", array('status' => 1), array("id", "asc"));
         $data['country'] = $this->job_model->master_fun_get_tbl_val("country", array('status' => 1), array("id", "asc"));
@@ -1546,7 +1547,7 @@ class Job_master extends CI_Controller
         $data['parameter_list'] = $test1;
         $data['branch_list'] = $this->registration_admin_model->get_val("SELECT * from branch_master where  status='1' and city='" . $data['query'][0]["test_city"] . "'");
         $data["discount_added_by"] = $this->job_model->get_val("SELECT job_log.`updated_by`,`admin_master`.`name` FROM `job_log` INNER JOIN `admin_master` ON `job_log`.`updated_by`=`admin_master`.`id` WHERE `job_log`.`job_fk`='" . $data['cid'] . "' AND `job_log`.`message_fk`='24' order by job_log.id desc");
-        $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $data["cid"] . "'");
+        $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name`,`test_master`.`complete_report_without_add_result` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $data["cid"] . "'");
         $data['query'][0]["job_test_list"] = array();
         foreach ($job_test_list as $t_key) {
             $sub_test_list = $this->job_model->get_val("SELECT `sub_test_master`.*,`test_master`.`test_name` FROM `sub_test_master` INNER JOIN test_master ON `sub_test_master`.`sub_test`=test_master.`id` WHERE `sub_test_master`.`status`='1' AND `test_master`.`status`='1' AND `sub_test_master`.`test_fk`='" . $t_key["test_fk"] . "'");
@@ -1557,15 +1558,16 @@ class Job_master extends CI_Controller
         $selected_package = $this->registration_admin_model->get_val("SELECT `book_package_master`.*,`package_master`.`title` FROM `book_package_master` INNER JOIN `package_master` ON `book_package_master`.`package_fk`=`package_master`.`id` WHERE `book_package_master`.`status`='1' AND `package_master`.`status`='1' AND `book_package_master`.`job_fk`='" . $data["cid"] . "'");
         $data["selected_package"] = array();
         foreach ($selected_package as $pkey) {
-            $package_test_list = $this->registration_admin_model->get_val("SELECT 
+            $package_test_list = $this->registration_admin_model->get_val("SELECT
             `package_test`.*,
-            `test_master`.`test_name` 
+            `test_master`.`test_name`,
+            `test_master`.`complete_report_without_add_result`
             FROM
-            `package_test` 
-            INNER JOIN `test_master` 
-                ON `package_test`.`test_fk` = `test_master`.`id` 
-            WHERE `package_test`.`status` = '1' 
-            AND `test_master`.`status` = '1' 
+            `package_test`
+            INNER JOIN `test_master`
+                ON `package_test`.`test_fk` = `test_master`.`id`
+            WHERE `package_test`.`status` = '1'
+            AND `test_master`.`status` = '1'
             AND `package_test`.`package_fk` = '" . $pkey["package_fk"] . "'");
             $pkey["test_list"] = $package_test_list;
             $data["selected_package"][] = $pkey;
@@ -1661,6 +1663,7 @@ WHERE sample_job_master_receiv_amount.job_fk = '" . $data["b2b_job_detais"][0]["
         //$data['creditors'] = $this->job_model->master_fun_get_tbl_val("creditors_master", array('status' => '1', "branch_fk" => $data['query'][0]['branch_fk']), array("name", "asc"));
         $data['report'] = $this->job_model->master_fun_get_tbl_val("report_master", array('status' => 1, "job_fk" => $data['cid'], "type !=" => "c"), array("id", "asc"));
         $data['common_report'] = $this->job_model->master_fun_get_tbl_val("report_master", array('status' => 1, "job_fk" => $data['cid'], "type" => "c"), array("id", "asc"));
+        $data['outside_report'] = $this->job_model->master_fun_get_tbl_val("outside_report_master", array('status' => 1, "job_fk" => $data['cid']), array("id", "asc"));
         $data['city'] = $this->job_model->master_fun_get_tbl_val("city", array('status' => 1), array("id", "asc"));
         $data['state'] = $this->job_model->master_fun_get_tbl_val("state", array('status' => 1), array("id", "asc"));
         $data['country'] = $this->job_model->master_fun_get_tbl_val("country", array('status' => 1), array("id", "asc"));
@@ -1772,7 +1775,7 @@ WHERE `customer_family_master`.`status` = '1'
         $data['parameter_list'] = $test1;
         $data['branch_list'] = $this->registration_admin_model->get_val("SELECT * from branch_master where  status='1' and city='" . $data['query'][0]["test_city"] . "'");
         $data["discount_added_by"] = $this->job_model->get_val("SELECT job_log.`updated_by`,`admin_master`.`name` FROM `job_log` INNER JOIN `admin_master` ON `job_log`.`updated_by`=`admin_master`.`id` WHERE `job_log`.`job_fk`='" . $data['cid'] . "' AND `job_log`.`message_fk`='24' order by job_log.id desc");
-        $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $data["cid"] . "'");
+        $job_test_list = $this->job_model->get_val("SELECT `job_test_list_master`.*,`test_master`.`test_name`,`test_master`.`complete_report_without_add_result` FROM `job_test_list_master` INNER JOIN `test_master` ON `job_test_list_master`.`test_fk`=`test_master`.`id` WHERE `job_test_list_master`.`job_fk`='" . $data["cid"] . "'");
         $data['query'][0]["job_test_list"] = array();
         foreach ($job_test_list as $t_key) {
             $sub_test_list = $this->job_model->get_val("SELECT `sub_test_master`.*,`test_master`.`test_name` FROM `sub_test_master` INNER JOIN test_master ON `sub_test_master`.`sub_test`=test_master.`id` WHERE `sub_test_master`.`status`='1' AND `test_master`.`status`='1' AND `sub_test_master`.`test_fk`='" . $t_key["test_fk"] . "'");
@@ -4374,7 +4377,7 @@ WHERE `package_test`.`status` = '1'
         }
         //print_r($file_upload); die();
         foreach ($file_upload as $f_key) {
-            $row = $this->job_model->master_num_rows("report_master", array("job_fk" => $f_key["job_fk"], "test_fk" => $f_key["test_fk"], "status" => "1"));
+            $row = $this->job_model->master_num_rows("report_master", array("job_fk" => $f_key["job_fk"], "test_fk" => $f_key["test_fk"], "type" => $f_key["type"], "status" => "1"));
             if ($row == 1) {
                 $delete = $this->job_model->master_fun_update_multi("report_master", array("job_fk" => $f_key["job_fk"], "test_fk" => $f_key["test_fk"], "type" => $f_key["type"]), array("report" => $f_key["report"], "original" => $f_key["original"], "description" => $f_key["description"], "without_laterpad" => $f_key["without_laterpad"], "without_laterpad_original" => $f_key["without_laterpad_original"]));
             } else {
@@ -4410,6 +4413,43 @@ WHERE `package_test`.`status` = '1'
         $data['query'] = $this->job_model->master_fun_update("report_master", array("id", $cid), array("status" => "0"));
         $this->job_model->master_fun_insert("job_log", array("job_fk" => $jid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "message_fk" => "29", "date_time" => date("Y-m-d H:i:s")));
         $this->session->set_flashdata("success", array("Report successfully Remove"));
+        redirect("job-master/job-details/" . $jid, "refresh");
+    }
+
+    function upload_outside_report($cid = "")
+    {
+        if (!is_loggedin()) {
+            redirect('login');
+        }
+        $data["login_data"] = logindata();
+        if (empty($cid) || empty($_FILES['outside_report_file']['name'])) {
+            $this->session->set_flashdata("error", array("No file selected."));
+            redirect('job-master/job-details/' . $cid);
+        }
+        $config['upload_path'] = './upload/report/';
+        $config['allowed_types'] = 'pdf';
+        $config['file_name'] = time() . '_outside_' . str_replace(' ', '_', $_FILES['outside_report_file']['name']);
+        $config['overwrite'] = FALSE;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+        if (!$this->upload->do_upload('outside_report_file')) {
+            $this->session->set_flashdata("error", array($this->upload->display_errors()));
+            redirect('job-master/job-details/' . $cid);
+        }
+        $original_name = $_FILES['outside_report_file']['name'];
+        $this->job_model->master_fun_insert("outside_report_master", array("job_fk" => $cid, "report" => $config['file_name'], "original" => $original_name, "status" => "1", "created_by" => $data["login_data"]["id"], "created_date" => date("Y-m-d H:i:s")));
+        $this->job_model->master_fun_insert("job_log", array("job_fk" => $cid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "message_fk" => "34", "date_time" => date("Y-m-d H:i:s")));
+        $this->session->set_flashdata("success", array("Outside report uploaded successfully."));
+        redirect('job-master/job-details/' . $cid);
+    }
+
+    function remove_outside_report($id = "", $jid = "")
+    {
+        if (!is_loggedin()) { redirect('login'); }
+        $data["login_data"] = logindata();
+        $this->job_model->master_fun_update("outside_report_master", array("id", $id), array("status" => "0"));
+        $this->job_model->master_fun_insert("job_log", array("job_fk" => $jid, "created_by" => "", "updated_by" => $data["login_data"]["id"], "deleted_by" => "", "message_fk" => "35", "date_time" => date("Y-m-d H:i:s")));
+        $this->session->set_flashdata("success", array("Outside report removed successfully."));
         redirect("job-master/job-details/" . $jid, "refresh");
     }
 
@@ -9964,7 +10004,7 @@ Volume :-  Adequate
         }
         $jobs = $this->input->get("jobs");
         if ($jobs != "") {
-            $job_test_list = $this->job_model->get_val("SELECT t.test_name,a.test_fk AS testid,a.`new_page` FROM  `approve_job_test` a LEFT JOIN test_master t ON t.`id`=a.`test_fk` WHERE a.status='1' AND a.job_fk='$jobs' GROUP BY a.`id` ORDER BY a.position ASC");
+            $job_test_list = $this->job_model->get_val("SELECT t.test_name, a.test_fk AS testid, a.`new_page` FROM `approve_job_test` a LEFT JOIN test_master t ON t.`id`=a.`test_fk` WHERE a.status='1' AND a.job_fk='$jobs' AND (t.complete_report_without_add_result IS NULL OR t.complete_report_without_add_result='0') GROUP BY a.`id` ORDER BY a.position ASC");
 ?><table class="table table-striped" id="sort">
                 <tbody id="">
                     <?php
@@ -10009,7 +10049,7 @@ Volume :-  Adequate
                 }
                 $jobs = $this->input->get("jobs");
                 if ($jobs != "") {
-                    $job_test_list = $this->job_model->get_val("SELECT t.test_name,a.test_fk AS testid,a.`new_page` FROM  `approve_job_test` a LEFT JOIN test_master t ON t.`id`=a.`test_fk` WHERE a.status='1' AND a.job_fk='$jobs' GROUP BY a.`id` ORDER BY a.position ASC");
+                    $job_test_list = $this->job_model->get_val("SELECT t.test_name, a.test_fk AS testid, a.`new_page` FROM `approve_job_test` a LEFT JOIN test_master t ON t.`id`=a.`test_fk` WHERE a.status='1' AND a.job_fk='$jobs' AND (t.complete_report_without_add_result IS NULL OR t.complete_report_without_add_result='0') GROUP BY a.`id` ORDER BY a.position ASC");
                     ?><table class="table table-striped" id="sort">
                 <tbody id="">
                     <?php

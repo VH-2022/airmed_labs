@@ -56,6 +56,10 @@
                                 <input type="checkbox" value="1" name="is_view"/>
                             </div>
                             <div class="form-group">
+                                <label for="exampleInputFile">Complete Report (Without Add Result)</label>
+                                <input type="checkbox" value="1" name="complete_report_without_add_result"/>
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputFile">Report Type</label><span style="color:red">*</span>
                                 <select class="form-control" name="report_type">
                                     <option value="1">Normal</option>
