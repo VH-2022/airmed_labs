@@ -3038,6 +3038,7 @@ WHERE `customer_family_master`.`status` = '1'
 
     function manage_test($jid = null) {
         if ($jid != null) {
+            $data["login_data"] = logindata();
             $data["jid"] = $jid;
             $data["job_details"] = $this->get_job_details($jid);
             //echo "<pre>";

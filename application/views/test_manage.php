@@ -39,7 +39,7 @@
                                 /* Nishit code start */
                                 $booking_date = explode(" ", $job_details[0]["date"]);
                                 /* End */
-                                if ($booking_date[0] == date("Y-m-d")) {
+                                if ($booking_date[0] == date("Y-m-d") || $login_data['type'] == 1) {
                                     ?>
                                     <div class="col-sm-12" style="padding-left:0">
                                         <div class="col-sm-4">
@@ -103,7 +103,7 @@
                                                     Rs.<?= ucfirst($value["price"]); ?>
                                                 </td>
                                                 <td>
-                                                  <?php if ($booking_date[0] == date("Y-m-d")) { ?>  <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["price"]); ?>', '<?= ucfirst($value["test_name"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
+                                                  <?php if ($booking_date[0] == date("Y-m-d") || $login_data['type'] == 1) { ?>  <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["price"]); ?>', '<?= ucfirst($value["test_name"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -123,7 +123,7 @@
                                                     Rs.<?= ucfirst($value["d_price"]); ?>
                                                 </td>
                                                 <td>
-                                                 <?php if ($booking_date[0] == date("Y-m-d")) { ?>   <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["d_price"]); ?>', '<?= ucfirst($value["title"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
+                                                 <?php if ($booking_date[0] == date("Y-m-d") || $login_data['type'] == 1) { ?>   <a href="javascript:void(0);" onclick="delete_city_price('<?= $cnt ?>', '<?= ucfirst($value["d_price"]); ?>', '<?= ucfirst($value["title"]); ?>', '<?= $value["id"]; ?>')">Delete</a> <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                     </div>
-                    <?php if ($booking_date[0] == date("Y-m-d")) { ?>
+                    <?php if ($booking_date[0] == date("Y-m-d") || $login_data['type'] == 1) { ?>
                     <div class="box-footer">
                         <input style="float:right;" class="btn btn-primary" value="Update" id="add_sub_parameter" type="button" onclick="UpdateJobTest();">
                     </div>
