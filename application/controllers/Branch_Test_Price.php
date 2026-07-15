@@ -54,7 +54,7 @@ class Branch_Test_Price extends CI_Controller {
             $data['cid'] = $id;
             if ($ttype == 2) {
 
-                $q = "SELECT tp.id,tp.price,tp.test_fk,tp.branch_fk,tp.status,tm.title AS test_name, tp.r_code FROM package_master tm INNER JOIN test_branch_price tp ON tp.test_fk = tm.id   WHERE tp.branch_fk='$id' AND tm.status ='1' AND tp.`type`='2'";
+                $q = "SELECT tp.id,tp.price,tp.test_fk,tp.branch_fk,tp.status,tm.title AS test_name, tp.r_code FROM package_master tm INNER JOIN test_branch_price tp ON tp.test_fk = tm.id   WHERE tp.branch_fk='$id' AND tm.status ='1' AND tp.`type`='2' AND tp.deleted_at IS NULL";
 
                 if ($name != "") {
                     $name = trim($_GET['test_name']);
@@ -65,8 +65,8 @@ class Branch_Test_Price extends CI_Controller {
 
                 $q = "SELECT tp.id,tp.price,tp.test_fk,tp.branch_fk,tp.status,tm.test_name, tp.r_code
                 FROM test_master tm LEFT JOIN test_branch_price tp
-                on tp.test_fk = tm.id 
-                WHERE tp.branch_fk= $id AND tm.status = 1 AND tp.`type`='1' ";
+                on tp.test_fk = tm.id
+                WHERE tp.branch_fk= $id AND tm.status = 1 AND tp.`type`='1' AND tp.deleted_at IS NULL";
 
                 if ($name != "") {
                     $name = trim($_GET['test_name']);
@@ -579,7 +579,50 @@ $active_package = $this->job_model->get_val("SELECT `active_package`.id FROM
 		}
 		
 }
-function update_code() {
+    function delete_test_price($id = "", $branch_id = "") {
+        if (!is_loggedin()) { redirect('login'); }
+        $data["login_data"] = logindata();
+        $name = $this->input->get("test_name");
+        $ttype = $this->input->get("ttype");
+        $this->Branch_Model->master_tbl_update("test_branch_price", $id, array("deleted_by" => $data["login_data"]["id"], "deleted_at" => date("Y-m-d H:i:s")));
+        $this->session->set_flashdata("success", array("Entry deleted successfully."));
+        redirect("Branch_Test_Price/edit_test_price/$branch_id?test_name=$name&ttype=$ttype&search=Search", "refresh");
+    }
+
+    function bulk_status_test_price($branch_id = "") {
+        if (!is_loggedin()) { redirect('login'); }
+        $ids = $this->input->post("ids");
+        $status = $this->input->post("status");
+        $status = ($status == '1') ? '1' : '0';
+        if (!empty($ids) && is_array($ids)) {
+            foreach ($ids as $id) {
+                $id = (int)$id;
+                if ($id > 0) {
+                    $this->Branch_Model->master_tbl_update("test_branch_price", $id, array("status" => $status));
+                }
+            }
+        }
+        echo json_encode(array("success" => true));
+        exit;
+    }
+
+    function bulk_delete_test_price($branch_id = "") {
+        if (!is_loggedin()) { redirect('login'); }
+        $data["login_data"] = logindata();
+        $ids = $this->input->post("ids");
+        if (!empty($ids) && is_array($ids)) {
+            foreach ($ids as $id) {
+                $id = (int)$id;
+                if ($id > 0) {
+                    $this->Branch_Model->master_tbl_update("test_branch_price", $id, array("deleted_by" => $data["login_data"]["id"], "deleted_at" => date("Y-m-d H:i:s")));
+                }
+            }
+        }
+        echo json_encode(array("success" => true));
+        exit;
+    }
+
+    function update_code() {
     $id = $_POST['id'];
     $rcode = $_POST['r_code'];
     $update = $this->Branch_Model->master_tbl_update("test_branch_price", $id, array("r_code" => $rcode));

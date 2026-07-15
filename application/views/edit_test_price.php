@@ -95,10 +95,19 @@
                             <a style="float:right;margin-right:5px;" data-toggle="modal" data-target="#add_test" class="btn btn-primary btn-sm"> Add Test</a>
                             <a style="float:right;margin-right:5px;" data-toggle="modal" data-target="#import-rcode" class="btn btn-primary btn-sm"><strong> Import R Code</strong></a>
                             <br /><br />
+                            <div id="bulk_action_bar" style="display:none; margin-bottom:10px;">
+                                <button type="button" class="btn btn-sm btn-success" onclick="bulkStatus(1);"><i class="fa fa-toggle-on"></i> Bulk Activate</button>
+                                &nbsp;
+                                <button type="button" class="btn btn-sm btn-warning" onclick="bulkStatus(0);"><i class="fa fa-toggle-off"></i> Bulk Deactivate</button>
+                                &nbsp;
+                                <button type="button" class="btn btn-sm btn-danger" id="bulk_delete_btn" onclick="bulkDelete();"><i class="fa fa-trash"></i> Bulk Delete Inactive</button>
+                            </div>
+                            <br />
 
                             <table id="example3" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th><input type="checkbox" id="select_all" title="Select All"></th>
                                         <th>No</th>
                                         <th>Test Name</th>
                                         <th>R Code</th>
@@ -113,6 +122,9 @@
                                     foreach ($query as $row) {
                                     ?>
                                         <tr>
+                                            <td>
+                                                <input type="checkbox" class="bulk_chk" value="<?= $row->id ?>" data-status="<?= $row->status ?>">
+                                            </td>
                                             <td><?php echo $cnt; ?> </td>
                                             <td><?php echo ucfirst($row->test_name); ?></td>
                                             <td><input type="text" onblur="ra_change(this, '<?= $row->id ?>');" value='<?= ucfirst($row->r_code); ?>'></td>
@@ -125,14 +137,10 @@
                                                 <?php } ?>
                                             </td>
                                             <td>
-                                                <?php  /*if ($row->status == '0') { ?>
-                                                    <a href='<?php echo base_url(); ?>Branch_Test_Price/isdeactive/1/<?php echo $row->id; ?>/<?php echo $cid; ?>' data-toggle="tooltip" data-original-title="Active" onclick="return confirm('Are You Sure ?')"><i class="fa fa-toggle-off"></i></a>
-                                                <?php } else { ?>
-                                                    <a href='<?php echo base_url(); ?>Branch_Test_Price/isdeactive/0/<?php echo $row->id; ?>/<?php echo $cid; ?>' data-toggle="tooltip" data-original-title="Deactive" onclick="return confirm('Are You Sure ?')"><i class="fa fa-toggle-on" style="font-size:12px"></i></a>
-                                                <?php } */ ?>
-
                                                 <?php if ($row->status == '0') { ?>
                                                     <a href='<?php echo base_url(); ?>Branch_Test_Price/isdeactive/1/<?php echo $row->id; ?>/<?php echo $cid; ?>?test_name=<?php echo $test_name; ?>&ttype=<?php echo $ttype; ?>&search=Search' data-toggle="tooltip" data-original-title="Active" onclick="return confirm('Are You Sure ?')"><i class="fa fa-toggle-off"></i></a>
+                                                    &nbsp;
+                                                    <a href='<?php echo base_url(); ?>Branch_Test_Price/delete_test_price/<?php echo $row->id; ?>/<?php echo $cid; ?>?test_name=<?php echo $test_name; ?>&ttype=<?php echo $ttype; ?>&search=Search' data-toggle="tooltip" data-original-title="Delete" onclick="return confirm('Delete this entry permanently?');" style="color:red;"><i class="fa fa-trash"></i></a>
                                                 <?php } else { ?>
                                                     <a href='<?php echo base_url(); ?>Branch_Test_Price/isdeactive/0/<?php echo $row->id; ?>/<?php echo $cid; ?>?test_name=<?php echo $test_name; ?>&ttype=<?php echo $ttype; ?>&search=Search' data-toggle="tooltip" data-original-title="Deactive" onclick="return confirm('Are You Sure ?')"><i class="fa fa-toggle-on" style="font-size:12px"></i></a>
                                                 <?php } ?>
@@ -146,7 +154,7 @@
                                     if (empty($query)) {
                                     ?>
                                         <tr>
-                                            <td colspan="4">
+                                            <td colspan="7">
                                                 <center>No records found.</center>
                                             </td>
                                         </tr>
@@ -477,6 +485,69 @@
     //    function get_test_price() {
     //        $("#test_name_1").show();
     //    }
+
+    $('#select_all').on('change', function() {
+        $('.bulk_chk').prop('checked', this.checked);
+        toggleBulkBar();
+    });
+
+    $(document).on('change', '.bulk_chk', function() {
+        toggleBulkBar();
+        if (!this.checked) $('#select_all').prop('checked', false);
+    });
+
+    function toggleBulkBar() {
+        var checked = $('.bulk_chk:checked').length;
+        $('#bulk_action_bar').toggle(checked > 0);
+        var inactiveCount = 0, activeCount = 0;
+        $('.bulk_chk:checked').each(function() {
+            if ($(this).data('status') == '0') inactiveCount++;
+            else activeCount++;
+        });
+        // Bulk Delete only enabled when ALL selected are inactive
+        if (inactiveCount > 0 && activeCount === 0) {
+            $('#bulk_delete_btn').show().prop('disabled', false);
+        } else if (inactiveCount > 0 && activeCount > 0) {
+            $('#bulk_delete_btn').show().prop('disabled', true).attr('title', 'Uncheck active rows to enable delete');
+        } else {
+            $('#bulk_delete_btn').hide();
+        }
+    }
+
+    function bulkStatus(status) {
+        var ids = [], activeCount = 0, inactiveCount = 0;
+        $('.bulk_chk:checked').each(function() {
+            ids.push($(this).val());
+            if ($(this).data('status') == '1') activeCount++;
+            else inactiveCount++;
+        });
+        if (ids.length === 0) { alert('Select at least one entry.'); return; }
+        if (status == 1 && activeCount > 0) {
+            if (!confirm(activeCount + ' selected entries are already Active. Continue activating all ' + ids.length + ' selected?')) return;
+        } else if (status == 0 && inactiveCount > 0) {
+            if (!confirm(inactiveCount + ' selected entries are already Inactive. Continue deactivating all ' + ids.length + ' selected?')) return;
+        } else {
+            var label = status == 1 ? 'Activate' : 'Deactivate';
+            if (!confirm(label + ' ' + ids.length + ' selected entries?')) return;
+        }
+        $.post('<?= base_url(); ?>Branch_Test_Price/bulk_status_test_price/<?= $cid ?>', { ids: ids, status: status }, function(res) {
+            window.location.reload();
+        });
+    }
+
+    function bulkDelete() {
+        var ids = [], activeCount = 0;
+        $('.bulk_chk:checked').each(function() {
+            if ($(this).data('status') == '0') ids.push($(this).val());
+            else activeCount++;
+        });
+        if (activeCount > 0) { alert('Please uncheck Active rows before deleting. Only Inactive rows can be deleted.'); return; }
+        if (ids.length === 0) { alert('Select at least one inactive entry to delete.'); return; }
+        if (!confirm('Permanently delete ' + ids.length + ' inactive entries? This cannot be undone.')) return;
+        $.post('<?= base_url(); ?>Branch_Test_Price/bulk_delete_test_price/<?= $cid ?>', { ids: ids }, function(res) {
+            window.location.reload();
+        });
+    }
 
     function ra_change(ctrl, id) {
         let val = ctrl.value;
